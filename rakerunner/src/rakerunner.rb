@@ -1,0 +1,53 @@
+# Copyright 2000-2008 JetBrains s.r.o.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Created by IntelliJ IDEA.
+#
+# @author: Roman.Chernyatchik
+# @date: 07.06.2007
+
+# Teamcity buildserver uses this file for running rake tasks
+######################################################################
+#TODO think how to pass arguments.
+#TODO If no args - use default rake runner
+
+ENV["idea.build.server.build.id"] = $0 = ARGV.shift;
+ENV["idea.build.agent.port"] = $0 = ARGV.shift;
+STDOUT.sync=true;
+STDERR.sync=true;
+
+######################################################################
+
+require 'rubygems'
+version = "> 0"
+if ARGV.first =~ /^_(.*)_$/ and Gem::Version.correct? $1 then
+  version = $1
+  ARGV.shift
+end
+
+#TODO
+#$stderr.puts(File.expand_path(File.dirname(__FILE__) + '/ext/rake_ext.rb'))
+#TODO
+#$stderr.puts(File.expand_path(File.dirname(__FILE__) + '/ext/lib/ruby/1.8/test/unit/autorunner'))
+
+gem 'rake', version
+load  File.expand_path(File.dirname(__FILE__) + '/ext/rake_ext.rb')
+
+# Change default runner to teamcity
+#require 'test/unit/autorunner'  # Otherwise "autorunner_old.rb" will require "autorunner" file once again via "test/unit" and RUNNERS will not be initialized
+#require File.expand_path(File.dirname(__FILE__) + '/ext/lib/ruby/1.8/test/unit/autorunner')
+
+#################################################################
+#################################################################
+Rake.application.run

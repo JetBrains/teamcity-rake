@@ -27,3 +27,14 @@
       - copy all necessary files to [ruby_home]/lib/ruby/1.8/test/unit/teamcity/*.*
 
 2. RUBY_INTERPRETER or system.ruby.interpreter must be set on agent. If system property is set corresponding environment variable will be ignored.
+
+============================================================
+======= DEPLOYING ==========================================
+============================================================
+1. As plugins
+2. Using "devel-deploy" task:
+   Setup Teamcity BuildServer directories in build file properties.
+
+   E.g.
+     agentdir - c:\soft\Teamcity_6527\buildAgent
+     webrootdir - c:\soft\Teamcity_6527\webapps\ROOT

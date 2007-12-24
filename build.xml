@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="rakerunner-teamcity" default="dist">
+    <!-- External directories -->
+    <property name="rakerunner.bin.dir" value="dist/RakeRunner/bin"/>
+
+    <!-- For devel-deploy -->
+    <!--<property name="webrootdir" value="c:/soft/Teamcity_6527/webapps/ROOT"/>-->
+    <!--<property name="agentdir" value="c:/soft/Teamcity_6527/buildAgent"/>-->
+
+    <!-- TeamCity libraries -->
+    <property name="tc.root.dir" value="dist/TeamCity"/>
+
+    <property name="tc.lib.dir" value="${tc.root.dir}/webapps/ROOT/WEB-INF/lib"/>
+    <property name="tc.agentlib.dir" value="${tc.root.dir}/buildAgent/lib"/>
+    <property name="tc.classes.dir" value="${tc.lib.dir}/../classes"/>
+    <property name="tc.extras.dir" value="${tc.root.dir}/side"/>
+
+    <property name="artifacts.dir" location="build/artifacts"/>
+
+    <!-- Project Libraries -->
+    <path id="classpath">
+        <pathelement path="${tc.classes.dir}"/>
+        <pathelement location="${tc.lib.dir}/annotations.jar"/>
+        <pathelement location="${tc.lib.dir}/common.jar"/>
+        <pathelement location="${tc.lib.dir}/xmlrpc-2.0.1.jar"/>
+        <pathelement location="${tc.lib.dir}/openapi.jar"/>
+        <pathelement location="${tc.lib.dir}/log4j-1.2.12.jar"/>
+        <pathelement location="${tc.lib.dir}/messages.jar"/>
+        <pathelement location="${tc.lib.dir}/server-model.jar"/>
+        <!--<pathelement location="${tc.lib.dir}/duplicator-util.jar"/>-->
+        <!--<pathelement location="${tc.extras.dir}/buildServerDuplicateServer.jar"/>-->
+        <!--<pathelement location="${tc.extras.dir}/dotNetCommonRuntime.jar"/>-->
+        <!--<pathelement location="${tc.extras.dir}/buildServerDuplicateRunner.jar"/>-->
+        <pathelement location="${tc.agentlib.dir}/agent-openapi.jar"/>
+        <pathelement location="${tc.agentlib.dir}/buildServerAgent.jar"/>
+        <pathelement location="${tc.agentlib.dir}/buildServerServerLogging.jar"/>
+        <pathelement location="${tc.agentlib.dir}/buildServerCommonRuntime.jar"/>
+        <pathelement location="${tc.agentlib.dir}/buildServerRuntimeUtil.jar"/>
+        <pathelement location="${tc.lib.dir}/utils.jar"/>
+        <pathelement location="${tc.lib.dir}/server-openapi.jar"/>
+        <pathelement location="${tc.lib.dir}/xstream-1.2.1.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <!-- Compile -->
+    <target name="make-common">
+        <mkdir dir="build/common/classes"/>
+        <javac srcdir="common/src" destdir="build/common/classes">
+            <classpath refid="classpath"/>
+        </javac>
+
+         <jar destfile="build/jar/RakeRunnerCommon.jar">
+            <fileset dir="build/common/classes"/>
+        </jar>
+
+    </target>
+
+    <target name="make-agent">
+        <!-- Java sources -->
+        <mkdir dir="build/agent/classes"/>
+        <javac srcdir="agent/src" destdir="build/agent/classes">
+            <classpath path="build/common/classes"/>
+            <classpath refid="classpath"/>
+        </javac>
+        <copy file="agent/src/build-agent-plugin.xml" todir="build/agent/classes"/>
+        <!-- Agent Jar -->
+        <jar destfile="build/jar/RakeRunnerAgent.jar">
+            <fileset dir="build/agent/classes"/>
+        </jar>
+
+        <!-- Bundle -->
+        <zip destfile="build/jar/rakeRunnerPlugin.zip">
+            <zipfileset dir="build/jar" includes="RakeRunnerAgent.jar, RakeRunnerCommon.jar"
+                        prefix="rakeRunnerPlugin/lib"/>
+            <!-- Ruby sources -->
+            <zipfileset dir="rakerunner/src" prefix="rakeRunnerPlugin/lib/rb"/>
+        </zip>
+    </target>
+
+    <target name="make-server">
+        <mkdir dir="build/server/classes/META-INF"/>
+        <javac srcdir="server/src" destdir="build/server/classes">
+            <classpath path="build/common/classes"/>
+            <classpath refid="classpath"/>
+        </javac>
+        <copy file="server/src/META-INF/build-server-plugin-rakerunner.xml"
+              todir="build/server/classes/META-INF"/>
+
+        <jar destfile="build/jar/rakeRunnerServer.jar">
+            <fileset dir="build/server/classes"/>
+            <fileset dir="server/resources"/>
+        </jar>
+    </target>
+
+    <target name="make">
+        <mkdir dir="build/jar"/>
+        <antcall target="make-common"/>
+        <antcall target="make-agent"/>
+        <antcall target="make-server"/>
+    </target>
+
+    <!-- Dist -->
+    <target name="dist" depends="clean,make"/>
+
+    <!-- Deploy -->
+    <target name="devel-deploy" depends="dist">
+        <copy file="build/jar/rakeRunnerServer.jar" todir="${webrootdir}/WEB-INF/lib"/>
+        <copy file="build/jar/rakeRunnerPlugin.zip" todir="${webrootdir}/update/plugins"/>
+        <unzip src="build/jar/rakeRunnerPlugin.zip" dest="${agentdir}/plugins"/>
+    </target>
+
+    <!-- Un-deploy -->
+    <target name="devel-undeploy">
+        <delete file="${webrootdir}/WEB-INF/lib/rakeRunnerServer.jar"/>
+        <delete file="${webrootdir}/update/plugins/rakeRunnerPlugin.zip"/>
+        <delete dir="${agentdir}/plugins/rakeRunnerPlugin"/>
+    </target>
+
+    <target name="build.artifacts" depends="dist">
+        <mkdir dir="${artifacts.dir}"/>
+        <move file ="build/jar/rakeRunnerServer.jar" todir="${artifacts.dir}"/>
+        <move file ="build/jar/rakeRunnerPlugin.zip" todir="${artifacts.dir}"/>
+    </target>
+    <!-- TeamCity builds -->
+    <target name="extract">
+        <!-- Extract TeamCity -->
+        <delete dir="${tc.root.dir}"/>
+        <untar compression="gzip" dest="dist">
+            <fileset dir=".">
+                <include name="dist/TeamCity-*.tar.gz"/>
+            </fileset>
+        </untar>
+        
+
+        <!--<mkdir dir="${tc.extras.dir}"/>
+        <unzip src="${tc.root.dir}/webapps/ROOT/update/plugins/dotnetPlugin.zip"
+               dest="${tc.extras.dir}">
+            <patternset>
+                <include name="**/dotNetCommonRuntime.jar"/>
+            </patternset>
+            <mapper type="flatten"/>
+        </unzip>
+        <unzip src="${tc.root.dir}/webapps/ROOT/update/plugins/duplicatePlugin.zip"
+               dest="${tc.extras.dir}">
+            <patternset>
+                <include name="**/buildServerDuplicateRunner.jar"/>
+                <include name="**/buildServerDuplicateServer.jar"/>
+            </patternset>
+            <mapper type="flatten"/>
+        </unzip>-->
+
+        <!-- Extract RakeRunner -->
+        <delete dir="dist/RakeRunner"/>
+        <mkdir dir="dist/RakeRunner"/>
+        <unzip dest="dist/RakeRunner">
+            <fileset dir=".">
+                <include name="dist/RakeRunner-*.zip"/>
+            </fileset>
+        </unzip>
+    </target>
+</project>
