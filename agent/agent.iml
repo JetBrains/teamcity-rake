@@ -29,7 +29,7 @@
     <Base>
       <setting name="state" value="1" />
     </Base>
-    <LanguageOptions name="$log4j$">
+    <LanguageOptions name="$TEMPLATE$">
       <option name="templateOptions">
         <value>
           <option name="block" value="true" />

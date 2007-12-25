@@ -130,22 +130,13 @@
     <orderEntry type="library" name="utils.jar" level="project" />
     <orderEntry type="library" name="server-openapi.jar" level="project" />
     <orderEntry type="library" name="xstream-1.2.1.jar" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/j2ee.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntryProperties />
   </component>
   <component name="copyright">
     <Base>
       <setting name="state" value="1" />
     </Base>
-    <LanguageOptions name="$log4j$">
+    <LanguageOptions name="$TEMPLATE$">
       <option name="templateOptions">
         <value>
           <option name="block" value="true" />
