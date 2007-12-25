@@ -8,7 +8,7 @@
     <!--<property name="agentdir" value="c:/soft/Teamcity_6527/buildAgent"/>-->
 
     <!-- TeamCity libraries -->
-    <property name="tc.root.dir" value="dist/TeamCity"/>
+    <!--<property name="tc.root.dir" value="dist/TeamCity"/>-->
 
     <property name="tc.lib.dir" value="${tc.root.dir}/webapps/ROOT/WEB-INF/lib"/>
     <property name="tc.agentlib.dir" value="${tc.root.dir}/buildAgent/lib"/>
@@ -27,10 +27,6 @@
         <pathelement location="${tc.lib.dir}/log4j-1.2.12.jar"/>
         <pathelement location="${tc.lib.dir}/messages.jar"/>
         <pathelement location="${tc.lib.dir}/server-model.jar"/>
-        <!--<pathelement location="${tc.lib.dir}/duplicator-util.jar"/>-->
-        <!--<pathelement location="${tc.extras.dir}/buildServerDuplicateServer.jar"/>-->
-        <!--<pathelement location="${tc.extras.dir}/dotNetCommonRuntime.jar"/>-->
-        <!--<pathelement location="${tc.extras.dir}/buildServerDuplicateRunner.jar"/>-->
         <pathelement location="${tc.agentlib.dir}/agent-openapi.jar"/>
         <pathelement location="${tc.agentlib.dir}/buildServerAgent.jar"/>
         <pathelement location="${tc.agentlib.dir}/buildServerServerLogging.jar"/>
@@ -124,8 +120,9 @@
         <move file ="build/jar/rakeRunnerServer.jar" todir="${artifacts.dir}"/>
         <move file ="build/jar/rakeRunnerPlugin.zip" todir="${artifacts.dir}"/>
     </target>
+
     <!-- TeamCity builds -->
-    <target name="extract">
+    <target name="Unpack TeamCity-*.tar.gz">
         <!-- Extract TeamCity -->
         <delete dir="${tc.root.dir}"/>
         <untar compression="gzip" dest="dist">
@@ -134,24 +131,6 @@
             </fileset>
         </untar>
         
-
-        <!--<mkdir dir="${tc.extras.dir}"/>
-        <unzip src="${tc.root.dir}/webapps/ROOT/update/plugins/dotnetPlugin.zip"
-               dest="${tc.extras.dir}">
-            <patternset>
-                <include name="**/dotNetCommonRuntime.jar"/>
-            </patternset>
-            <mapper type="flatten"/>
-        </unzip>
-        <unzip src="${tc.root.dir}/webapps/ROOT/update/plugins/duplicatePlugin.zip"
-               dest="${tc.extras.dir}">
-            <patternset>
-                <include name="**/buildServerDuplicateRunner.jar"/>
-                <include name="**/buildServerDuplicateServer.jar"/>
-            </patternset>
-            <mapper type="flatten"/>
-        </unzip>-->
-
         <!-- Extract RakeRunner -->
         <delete dir="dist/RakeRunner"/>
         <mkdir dir="dist/RakeRunner"/>

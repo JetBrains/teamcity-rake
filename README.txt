@@ -1,11 +1,14 @@
 ============================================================
-======== PROJECT,  SOURCES =================================
+======= ABOUT ==============================================
 ============================================================
+Teamcity plugin for running user Rake tasks.
 
-1.Before opening the project in IDEA for the first time:
-- recreate dist directory
-- TeamCity-*.tar.gz in dist/
-- run "ant extract" (see build.xml)
+Features:
+ * Shows rake tasks progress on buildserver
+ * Show Test::Unit tests results on buildserver
+   NOTE: Rake::Teamcity.run_tests(...) instead of Rake.run_tests(...)
+ * Supports correct processing of tests results for rails tasks: test, test::functionals, etc.
+
 
 ============================================================
 ======= INSTALLATION =======================================
@@ -21,12 +24,30 @@
         /> gem install builder
    * rails - for rails projects
 
-   * patch ruby API :
+   * patch Ruby Test/Unit API :
       - rename [ruby_home]/lib/ruby/1.8/test/unit/autorunner.rb to [ruby_home]/lib/ruby/1.8/test/unit/autorunner_old.rb
       - rename rakerunner/src/ext/lib/ruby/1.8/test/unit/autorunner.rb to [ruby_home]/lib/ruby/1.8/test/unit/autorunner.rb
       - copy all necessary files to [ruby_home]/lib/ruby/1.8/test/unit/teamcity/*.*
 
 2. RUBY_INTERPRETER or system.ruby.interpreter must be set on agent. If system property is set corresponding environment variable will be ignored.
+
+============================================================
+======= BUILD  =============================================
+============================================================
+1. Setup Teamcity libraries root dir in build file properties:
+   E.g.
+     tc.root.dir - dist\Teamcity
+2. Run "dist" task
+
+
+============================================================
+======== PROJECT,  SOURCES =================================
+============================================================
+
+1.Before opening the project in IDEA for the first time:
+- recreate dist directory
+- TeamCity-*.tar.gz in dist/
+- run "ant extract" (see build.xml)
 
 ============================================================
 ======= DEPLOYING ==========================================
