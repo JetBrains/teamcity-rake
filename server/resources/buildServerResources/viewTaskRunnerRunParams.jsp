@@ -3,5 +3,5 @@
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
 <div class="parameter">
-  Rake task name: <strong><props:displayValue name="rakerunner.rake.task.name" emptyValue="not specified"/></strong>
+  Rake task name: <strong><props:displayValue name="rakeRunner.rake.task.name" emptyValue="not specified"/></strong>
 </div>

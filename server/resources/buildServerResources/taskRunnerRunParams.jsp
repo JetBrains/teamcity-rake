@@ -4,9 +4,9 @@
 
 <l:settingsGroup title="Rake task">
     <tr>
-        <th><label for="rakerunner.rake.task.name">Rake task name: <l:star/></label></th>
-        <td><props:textProperty name="rakerunner.rake.task.name" style="width:30em;" maxlength="256"/>
-            <span class="error" id="error_rakerunner.rake.task.name"></span>
+        <th><label for="rakeRunner.rake.task.name">Rake task name: <l:star/></label></th>
+        <td><props:textProperty name="rakeRunner.rake.task.name" style="width:30em;" maxlength="256"/>
+            <span class="error" id="error_rakeRunner.rake.task.name"></span>
             <span class="smallNote">(e.g. test:functionals or mytask::test)</span>
         </td>
     </tr>
@@ -18,11 +18,11 @@
             <label>Fragments comparison:</label>
         </th>
         <td>
-            <props:checkboxProperty name="rakerunner.rake.options.trace"/>
-            <label for="rakerunner.rake.options.trace">Turn on invoke/execute tracing, enable full backtrace (--trace).</label>
+            <props:checkboxProperty name="rakeRunner.rake.options.trace"/>
+            <label for="rakeRunner.rake.options.trace">Turn on invoke/execute tracing, enable full backtrace (--trace).</label>
             <br/>
-            <props:checkboxProperty name="rakerunner.rake.options.quite"/>
-            <label for="rakerunner.rake.options.quite">Do not log messages to standard output (--quite).</label>
+            <props:checkboxProperty name="rakeRunner.rake.options.quite"/>
+            <label for="rakeRunner.rake.options.quite">Do not log messages to standard output (--quite).</label>
         </td>
     </tr>
 </l:settingsGroup>
