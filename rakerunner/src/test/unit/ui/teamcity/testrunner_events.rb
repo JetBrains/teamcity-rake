@@ -17,8 +17,8 @@
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
 
-require File.expand_path(File.dirname(__FILE__) + '/message_factory')
-require File.expand_path(File.dirname(__FILE__) + '/event_queue/event_queue')
+require 'test/unit/ui/teamcity/message_factory'
+require 'test/unit/ui/teamcity/event_queue/event_queue'
 
 module Test
   module Unit

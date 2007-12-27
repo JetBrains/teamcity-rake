@@ -21,8 +21,8 @@
 require 'test/unit/ui/testrunnermediator'
 require 'test/unit/ui/testrunnerutilities'
 
-require File.expand_path(File.dirname(__FILE__) + '/testrunner_events')
-require File.expand_path(File.dirname(__FILE__) + '/event_queue/event_queue')
+require 'test/unit/ui/teamcity/testrunner_events'
+require 'test/unit/ui/teamcity/event_queue/event_queue'
 
 module Test
   module Unit

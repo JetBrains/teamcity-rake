@@ -18,17 +18,17 @@
 # @date: 04.05.2007
 
 require 'test/unit'
-require File.expand_path(File.dirname(__FILE__) + '/../../src/ext/lib/ruby/1.8/test/unit/teamcity/message_factory')
+require 'test/unit/ui/teamcity/message_factory'
 
 class String; def rescue_action(e) raise e end; end
 
 class StringTest < Test::Unit::TestCase
 
   def test_starts_with?
-    assert("teamcity".starts_with? "team")
-    assert("teamcity".starts_with? "teamcity")
+    assert("teamcity".starts_with?("team"))
+    assert("teamcity".starts_with?("teamcity"))
     assert("teamcity".starts_with? "t")
-    assert("teamcity".starts_with? "")
+    assert("teamcity".starts_with? (""))
 
     assert !("teamcity".starts_with?("e"))
     assert !("teamcity".starts_with?("teamcity!"))

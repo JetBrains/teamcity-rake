@@ -18,7 +18,7 @@
 # @date: 08.06.2007
 
 require 'test/unit'
-require File.expand_path(File.dirname(__FILE__) + '/../../src/ext/lib/ruby/1.8/test/unit/teamcity/event_queue/event_queue')
+require 'test/unit/ui/teamcity/event_queue/event_queue'
 
 #################### Extensions #######################################
 

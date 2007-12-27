@@ -18,7 +18,7 @@
 # @date: 02.06.2007
 
 require 'builder'
-require File.expand_path(File.dirname(__FILE__) + "/string_ext")
+require "test/unit/ui/teamcity/string_ext"
 
 module Rake
   module TeamCity

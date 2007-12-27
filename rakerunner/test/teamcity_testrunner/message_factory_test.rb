@@ -16,12 +16,13 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 30.05.2007
+require File.dirname(__FILE__) + '/../test_helper' 
 
 require "test/unit"
-require File.expand_path(File.dirname(__FILE__) + '/../../src/ext/lib/ruby/1.8/test/unit/teamcity/message_factory')
+require 'test/unit/ui/teamcity/message_factory'
 
 module Rake::TeamCity
-  class MessageFactoryTest < Test::Unit::TestCase        #TODO add compile error
+  class MessageFactoryTest < Test::Unit::TestCase 
 
     def test_get_block_type
       assert_equal("$BUILD_PROGRESS$", MessageFactory.get_block_type(nil))

@@ -18,7 +18,7 @@
 # @date: 03.05.2007
 
 require "test/unit"
-require File.expand_path(File.dirname(__FILE__) + '/../../src/ext/lib/ruby/1.8/test/unit/teamcity/message_factory')
+require 'test/unit/ui/teamcity/message_factory'
 
 
 module Rake::TeamCity::MessageFactory

@@ -17,7 +17,7 @@
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
 
-require File.expand_path(File.dirname(__FILE__) + '/event')
+require 'test/unit/ui/teamcity/event_queue/event'
 
 module Rake
   module TeamCity

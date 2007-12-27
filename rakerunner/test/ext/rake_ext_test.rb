@@ -19,7 +19,7 @@
 
 require 'test/unit'
 ENV["idea.rake.debug"] = "true"
-require File.expand_path(File.dirname(__FILE__) + '/../../src/ext/rake_ext')
+require File.expand_path(File.dirname(__FILE__) + '/../../src/rake_ext')
 
 class Object
   @@test_stdout = ""

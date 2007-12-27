@@ -17,7 +17,7 @@
 # @author: Roman.Chernyatchik
 # @date: 07.06.2007
 
-# TeamCity buildserver uses this file for running rake tasks
+# TeamCity build server uses this file for running rake tasks
 ######################################################################
 #TODO think how to pass arguments.
 #TODO If no args - use default rake runner
@@ -36,18 +36,8 @@ if ARGV.first =~ /^_(.*)_$/ and Gem::Version.correct? $1 then
   ARGV.shift
 end
 
-#TODO
-#$stderr.puts(File.expand_path(File.dirname(__FILE__) + '/ext/rake_ext.rb'))
-#TODO
-#$stderr.puts(File.expand_path(File.dirname(__FILE__) + '/ext/lib/ruby/1.8/test/unit/autorunner'))
-
 gem 'rake', version
-load  File.expand_path(File.dirname(__FILE__) + '/ext/rake_ext.rb')
-
-# Change default runner to teamcity
-#require 'test/unit/autorunner'  # Otherwise "autorunner_old.rb" will require "autorunner" file once again via "test/unit" and RUNNERS will not be initialized
-#require File.expand_path(File.dirname(__FILE__) + '/ext/lib/ruby/1.8/test/unit/autorunner')
-
+load  File.expand_path(File.dirname(__FILE__) + '/rake_ext.rb')
 #################################################################
 #################################################################
 Rake.application.run

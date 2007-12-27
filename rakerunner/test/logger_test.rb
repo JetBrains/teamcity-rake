@@ -18,16 +18,19 @@
 # @date: 02.06.2007
 
 require "test/unit"
-require File.dirname(__FILE__) + '/../src/ext/lib/ruby/1.8/test/unit/teamcity/event_queue/event_queue'
+require 'test/unit/ui/teamcity/event_queue/event_queue'
 
 class LoggerTest < Test::Unit::TestCase
-  include Rake::TeamCity::MessagesDispather
 
   def setup
     super()
 
+    @msg_dispather = Rake::TeamCity::MessagesDispather.new()
     @data = []
-    start_dispatcher("buildId", "url", 1, 0,
+
+    ENV['idea.build.server.build.id'] = "1"
+    ENV['idea.build.agent.port'] = "url"
+    @msg_dispather.start_dispatcher(1, 0,
                      Rake::TeamCity::Logger::EventHandler.new do |events, count|
                        for event in events
                          @data << event.data
@@ -37,17 +40,17 @@ class LoggerTest < Test::Unit::TestCase
   end
 
   def teardown
+    @msg_dispather.stop_dispatcher
     super()
-    stop_dispatcher
   end
 
   def test_log_one
-    log_one("msg1\nmsg2")
+    @msg_dispather.log_one("msg1\nmsg2")
     assert_equal(["msg1\nmsg2"], @data)
   end
 
   def test_log_many
-    log_many(["msg1\nmsg2", "msg3\nmsg4"])
+    @msg_dispather.log_many(["msg1\nmsg2", "msg3\nmsg4"])
     assert_equal(["msg1\nmsg2", "msg3\nmsg4"], @data)
   end
 end

@@ -18,7 +18,7 @@
 # @date: 02.06.2007
 
 require 'thread'
-require File.expand_path(File.dirname(__FILE__) + '/events_processor')
+require 'test/unit/ui/teamcity/event_queue/events_processor'
 
 #module Rake::TeamCity::Logger
 module Rake::TeamCity::Logger
