@@ -60,7 +60,7 @@ module XMLRPC
 end
 
 module Rake
-  class TeamcityApplication < Application
+  class TeamCityApplication < Application
     @@test_warning = ''
     
     def self.test_warning
@@ -94,16 +94,16 @@ class ModuleTest < Test::Unit::TestCase
     end
 
     assert_equal("[IDEA]: WARNING: Possible conflict with Rake extension: String#to_s already exists",
-                 Rake::TeamcityApplication.test_warning)
+                 Rake::TeamCityApplication.test_warning)
     assert_equal("", Object.test_stdout)
     assert_equal("", Object.test_stderr)
 
-    Rake::TeamcityApplication.test_warning = ""
+    Rake::TeamCityApplication.test_warning = ""
     String.rake_extension("ya_krevetko") do
       Object.test_stderr = "ok"
     end
     assert_equal("",
-                 Rake::TeamcityApplication.test_warning)
+                 Rake::TeamCityApplication.test_warning)
     assert_equal("ok", Object.test_stderr)
     assert_equal("", Object.test_stdout)
   end
@@ -118,7 +118,7 @@ class RakeTest < Test::Unit::TestCase
 
     assert_not_nil app
     assert_same app, Rake.application
-    assert_equal app.class, Rake::TeamcityApplication 
+    assert_equal app.class, Rake::TeamCityApplication
   end
 
 end

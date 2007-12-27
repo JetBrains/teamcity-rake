@@ -75,7 +75,7 @@ end
       ENV["idea.build.server.build.id"] = nil;
       ENV["idea.build.agent.port"] =  nil;
 
-      assert_raise(Rake::TeamCity::ConnectionException, "Rake::TeamcityException: Can't connect to agent. Wrong parameters:  buildId=nil, port=0") do
+      assert_raise(Rake::TeamCity::ConnectionException, "Rake::TeamCityException: Can't connect to agent. Wrong parameters:  buildId=nil, port=0") do
         server, build_id = Rake::TeamCity::MessagesDispather.get_teamcity_connection_params
       end
     end

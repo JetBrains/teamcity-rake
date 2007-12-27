@@ -27,7 +27,7 @@ Features:
    * patch Ruby Test/Unit API :
       - rename [ruby_home]/lib/ruby/1.8/test/unit/autorunner.rb to [ruby_home]/lib/ruby/1.8/test/unit/autorunner_old.rb
       - rename rakerunner/src/ext/lib/ruby/1.8/test/unit/autorunner.rb to [ruby_home]/lib/ruby/1.8/test/unit/autorunner.rb
-      - copy all necessary files to [ruby_home]/lib/ruby/1.8/test/unit/teamcity/*.*
+      - copy all necessary files to [ruby_home]/lib/ruby/1.8/test/unit/ui/teamcity/*.*
 
 2. RUBY_INTERPRETER or system.ruby.interpreter must be set on agent. If system property is set corresponding environment variable will be ignored.
 

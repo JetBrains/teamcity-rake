@@ -205,7 +205,7 @@ module Rake
         value ? TRUE : FALSE;
       end
 
-      # Creates XML stub in Teamcity message format
+      # Creates XML stub in TeamCity message format
       # <i>msg_status</i> - one of
       # <ul> <li> :unknown
       #   <li> :normal

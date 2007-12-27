@@ -33,12 +33,12 @@ end
 ######################################################################
 ######################################################################
 
-########## Rake  TeamcityApplication ###################################
+########## Rake  TeamCityApplication ###################################
 # TODO User output from tests
 # TODO User output from raketasks
 
 module Rake
-  class TeamcityApplication < Application
+  class TeamCityApplication < Application
     attr_reader :server, :build_id_str
 
     def initialize
@@ -47,8 +47,8 @@ module Rake
       begin
         super
       rescue Exception => e
-        msg, stacktrace =  Rake::TeamcityApplication.format_exception_msg(e, options.trace)
-        Rake::TeamcityApplication.send_error(msg, stacktrace)
+        msg, stacktrace =  Rake::TeamCityApplication.format_exception_msg(e, options.trace)
+        Rake::TeamCityApplication.send_error(msg, stacktrace)
 
         Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)
         exit(1)
@@ -91,8 +91,8 @@ module Rake
     # Then executes it. If error occurs method will send information to TeamCity and
     # raise special exception to interrupt process, but prevent futher handling of this exception
     def self.target_exception_handling(block_msg)
-      # Log in Teamcity
-      Rake::TeamcityApplication.send_open_target(block_msg) if Rake.application.options.trace
+      # Log in TeamCity
+      Rake::TeamCityApplication.send_open_target(block_msg) if Rake.application.options.trace
 
       # Executes task safely
       begin
@@ -100,15 +100,15 @@ module Rake
       rescue Rake::ApplicationAbortedException => app_e
         raise
       rescue Exception => exc
-        # Log in Teamcity
-        Rake::TeamcityApplication.process_exception(exc)
+        # Log in TeamCity
+        Rake::TeamCityApplication.process_exception(exc)
       ensure
-        # Log in Teamcity
-        Rake::TeamcityApplication.send_close_target(block_msg) if Rake.application.options.trace
+        # Log in TeamCity
+        Rake::TeamCityApplication.send_close_target(block_msg) if Rake.application.options.trace
       end
     end
 
-    # Logs exception in Teamcity and raises special(Rake::ApplicationAbortedException.new)
+    # Logs exception in TeamCity and raises special(Rake::ApplicationAbortedException.new)
     # exception to prevent further handling
     #
     # *returns* Exit code
@@ -141,13 +141,13 @@ module Rake
         if (!applicationAbortedException)
           # Send exception in current opened teamcity mark-up block.
           trace = Rake.application.options.trace
-          msg, stacktrace = Rake::TeamcityApplication.format_exception_msg(exc, trace)
-          Rake::TeamcityApplication.send_error(msg, stacktrace)
+          msg, stacktrace = Rake::TeamCityApplication.format_exception_msg(exc, trace)
+          Rake::TeamCityApplication.send_error(msg, stacktrace)
         end
 
         if on_top_level
           # Rake aborted
-          Rake::TeamcityApplication.send_error_msg("Rake aborted!")
+          Rake::TeamCityApplication.send_error_msg("Rake aborted!")
         end
       end
 
@@ -176,7 +176,7 @@ module Rake
       begin
         super
       rescue Exception => e
-        exit_code = Rake::TeamcityApplication.process_exception(e, true)
+        exit_code = Rake::TeamCityApplication.process_exception(e, true)
       ensure
         Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)
         exit(exit_code)
@@ -196,7 +196,7 @@ end
 #############  Object extension #############################
 class Object
   def puts(obj)
-     Rake::TeamcityApplication.send_noraml_user_message(obj.to_s)
+     Rake::TeamCityApplication.send_noraml_user_message(obj.to_s)
   end
 
   def printf(s, *args)
@@ -209,7 +209,7 @@ class Module
   #Overriding rake_extension of standart API. 0.7.3 - 0.8.0
   def rake_extension(method)
     if instance_methods.include?(method)
-      Rake::TeamcityApplication.send_warning("WARNING: Possible conflict with Rake extension: #{self}##{method} already exists")
+      Rake::TeamCityApplication.send_warning("WARNING: Possible conflict with Rake extension: #{self}##{method} already exists")
     else
       yield
     end
@@ -223,7 +223,7 @@ module Rake
   class << self
     # Current Rake Application: 0.7.3 - 0.8.0
     def application
-      @application ||= Rake::TeamcityApplication.new
+      @application ||= Rake::TeamCityApplication.new
     end
   end
 end
@@ -237,7 +237,7 @@ class Rake::Task
   alias standart_invoke invoke
   private :standart_invoke
   def invoke(*args)
-    Rake::TeamcityApplication.target_exception_handling("Invoke #{name} #{format_trace_flags}") do
+    Rake::TeamCityApplication.target_exception_handling("Invoke #{name} #{format_trace_flags}") do
      method(:standart_invoke).arity == 0 ? standart_invoke() : standart_invoke(args)
     end
   end
@@ -253,9 +253,9 @@ class Rake::Task
     end
 
     if application.options.dryrun
-      Rake::TeamcityApplication.target_exception_handling("Execute (dry run) #{name}", &standart_execute_block)
+      Rake::TeamCityApplication.target_exception_handling("Execute (dry run) #{name}", &standart_execute_block)
     else
-      Rake::TeamcityApplication.target_exception_handling("Execute #{name}", &standart_execute_block)
+      Rake::TeamCityApplication.target_exception_handling("Execute #{name}", &standart_execute_block)
     end
   end
 end
@@ -283,7 +283,7 @@ module RakeFileUtils
   private :standart_when_writing
   def when_writing(msg=nil)
     if RakeFileUtils.nowrite_flag
-      Rake::TeamcityApplication.send_info_msg("DRYRUN: #{msg}") if msg
+      Rake::TeamCityApplication.send_info_msg("DRYRUN: #{msg}") if msg
     end
     standart_when_writing(msg)
   end
@@ -292,7 +292,7 @@ module RakeFileUtils
   #
   # Send the message to the default rake output (which is $stderr).
   def rake_output_message(message)
-    Rake::TeamcityApplication.send_error_msg(message)
+    Rake::TeamCityApplication.send_error_msg(message)
 #    $stderr.puts(message)
   end
 end
@@ -303,16 +303,16 @@ class Rake::Application
   #
   # Provide standard execption handling for the given block.
   #
-  # This method wraps exceptions into  Rake::TeamcityApplication.process_exception exception.
-  # Such exceptions will be processed in Rake::TeamcityApplication.run
+  # This method wraps exceptions into  Rake::TeamCityApplication.process_exception exception.
+  # Such exceptions will be processed in Rake::TeamCityApplication.run
   def standard_exception_handling
     begin
       yield
     rescue Rake::ApplicationAbortedException => app_e
       raise
     rescue Exception => exc
-      # Log in Teamcity
-      Rake::TeamcityApplication.process_exception(exc)
+      # Log in TeamCity
+      Rake::TeamCityApplication.process_exception(exc)
     end
   end
 
@@ -326,7 +326,7 @@ class Rake::Application
             %{found at: #{rakefile_location}} +
             %{    Use --classic-namespace on rake command} +
             %{    or 'require "rake/classic_namespace"' in Rakefile}
-      Rake::TeamcityApplication.send_warning(msg)
+      Rake::TeamCityApplication.send_warning(msg)
     end
     @const_warning = true
   end

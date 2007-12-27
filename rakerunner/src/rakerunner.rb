@@ -17,7 +17,7 @@
 # @author: Roman.Chernyatchik
 # @date: 07.06.2007
 
-# Teamcity buildserver uses this file for running rake tasks
+# TeamCity buildserver uses this file for running rake tasks
 ######################################################################
 #TODO think how to pass arguments.
 #TODO If no args - use default rake runner

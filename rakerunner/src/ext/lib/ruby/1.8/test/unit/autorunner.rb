@@ -19,6 +19,7 @@
 
 #TODO If we runner isn't connected to server, use default Console runner
 require 'test/unit/autorunner_old.rb'
+require File.expand_path('test/unit/teamcity/event_queue/event_queue')
 
 module Test
   module Unit
@@ -30,25 +31,30 @@ module Test
 
       alias old_options options
       def options
-        # use teamcity runner by default
-        @runner = RUNNERS[:teamcity]
 
+        puts "!!!!!!!!!!!!!11 Set? #{Rake::TeamCity::MessagesDispather.teamcity_test_runner_enabled_set?}"
+        # use teamcity runner by default
+        if Rake::TeamCity::MessagesDispather.teamcity_test_runner_enabled_set?
+          @runner = RUNNERS[:teamcity]
+        end
         # options can override this default params
         old_options
       end
 
 #  TODO
-#       def initialize(standalone)
-#         super
+       def initialize(standalone)
+         puts "!!!!!!!!!!!!!11 Set? #{Rake::TeamCity::MessagesDispather.teamcity_test_runner_enabled_set?}"
+         super
+
 #         @runner = RUNNERS[:teamcity]
-#       end
+       end
     end
   end
 end
 
 
 module Rake
-  module Teamcity
+  module TeamCity
     require 'test/unit/assertions'
 
     include Test::Unit::Assertions
@@ -62,7 +68,7 @@ module Rake
         begin
           Test::Unit::AutoRunner.run(true, nil, additional_options ? [fn] + additional_options : [fn])
         rescue RuntimeError => ex
-          # Teamcity test runner will process this exception
+          # TeamCity test runner will process this exception
           # TODO Terminate?
         end
       }

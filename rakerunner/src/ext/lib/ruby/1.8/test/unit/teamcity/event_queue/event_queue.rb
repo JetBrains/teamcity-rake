@@ -24,7 +24,7 @@ require File.expand_path(File.dirname(__FILE__) + '/event_handler')
 require File.expand_path(File.dirname(__FILE__) + '/event')
 
 
-# Dispatches messages to Teamcity buildserver
+# Dispatches messages to TeamCity buildserver
 module Rake
   module TeamCity
     class << self
@@ -36,7 +36,12 @@ module Rake
     class MessagesDispather
       include Logger
 
-      # Creates connection XMLRPC::Client to Teamcity server.
+      # Check does Teamcity test runner is enabled 
+      def self.teamcity_test_runner_enabled_set?
+        ENV['idea.build.server.build.id'] && ENV['idea.build.agent.port']
+      end
+
+      # Creates connection XMLRPC::Client to TeamCity server.
       # Uses enviroment vriables ENV['idea.build.server.build.id'] and ENV['idea.build.agent.port'].
       #
       # <b> Returns: </b> connection object and build_id string
@@ -54,7 +59,7 @@ module Rake
         return server, build_id_str
       end
 
-      # Creates connection to Teamcity and starts dispatcher.
+      # Creates connection to TeamCity and starts dispatcher.
       # Do nothing, if it has been already started.
       #
       # max_attemps - max attemps count for message resending
@@ -92,7 +97,7 @@ module Rake
         end
       end
 
-      # Sends to Teamcity array of messages.
+      # Sends to TeamCity array of messages.
       # May throw ConnectionException
       def log_many(messages)
         for msg in messages
@@ -100,7 +105,7 @@ module Rake
         end
       end
 
-      # Sends to Teamcity message.
+      # Sends to TeamCity message.
       # May throw ConnectionException
       def log_one(msg)
         event = Logger::Event.new(self, msg)
@@ -115,7 +120,7 @@ module Rake
     end
 
 
-    # Sends data to Teamcity via RPC
+    # Sends data to TeamCity via RPC
     class SendDataEventHandler < Logger::EventHandler
 
       # Creates a SendDataEventHandler
