@@ -113,4 +113,11 @@ public class ExternalParamsUtil implements RakeRunnerConstants {
               throw new RunBuildException(e);
           }
     }
+
+    public static boolean isParameterEnabled(final Map<String, String> runParameters,
+                                             final String key) {
+       return runParameters.containsKey(key)
+               && runParameters.get(key).equals(Boolean.TRUE.toString());
+     }
+
 }

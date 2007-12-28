@@ -27,15 +27,20 @@ import jetbrains.buildServer.agent.Constants;
  */
 public interface RakeRunnerConstants extends Constants {
     @NonNls public String RUNNER_TYPE = "rake-runner";
+    @NonNls String DEBUG_PROPERTY = "rakeRunner.debug";
 
-// Server ptoperties
+// Server properties
     /**
      * UI property: Rake task name
      */
     @NonNls String SERVER_UI_RAKE_TASK_PROPERTY = "rakeRunner.rake.task.name";
+    @NonNls String SERVER_UI_WORK_DIR_PROPERTY = "rakeRunner.rake.work.dir";
+    @NonNls String SERVER_UI_RAKE_OPTION_TRACE_PROPERTY = "rakeRunner.rake.options.trace";
+    @NonNls String SERVER_UI_RAKE_OPTION_QUITE_PROPERTY = "rakeRunner.rake.options.quite";
+    //TODO verbose, silent
 
 // Agent properties:
-
+    
     // Ruby interpreter
     @NonNls String SYSTEM_PROPERTY_RUBY_INTERPRETER = "system.ruby.interpreter";
     @NonNls String TARGET_RUBY_INTERPRETER = "target.ruby.interpreter";

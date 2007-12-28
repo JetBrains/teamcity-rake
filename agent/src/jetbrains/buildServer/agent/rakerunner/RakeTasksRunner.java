@@ -20,6 +20,7 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.openapi.util.Key;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.BuildAgentSystemInfo;
@@ -35,7 +36,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * Created by IntelliJ IDEA.
@@ -80,52 +80,67 @@ public class RakeTasksRunner extends RakeRunnerBase {
                                     @NotNull final Map<String, String> buildParams)
             throws IOException, RunBuildException {
 
-//        setupBuildParameters(runParameters, buildParameters, cmd);
+        final boolean inDebugMode = ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.DEBUG_PROPERTY);
 
+        // Ruby interpreter
         cmd.setExePath(ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams));
 
-        //TODO
-//        cmd.setWorkDirectory("C:/home/teamcity/rubyteamcity/rails");
-//        cmd.setWorkDirectory("C:\\home\\teamcity\\rubyteamcity\\rails");
+        // Working directory
+        final String workDir = runParams.get(RakeRunnerConstants.SERVER_UI_WORK_DIR_PROPERTY);
+        if (!PropertiesUtil.isEmptyOrNull(workDir)) {
+            cmd.setWorkDirectory(workDir);
+        }
 
+        // Rake runner script
         cmd.addParameter(RubySourcesUtil.getRakeRunnerPath());
 
+//TODO
 //        cmd.addParameter("-e");
 //        cmd.addParameter("\"require(\\\"C:/home/teamcity/rubyteamcity/rakerunner/src/arguments\\\");STDOUT.sync=true;STDERR.sync=true;load($0=ARGV.shift)\"");
 
+        // TeamCity connection params
         cmd.addParameter(runParams.get(AgentRuntimeProperties.BUILD_ID)); //build
         cmd.addParameter(runParams.get(AgentRuntimeProperties.OWN_PORT)); //port
 
-//        for (int i = 1; i < rakeCmd.length; i ++) {
-//            cmd.addParameter(rakeCmd[i]);
-//        }
-
-        //TODO
-        cmd.addParameter("--trace");
-
-        final String user_params = "xxx:test";
-//        final String user_params = runParams.get(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY);
-        if (user_params != null) {
-            final StringTokenizer st = new StringTokenizer(user_params);
-            while (st.hasMoreTokens()) {
-                cmd.addParameter(st.nextToken());
-            }
-        }  else {
-            throw new RunBuildException("Specify Rake task name in runner configuration settings.");
+        // Rake options
+        if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_TRACE_PROPERTY)) {
+            cmd.addParameter("--trace");
         }
 
+        if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_QUITE_PROPERTY)) {
+            cmd.addParameter("--quite");
+        }
+
+        // Task name
+        final String task_name = runParams.get(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY);
+        if (PropertiesUtil.isEmptyOrNull(task_name)) {
+            throw new RunBuildException("Specify Rake task name in runner configuration settings.");
+        } else {
+            cmd.addParameter(task_name);
+        }
+        
+//        if (user_params != null) {
+//            final StringTokenizer st = new StringTokenizer(user_params);
+//            while (st.hasMoreTokens()) {
+//                cmd.addParameter(st.nextToken());
+//            }
+//        }  else {
+//            throw new RunBuildException("Specify Rake task name in runner configuration settings.");
+//        }
         //TODO if user allow
         // cmd.addParameter("TESTOPTS=\\\"C:/home/teamcity/rubyteamcity/rakerunner/src/teamcity_testrunner.rb\\\" --runner=teamcity");
 
-        //TODO Remove debug print
-//        System.err.println("\nRakeRunner.buildCommandLine : \n" + cmd.getCommandLineString());
+        if (inDebugMode) {
+            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
+        }
     }
 
-    protected void onTextAvailable(final Map<String, String> runParameters, final ProcessEvent processEvent, final Key key) {
+    protected void onTextAvailable(final Map<String, String> runParameters,
+                                   final ProcessEvent processEvent, final Key key) {
         super.onTextAvailable(runParameters, processEvent, key);
         //TODO script hide run params
         final String text = TextUtil.removeNewLine(processEvent.getText());
-        getBuildLogger().message("{AGENT TEXT OUTPUT}: " + text);
+        getBuildLogger().message("{AGENT TEXT AVAILABLE}: " + text);
     }
 
 }

@@ -9,13 +9,19 @@
             <span class="error" id="error_rakeRunner.rake.task.name"></span>
             <span class="smallNote">(e.g. test:functionals or mytask::test)</span>
         </td>
+
+        <th><label for="rakeRunner.rake.work.dir">Working directory: <l:star/></label></th>
+        <td><props:textProperty name="rakeRunner.rake.work.dir" style="width:30em;" maxlength="1000"/>
+            <span class="error" id="error_rakeRunner.rake.work.dir"></span>
+            <span class="smallNote">(VCS root by default)</span>
+        </td>
     </tr>
 </l:settingsGroup>
 
 <l:settingsGroup title="Rake options">
     <tr>
         <th>
-            <label>Fragments comparison:</label>
+            <label>Options:</label>
         </th>
         <td>
             <props:checkboxProperty name="rakeRunner.rake.options.trace"/>
@@ -26,3 +32,11 @@
         </td>
     </tr>
 </l:settingsGroup>
+
+<tr>
+    <th><label>Debug:</label></th>
+    <td>
+        <props:checkboxProperty name="rakeRunner.debug"/>
+        <label for="rcodedup.debug">Enable debug messages in the build log</label>
+    </td>
+</tr>
