@@ -9,7 +9,7 @@
             <span class="error" id="error_rakeRunner.rake.task.name"></span>
             <span class="smallNote">(e.g. test:functionals or mytask::test)</span>
         </td>
-
+        <br/>
         <th><label for="rakeRunner.rake.work.dir">Working directory: <l:star/></label></th>
         <td><props:textProperty name="rakeRunner.rake.work.dir" style="width:30em;" maxlength="1000"/>
             <span class="error" id="error_rakeRunner.rake.work.dir"></span>
