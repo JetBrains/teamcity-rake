@@ -16,13 +16,6 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import com.intellij.openapi.util.SystemInfo;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-
 /**
  * Created by IntelliJ IDEA.
  *
@@ -30,7 +23,7 @@ import java.io.File;
  * @date: 04.06.2007
  */
 public class RubyScriptRunnerUtil {
-    @NonNls private static final String BIN_DIR = "bin";
+//    @NonNls private static final String BIN_DIR = "bin";
 //    @NonNls private static final String WIN_RUBY_EXE =      "ruby.exe";
 //    @NonNls private static final String LINUX_RUBY_EXE =    "ruby";
 //    @NonNls private static final String MAC_RUBY_EXE =      "ruby";
@@ -53,10 +46,10 @@ public class RubyScriptRunnerUtil {
 //
 //
 //    @NonNls private static final String EXE_PATH = BIN_DIR + "/" + RUBY_EXE;
-    @NonNls private static final String RAKE = "rake";
-
-    @NonNls private static final String BAT_SUFFIX = ".bat";
-    @NonNls private static final String SH_SUFFIX = ".sh";
+//    @NonNls private static final String RAKE = "rake";
+//
+//    @NonNls private static final String BAT_SUFFIX = ".bat";
+//    @NonNls private static final String SH_SUFFIX = ".sh";
 
 
 //    @NotNull
@@ -76,16 +69,16 @@ public class RubyScriptRunnerUtil {
 //        final String homePath = normalizePath(rubyHomePath);
 //
 //        final String binFolder = homePath + BIN_DIR + "/";
-//        if (checkIfPathExists(binFolder + scriptName)) {
+//        if (checkIfDirExists(binFolder + scriptName)) {
 //            return new String[]{getVMExecutablePath(rubyHomePath),
 //                                binFolder + scriptName};
 //        }
 //        if (SystemInfo.isWindows
-//                && checkIfPathExists(binFolder + scriptName + BAT_SUFFIX)) {
+//                && checkIfDirExists(binFolder + scriptName + BAT_SUFFIX)) {
 //            return new String[]{binFolder + scriptName + BAT_SUFFIX};
 //        }
 //        if (!SystemInfo.isWindows
-//                && checkIfPathExists(binFolder + scriptName + SH_SUFFIX)) {
+//                && checkIfDirExists(binFolder + scriptName + SH_SUFFIX)) {
 //            return new String[]{binFolder + scriptName + SH_SUFFIX};
 //        }
 //        return null;
@@ -96,14 +89,5 @@ public class RubyScriptRunnerUtil {
             return rubyHomePath;
         }
         return rubyHomePath + "/";
-    }
-
-    /**
-     * @param path Path to check
-     * @return true, if path exists
-     */
-    private static boolean checkIfPathExists(@NotNull final String path) {
-        File file = new File(path);
-        return file.exists() && file.isFile();
-    }
+    }  
 }

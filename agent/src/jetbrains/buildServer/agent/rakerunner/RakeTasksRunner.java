@@ -27,6 +27,7 @@ import jetbrains.buildServer.agent.BuildAgentSystemInfo;
 import jetbrains.buildServer.agent.rakerunner.utils.ExternalParamsUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySourcesUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
 import jetbrains.buildServer.agent.rakerunner.RakeRunnerBase;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.apache.log4j.Logger;
@@ -75,7 +76,7 @@ public class RakeTasksRunner extends RakeRunnerBase {
     }
 
     protected void buildCommandLine(@NotNull final GeneralCommandLine cmd,
-                                    @NotNull final File workingDir,
+                                    @NotNull final File soourcesRootDir,
                                     @NotNull final Map<String, String> runParams,
                                     @NotNull final Map<String, String> buildParams)
             throws IOException, RunBuildException {
@@ -86,13 +87,38 @@ public class RakeTasksRunner extends RakeRunnerBase {
         cmd.setExePath(ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams));
 
         // Working directory
-        final String workDir = runParams.get(RakeRunnerConstants.SERVER_UI_WORK_DIR_PROPERTY);
-        if (!PropertiesUtil.isEmptyOrNull(workDir)) {
-            cmd.setWorkDirectory(workDir);
+        final String userWorkDir = runParams.get(RakeRunnerConstants.SERVER_UI_WORK_DIR_PROPERTY);
+        final String workDir;
+        if (!PropertiesUtil.isEmptyOrNull(userWorkDir)) {
+            //User defined working directory
+
+            // with separator
+            String path = soourcesRootDir.getCanonicalPath() + File.separator + userWorkDir;
+            if (FileUtil.checkIfDirExists(path)) {
+                workDir = path;
+            } else {
+                // without separator
+                path = soourcesRootDir.getCanonicalPath() + userWorkDir;
+                if (FileUtil.checkIfDirExists(path)) {
+                    workDir = path;
+                } else {
+                    // consider userWorkDir as full path
+                    if (FileUtil.checkIfDirExists(userWorkDir)) {
+                        workDir = path;
+                    } else {
+                        if (inDebugMode) {
+                            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: User defined working directory: [" + userWorkDir + "]");
+                            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Sources root directory: [" + soourcesRootDir.getAbsolutePath() + "]");
+                        }
+                        throw new RunBuildException("Cannot find working directory: [" + userWorkDir + "].");
+                    }
+                }
+            }
+        } else {
+            //Use project sources root as working directory
+            workDir = soourcesRootDir.getCanonicalPath();
         }
-        if (inDebugMode) {
-            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: WorkDir : \n" + workDir);
-        }
+        cmd.setWorkDirectory(workDir);
 
         // Rake runner script
         cmd.addParameter(RubySourcesUtil.getRakeRunnerPath());
@@ -134,6 +160,7 @@ public class RakeTasksRunner extends RakeRunnerBase {
         // cmd.addParameter("TESTOPTS=\\\"C:/home/teamcity/rubyteamcity/rakerunner/src/teamcity_testrunner.rb\\\" --runner=teamcity");
 
         if (inDebugMode) {
+            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + workDir + "]");
             getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
         }
     }
