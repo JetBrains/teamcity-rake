@@ -17,8 +17,13 @@
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
 
-require 'test/unit/ui/teamcity/message_factory'
-require 'test/unit/ui/teamcity/event_queue/event_queue'
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/message_factory'
+  require 'src/test/unit/ui/teamcity/event_queue/event_queue'
+else
+  require 'test/unit/ui/teamcity/message_factory'
+  require 'test/unit/ui/teamcity/event_queue/event_queue'
+end
 
 module Test
   module Unit

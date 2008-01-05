@@ -19,10 +19,15 @@
 
 require "xmlrpc/client"
 
-require File.expand_path(File.dirname(__FILE__) + '/events_dispatcher')
-require File.expand_path(File.dirname(__FILE__) + '/event_handler')
-require File.expand_path(File.dirname(__FILE__) + '/event')
-
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/event_queue/events_dispatcher'
+  require 'src/test/unit/ui/teamcity/event_queue/event_handler'
+  require 'src/test/unit/ui/teamcity/event_queue/event'
+else
+  require 'test/unit/ui/teamcity/event_queue/events_dispatcher'
+  require 'test/unit/ui/teamcity/event_queue/event_handler'
+  require 'test/unit/ui/teamcity/event_queue/event'
+end
 
 # Dispatches messages to TeamCity buildserver
 module Rake

@@ -18,7 +18,11 @@
 # @date: 02.06.2007
 
 require 'thread'
-require 'test/unit/ui/teamcity/event_queue/events_processor'
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/event_queue/events_processor'
+else
+  require 'test/unit/ui/teamcity/event_queue/events_processor'
+end
 
 #module Rake::TeamCity::Logger
 module Rake::TeamCity::Logger

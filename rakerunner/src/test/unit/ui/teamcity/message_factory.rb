@@ -18,7 +18,12 @@
 # @date: 02.06.2007
 
 require 'builder'
-require "test/unit/ui/teamcity/string_ext"
+
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/string_ext'
+else
+  require 'test/unit/ui/teamcity/string_ext'
+end
 
 module Rake
   module TeamCity

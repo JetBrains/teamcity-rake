@@ -16,13 +16,21 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
-
+if ENV["idea.rake.debug.log"]
+  RUNNER_LOG = File.new(File.expand_path(File.dirname(__FILE__) + "../../logs/runner.log"), "a+");
+  RUNNER_LOG << "\n[#{Time.now}] : Started\n";
+end
 
 require 'test/unit/ui/testrunnermediator'
 require 'test/unit/ui/testrunnerutilities'
 
-require 'test/unit/ui/teamcity/testrunner_events'
-require 'test/unit/ui/teamcity/event_queue/event_queue'
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/testrunner_events'
+  require 'src/test/unit/ui/teamcity/event_queue/event_queue'
+else
+  require 'test/unit/ui/teamcity/testrunner_events'
+  require 'test/unit/ui/teamcity/event_queue/event_queue'
+end
 
 module Test
   module Unit
@@ -98,4 +106,11 @@ end
 
 if __FILE__ == $0
   Test::Unit::UI::TeamCity::TestRunner.start_command_line_test
+end
+
+at_exit do
+  if ENV["idea.rake.debug.log"]
+    RUNNER_LOG << "[#{Time.now}] : Finished\n\n";
+    RUNNER_LOG.close
+  end
 end

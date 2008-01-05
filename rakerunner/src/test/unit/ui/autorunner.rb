@@ -17,36 +17,35 @@
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
 
-#TODO If we runner isn't connected to server, use default Console runner
 require 'test/unit/autorunner_old.rb'
-require 'test/unit/ui/teamcity/event_queue/event_queue'
+
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/event_queue/event_queue'
+else
+  require 'test/unit/ui/teamcity/event_queue/event_queue'
+end
 
 module Test
   module Unit
     class AutoRunner
       RUNNERS[:teamcity] = proc do |r|
-        require 'test/unit/ui/teamcity/testrunner'
+        if ENV["idea.rake.debug.sources"]
+          require 'src/test/unit/ui/teamcity/testrunner'
+        else
+          require 'test/unit/ui/teamcity/testrunner'
+        end
         Test::Unit::UI::TeamCity::TestRunner
       end
 
-      alias old_options options
-      def options
+       alias old_initialize initialize
+       private :old_initialize
+       def initialize(*args)
+         method(:old_initialize).arity == 0 ? old_initialize() : old_initialize(args)
+         old_initialize(*args)
 
-        puts "!!!!!!!!!!!!!11 Set? #{Rake::TeamCity::MessagesDispather.teamcity_test_runner_enabled_set?}"
-        # use teamcity runner by default
-        if Rake::TeamCity::MessagesDispather.teamcity_test_runner_enabled_set?
-          @runner = RUNNERS[:teamcity]
-        end
-        # options can override this default params
-        old_options
-      end
-
-#  TODO
-       def initialize(standalone)
-         puts "!!!!!!!!!!!!!11 Set? #{Rake::TeamCity::MessagesDispather.teamcity_test_runner_enabled_set?}"
-         super
-
-#         @runner = RUNNERS[:teamcity]
+         if (Rake::TeamCity::MessagesDispather.teamcity_test_runner_enabled_set?)
+           @runner = RUNNERS[:teamcity]
+         end
        end
     end
   end

@@ -17,12 +17,17 @@
 # @author: Roman.Chernyatchik
 # @date: 07.06.2007
 
+if ENV["idea.rake.debug.log"]
+  RAKE_EXT_LOG = File.new(File.expand_path(File.dirname(__FILE__) + "../../logs/rake_ext.log"), "a+");
+  RAKE_EXT_LOG << "\n[#{Time.now}] : Started\n";
+end
+
 # For RAKEVERSION =  0.7.2 - 0.8.0
 require 'rake'
 
-if ENV["idea.rake.debug"]
-  require 'test/unit/ui/teamcity/message_factory'
-  require 'test/unit/ui/teamcity/event_queue/event_queue'
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/message_factory'
+  require 'src/test/unit/ui/teamcity/event_queue/event_queue'
 else
   require 'test/unit/ui/teamcity/message_factory'
   require 'test/unit/ui/teamcity/event_queue/event_queue'
@@ -50,7 +55,7 @@ module Rake
         msg, stacktrace =  Rake::TeamCityApplication.format_exception_msg(e, options.trace)
         Rake::TeamCityApplication.send_error(msg, stacktrace)
 
-        Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)
+        #Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)  - will be closed at_exit
         exit(1)
       end
     end
@@ -178,7 +183,7 @@ module Rake
       rescue Exception => e
         exit_code = Rake::TeamCityApplication.process_exception(e, true)
       ensure
-        Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)
+#        Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)
         exit(exit_code)
       end
     end
@@ -329,5 +334,16 @@ class Rake::Application
       Rake::TeamCityApplication.send_warning(msg)
     end
     @const_warning = true
+  end
+end
+
+at_exit do
+  if ENV["idea.rake.debug.log"]
+    RAKE_EXT_LOG << "[#{Time.now}] : Closing connection....\n";
+    Rake::TeamCity.msg_dispatcher.stop_dispatcher(true);
+    RAKE_EXT_LOG << "[#{Time.now}] : Closed.\n";
+
+    RAKE_EXT_LOG << "[#{Time.now}] : Finished\n\n";
+    RAKE_EXT_LOG.close
   end
 end

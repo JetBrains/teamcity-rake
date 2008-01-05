@@ -17,7 +17,11 @@
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
 
-require 'test/unit/ui/teamcity/event_queue/event'
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/event_queue/event'
+else
+  require 'test/unit/ui/teamcity/event_queue/event'
+end
 
 module Rake
   module TeamCity
