@@ -61,8 +61,8 @@ public class RakeTasksRunner extends RakeRunnerBase {
 
         // Interpreter path
         if (!ExternalParamsUtil.isAgentPropertyDefined(SYSTEM_PROPERTY_RUBY_INTERPRETER,
-                                                                 ENV_VARIABLE_RUBY_INTERPRETER,
-                                                                 agentConfiguration)) {
+                                                       ENV_VARIABLE_RUBY_INTERPRETER,
+                                                       agentConfiguration)) {
             LOG.info(getRunnerNotRegisteredMessage() + " "
                     + SYSTEM_PROPERTY_RUBY_INTERPRETER + " system property or "
                     + ENV_VARIABLE_RUBY_INTERPRETER + " environment variable is required");
@@ -89,6 +89,9 @@ public class RakeTasksRunner extends RakeRunnerBase {
         final String workDir = runParams.get(RakeRunnerConstants.SERVER_UI_WORK_DIR_PROPERTY);
         if (!PropertiesUtil.isEmptyOrNull(workDir)) {
             cmd.setWorkDirectory(workDir);
+        }
+        if (inDebugMode) {
+            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: WorkDir : \n" + workDir);
         }
 
         // Rake runner script
