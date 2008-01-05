@@ -51,6 +51,7 @@ module Test
 
           # Starts testing
           def start
+            2 / 0
             setup_mediator
             attach_to_mediator
 
