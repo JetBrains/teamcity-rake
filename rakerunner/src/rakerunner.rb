@@ -28,6 +28,8 @@ STDOUT.sync=true;
 STDERR.sync=true;
 
 ######################################################################
+ENV["idea.rake.debug.log.path"] = File.expand_path(File.dirname(__FILE__) + "/../..")
+######################################################################
 
 require 'rubygems'
 version = "> 0"

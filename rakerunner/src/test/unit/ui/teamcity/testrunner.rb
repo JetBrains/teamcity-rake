@@ -16,8 +16,8 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
-if ENV["idea.rake.debug.log"]
-  RUNNER_LOG = File.new(File.expand_path(File.dirname(__FILE__) + "../../logs/runner.log"), "a+");
+if ENV["idea.rake.debug.log.path"]
+  RUNNER_LOG = File.new(ENV["idea.rake.debug.log.path"] + "/runner.log", "a+");
   RUNNER_LOG << "\n[#{Time.now}] : Started\n";
 end
 
@@ -109,7 +109,7 @@ if __FILE__ == $0
 end
 
 at_exit do
-  if ENV["idea.rake.debug.log"]
+  if ENV["idea.rake.debug.log.path"]
     RUNNER_LOG << "[#{Time.now}] : Finished\n\n";
     RUNNER_LOG.close
   end

@@ -17,9 +17,9 @@
 # @author: Roman.Chernyatchik
 # @date: 07.06.2007
 
-if ENV["idea.rake.debug.log"]
-  RAKE_EXT_LOG = File.new(File.expand_path(File.dirname(__FILE__) + "../../logs/rake_ext.log"), "a+");
-  RAKE_EXT_LOG << "\n[#{Time.now}] : Started\n";
+if ENV["idea.rake.debug.log.path"]
+  RAKE_EXT_LOG = File.new(ENV["idea.rake.debug.log.path"] + "/rake_ext.log", "a+")
+  RAKE_EXT_LOG << "\n[#{Time.now}] : Started\n"
 end
 
 # For RAKEVERSION =  0.7.2 - 0.8.0
@@ -338,7 +338,7 @@ class Rake::Application
 end
 
 at_exit do
-  if ENV["idea.rake.debug.log"]
+  if ENV["idea.rake.debug.log.path"]
     RAKE_EXT_LOG << "[#{Time.now}] : Closing connection....\n";
     Rake::TeamCity.msg_dispatcher.stop_dispatcher(true);
     RAKE_EXT_LOG << "[#{Time.now}] : Closed.\n";
