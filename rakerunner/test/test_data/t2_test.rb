@@ -5,15 +5,11 @@
 # To change this template use File | Settings | File Templates.
 require 'test/unit'
 
-class T1Test < Test::Unit::TestCase
+class T2Test < Test::Unit::TestCase
   def test_true
-    assert_equal 1, 1
+    assert_equal 2, 3
   end
   def test_failing
-    assert_equal 1, 2
-  end
-
-  def test_compile_error
-    assert_equal 1, k
+    assert_equal 2, 4
   end
 end
