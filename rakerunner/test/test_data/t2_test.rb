@@ -7,7 +7,7 @@ require 'test/unit'
 
 class T2Test < Test::Unit::TestCase
   def test_true
-    assert_equal 2, 3
+    assert_equal 2, 2
   end
   def test_failing
     assert_equal 2, 4
