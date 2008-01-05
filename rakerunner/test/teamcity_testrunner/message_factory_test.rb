@@ -16,10 +16,9 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 30.05.2007
-require File.dirname(__FILE__) + '/../test_helper' 
+require File.dirname(__FILE__) + '/../test_helper'
 
-require "test/unit"
-require 'test/unit/ui/teamcity/message_factory'
+require 'src/test/unit/ui/teamcity/message_factory'
 
 module Rake::TeamCity
   class MessageFactoryTest < Test::Unit::TestCase 

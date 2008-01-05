@@ -17,8 +17,9 @@
 # @author: Roman.Chernyatchik
 # @date: 04.05.2007
 
-require 'test/unit'
-require 'test/unit/ui/teamcity/message_factory'
+require File.dirname(__FILE__) + '/../test_helper'
+
+require 'src/test/unit/ui/teamcity/message_factory'
 
 class String; def rescue_action(e) raise e end; end
 

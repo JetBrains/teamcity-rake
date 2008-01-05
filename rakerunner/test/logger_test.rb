@@ -17,8 +17,9 @@
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
 
-require "test/unit"
-require 'test/unit/ui/teamcity/event_queue/event_queue'
+require File.dirname(__FILE__) + '/../test_helper'
+
+require 'src/test/unit/ui/teamcity/event_queue/event_queue'
 
 class LoggerTest < Test::Unit::TestCase
 

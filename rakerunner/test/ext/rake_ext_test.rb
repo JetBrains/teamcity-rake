@@ -17,9 +17,9 @@
 # @author: Roman.Chernyatchik
 # @date: 08.06.2007
 
-require 'test/unit'
-ENV["idea.rake.debug"] = "true"
-require File.expand_path(File.dirname(__FILE__) + '/../../src/rake_ext')
+require File.dirname(__FILE__) + '/../test_helper'
+
+require 'src/rake_ext'
 
 class Object
   @@test_stdout = ""
