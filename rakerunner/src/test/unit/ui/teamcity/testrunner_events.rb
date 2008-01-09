@@ -105,10 +105,10 @@ module Test
 
           # Test result changed - update statistics
           def result_changed(result)
-            debug_log("result_changed: all#{result.run_count.to_s}, " +
-                                      "asserts#{result.assertion_count.to_s}, " +
-                                      "failure#{result.failure_count.to_s}, " +
-                                      "error count#{result.error_count.to_s}")
+            debug_log("result_changed: all=#{result.run_count.to_s}, " +
+                                      "asserts=#{result.assertion_count.to_s}, " +
+                                      "failure=#{result.failure_count.to_s}, " +
+                                      "error count=#{result.error_count.to_s}")
           end
           ###########################################################################
 
@@ -122,8 +122,10 @@ module Test
           def debug_log(string)
             # Logs output.
             if ENV["idea.rake.debug.log.path"]
-              RUNNER_LOG << "[#{Time.now}] : {TC_TR_DEBUG_LOG} #{string}\n";
+              RUNNER_LOG << "[#{Time.now}] : #{string}\n";
             end
+            # Uncomment to see output in Teamcity build log.
+            # puts "{TC_TR_DEBUG_LOG} #{string}\n";
           end
         end
       end
