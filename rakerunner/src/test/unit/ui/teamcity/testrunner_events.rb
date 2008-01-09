@@ -105,11 +105,10 @@ module Test
 
           # Test result changed - update statistics
           def result_changed(result)
-            # TODO - add special message type and show statistics in teamcity task
-#            debug_log("result_changed: all#{result.run_count.to_s}, " +
-#                                      "asserts#{result.assertion_count.to_s}, " +
-#                                      "failure#{result.failure_count.to_s}, " +
-#                                      "error count#{result.error_count.to_s}")
+            debug_log("result_changed: all#{result.run_count.to_s}, " +
+                                      "asserts#{result.assertion_count.to_s}, " +
+                                      "failure#{result.failure_count.to_s}, " +
+                                      "error count#{result.error_count.to_s}")
           end
           ###########################################################################
 
@@ -121,10 +120,10 @@ module Test
           end
 
           def debug_log(string)
-            # Does nothing
-            # Override method to see log
-            #
-            puts("{TC_TR_DEBUG_LOG} #{string}")
+            # Logs output.
+            if ENV["idea.rake.debug.log.path"]
+              RUNNER_LOG << "[#{Time.now}] : {TC_TR_DEBUG_LOG} #{string}\n";
+            end
           end
         end
       end
