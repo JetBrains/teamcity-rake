@@ -18,7 +18,7 @@
 # @date: 07.06.2007
 
 if ENV["idea.rake.debug.log.path"]
-  RAKE_EXT_LOG = File.new(ENV["idea.rake.debug.log.path"] + "/rake_ext.log", "a+")
+  RAKE_EXT_LOG = File.new(ENV["idea.rake.debug.log.path"] + "/rakeRunner_rake.log", "a+")
   RAKE_EXT_LOG << "\n[#{Time.now}] : Started\n"
 end
 

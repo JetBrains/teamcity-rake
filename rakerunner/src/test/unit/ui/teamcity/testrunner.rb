@@ -17,7 +17,7 @@
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
 if ENV["idea.rake.debug.log.path"]
-  RUNNER_LOG = File.new(ENV["idea.rake.debug.log.path"] + "/runner.log", "a+");
+  RUNNER_LOG = File.new(ENV["idea.rake.debug.log.path"] + "/rakeRunner_testrunner.log", "a+");
   RUNNER_LOG << "\n[#{Time.now}] : Started\n";
 end
 
