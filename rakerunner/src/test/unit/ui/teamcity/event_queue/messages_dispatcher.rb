@@ -21,15 +21,16 @@ require "xmlrpc/client"
 
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/event_queue/events_dispatcher'
-  require 'src/test/unit/ui/teamcity/event_queue/event_handler'
+  require 'src/test/unit/ui/teamcity/event_queue/rpc_event_handler'
 else
   require 'test/unit/ui/teamcity/event_queue/events_dispatcher'
-  require 'test/unit/ui/teamcity/event_queue/event_handler'
+  require 'test/unit/ui/teamcity/event_queue/rpc_event_handler'
 end
 
 # Dispatches messages to TeamCity buildserver
 module Rake
   module TeamCity
+    
     class << self
       def msg_dispatcher
         @msg_dispatcher ||= MessagesDispather.new
@@ -67,7 +68,7 @@ module Rake
       #
       # max_attemps - max attemps count for message resending
       # retry_delay - rational number, delay beetween attemps in seconds
-      # handler - this handler will process events, by default it is SendDataEventHandler
+      # handler - this handler will process events, by default it is RPCEventHandler
       #
       # <b> Returns </b> server(XMLRPC::Client object), build_id_str(build id from teamcity, is used for autorization)
       # <b> Raise: </b> ConnectionException if params are not valid
@@ -76,7 +77,7 @@ module Rake
         unless (started?)
           @server, @build_id_str = MessagesDispather.get_teamcity_connection_params
           unless handler
-            handler = SendDataEventHandler.new(@build_id_str, @server, max_attemps, retry_delay)
+            handler = Rake::TeamCity:: RPCEventHandler.new(@build_id_str, @server, max_attemps, retry_delay)
           end
           @dispatcher = EventsDispatcher.new(handler)
           @dispatcher.start
@@ -119,52 +120,6 @@ module Rake
 
       def started?
         @dispatcher != nil
-      end
-    end
-
-
-    # Sends data to TeamCity via RPC
-    class SendDataEventHandler < Logger::EventHandler
-
-      # Creates a SendDataEventHandler
-      #
-      # buildId - build id from teamcity, is used for autorization
-      # server - XMLRPC::Client object, not nil.
-      # max_attemps - max attemps count for message resending
-      # retry_delay - rational number, delay beetween attemps in seconds
-      #
-      def initialize(buildId, server, max_attemps, retry_delay)
-        @buildId = buildId
-        @server = server
-        @max_attemps = max_attemps
-        @retry_delay = retry_delay
-      end
-
-      # Sends msg to TeamCity buildserver using RPC
-      #
-      # events - Array of events, e.g. TeamCity::Logger::Event
-      # count - attemp number, if count < @max_attemps program will retry sending
-      #
-      def process(events, count = 0)
-        begin
-          # Collect messages
-          msgs = []
-          for event in events
-            msgs << event.data
-          end
-
-          # Sending
-          @server.call("buildAgent.log", @buildId, msgs)
-
-        rescue XMLRPC::FaultException => e
-          # Retrying...
-          if count < @max_attemps
-            sleep @retry_delay
-            process(events, count + 1)
-          end
-        rescue Exception => e1
-          raise ConnectionException.new("Failed: Can't send messages to server\n#{e1}")
-        end
       end
     end
 

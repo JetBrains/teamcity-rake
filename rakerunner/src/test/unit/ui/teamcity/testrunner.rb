@@ -26,10 +26,8 @@ require 'test/unit/ui/testrunnerutilities'
 
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/testrunner_events'
-  require 'src/test/unit/ui/teamcity/event_queue/event_queue'
 else
   require 'test/unit/ui/teamcity/testrunner_events'
-  require 'test/unit/ui/teamcity/event_queue/event_queue'
 end
 
 # Runs a Test::Unit::TestSuite on teamcity server.
