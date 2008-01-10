@@ -34,10 +34,10 @@ end
 
 # Runs a Test::Unit::TestSuite on teamcity server.
 class Test::Unit::UI::TeamCity::TestRunner
-  extend TestRunnerUtilities
+  extend Test::Unit::UI::TestRunnerUtilities
 
   # Includes module with event handlers
-  include EventHandlers
+  include Test::Unit::UI::TeamCity::EventHandlers
 
   # Creates a new TestRunner for running the passed
   # suite.
@@ -78,20 +78,20 @@ class Test::Unit::UI::TeamCity::TestRunner
   private
 
   def setup_mediator
-    @mediator = TestRunnerMediator.new(@suite)
+    @mediator = Test::Unit::UI::TestRunnerMediator.new(@suite)
     @suite_name = (@suite.kind_of?(Module) ? @suit.name : @suite.to_s)
   end
 
   def attach_to_mediator
-    @mediator.add_listener(TestResult::FAULT, &method(:add_fault))
-    @mediator.add_listener(TestResult::CHANGED, &method(:result_changed))
+    @mediator.add_listener(Test::Unit::TestResult::FAULT, &method(:add_fault))
+    @mediator.add_listener(Test::Unit::TestResult::CHANGED, &method(:result_changed))
 
-    @mediator.add_listener(TestCase::STARTED, &method(:test_started))
-    @mediator.add_listener(TestCase::FINISHED, &method(:test_finished))
+    @mediator.add_listener(Test::Unit::TestCase::STARTED, &method(:test_started))
+    @mediator.add_listener(Test::Unit::TestCase::FINISHED, &method(:test_finished))
 
-    @mediator.add_listener(TestRunnerMediator::STARTED, &method(:started))
-    @mediator.add_listener(TestRunnerMediator::FINISHED, &method(:finished))
-    @mediator.add_listener(TestRunnerMediator::RESET, &method(:reset_ui))
+    @mediator.add_listener(Test::Unit::UI::TestRunnerMediator::STARTED, &method(:started))
+    @mediator.add_listener(Test::Unit::UI::TestRunnerMediator::FINISHED, &method(:finished))
+    @mediator.add_listener(Test::Unit::UI::TestRunnerMediator::RESET, &method(:reset_ui))
   end
 end
 
