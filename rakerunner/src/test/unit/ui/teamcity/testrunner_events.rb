@@ -97,18 +97,18 @@ module Test
               backtrace = fault.location.to_s
               message = fault.message.to_s
               test_name = fault.test_name
-              debug_log("Add failure for #{test_name}")
+              debug_log("Add failure for #{test_name}, \n    Backtrace:    \n#{backtrace}")
             when Test::Unit::Error
               backtrace = filter_backtrace(fault.exception.backtrace).join("\n    ")
               message = "#{fault.exception.class.name}: #{fault.exception.message.to_s}" 
               test_name = fault.test_name
-              debug_log("Add error for #{test_name}")
+              debug_log("Add error for #{test_name}, \n    Backtrace:    \n#{backtrace}")
             else
               test_name =
                 ((defined? fault.test_name) || @my_running_test_name || "<unknown>").to_s
               message = ((defined? fault.message) || fault).to_s
               backtrace = fault.to_s
-              debug_log("Add unknown fault #{test_name}")
+              debug_log("Add unknown fault #{test_name}, \n    Backtrace:    \n#{backtrace}")
             end
             log_one(Rake::TeamCity::MessageFactory.
                     create_test_problem_message(test_name, message,
