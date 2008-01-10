@@ -40,4 +40,7 @@ class T3_WITH_OUTPUT_Test < Test::Unit::TestCase
     assert_equal 2, 3
   end
 
+  eval("def test_fail_always_new_#{Time.now.to_i}
+           assert_equal 2, 3
+end")
 end
