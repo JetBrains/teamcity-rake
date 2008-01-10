@@ -130,7 +130,7 @@ module Rake
       #
       # public static BuildMessage1 createTestStderr(final String testName, final String output) {
       # public static BuildMessage1 createTestStdout(final String testName, final String output)
-      def self.create_test_ouptut_message(msg, test_name, is_std_out, output)
+      def self.create_test_output_message(test_name, is_std_out, output)
         _create_stub(:normal, "TestOutput") do |x|
           x.myValue("class" => "jetbrains.buildServer.messages.TestOutputData") do
             x.testName test_name
