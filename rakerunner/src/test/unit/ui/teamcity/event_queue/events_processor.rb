@@ -23,53 +23,47 @@ else
   require 'test/unit/ui/teamcity/event_queue/event'
 end
 
-module Rake
-  module TeamCity
-    module Logger
+# Collects events in event queue and process it by handlers.
+class Rake::TeamCity::Logger::EventsProcessor
+  def initialize(queue, events_sequence_handler, exceptions_handler)
+    @queue = queue
+    @events_sequence_handler = events_sequence_handler
+    @exceptions_handler = exceptions_handler
+  end
 
-      class EventsProcessor
-        def initialize(queue, events_sequence_handler, exceptions_handler)
-          @queue = queue
-          @events_sequence_handler = events_sequence_handler
-          @exceptions_handler = exceptions_handler
-        end
+  def start
+    @is_running = true
+    @should_stop = false
 
-        def start
-          @is_running = true
-          @should_stop = false
+    @processor_thread = Thread.new do
+      while (@is_running && !@should_stop)
+        process_events
+      end
+      process_events
+    end
+  end
 
-          @processor_thread = Thread.new do
-            while (@is_running && !@should_stop)
-              process_events
-            end
-            process_events
-          end
-        end
+  def process_events
+    events = []
 
-        def process_events
-          events = []
+    until @queue.empty? do
+      events << @queue.pop
+    end
 
-          until @queue.empty? do
-            events << @queue.pop
-          end
-
-          unless events.empty?
-            begin
-              @events_sequence_handler.process(events) if @events_sequence_handler
-            rescue Exception => e
-              @exceptions_handler.process(Event.new(self, [e, events])) if @exceptions_handler
-            end
-          end
-        end
-
-
-        def stop(join_thread = false)
-          @is_running = false;
-
-          # In test mode Thread.join may lead to DeadLock
-          @processor_thread.join if join_thread
-        end
+    unless events.empty?
+      begin
+        @events_sequence_handler.process(events) if @events_sequence_handler
+      rescue Exception => e
+        @exceptions_handler.process(Event.new(self, [e, events])) if @exceptions_handler
       end
     end
+  end
+
+
+  def stop(join_thread = false)
+    @is_running = false;
+
+    # In test mode Thread.join may lead to DeadLock
+    @processor_thread.join if join_thread
   end
 end
