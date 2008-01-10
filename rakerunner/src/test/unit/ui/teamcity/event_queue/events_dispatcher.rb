@@ -19,36 +19,66 @@
 
 require 'thread'
 if ENV["idea.rake.debug.sources"]
-  require 'src/test/unit/ui/teamcity/event_queue/events_processor'
+  require 'src/test/unit/ui/teamcity/event_queue/event'
 else
-  require 'test/unit/ui/teamcity/event_queue/events_processor'
+  require 'test/unit/ui/teamcity/event_queue/event'
 end
 
-#module Rake::TeamCity::Logger
+# Collects events and processes it by handler
 module Rake::TeamCity::Logger
   class EventsDispatcher
     def initialize(events_sequence_handler, exceptions_handler = nil)
       @queue = Queue.new
-      @processor = EventsProcessor.new(@queue, events_sequence_handler, exceptions_handler)
+      @events_sequence_handler = events_sequence_handler
+      @exceptions_handler = exceptions_handler
     end
 
-    # Adds new event into the event queue
+    # Adds new event into event queue
     def dispatch event
       @queue.push event
     end
 
     def start
-      @processor.start
+      @is_running = true
+      @should_stop = false
+
+      @processor_thread = Thread.new do
+        while (@is_running && !@should_stop)
+          process_events
+        end
+        process_events
+      end
     end
 
-    # Stops events processor and wait untill all events will be processed
+    # Stops events processor and wait until all events will be processed
     def stop(join_thread = false)
-      @processor.stop(join_thread)
+      @is_running = false;
+
+      # In test mode Thread.join may lead to DeadLock
+      @processor_thread.join if join_thread
     end
 
     # Stops events processor and doesn't process all remaing events
     def stop_immediately
-      @processor.stop_immediately
+      stop(true)
+    end
+
+    ############################################################################
+    private
+    def process_events
+      events = []
+
+      until @queue.empty? do
+        events << @queue.pop
+      end
+
+      unless events.empty?
+        begin
+          @events_sequence_handler.process(events) if @events_sequence_handler
+        rescue Exception => e
+          @exceptions_handler.process(Event.new(self, [e, events])) if @exceptions_handler
+        end
+      end
     end
   end
 end
