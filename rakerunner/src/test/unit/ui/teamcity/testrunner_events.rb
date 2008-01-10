@@ -94,10 +94,14 @@ module Test
           def add_fault(fault)
             case fault
             when Test::Unit::Failure
-              backtrace = fault.location.to_s
+              if fault.location.kind_of?(Array)
+                backtrace = fault.location..join("\n    ")
+              else
+                backtrace = fault.location.to_s
+              end
               message = fault.message.to_s
               test_name = fault.test_name
-              debug_log("Add failure for #{test_name}, \n    Backtrace[#{fault.location.class}]:    \n#{backtrace}")
+              debug_log("Add failure for #{test_name}, \n    Backtrace:    \n#{backtrace}")
             when Test::Unit::Error
               backtrace = filter_backtrace(fault.exception.backtrace).join("\n    ")
               message = "#{fault.exception.class.name}: #{fault.exception.message.to_s}" 
