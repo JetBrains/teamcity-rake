@@ -95,7 +95,7 @@ module Test
             case fault
             when Test::Unit::Failure
               if fault.location.kind_of?(Array)
-                backtrace = fault.location..join("\n    ")
+                backtrace = fault.location.join("\n    ")
               else
                 backtrace = fault.location.to_s
               end
