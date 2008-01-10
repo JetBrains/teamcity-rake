@@ -19,10 +19,12 @@
 
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/message_factory'
-  require 'src/test/unit/ui/teamcity/event_queue/event_queue'
+  require 'src/test/unit/ui/teamcity/event_queue/messages_dispatcher'
+  require 'src/test/unit/ui/teamcity/std_capture_helper'
 else
   require 'test/unit/ui/teamcity/message_factory'
-  require 'test/unit/ui/teamcity/event_queue/event_queue'
+  require 'test/unit/ui/teamcity/event_queue/messages_dispatcher'
+  require 'test/unit/ui/teamcity/std_capture_helper'
 end
 
 module Test
@@ -31,6 +33,7 @@ module Test
       module TeamCity
         module EventHandlers
           include Rake::TeamCity::Logger
+          include Rake::TeamCity::StdCaptureHelper
           include Test::Unit::Util::BacktraceFilter
 
           def log_one(msg)
@@ -64,7 +67,7 @@ module Test
           def test_started(test_name)
             debug_log("Test started #{test_name}...")
 
-            close_test_block unless @my_running_test_name
+            capture_output_start
 
             @my_running_test_name = test_name
             log_one(Rake::TeamCity::MessageFactory.create_open_block(@my_running_test_name, :test))
@@ -72,7 +75,16 @@ module Test
 
           # Test case finished
           def test_finished(test_name)
-            #TODO - test output!!!!!!
+
+            stdout_string, stderr_string = capture_output_end
+            if (!stdout_string.empty?)
+              log_one(Rake::TeamCity::MessageFactory.create_test_output_message(@my_running_test_name, true, stdout_string))
+            end
+            debug_log("My stdOut: [#{stdout_string}]")
+            if (!stderr_string.empty?)
+              log_one(Rake::TeamCity::MessageFactory.create_test_output_message(@my_running_test_name, false, stderr_string))
+            end
+            debug_log("My stdErr: [#{stderr_string}]")
 
             debug_log("Test finished #{test_name}...")
             close_test_block
@@ -100,7 +112,7 @@ module Test
             end
             log_one(Rake::TeamCity::MessageFactory.
                     create_test_problem_message(test_name, message,
-                                                message + "\n\n    " + backtrace ))
+                                                message + "\n\n    " + backtrace))
           end
 
           # Test result changed - update statistics

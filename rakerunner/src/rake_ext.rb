@@ -27,10 +27,10 @@ require 'rake'
 
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/message_factory'
-  require 'src/test/unit/ui/teamcity/event_queue/event_queue'
+  require 'src/test/unit/ui/teamcity/event_queue/messages_dispatcher'
 else
   require 'test/unit/ui/teamcity/message_factory'
-  require 'test/unit/ui/teamcity/event_queue/event_queue'
+  require 'test/unit/ui/teamcity/event_queue/messages_dispatcher'
 end
 ######################################################################
 ######################################################################
@@ -38,7 +38,7 @@ end
 ######################################################################
 ######################################################################
 
-########## Rake  TeamCityApplication ###################################
+########## Rake  TeamCityApplication #################################
 # TODO User output from tests
 # TODO User output from raketasks
 

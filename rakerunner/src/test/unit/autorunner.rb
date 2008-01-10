@@ -20,9 +20,9 @@
 require 'test/unit/autorunner_old.rb'
 
 if ENV["idea.rake.debug.sources"]
-  require 'src/test/unit/ui/teamcity/event_queue/event_queue'
+  require 'src/test/unit/ui/teamcity/event_queue/messages_dispatcher'
 else
-  require 'test/unit/ui/teamcity/event_queue/event_queue'
+  require 'test/unit/ui/teamcity/event_queue/messages_dispatcher'
 end
 
 module Test
