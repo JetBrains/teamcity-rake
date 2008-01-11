@@ -21,10 +21,12 @@ if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/message_factory'
   require 'src/test/unit/ui/teamcity/event_queue/messages_dispatcher'
   require 'src/test/unit/ui/teamcity/std_capture_helper'
+  require 'src/test/unit/ui/teamcity/runner_utils'
 else
   require 'test/unit/ui/teamcity/message_factory'
   require 'test/unit/ui/teamcity/event_queue/messages_dispatcher'
   require 'test/unit/ui/teamcity/std_capture_helper'
+  require 'test/unit/ui/teamcity/runner_utils'
 end
 
 module Test
@@ -35,6 +37,7 @@ module Test
           include Rake::TeamCity::Logger
           include Rake::TeamCity::StdCaptureHelper
           include Test::Unit::Util::BacktraceFilter
+          include Rake::TeamCity::RunnerUtils
 
           def log_one(msg)
             Rake::TeamCity.msg_dispatcher.log_one(msg)

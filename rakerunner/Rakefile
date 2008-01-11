@@ -8,12 +8,24 @@ require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 
-Rake::TestTask.new do |t|
-  t.libs << "src"    
+#Rake::TestTask.new do |t|
+#  t.libs << "src"
+#
+#  t.test_files = FileList['test/**/*_test.rb']
+#end
 
-  t.test_files = FileList['test/test_data/**/*_test.rb']
+Rake::TestTask.new(:test_data_common) do |t|
+  t.libs << "src"
+
+  t.test_files = FileList['test/test_data/common/**/*_test.rb']
 #  t.test_files = FileList['test/**/*_test.rb']
 end
 
-# TODO why doesn't work? 
+Rake::TestTask.new(:test_data_compile_failure) do |t|
+  t.libs << "src"
+
+  t.test_files = FileList['test/test_data/compilation_errors/**/*_test.rb']
+end
+
+# TODO why doesn't work?
 Dir["test/tasks/**/*.rake"].sort.each {|ext| load ext}
