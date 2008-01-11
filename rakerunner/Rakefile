@@ -17,14 +17,14 @@ require 'rake/rdoctask'
 Rake::TestTask.new(:test_data_common) do |t|
   t.libs << "src"
 
-  t.test_files = FileList['test/test_data/common/**/*_test.rb']
+  t.test_files = FileList['test_data/common/**/*_test.rb']
 #  t.test_files = FileList['test/**/*_test.rb']
 end
 
 Rake::TestTask.new(:test_data_compile_failure) do |t|
   t.libs << "src"
 
-  t.test_files = FileList['test/test_data/compilation_errors/**/*_test.rb']
+  t.test_files = FileList['test_data/compilation_errors/**/*_test.rb']
 end
 
 # TODO why doesn't work?
