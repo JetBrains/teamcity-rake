@@ -18,37 +18,7 @@ class A::B::C::Namespace_Test < Test::Unit::TestCase
     assert_equal 2, 2
   end
 
-  def test_true_err_out_puts
-    $stderr << "test_true.$stderr"
-    $stdout << "test_true.$stdout"
-    puts("test_true.puts")
-
-    assert_equal 2, 2
-  end
-
-  def test_failing_err_out_puts
-    $stderr << "test_true.$stderr"
-    $stdout << "test_true.$stdout"
-    puts("test_true.puts")
-
-    assert_equal 2, 4
-  end
-
-  def test_true_err_out_puts_child_process
-    system("ls medved_krevedko_and_preved_are_our_best_friends_")
-    system("dir medved_krevedko_and_preved_are_our_best_friends_")
-
-    assert_equal 2, 2
-  end
-
-  def test_false_err_out_puts_child_process
-    system("ls medved_krevedko_and_preved_are_our_best_friends_")
-    system("dir medved_krevedko_and_preved_are_our_best_friends_")
-
+  def test_failure
     assert_equal 2, 3
   end
-
-  eval("def test_fail_always_new_#{Time.now.to_i}
-           assert_equal 2, 3
-end")
 end
