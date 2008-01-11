@@ -117,8 +117,11 @@ module Test
               backtrace = fault.to_s
               debug_log("Add unknown fault #{test_name}, \n    Backtrace:    \n#{backtrace}")
             end
+            convert_ruby_test_name = convert_ruby_test_name(test_name)
+            debug_log("  Teamcity test name: #{convert_ruby_test_name}")
+
             log_one(Rake::TeamCity::MessageFactory.
-                    create_test_problem_message(test_name, message,
+                    create_test_problem_message(convert_ruby_test_name, message,
                                                 message + "\n\n    " + backtrace))
           end
 
