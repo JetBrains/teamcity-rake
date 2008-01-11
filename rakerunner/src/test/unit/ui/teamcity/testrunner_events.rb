@@ -33,12 +33,16 @@ module Test
   module Unit
     module UI
       module TeamCity
+        class InnerException < Exception
+        end
+
         module EventHandlers
           include Rake::TeamCity::Logger
           include Rake::TeamCity::StdCaptureHelper
           include Test::Unit::Util::BacktraceFilter
           include Rake::TeamCity::RunnerUtils
 
+          ###########################################3
           def log_one(msg)
             Rake::TeamCity.msg_dispatcher.log_one(msg)
           end
@@ -68,17 +72,20 @@ module Test
 
           # Test case started
           def test_started(test_name)
-            debug_log("Test started #{test_name}...")
+            teamcity_test_name = convert_ruby_test_name(test_name)
+            debug_log("Test started #{test_name}...[#{teamcity_test_name}]")
 
             capture_output_start
 
-            @my_running_test_name = test_name
+            @my_running_test_name = teamcity_test_name
+            @my_running_test_name_ruby = test_name
             log_one(Rake::TeamCity::MessageFactory.create_open_block(@my_running_test_name, :test))
           end
 
           # Test case finished
           def test_finished(test_name)
-
+            assert_test_valid(test_name)
+            
             stdout_string, stderr_string = capture_output_end
             if (!stdout_string.empty?)
               log_one(Rake::TeamCity::MessageFactory.create_test_output_message(@my_running_test_name, true, stdout_string))
@@ -89,7 +96,7 @@ module Test
             end
             debug_log("My stdErr: [#{stderr_string}]")
 
-            debug_log("Test finished #{test_name}...")
+            debug_log("Test finished #{@my_running_test_name_ruby}...[#{@my_running_test_name}]")
             close_test_block
           end
 
@@ -117,11 +124,10 @@ module Test
               backtrace = fault.to_s
               debug_log("Add unknown fault #{test_name}, \n    Backtrace:    \n#{backtrace}")
             end
-            convert_ruby_test_name = convert_ruby_test_name(test_name)
-            debug_log("  Teamcity test name: #{convert_ruby_test_name}")
 
+            assert_test_valid(test_name)
             log_one(Rake::TeamCity::MessageFactory.
-                    create_test_problem_message(convert_ruby_test_name, message,
+                    create_test_problem_message(@my_running_test_name, message,
                                                 message + "\n\n    " + backtrace))
           end
 
@@ -138,6 +144,17 @@ module Test
             if @my_running_test_name
               log_one(Rake::TeamCity::MessageFactory.create_close_block(@my_running_test_name, :test))
               @my_running_test_name = nil
+            end
+          end
+
+          private
+
+          def assert_test_valid(test_name)
+            if (test_name != @my_running_test_name_ruby)
+              teamcity_test_name = convert_ruby_test_name(test_name)
+              msg = "Finished test '#{test_name}'[#{teamcity_test_name}] doesn't correspond to current running test '#{@my_running_test_name_ruby}'[#{@my_running_test_name}]!"
+              debug_log(msg)
+              raise InnerException.new(msg)
             end
           end
 
