@@ -89,6 +89,7 @@ module Rake
     end
 
     def self.send_noraml_user_message(msg)
+      RAKE_EXT_LOG << "\n[#{Time.now}] : Msg: #{Rake::TeamCity::MessageFactory.create_user_message(msg)}\n"
       send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_user_message(msg)}
     end
 
