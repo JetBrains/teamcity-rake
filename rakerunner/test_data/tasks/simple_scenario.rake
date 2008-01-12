@@ -32,7 +32,7 @@ namespace :simple_sc do
 
   Rake::PackageTask.new("sample", "0.1") do |p|
     p.need_zip = true
-    p.zip_command = "7z a -mx=9 -mmt=off -mm=copy"
+    p.zip_command = "7z a -mx=9 -mmt=off"
     p.package_dir = "dist"
     p.package_files.include("dist/dir**/*")
   end
