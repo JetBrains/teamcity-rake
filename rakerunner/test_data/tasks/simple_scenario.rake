@@ -7,15 +7,15 @@ namespace :simple_sc do
   CLEAN_FILES = FileList['dist']
   CLEAN_FILES.clear_exclude
   task :clean do
-    rm CLEAN_FILES, {:verbose => true, :force => true}
+    rm_r CLEAN_FILES, {:verbose => true, :force => true}
   end
 
   task :create_zip do
     puts "Current dir: #{File.expand_path(".")}"
     user_block("Fake progress") do
-      300.times do |i|
-        user_msg "Fake status message" #File.expand_path(".")
+      200.times do |i|
         dir_name = "dist/dir#{i}"
+        user_msg "Fake status message : #{dir_name}"
         mkdir_p dir_name
         list = FileList['common/**/*']
         list.exclude("**/*/.svn")
@@ -30,8 +30,10 @@ namespace :simple_sc do
     rm_r FileList['dist/dir*']
   end
 
-  Rake::PackageTask.new("rrrr", "0.1") do |p|
-    p.need_zip
+  Rake::PackageTask.new("sample", "0.1") do |p|
+    p.need_zip = true
+    p.zip_command = "7z a -mx=9 -mmt=off -mm=copy"
+    p.package_dir = "dist"
     p.package_files.include("dist/dir**/*")
   end
 
