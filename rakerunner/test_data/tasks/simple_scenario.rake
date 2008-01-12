@@ -5,6 +5,6 @@ namespace :simple_sc do
    #task :dist => :dist_dir do
    desc "Main task"
    task :dist do
-     puts File.dirname(".")
+     puts File.expand_path(".")
    end
 end
