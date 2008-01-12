@@ -338,9 +338,9 @@ class Rake::Application
 end
 
 at_exit do
+  Rake::TeamCity.msg_dispatcher.stop_dispatcher(true);
   if ENV["idea.rake.debug.log.path"]
     RAKE_EXT_LOG << "[#{Time.now}] : Closing connection....\n";
-    Rake::TeamCity.msg_dispatcher.stop_dispatcher(true);
     RAKE_EXT_LOG << "[#{Time.now}] : Closed.\n";
 
     RAKE_EXT_LOG << "[#{Time.now}] : Finished\n\n";
