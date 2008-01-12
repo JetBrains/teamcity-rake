@@ -52,7 +52,7 @@ module Rake
       begin
         super
       rescue Exception => e
-        RAKE_EXT_LOG << "\n[#{Time.now}] : Rake task erors:\n #{msg}\n #{stacktrace}\n"
+        RAKE_EXT_LOG << "\n[#{Time.now}] : Rake application initialization erors:\n #{msg}\n #{stacktrace}\n"
 
         msg, stacktrace =  Rake::TeamCityApplication.format_exception_msg(e, options.trace)
         Rake::TeamCityApplication.send_error(msg, stacktrace)
@@ -60,7 +60,7 @@ module Rake
         #Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)  - will be closed at_exit
         exit(1)
       else
-        RAKE_EXT_LOG << "\n[#{Time.now}] : Rake task OK\n"
+        RAKE_EXT_LOG << "\n[#{Time.now}] : Rake application initialized.\n"
       end
     end
 
@@ -181,7 +181,7 @@ module Rake
     end
 
     def run
-      exit_code = 1
+      exit_code = 0
       begin
         super
       rescue Exception => e
