@@ -52,11 +52,15 @@ module Rake
       begin
         super
       rescue Exception => e
+        RAKE_EXT_LOG << "\n[#{Time.now}] : Rake task erors:\n #{msg}\n #{stacktrace}\n"
+
         msg, stacktrace =  Rake::TeamCityApplication.format_exception_msg(e, options.trace)
         Rake::TeamCityApplication.send_error(msg, stacktrace)
 
         #Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)  - will be closed at_exit
         exit(1)
+      else
+        RAKE_EXT_LOG << "\n[#{Time.now}] : Rake task OK\n"
       end
     end
 
