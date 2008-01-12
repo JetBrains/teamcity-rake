@@ -14,9 +14,9 @@ namespace :simple_sc do
 end
 
 def user_block(name)
-  puts "##[#{name}"
+  puts "##[ #{name}"
   yield
-  puts "##]#{name}"
+  puts "##] #{name}"
 end
 
 def user_msg(text)
