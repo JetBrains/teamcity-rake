@@ -20,7 +20,7 @@ namespace :simple_sc do
   CLEAN_FILES = FileList['dist/**/*']
   CLEAN_FILES.clear_exclude
   task :clean do
-    rm CLEAN_FILES :verbose
+    rm CLEAN_FILES, :verbose
   end
 end
 #############################################
