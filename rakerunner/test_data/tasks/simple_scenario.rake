@@ -1,16 +1,25 @@
+# For autocompletion
+require "fileutils"
+include FileUtils
+########################################
 namespace :simple_sc do
+  require 'rake/clean'
+  CLEAN.include("dist/**/*")
 
-  #directory "./"
+  #task :dist => :dist_dir do
+  desc "Main task"
+  task :dist do
+    puts "Current dir: #{File.expand_path(".")}"
 
-   #task :dist => :dist_dir do
-   desc "Main task"
-   task :dist do
-     puts "Current dir: #{File.expand_path(".")}" 
+    user_block("Fake progress") do
+      30.times do |i|
+        mkdir_p "dist/dir#{i}"
+      end
 
-     user_block("File.expand_path(.)") do
-       user_msg "Test" #File.expand_path(".")
-     end
-   end
+      user_msg "Fake status message" #File.expand_path(".")
+
+    end
+  end
 end
 
 def user_block(name)
@@ -20,5 +29,5 @@ def user_block(name)
 end
 
 def user_msg(text)
-   puts "###{text}"
+  puts "###{text}"
 end
