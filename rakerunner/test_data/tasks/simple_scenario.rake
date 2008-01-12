@@ -5,7 +5,7 @@ namespace :simple_sc do
   task :create_fake_dirs do
     puts "Current dir: #{File.expand_path(".")}"
     user_block("Fake progress") do
-      30.times do |i|
+      300.times do |i|
         dir_name = "dist/dir#{i}"
         mkdir_p dir_name
         cp_r "common", dir_name, {:verbose => true}
