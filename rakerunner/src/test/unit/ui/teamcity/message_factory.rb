@@ -203,7 +203,7 @@ module Rake
       end
 
       def self.get_time
-        Time.now.to_i
+        ((Time.now.to_f) * 1000 ).to_i
       end
 
       def self.get_bool_str(value)
