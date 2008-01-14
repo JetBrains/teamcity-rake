@@ -22,6 +22,11 @@ class T1Test < Test::Unit::TestCase
     assert_equal 1, k
   end
 
+  def test_long_test
+    sleep(5) 
+    assert_equal 1, 1
+  end
+
   private
   def my_failure_iterate(count)
     p "my_failure_iterate #{count}"
