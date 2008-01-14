@@ -23,7 +23,16 @@ class RunnerUtilsTest < Test::Unit::TestCase
      assert_equal("test_method_params_syntax_is_ok",
                   convert_ruby_test_name("test_method_params_syntax_is_ok"))
 
-     assert_equal("A::B::C::Test.test_1",
-                  convert_ruby_test_name("test_1(A::B::C::Test)"))
+  end
+
+  def test_convert_ruby_test_name_qualified_name
+    assert_equal("A.Test.test_1",
+                 convert_ruby_test_name("test_1(A::Test)"))
+    assert_equal("A::B::C.Test.test_1",
+                 convert_ruby_test_name("test_1(A::B::C::Test)"))
+    assert_equal("A::B.C.Test.test_1",
+                 convert_ruby_test_name("test_1(A::B::C.Test)"))
+    assert_equal("A::B.C.Test.test_1",
+                 convert_ruby_test_name("test_1(A::B.C::Test)"))
   end
 end
