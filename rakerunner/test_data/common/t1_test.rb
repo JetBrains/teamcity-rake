@@ -22,9 +22,9 @@ class T1Test < Test::Unit::TestCase
     assert_equal 1, k
   end
 
-  def test_long_test
+  def test_5_millisec
     sleep(5) 
-    assert_equal 1, 1
+    true
   end
 
   private
