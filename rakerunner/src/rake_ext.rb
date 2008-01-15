@@ -16,8 +16,9 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 07.06.2007
+RAKE_EXT_LOG_ENABLED = ENV["idea.rake.debug.log.path"]
 
-if ENV["idea.rake.debug.log.path"]
+if RAKE_EXT_LOG_ENABLED
   RAKE_EXT_LOG = File.new(ENV["idea.rake.debug.log.path"] + "/rakeRunner_rake.log", "a+")
   RAKE_EXT_LOG << "\n[#{Time.now}] : Started\n"
 end
@@ -52,7 +53,9 @@ module Rake
       begin
         super
       rescue Exception => e
-        RAKE_EXT_LOG << "\n[#{Time.now}] : Rake application initialization erors:\n #{msg}\n #{stacktrace}\n"
+        if RAKE_EXT_LOG_ENABLED
+          RAKE_EXT_LOG << "\n[#{Time.now}] : Rake application initialization erors:\n #{msg}\n #{stacktrace}\n"
+        end
 
         msg, stacktrace =  Rake::TeamCityApplication.format_exception_msg(e, options.trace)
         Rake::TeamCityApplication.send_error(msg, stacktrace)
@@ -60,7 +63,9 @@ module Rake
         #Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)  - will be closed at_exit
         exit(1)
       else
-        RAKE_EXT_LOG << "\n[#{Time.now}] : Rake application initialized.\n"
+        if RAKE_EXT_LOG_ENABLED
+          RAKE_EXT_LOG << "\n[#{Time.now}] : Rake application initialized.\n"
+        end
       end
     end
 
@@ -187,8 +192,7 @@ module Rake
       rescue Exception => e
         exit_code = Rake::TeamCityApplication.process_exception(e, true)
       ensure
-#        Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)
-        exit(exit_code)
+        exit(exit_code) if (exit_code != 0)
       end
     end
   end
@@ -205,7 +209,7 @@ end
 #############  Object extension #############################
 class Object
   def puts(obj)
-     Rake::TeamCityApplication.send_noraml_user_message(obj.to_s)
+    Rake::TeamCityApplication.send_noraml_user_message(obj.to_s)
   end
 
   def printf(s, *args)
@@ -343,7 +347,7 @@ end
 
 at_exit do
   Rake::TeamCity.msg_dispatcher.stop_dispatcher(true);
-  if ENV["idea.rake.debug.log.path"]
+  if RAKE_EXT_LOG_ENABLED
     RAKE_EXT_LOG << "[#{Time.now}] : Closing connection....\n";
     RAKE_EXT_LOG << "[#{Time.now}] : Closed.\n";
 
