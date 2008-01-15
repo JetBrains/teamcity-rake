@@ -8,6 +8,8 @@ Rake::TestTask.new(:test_data_common) do |t|
 end
 desc "Common tests via Rake.run_tests"
 task :test_data_common1 do
+  require "rake/runtest"
+  Rake.run_tests 'common/**/*_test.rb'
 end
 
 
