@@ -75,6 +75,18 @@ public class RakeTasksRunner extends RakeRunnerBase {
         return true;
     }
 
+    protected void modifyBuildEnvironment(final Map<String, String> environment,
+                                          final Map<String, String> runParameters,
+                                          final Map<String, String> buildParameters,
+                                          final File tempDir) {
+        super.modifyBuildEnvironment(environment, runParameters, buildParameters, tempDir);
+
+        environment.put(AgentRuntimeProperties.BUILD_ID,
+                        runParameters.get(AgentRuntimeProperties.BUILD_ID));
+        environment.put(AgentRuntimeProperties.OWN_PORT,
+                        runParameters.get(AgentRuntimeProperties.OWN_PORT));
+    }
+
     protected void buildCommandLine(@NotNull final GeneralCommandLine cmd,
                                     @NotNull final File soourcesRootDir,
                                     @NotNull final Map<String, String> runParams,
@@ -122,14 +134,6 @@ public class RakeTasksRunner extends RakeRunnerBase {
 
         // Rake runner script
         cmd.addParameter(RubySourcesUtil.getRakeRunnerPath());
-
-//TODO
-//        cmd.addParameter("-e");
-//        cmd.addParameter("\"require(\\\"C:/home/teamcity/rubyteamcity/rakerunner/src/arguments\\\");STDOUT.sync=true;STDERR.sync=true;load($0=ARGV.shift)\"");
-
-        // TeamCity connection params
-        cmd.addParameter(runParams.get(AgentRuntimeProperties.BUILD_ID)); //build
-        cmd.addParameter(runParams.get(AgentRuntimeProperties.OWN_PORT)); //port
 
         // Rake options
         if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_TRACE_PROPERTY)) {

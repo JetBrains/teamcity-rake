@@ -30,7 +30,7 @@ end
 # Dispatches messages to TeamCity buildserver
 module Rake
   module TeamCity
-    
+
     class << self
       def msg_dispatcher
         @msg_dispatcher ||= MessagesDispather.new
@@ -40,7 +40,7 @@ module Rake
     class MessagesDispather
       include Logger
 
-      # Check does Teamcity test runner is enabled 
+      # Check does Teamcity test runner is enabled
       def self.teamcity_test_runner_enabled_set?
         ENV['idea.build.server.build.id'] && ENV['idea.build.agent.port']
       end
@@ -84,7 +84,7 @@ module Rake
         else
           new_server, new_build_id_str = MessagesDispather.get_teamcity_connection_params
           if (new_build_id_str != @build_id_str)
-            raise ConnectionException.new("Attemp to start dispatcher for other build_id when another dispatcher is running. At first stop previous one.")            
+            raise ConnectionException.new("Attemp to start dispatcher for other build_id when another dispatcher is running. At first stop previous one.")
           end
 
         end

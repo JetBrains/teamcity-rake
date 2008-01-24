@@ -19,11 +19,8 @@
 
 # TeamCity build server uses this file for running rake tasks
 ######################################################################
-#TODO think how to pass arguments.
 #TODO If no args - use default rake runner
 
-ENV["idea.build.server.build.id"] = $0 = ARGV.shift;
-ENV["idea.build.agent.port"] = $0 = ARGV.shift;
 STDOUT.sync=true;
 STDERR.sync=true;
 

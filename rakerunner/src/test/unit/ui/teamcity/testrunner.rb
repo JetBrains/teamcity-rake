@@ -1,3 +1,4 @@
+$stderr << "_________TEAM RUNNER________________________________________PRJ_______________________________________\n"
 # Copyright 2000-2008 JetBrains s.r.o.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
