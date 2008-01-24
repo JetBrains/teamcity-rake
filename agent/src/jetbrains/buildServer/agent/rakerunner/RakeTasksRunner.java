@@ -87,38 +87,38 @@ public class RakeTasksRunner extends RakeRunnerBase {
         cmd.setExePath(ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams));
 
         // Working directory
-        final String userWorkDir = runParams.get(RakeRunnerConstants.SERVER_UI_WORK_DIR_PROPERTY);
-        final String workDir;
-        if (!PropertiesUtil.isEmptyOrNull(userWorkDir)) {
-            //User defined working directory
-
-            // with separator
-            String path = soourcesRootDir.getCanonicalPath() + File.separator + userWorkDir;
-            if (FileUtil.checkIfDirExists(path)) {
-                workDir = path;
-            } else {
-                // without separator
-                path = soourcesRootDir.getCanonicalPath() + userWorkDir;
-                if (FileUtil.checkIfDirExists(path)) {
-                    workDir = path;
-                } else {
-                    // consider userWorkDir as full path
-                    if (FileUtil.checkIfDirExists(userWorkDir)) {
-                        workDir = path;
-                    } else {
-                        if (inDebugMode) {
-                            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: User defined working directory: [" + userWorkDir + "]");
-                            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Sources root directory: [" + soourcesRootDir.getAbsolutePath() + "]");
-                        }
-                        throw new RunBuildException("Cannot find working directory: [" + userWorkDir + "].");
-                    }
-                }
-            }
-        } else {
+//        final String userWorkDir = runParams.get(RakeRunnerConstants.SERVER_UI_WORK_DIR_PROPERTY);
+//        final String workDir;
+//        if (!PropertiesUtil.isEmptyOrNull(userWorkDir)) {
+//            //User defined working directory
+//
+//            // with separator
+//            String path = soourcesRootDir.getCanonicalPath() + File.separator + userWorkDir;
+//            if (FileUtil.checkIfDirExists(path)) {
+//                workDir = path;
+//            } else {
+//                // without separator
+//                path = soourcesRootDir.getCanonicalPath() + userWorkDir;
+//                if (FileUtil.checkIfDirExists(path)) {
+//                    workDir = path;
+//                } else {
+//                    // consider userWorkDir as full path
+//                    if (FileUtil.checkIfDirExists(userWorkDir)) {
+//                        workDir = path;
+//                    } else {
+//                        if (inDebugMode) {
+//                            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: User defined working directory: [" + userWorkDir + "]");
+//                            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Sources root directory: [" + soourcesRootDir.getAbsolutePath() + "]");
+//                        }
+//                        throw new RunBuildException("Cannot find working directory: [" + userWorkDir + "].");
+//                    }
+//                }
+//            }
+//        } else {
             //Use project sources root as working directory
-            workDir = soourcesRootDir.getCanonicalPath();
-        }
-        cmd.setWorkDirectory(workDir);
+//            workDir = soourcesRootDir.getCanonicalPath();
+//        }
+//        cmd.setWorkDirectory(workDir);
 
         // Rake runner script
         cmd.addParameter(RubySourcesUtil.getRakeRunnerPath());
@@ -133,11 +133,11 @@ public class RakeTasksRunner extends RakeRunnerBase {
 
         // Rake options
         if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_TRACE_PROPERTY)) {
-            cmd.addParameter("--trace");
+            cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_TRACE_FLAG);
         }
 
         if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_QUITE_PROPERTY)) {
-            cmd.addParameter("--quite");
+            cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_QUITE_FLAG);
         }
 
         // Task name
@@ -160,7 +160,7 @@ public class RakeTasksRunner extends RakeRunnerBase {
         // cmd.addParameter("TESTOPTS=\\\"C:/home/teamcity/rubyteamcity/rakerunner/src/teamcity_testrunner.rb\\\" --runner=teamcity");
 
         if (inDebugMode) {
-            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + workDir + "]");
+            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + soourcesRootDir.getCanonicalPath() + "]");
             getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
         }
     }

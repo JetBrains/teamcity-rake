@@ -6,10 +6,6 @@
   Rake task name: <strong><props:displayValue name="rakeRunner.rake.task.name" emptyValue="not specified"/></strong>
 </div>
 
-<div class="parameter">
-  Working directory: <strong><props:displayValue name="rakeRunner.rake.work.dir" emptyValue="VCS root"/></strong>
-</div>
-
 <div class="nestedParameter">
   <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
     <li>Trace: <strong><props:displayCheckboxValue name="rakeRunner.rake.options.trace"/></strong></li>
