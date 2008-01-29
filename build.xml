@@ -72,7 +72,8 @@
             <zipfileset dir="build/jar" includes="RakeRunnerAgent.jar, RakeRunnerCommon.jar"
                         prefix="rakeRunnerPlugin/lib"/>
             <!-- Ruby sources -->
-            <zipfileset dir="rakerunner/src" prefix="rakeRunnerPlugin/lib/rb"/>
+            <zipfileset dir="rakerunner/src" excludes="test/**/*, test" prefix="rakeRunnerPlugin/lib/rb/runner"/>
+            <zipfileset dir="rakerunner/src/test" prefix="rakeRunnerPlugin/lib/rb/patch/test"/>
         </zip>
     </target>
 

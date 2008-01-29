@@ -1,4 +1,3 @@
-$stderr << "_________TEAM RUNNER________________________________________PRJ_______________________________________\n"
 # Copyright 2000-2008 JetBrains s.r.o.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +16,14 @@ $stderr << "_________TEAM RUNNER________________________________________PRJ_____
 #
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
-if ENV["idea.rake.debug.log.path"]
-  RUNNER_LOG = File.new(ENV["idea.rake.debug.log.path"] + "/rakeRunner_testrunner.log", "a+");
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/rakerunner_consts'
+else
+  require 'test/unit/ui/teamcity/rakerunner_consts'
+end
+
+if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
+  RUNNER_LOG = File.new(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + "/rakeRunner_testrunner.log", "a+");
   RUNNER_LOG << "\n[#{Time.now}] : Started\n";
 end
 
@@ -99,7 +104,7 @@ if __FILE__ == $0
 end
 
 at_exit do
-  if ENV["idea.rake.debug.log.path"]
+  if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
     RUNNER_LOG << "[#{Time.now}] : Finished\n\n";
     RUNNER_LOG.close
   end

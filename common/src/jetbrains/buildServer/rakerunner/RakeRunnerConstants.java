@@ -46,4 +46,7 @@ public interface RakeRunnerConstants extends Constants {
     @NonNls String SYSTEM_PROPERTY_RUBY_INTERPRETER = "system.ruby.interpreter";
     @NonNls String TARGET_RUBY_INTERPRETER = "target.ruby.interpreter";
     @NonNls String ENV_VARIABLE_RUBY_INTERPRETER = "RUBY_INTERPRETER";
+
+    @NonNls String ORIGINAL_SDK_AUTORUNNER_PATH_KEY = "rake.runner.original.sdk.test.unit.autorunner.path";
+    @NonNls String RUBYLIB_ENVIRONMENT_VARIABLE = "RUBYLIB";
 }

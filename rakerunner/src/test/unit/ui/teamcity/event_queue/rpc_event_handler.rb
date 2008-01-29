@@ -2,10 +2,11 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 10.01.2008
-
 if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/rakerunner_consts'
   require 'src/test/unit/ui/teamcity/event_queue/event_handler'
 else
+  require 'test/unit/ui/teamcity/rakerunner_consts'
   require 'test/unit/ui/teamcity/event_queue/event_handler'
 end
 
@@ -14,9 +15,6 @@ module Rake
 
     # Sends data to TeamCity via RPC
     class RPCEventHandler < Logger::EventHandler
-      # Name of Teamcity RPC logger method
-      TEAMCITY_LOGGER_RPC_NAME = "buildAgent.log"
-
       # Creates a RPCEventHandler
       #
       # buildId - build id from teamcity, is used for autorization

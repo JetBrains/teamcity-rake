@@ -16,10 +16,16 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 07.06.2007
-RAKE_EXT_LOG_ENABLED = ENV["idea.rake.debug.log.path"]
 
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/rakerunner_consts'
+else
+  require 'test/unit/ui/teamcity/rakerunner_consts'
+end
+
+RAKE_EXT_LOG_ENABLED = ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
 if RAKE_EXT_LOG_ENABLED
-  RAKE_EXT_LOG = File.new(ENV["idea.rake.debug.log.path"] + "/rakeRunner_rake.log", "a+")
+  RAKE_EXT_LOG = File.new(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + "/rakeRunner_rake.log", "a+")
   RAKE_EXT_LOG << "\n[#{Time.now}] : Started\n"
 end
 

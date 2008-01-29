@@ -19,15 +19,14 @@ package jetbrains.buildServer.agent.rakerunner;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.openapi.util.Key;
+import com.intellij.util.containers.HashMap;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.util.PropertiesUtil;
-import jetbrains.buildServer.agent.AgentRuntimeProperties;
-import jetbrains.buildServer.agent.BuildAgentConfiguration;
-import jetbrains.buildServer.agent.BuildAgentSystemInfo;
+import jetbrains.buildServer.agent.*;
+import jetbrains.buildServer.agent.impl.AgentEventDispatcher;
 import jetbrains.buildServer.agent.rakerunner.utils.ExternalParamsUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySourcesUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
 import jetbrains.buildServer.agent.rakerunner.RakeRunnerBase;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.apache.log4j.Logger;
@@ -95,44 +94,22 @@ public class RakeTasksRunner extends RakeRunnerBase {
 
         final boolean inDebugMode = ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.DEBUG_PROPERTY);
 
+        final String patchedRubySDKFilesRoot = RubySourcesUtil.getPatchedRubySDKFilesRoot();
+
+        // Special rake runner Environment properties
+        final HashMap<String, String> envMap = new HashMap<String, String>();
+        envMap.put(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE,
+                    patchedRubySDKFilesRoot);
+        //TODO append to begin if exists
+        envMap.put(RakeRunnerConstants.ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
+                //TODO hardcoded...
+                   "c:\\IR\\teamcity\\ruby\\lib\\ruby\\1.8\\test\\unit\\autorunner");
+        cmd.setEnvParams(envMap);
+
         // Ruby interpreter
         cmd.setExePath(ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams));
 
-        // Working directory
-//        final String userWorkDir = runParams.get(RakeRunnerConstants.SERVER_UI_WORK_DIR_PROPERTY);
-//        final String workDir;
-//        if (!PropertiesUtil.isEmptyOrNull(userWorkDir)) {
-//            //User defined working directory
-//
-//            // with separator
-//            String path = soourcesRootDir.getCanonicalPath() + File.separator + userWorkDir;
-//            if (FileUtil.checkIfDirExists(path)) {
-//                workDir = path;
-//            } else {
-//                // without separator
-//                path = soourcesRootDir.getCanonicalPath() + userWorkDir;
-//                if (FileUtil.checkIfDirExists(path)) {
-//                    workDir = path;
-//                } else {
-//                    // consider userWorkDir as full path
-//                    if (FileUtil.checkIfDirExists(userWorkDir)) {
-//                        workDir = path;
-//                    } else {
-//                        if (inDebugMode) {
-//                            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: User defined working directory: [" + userWorkDir + "]");
-//                            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Sources root directory: [" + soourcesRootDir.getAbsolutePath() + "]");
-//                        }
-//                        throw new RunBuildException("Cannot find working directory: [" + userWorkDir + "].");
-//                    }
-//                }
-//            }
-//        } else {
-            //Use project sources root as working directory
-//            workDir = soourcesRootDir.getCanonicalPath();
-//        }
-//        cmd.setWorkDirectory(workDir);
-
-        // Rake runner script
+       // Rake runner script
         cmd.addParameter(RubySourcesUtil.getRakeRunnerPath());
 
         // Rake options
@@ -176,5 +153,4 @@ public class RakeTasksRunner extends RakeRunnerBase {
         final String text = TextUtil.removeNewLine(processEvent.getText());
         getBuildLogger().message("{AGENT TEXT AVAILABLE}: " + text);
     }
-
 }

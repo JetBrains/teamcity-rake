@@ -1,8 +1,6 @@
 package jetbrains.buildServer.runner.rakerunner;
 
-import jetbrains.buildServer.BuildTypeDescriptor;
 import jetbrains.buildServer.util.PropertiesUtil;
-import jetbrains.buildServer.runner.BuildFileRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.serverSide.*;
@@ -27,7 +25,7 @@ public class RakeRunnerRunType extends RunType {
 
     public PropertiesProcessor getRunnerPropertiesProcessor() {
         return new PropertiesProcessor() {
-            public Collection process(Map properties) {
+            public Collection<InvalidProperty> process(Map properties) {
                 final List<InvalidProperty> result = new Vector<InvalidProperty>();
 
                 // Rake task name
@@ -52,12 +50,11 @@ public class RakeRunnerRunType extends RunType {
 
     public Map<String, String> getDefaultRunnerProperties() {
         final Map<String, String> map = new HashMap<String, String>();
-        //TODO
+        //TODO - setup check box options
         return map;
     }
 
     public boolean isCheckoutTypeSupported(final SBuildType.CheckoutType checkoutType) {
-//        return checkoutType != BuildTypeDescriptor.CheckoutType.MANUAL;
         return true;
     }
 

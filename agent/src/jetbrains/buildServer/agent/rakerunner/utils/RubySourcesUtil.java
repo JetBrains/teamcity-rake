@@ -39,7 +39,8 @@ public class RubySourcesUtil {
     @NonNls
     private static final String RUBY_SOURCES_SUBDIR = "rb";
     @NonNls
-    private static final String RUBY_SOURCES_RAKE_RUNNER = "rakerunner.rb";
+    private static final String RUBY_SOURCES_SKD_PATCH_FOLDER = "patch";
+    private static final String RUBY_SOURCES_RAKE_RUNNER = "runner"+ File.separatorChar + "rakerunner.rb";
 
     @NotNull
     private static String getRootPath() throws RunBuildException {
@@ -69,5 +70,11 @@ public class RubySourcesUtil {
     public static String getRakeRunnerPath() throws RunBuildException {
         final String path = getRootPath();
         return path + File.separatorChar + RUBY_SOURCES_RAKE_RUNNER;
+    }
+
+    @NotNull
+    public static String getPatchedRubySDKFilesRoot() throws RunBuildException {
+        final String path = getRootPath();
+        return path + File.separatorChar + RUBY_SOURCES_SKD_PATCH_FOLDER;
     }
 }

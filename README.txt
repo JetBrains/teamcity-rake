@@ -59,3 +59,10 @@ Features:
    E.g.
      agentdir - c:\soft\Teamcity_6527\buildAgent
      webrootdir - c:\soft\Teamcity_6527\webapps\ROOT
+
+=============================================================
+========= LIMITATIONS =======================================
+=============================================================
+RakeRunner plugin uses own unit tests runner and loads it with RUBYLIB enviroment variable.
+Be sure that your program doesn't clear this enviroment variable. But obviously you may append
+your pathes to it.

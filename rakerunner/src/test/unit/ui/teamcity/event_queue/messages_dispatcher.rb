@@ -16,6 +16,11 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/rakerunner_consts'
+else
+  require 'test/unit/ui/teamcity/rakerunner_consts'
+end
 
 require "xmlrpc/client"
 
@@ -42,18 +47,18 @@ module Rake
 
       # Check does Teamcity test runner is enabled
       def self.teamcity_test_runner_enabled_set?
-        ENV['idea.build.server.build.id'] && ENV['idea.build.agent.port']
+        ENV[IDEA_BUILDSERVER_BUILD_ID_KEY] && ENV[IDEA_BUILDSERVER_AGENT_PORT_KEY]
       end
 
       # Creates connection XMLRPC::Client to TeamCity server.
-      # Uses enviroment vriables ENV['idea.build.server.build.id'] and ENV['idea.build.agent.port'].
+      # Uses enviroment vriables ENV[IDEA_BUILDSERVER_BUILD_ID_KEY] and ENV[IDEA_BUILDSERVER_AGENT_PORT_KEY].
       #
       # <b> Returns: </b> connection object and build_id string
       # <b> Raise: </b> ConnectionException if params are not valid
       def self.get_teamcity_connection_params
-        build_id_str = ENV['idea.build.server.build.id']
+        build_id_str = ENV[IDEA_BUILDSERVER_BUILD_ID_KEY]
         begin
-          port_int = ENV['idea.build.agent.port'].to_i
+          port_int = ENV[IDEA_BUILDSERVER_AGENT_PORT_KEY].to_i
         ensure
           if !build_id_str or !port_int
             fail ConnectionException.new("Can't connect to agent. Wrong parameters:  buildId=#{build_id_str || "nil"}, port=#{port_int || "nil"}")
@@ -72,7 +77,9 @@ module Rake
       #
       # <b> Returns </b> server(XMLRPC::Client object), build_id_str(build id from teamcity, is used for autorization)
       # <b> Raise: </b> ConnectionException if params are not valid
-      def start_dispatcher(max_attemps = 100, retry_delay = 0.25, handler = nil)
+      def start_dispatcher(max_attemps = TEAMCITY_RAKERUNNER_DISPATCHER_MAX_ATTEMPS,
+                           retry_delay = TEAMCITY_RAKERUNNER_DISPATCHER_RETRY_DELAY,
+                           handler = nil)
 
         unless (started?)
           @server, @build_id_str = MessagesDispather.get_teamcity_connection_params
