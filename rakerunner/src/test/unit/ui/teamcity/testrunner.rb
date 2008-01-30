@@ -16,6 +16,7 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
+
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/rakerunner_consts'
 else

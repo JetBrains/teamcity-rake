@@ -16,13 +16,13 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 02.06.2007
+
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/rakerunner_consts'
 else
   require 'test/unit/ui/teamcity/rakerunner_consts'
 end
 
-#TODO remove ".rb" from end
 ORIGINAL_SDK_AUTORUNNER_PATH = ENV[ORIGINAL_SDK_AUTORUNNER_PATH_KEY]
 if ORIGINAL_SDK_AUTORUNNER_PATH
   require ORIGINAL_SDK_AUTORUNNER_PATH
@@ -59,28 +59,3 @@ module Test
     end
   end
 end
-#
-#module Rake
-#  module TeamCity
-#    require 'test/unit/assertions'
-#
-#    include Test::Unit::Assertions
-#
-#    def run_tests(file_pattern='test/test*.rb',
-#                  log_enabled = false,
-#                  additional_options = nil)
-#
-#      Dir["#{file_pattern}"].each { |fn|
-#        puts fn if log_enabled
-#        begin
-#          Test::Unit::AutoRunner.run(true, nil, additional_options ? [fn] + additional_options : [fn])
-#        rescue RuntimeError => ex
-#          # TeamCity test runner will process this exception
-#          # TODO Terminate?
-#        end
-#      }
-#    end
-#
-#    extend self
-#  end
-#end

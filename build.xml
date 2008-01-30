@@ -44,7 +44,7 @@
     <!-- Compile -->
     <target name="make-common">
         <mkdir dir="build/common/classes"/>
-        <javac srcdir="common/src" destdir="build/common/classes">
+        <javac srcdir="common/src" debug="on" destdir="build/common/classes">
             <classpath refid="classpath"/>
         </javac>
 
@@ -57,7 +57,7 @@
     <target name="make-agent">
         <!-- Java sources -->
         <mkdir dir="build/agent/classes"/>
-        <javac srcdir="agent/src" destdir="build/agent/classes">
+        <javac srcdir="agent/src" debug="on" destdir="build/agent/classes">
             <classpath path="build/common/classes"/>
             <classpath refid="classpath"/>
         </javac>
@@ -79,7 +79,7 @@
 
     <target name="make-server">
         <mkdir dir="build/server/classes/META-INF"/>
-        <javac srcdir="server/src" destdir="build/server/classes">
+        <javac srcdir="server/src" debug="on" destdir="build/server/classes">
             <classpath path="build/common/classes"/>
             <classpath refid="classpath"/>
         </javac>

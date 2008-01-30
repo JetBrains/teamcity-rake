@@ -19,8 +19,6 @@
 
 # TeamCity build server uses this file for running rake tasks
 ######################################################################
-#TODO If no args - use default rake runner
-
 STDOUT.sync=true;
 STDERR.sync=true;
 

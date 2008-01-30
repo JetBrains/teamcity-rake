@@ -21,14 +21,12 @@ import com.intellij.execution.process.ProcessEvent;
 import com.intellij.openapi.util.Key;
 import com.intellij.util.containers.HashMap;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.util.PropertiesUtil;
-import jetbrains.buildServer.agent.*;
-import jetbrains.buildServer.agent.impl.AgentEventDispatcher;
-import jetbrains.buildServer.agent.rakerunner.utils.ExternalParamsUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RubySourcesUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
-import jetbrains.buildServer.agent.rakerunner.RakeRunnerBase;
+import jetbrains.buildServer.agent.AgentRuntimeProperties;
+import jetbrains.buildServer.agent.BuildAgentConfiguration;
+import jetbrains.buildServer.agent.BuildAgentSystemInfo;
+import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.util.PropertiesUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -99,11 +97,9 @@ public class RakeTasksRunner extends RakeRunnerBase {
         // Special rake runner Environment properties
         final HashMap<String, String> envMap = new HashMap<String, String>();
         envMap.put(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE,
-                    patchedRubySDKFilesRoot);
-        //TODO append to begin if exists
+                   OSUtil.appendToRUBYLIBEnvVariable(patchedRubySDKFilesRoot));
         envMap.put(RakeRunnerConstants.ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
-                //TODO hardcoded...
-                   "c:\\IR\\teamcity\\ruby\\lib\\ruby\\1.8\\test\\unit\\autorunner");
+                   RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(runParams, buildParams));
         cmd.setEnvParams(envMap);
 
         // Ruby interpreter

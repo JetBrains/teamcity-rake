@@ -16,6 +16,8 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -24,23 +26,21 @@ import java.io.File;
  * Created by IntelliJ IDEA.
  *
  * @author: Roman.Chernyatchik
- * @date: 05.01.2008
+ * @date: 30.01.2008
  */
-public class FileUtil {
-    /**
-     * @param path Path to check
-     * @return true, if path exists and is directory
-     */
-    public static boolean checkIfDirExists(@NotNull final String path) {
-        final File file = new File(path);
-        return file.exists() && file.isDirectory();
+public class OSUtil {
+    
+    public static String appendToRUBYLIBEnvVariable(@NotNull final String additionalPath) {
+        final String rubyLibVal = System.getenv(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE);
+
+        final String pathValue;
+        if (TextUtil.isEmpty(rubyLibVal)) {
+            pathValue = toSystemDependentName(additionalPath);
+        } else {
+            pathValue = rubyLibVal + File.pathSeparatorChar + toSystemDependentName(additionalPath);
+        }
+
+        return pathValue;
     }
 
-    /**
-     * @param path Path to check
-     * @return true, if path exists
-     */
-    public static boolean checkIfExists(@NotNull final String path) {
-        return new File(path).exists();
-    }
 }

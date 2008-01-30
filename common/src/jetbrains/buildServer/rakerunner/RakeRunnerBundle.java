@@ -24,6 +24,6 @@ package jetbrains.buildServer.rakerunner;
  */
 
 public interface RakeRunnerBundle {
-    String RUNNER_DESCRIPTION = "Runner for executing rake tasks, Test::Unit and RSpec tests";
-    String RUNNER_DISPLAY_NAME = "Rake tasks runner";
+    public String RUNNER_DESCRIPTION = "Runner for executing rake tasks, Test::Unit and RSpec tests";
+    public String RUNNER_DISPLAY_NAME = "Rake tasks runner";
 }

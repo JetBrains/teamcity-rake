@@ -16,6 +16,7 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 30.05.2007
+
 require File.dirname(__FILE__) + '/../test_helper'
 
 require 'src/test/unit/ui/teamcity/message_factory'
