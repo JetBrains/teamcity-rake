@@ -66,7 +66,11 @@ public class RakeRunnerRunType extends RunType {
 
     public Map<String, String> getDefaultRunnerProperties() {
         final Map<String, String> map = new HashMap<String, String>();
-        //TODO - setup check box options
+        final String trueStr = Boolean.TRUE.toString();
+
+        // --trace
+        map.put(RakeRunnerConstants.SERVER_UI_RAKE_OPTION_TRACE_PROPERTY, trueStr);
+
         return map;
     }
 

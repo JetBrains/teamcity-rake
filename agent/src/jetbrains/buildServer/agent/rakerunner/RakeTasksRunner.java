@@ -112,9 +112,11 @@ public class RakeTasksRunner extends RakeRunnerBase {
         if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_TRACE_PROPERTY)) {
             cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_TRACE_FLAG);
         }
-
-        if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_QUITE_PROPERTY)) {
-            cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_QUITE_FLAG);
+        if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_QUIET_PROPERTY)) {
+            cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_QUIET_FLAG);
+        }
+        if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_DRYRUN_PROPERTY)) {
+            cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_DRYRUN_FLAG);
         }
 
         // Task name

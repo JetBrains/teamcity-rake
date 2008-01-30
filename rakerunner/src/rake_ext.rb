@@ -46,7 +46,6 @@ end
 ######################################################################
 
 ########## Rake  TeamCityApplication #################################
-# TODO User output from tests
 # TODO User output from raketasks
 
 module Rake

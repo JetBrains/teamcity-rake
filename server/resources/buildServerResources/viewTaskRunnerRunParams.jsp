@@ -27,7 +27,8 @@
 <div class="nestedParameter">
   <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
     <li>Turn on invoke/execute tracing, enable full backtrace (--trace): <strong><props:displayCheckboxValue name="rakeRunner.rake.options.trace"/></strong></li>
-    <li>Do not log messages to standard output (--quite): <strong><props:displayCheckboxValue name="rakeRunner.rake.options.quite"/></strong></li>
+    <li>Do not log messages to standard output (--quiet): <strong><props:displayCheckboxValue name="rakeRunner.rake.options.quiet"/></strong></li>
+    <li>Do a dry run without executing actions (--dry-run): <strong><props:displayCheckboxValue name="rakeRunner.rake.options.dryrun"/></strong></li>
   </ul>
 </div>
 

@@ -36,9 +36,10 @@ public interface RakeRunnerConstants extends Constants {
     @NonNls String SERVER_UI_RAKE_TASK_PROPERTY = "rakeRunner.rake.task.name";
     @NonNls String SERVER_UI_RAKE_OPTION_TRACE_PROPERTY = "rakeRunner.rake.options.trace";
     @NonNls String AGENT_CMD_LINE_RAKE_OPTION_TRACE_FLAG = "--trace";
-    @NonNls String SERVER_UI_RAKE_OPTION_QUITE_PROPERTY = "rakeRunner.rake.options.quite";
-    @NonNls String AGENT_CMD_LINE_RAKE_OPTION_QUITE_FLAG = "--quite";
-    //TODO verbose, silent
+    @NonNls String SERVER_UI_RAKE_OPTION_QUIET_PROPERTY = "rakeRunner.rake.options.quiet";
+    @NonNls String AGENT_CMD_LINE_RAKE_OPTION_QUIET_FLAG = "--quiet";
+    @NonNls String SERVER_UI_RAKE_OPTION_DRYRUN_PROPERTY = "rakeRunner.rake.options.dryrun";
+    @NonNls String AGENT_CMD_LINE_RAKE_OPTION_DRYRUN_FLAG = "--dry-run";
 
 // Agent properties:
     

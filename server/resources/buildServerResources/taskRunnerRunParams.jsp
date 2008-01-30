@@ -42,8 +42,11 @@
             <props:checkboxProperty name="rakeRunner.rake.options.trace"/>
             <label for="rakeRunner.rake.options.trace">Turn on invoke/execute tracing, enable full backtrace (--trace).</label>
             <br/>
-            <props:checkboxProperty name="rakeRunner.rake.options.quite"/>
-            <label for="rakeRunner.rake.options.quite">Do not log messages to standard output (--quite).</label>
+            <props:checkboxProperty name="rakeRunner.rake.options.quiet"/>
+            <label for="rakeRunner.rake.options.quiet">Do not log messages to standard output (--quiet).</label>
+            <br/>
+            <props:checkboxProperty name="rakeRunner.rake.options.dryrun"/>
+            <label for="rakeRunner.rake.options.dryrun">Do a dry run without executing actions (--dry-run).</label>
         </td>
     </tr>
 </l:settingsGroup>
