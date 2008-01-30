@@ -16,5 +16,4 @@
 
 <container>
   <component class="jetbrains.buildServer.agent.rakerunner.RakeTasksRunner"/>
-  <component class="jetbrains.buildServer.agent.rakerunner.RakeRunnerPropertiesExtension"/>
 </container>
