@@ -49,7 +49,7 @@ namespace :simple_sc do
     rm_r FileList['dist/dir*']
   end
 
-  Rake::PackageTask.new("sample", "0.1." + ENV["build.vcs.number.1"]) do |p|
+  Rake::PackageTask.new("sample", "0.1." + ENV["BUILD_VCS_NUMBER.1"]) do |p|
     p.need_zip = true
     p.zip_command = "7z a -mx=9 -mmt=off"
     p.package_dir = "dist"
