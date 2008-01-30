@@ -2,7 +2,7 @@
 <project name="rakerunner-teamcity" default="dist">
     <!-- External directories -->
     <property name="rakerunner.bin.dir" value="dist/RakeRunner/bin"/>
-
+    <property name="plugin.version" value="${build.vcs.number.1}"/>
     <!-- For devel-deploy -->
     <!--<property name="webrootdir" value="c:/soft/Teamcity_6527/webapps/ROOT"/>-->
     <!--<property name="agentdir" value="c:/soft/Teamcity_6527/buildAgent"/>-->
@@ -118,8 +118,8 @@
 
     <target name="build.artifacts" depends="dist">
         <mkdir dir="${artifacts.dir}"/>
-        <move file ="build/jar/rakeRunnerServer.jar" todir="${artifacts.dir}"/>
-        <move file ="build/jar/rakeRunnerPlugin.zip" todir="${artifacts.dir}"/>
+        <move file ="build/jar/rakeRunnerServer-${plugin.version}.jar" todir="${artifacts.dir}"/>
+        <move file ="build/jar/rakeRunnerPlugin-${plugin.version}.zip" todir="${artifacts.dir}"/>
     </target>
 
     <!-- TeamCity builds -->
