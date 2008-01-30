@@ -1,6 +1,7 @@
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 
 <l:settingsGroup title="Rake task">
     <tr>
@@ -9,8 +10,12 @@
             <span class="error" id="error_rakeRunner.rake.task.name"></span>
             <span class="smallNote">(e.g. test:functionals or mytask::test)</span>
         </td>
+
+
     </tr>
 </l:settingsGroup>
+
+<forms:workingDirectory />
 
 <l:settingsGroup title="Rake options">
     <tr>

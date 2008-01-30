@@ -6,6 +6,8 @@
   Rake task name: <strong><props:displayValue name="rakeRunner.rake.task.name" emptyValue="not specified"/></strong>
 </div>
 
+<props:viewWorkingDirectory />
+
 <div class="nestedParameter">
   <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
     <li>Trace: <strong><props:displayCheckboxValue name="rakeRunner.rake.options.trace"/></strong></li>
