@@ -36,12 +36,6 @@ public abstract class RakeRunnerBase extends GenericProgramRunner implements Rak
         return true;
     }
 
-    @SuppressWarnings({"NoopMethodInAbstractClass"})
-    protected void processTerminated(final RunEnvironment runEnv, final boolean isFailed) {
-        super.processTerminated(runEnv, isFailed);
-        //TODO
-    }
-
     protected void fillSystemProperties(final Map<String, String> props,
                                         final Map<String, String> runParameters,
                                         final Map<String, String> buildParameters) {
