@@ -22,8 +22,6 @@ import com.intellij.openapi.util.Key;
 import com.intellij.util.containers.HashMap;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
-import jetbrains.buildServer.agent.BuildAgentConfiguration;
-import jetbrains.buildServer.agent.BuildAgentSystemInfo;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.PropertiesUtil;
@@ -49,29 +47,6 @@ public class RakeTasksRunner extends RakeRunnerBase {
         return RakeRunnerConstants.RUNNER_TYPE;
     }
 
-    public boolean canRun(@NotNull final BuildAgentConfiguration agentConfiguration) {
-        final BuildAgentSystemInfo systemInfo = agentConfiguration.getSystemInfo();
-        if (!systemInfo.isWindows() && !systemInfo.isMac()
-                && !systemInfo.isUnix()) {
-            LOG.info(getType() + " runner can works only under Unix, Linux, Windows and MacOS");
-            return false;
-        }
-
-        // Interpreter path
-        if (!ExternalParamsUtil.isAgentPropertyDefined(SYSTEM_PROPERTY_RUBY_INTERPRETER,
-                                                       ENV_VARIABLE_RUBY_INTERPRETER,
-                                                       agentConfiguration)) {
-            LOG.info(getRunnerNotRegisteredMessage() + " "
-                    + SYSTEM_PROPERTY_RUBY_INTERPRETER + " system property or "
-                    + ENV_VARIABLE_RUBY_INTERPRETER + " environment variable is required");
-            return false;
-        }
-
-        // TODO Rake gem > 0.7.3...
-        // TODO Builder gem...
-        return true;
-    }
-
     protected void modifyBuildEnvironment(final Map<String, String> environment,
                                           final Map<String, String> runParameters,
                                           final Map<String, String> buildParameters,
@@ -94,39 +69,40 @@ public class RakeTasksRunner extends RakeRunnerBase {
 
         final String patchedRubySDKFilesRoot = RubySourcesUtil.getPatchedRubySDKFilesRoot();
 
-        // Special rake runner Environment properties
-        final HashMap<String, String> envMap = new HashMap<String, String>();
-        envMap.put(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE,
-                   OSUtil.appendToRUBYLIBEnvVariable(patchedRubySDKFilesRoot));
-        envMap.put(RakeRunnerConstants.ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
-                   RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(runParams, buildParams));
-        cmd.setEnvParams(envMap);
+        try {
+            // Special rake runner Environment properties
+            final HashMap<String, String> envMap = new HashMap<String, String>();
+            envMap.put(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE,
+                    OSUtil.appendToRUBYLIBEnvVariable(patchedRubySDKFilesRoot));
+            envMap.put(RakeRunnerConstants.ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
+                    RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(runParams, buildParams));
+            cmd.setEnvParams(envMap);
 
-        // Ruby interpreter
-        cmd.setExePath(ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams));
+            // Ruby interpreter
+            cmd.setExePath(ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams));
 
-       // Rake runner script
-        cmd.addParameter(RubySourcesUtil.getRakeRunnerPath());
+            // Rake runner script
+            cmd.addParameter(RubySourcesUtil.getRakeRunnerPath());
 
-        // Rake options
-        if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_TRACE_PROPERTY)) {
-            cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_TRACE_FLAG);
-        }
-        if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_QUIET_PROPERTY)) {
-            cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_QUIET_FLAG);
-        }
-        if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_DRYRUN_PROPERTY)) {
-            cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_DRYRUN_FLAG);
-        }
+            // Rake options
+            if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_TRACE_PROPERTY)) {
+                cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_TRACE_FLAG);
+            }
+            if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_QUIET_PROPERTY)) {
+                cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_QUIET_FLAG);
+            }
+            if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_DRYRUN_PROPERTY)) {
+                cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_DRYRUN_FLAG);
+            }
 
-        // Task name
-        final String task_name = runParams.get(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY);
-        if (PropertiesUtil.isEmptyOrNull(task_name)) {
-            throw new RunBuildException("Specify Rake task name in runner configuration settings.");
-        } else {
-            cmd.addParameter(task_name);
-        }
-        
+            // Task name
+            final String task_name = runParams.get(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY);
+            if (PropertiesUtil.isEmptyOrNull(task_name)) {
+                cmd.addParameter(RakeRunnerConstants.DEFAULT_RAKE_TASK_NAME);
+            } else {
+                cmd.addParameter(task_name);
+            }
+
 //        if (user_params != null) {
 //            final StringTokenizer st = new StringTokenizer(user_params);
 //            while (st.hasMoreTokens()) {
@@ -135,12 +111,18 @@ public class RakeTasksRunner extends RakeRunnerBase {
 //        }  else {
 //            throw new RunBuildException("Specify Rake task name in runner configuration settings.");
 //        }
-        //TODO if user allow
-        // cmd.addParameter("TESTOPTS=\\\"C:/home/teamcity/rubyteamcity/rakerunner/src/teamcity_testrunner.rb\\\" --runner=teamcity");
+            //TODO if user allow
+            // cmd.addParameter("TESTOPTS=\\\"C:/home/teamcity/rubyteamcity/rakerunner/src/teamcity_testrunner.rb\\\" --runner=teamcity");
+
+            if (inDebugMode) {
+                getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
+            }
+        } catch (MyBuildFailureException e) {
+            failRakeTaskBuild(e);
+        }
 
         if (inDebugMode) {
             getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + soourcesRootDir.getCanonicalPath() + "]");
-            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
         }
     }
 
@@ -150,5 +132,31 @@ public class RakeTasksRunner extends RakeRunnerBase {
         //TODO script hide run params
         final String text = TextUtil.removeNewLine(processEvent.getText());
         getBuildLogger().message("{AGENT TEXT AVAILABLE}: " + text);
+    }
+
+    public void failRakeTaskBuild(@NotNull final MyBuildFailureException e) throws RunBuildException {
+        getBuildLogger().error(e.getMessage());
+        getBuildLogger().buildFailureDescription(e.getTitle());
+
+        throw new RunBuildException(e.getTitle());
+    }
+
+    public static class MyBuildFailureException extends Exception {
+        private final String msg;
+        private final String title;
+
+        public MyBuildFailureException(@NotNull final String msg,
+                                       @NotNull final String title) {
+            this.msg = msg;
+            this.title = title;
+        }
+
+        public String getMessage() {
+            return msg;
+        }
+
+        public String getTitle() {
+            return title;
+        }
     }
 }

@@ -26,4 +26,6 @@ package jetbrains.buildServer.rakerunner;
 public interface RakeRunnerBundle {
     public String RUNNER_DESCRIPTION = "Runner for executing rake tasks, Test::Unit and RSpec tests";
     public String RUNNER_DISPLAY_NAME = "Rake tasks runner";
+
+    public String RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT = "Rake-runner prerequisites error on agent..";
 }

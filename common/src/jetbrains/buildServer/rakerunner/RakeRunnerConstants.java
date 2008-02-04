@@ -50,4 +50,7 @@ public interface RakeRunnerConstants extends Constants {
 
     @NonNls String ORIGINAL_SDK_AUTORUNNER_PATH_KEY = "rake.runner.original.sdk.test.unit.autorunner.path";
     @NonNls String RUBYLIB_ENVIRONMENT_VARIABLE = "RUBYLIB";
+
+// Rake
+    @NonNls String DEFAULT_RAKE_TASK_NAME = "default";
 }

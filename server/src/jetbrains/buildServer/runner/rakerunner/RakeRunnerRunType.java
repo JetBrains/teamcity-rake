@@ -16,13 +16,16 @@
 
 package jetbrains.buildServer.runner.rakerunner;
 
-import jetbrains.buildServer.util.PropertiesUtil;
-import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
-import jetbrains.buildServer.serverSide.*;
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.serverSide.PropertiesProcessor;
+import jetbrains.buildServer.serverSide.RunType;
+import jetbrains.buildServer.serverSide.RunTypeRegistry;
+import jetbrains.buildServer.serverSide.SBuildType;
 import jetbrains.buildServer.web.openapi.WebResourcesManager;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -40,20 +43,21 @@ public class RakeRunnerRunType extends RunType {
     }
 
     public PropertiesProcessor getRunnerPropertiesProcessor() {
-        return new PropertiesProcessor() {
-            public Collection<InvalidProperty> process(Map properties) {
-                final List<InvalidProperty> result = new Vector<InvalidProperty>();
-
-                // Rake task name
-                final String rakeTaskName =
-                        (String)properties.get(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY);
-                if (PropertiesUtil.isEmptyOrNull(rakeTaskName)) {
-                    result.add(new InvalidProperty(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY,
-                                                   "Rake task name must be specified"));
-                }
-                return result;
-            }
-        };
+//        return new PropertiesProcessor() {
+//            public Collection<InvalidProperty> process(Map properties) {
+//                final List<InvalidProperty> result = new Vector<InvalidProperty>();
+//
+//                // Rake task name
+//                final String rakeTaskName =
+//                        (String)properties.get(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY);
+//                if (PropertiesUtil.isEmptyOrNull(rakeTaskName)) {
+//                    result.add(new InvalidProperty(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY,
+//                                                   "Rake task name must be specified"));
+//                }
+//                return result;
+//            }
+//        };
+        return null;
     }
 
     public String getEditRunnerParamsJspFilePath() {

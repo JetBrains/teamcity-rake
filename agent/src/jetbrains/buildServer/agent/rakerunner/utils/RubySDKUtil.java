@@ -17,7 +17,9 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
+import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +42,7 @@ public class RubySDKUtil {
     @NotNull
     public static String getSDKTestUnitAutoRunnerScriptPath(@NotNull final Map<String, String> runParameters,
                                                             @NotNull final Map<String, String> buildParameters)
-            throws RunBuildException {
+            throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
 
         final String scriptSource = GET_LOAD_PATH_SCRIPT;
 
@@ -57,6 +59,6 @@ public class RubySDKUtil {
 
         // Error
         final String msg = "File '" + AUTORUNNER_SCRIPT_PATH + "' wasn't found in $LOAD_PATH of Ruby SDK with interpreter: '" + rubyExecutable + "'";
-        throw new RunBuildException(msg);
+        throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
     }
 }

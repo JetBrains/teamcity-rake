@@ -21,13 +21,10 @@
 
 <l:settingsGroup title="Rake task">
     <tr>
-        <th><label for="rakeRunner.rake.task.name">Rake task name: <l:star/></label></th>
+        <th><label for="rakeRunner.rake.task.name">Rake task name: </label></th>
         <td><props:textProperty name="rakeRunner.rake.task.name" style="width:30em;" maxlength="256"/>
-            <span class="error" id="error_rakeRunner.rake.task.name"></span>
-            <span class="smallNote">(e.g. test:functionals or mytask::test)</span>
+            <span class="smallNote">(e.g. 'test:functionals' or 'mytask::test'. If empty 'default' task will be used)</span>
         </td>
-
-
     </tr>
 </l:settingsGroup>
 
@@ -56,5 +53,6 @@
     <td>
         <props:checkboxProperty name="rakeRunner.debug"/>
         <label for="rcodedup.debug">Enable debug messages in the build log</label>
+        <span class="smallNote">This is internal option, for plugin debugging.</span>
     </td>
 </tr>

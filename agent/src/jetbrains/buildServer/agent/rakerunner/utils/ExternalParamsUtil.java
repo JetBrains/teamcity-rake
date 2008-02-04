@@ -16,16 +16,16 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import jetbrains.buildServer.agent.BuildAgentConfiguration;
-import jetbrains.buildServer.agent.runner.PropertyFinder;
-import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.RunBuildException;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
+import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
+import jetbrains.buildServer.agent.runner.PropertyFinder;
+import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
 import java.io.File;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -43,75 +43,36 @@ public class ExternalParamsUtil implements RakeRunnerConstants {
                                SYSTEM_PROPERTY_RUBY_INTERPRETER);
 
 
-    @Nullable
-    public static String getAgentSystemOrEnvProperty(@NotNull final String systemPropertyName,
-                                                     @NotNull final String envPropertyName,
-                                                     @NotNull final BuildAgentConfiguration config) {
-       return getAgentSystemOrEnvProperty(systemPropertyName, envPropertyName, config, false);
-    }
-    @Nullable
-    private static String getAgentSystemOrEnvProperty(@NotNull final String systemPropertyName,
-                                                     @NotNull final String envPropertyName,
-                                                     @NotNull final BuildAgentConfiguration config,
-                                                     final boolean logResults) {
-
-        //TODO which order is right? What about "system." and "env." prefixes?
-
-        //system
-        final Object systemValue = config.getCustomProperties().get(systemPropertyName);
-        if (systemValue instanceof String) {
-            return (String) systemValue;
-        }
-
-        //env
-        final String envValue = config.getEnv(envPropertyName);   //System.env
-        if (envValue != null) {
-            return envValue;
-        }
-        return null;
-    }
-
-    public static boolean isAgentPropertyDefined(@NotNull final String systemPropertyName,
-                                                 @NotNull final  String envPropertyName,
-                                                 @NotNull final BuildAgentConfiguration config) {
-        return getAgentSystemOrEnvProperty(systemPropertyName, envPropertyName, config) != null;
-    }
-
-    @Nullable
-    public static String getRubyInterpreterPath(@NotNull final String systemPropertyName,
-                                                @NotNull final String envPropertyName,
-                                                @NotNull final BuildAgentConfiguration config) {
-       return getAgentSystemOrEnvProperty(systemPropertyName, envPropertyName, config, true);
-    }
-
-
     @NotNull
     public static String getRubyInterpreterPath(final Map<String, String> runParameters,
                                                 final Map<String, String> buildParameters)
-            throws RunBuildException {
-        //TODO refactor with corresponding method
+            throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
 
         final String rubyInterpreterPath =
                 RUBY_INTERPRETER_FINDER.getPropertyValue(runParameters, buildParameters);
 
         if (rubyInterpreterPath == null) {
-            throw new RunBuildException("Unable to find ruby home. Check property '"
+            final String msg = "Unable to find ruby home. Check property '"
                     + RakeRunnerConstants.TARGET_RUBY_INTERPRETER
                     + "', enviroment variable '"
                     + RakeRunnerConstants.ENV_VARIABLE_RUBY_INTERPRETER
                     + "' or system property '"
-                    + RakeRunnerConstants.SYSTEM_PROPERTY_RUBY_INTERPRETER + "'");
+                    + RakeRunnerConstants.SYSTEM_PROPERTY_RUBY_INTERPRETER + "'";
+
+            throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
         }
 
-          final File rubyInterpreter = new File(rubyInterpreterPath);
-          try {
-              if (rubyInterpreter.exists() && rubyInterpreter.isFile()) {
-                  return rubyInterpreterPath;
-              }
-              throw new RunBuildException("Ruby interpreter ("+ rubyInterpreterPath + ") doesn't exist or isn't a file.");
-          } catch (Exception e) {
-              throw new RunBuildException(e);
-          }
+        final File rubyInterpreter = new File(rubyInterpreterPath);
+        try {
+            if (rubyInterpreter.exists() && rubyInterpreter.isFile()) {
+                return rubyInterpreterPath;
+            }
+            final String msg = "Ruby interpreter (" + rubyInterpreterPath + ") doesn't exist or isn't a file.";
+            throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+        } catch (Exception e) {
+            //unknown error
+            throw new RunBuildException(e);
+        }
     }
 
     public static boolean isParameterEnabled(final Map<String, String> runParameters,
