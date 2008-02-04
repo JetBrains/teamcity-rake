@@ -70,7 +70,7 @@
 
         <!-- Bundle -->
         <zip destfile="build/jar/rakeRunnerPlugin.zip">
-            <zipfileset file="build/version.txt" />
+            <zipfileset dir="build/version" prefix="rakeRunnerPlugin/version"/>
             <zipfileset dir="build/jar" includes="RakeRunnerAgent.jar, RakeRunnerCommon.jar"
                         prefix="rakeRunnerPlugin/lib"/>
             <!-- Ruby sources -->
@@ -91,13 +91,14 @@
         <jar destfile="build/jar/rakeRunnerServer.jar">
             <fileset dir="build/server/classes"/>
             <fileset dir="server/resources"/>
-            <fileset file="build/version.txt"/>
+            <fileset dir="build" includes="version; version/**/*" />
         </jar>
     </target>
 
     <target name="make">
         <mkdir dir="build/jar"/>
-        <echo file="build/version.txt" append="false">${plugin.version}</echo>
+        <mkdir dir="build/version"/>
+        <echo file="build/version/${plugin.version}.txt" append="false"/>
         <antcall target="make-common"/>
         <antcall target="make-agent"/>
         <antcall target="make-server"/>
