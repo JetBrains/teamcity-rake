@@ -131,7 +131,7 @@ public class RakeTasksRunner extends RakeRunnerBase {
         super.onTextAvailable(runParameters, processEvent, key);
         //TODO script hide run params
         final String text = TextUtil.removeNewLine(processEvent.getText());
-        getBuildLogger().message("{AGENT TEXT AVAILABLE}: " + text);
+        getBuildLogger().message("{AGENT OUTPUT}: " + text);
     }
 
     public void failRakeTaskBuild(@NotNull final MyBuildFailureException e) throws RunBuildException {
