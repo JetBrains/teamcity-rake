@@ -23,7 +23,7 @@
     <tr>
         <th><label for="rakeRunner.rake.task.name">Rake task name: </label></th>
         <td><props:textProperty name="rakeRunner.rake.task.name" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">(e.g. 'test:functionals' or 'mytask::test'. If empty 'default' task will be used)</span>
+            <span class="smallNote">E.g. 'test:functionals' or 'mytask::test'. If empty 'default' task will be used.</span>
         </td>
     </tr>
 </l:settingsGroup>
@@ -39,11 +39,27 @@
             <props:checkboxProperty name="rakeRunner.rake.options.trace"/>
             <label for="rakeRunner.rake.options.trace">Turn on invoke/execute tracing, enable full backtrace (--trace).</label>
             <br/>
+
             <props:checkboxProperty name="rakeRunner.rake.options.quiet"/>
             <label for="rakeRunner.rake.options.quiet">Do not log messages to standard output (--quiet).</label>
             <br/>
+
             <props:checkboxProperty name="rakeRunner.rake.options.dryrun"/>
             <label for="rakeRunner.rake.options.dryrun">Do a dry run without executing actions (--dry-run).</label>
+        </td>
+        </tr>
+    <tr>
+        <th><label for="rakeRunner.testoptions">Rake tests options: </label></th>
+        <td><props:textProperty name="rakeRunner.testoptions" style="width:30em;" maxlength="256"/>
+            <span class="smallNote">If not empty rake will be invked with a 'TESTOPTS="{options}"'</span>
+        </td>
+        <br/>
+    </tr>
+    <tr>
+        <th><label for="rakeRunner.other.rake.args">Additional rake arguments: </label></th>
+        <td><props:textProperty name="rakeRunner.other.rake.args" style="width:30em;" maxlength="256"/>
+            <span class="smallNote">If test isn't empty this arguments will be added to 'rake' command line.<br/>
+                                    E.g. 'rake {additional arguments} {runner options} {task name}'.</span>
         </td>
     </tr>
 </l:settingsGroup>
