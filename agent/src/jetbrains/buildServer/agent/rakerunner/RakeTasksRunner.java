@@ -24,6 +24,7 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.util.PropertiesUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
@@ -69,8 +70,16 @@ public class RakeTasksRunner extends RakeRunnerBase {
         final boolean inDebugMode = ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.DEBUG_PROPERTY);
 
         final String patchedRubySDKFilesRoot = RubySourcesUtil.getPatchedRubySDKFilesRoot();
-
         try {
+            // Prerequisites
+            if (!RubySDKUtil.isGemInstalledInSDK(RubySDKUtil.GEM_BUILDER_NAME, null, true, runParams, buildParams)) {
+                final String msg = "Unable to find 'builder' gem for Ruby SDK with interpreter: '"
+                                    + ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams)
+                                    + "'. This gem is mandatory for Rake tasks runner. Please install 'builder' gem for this Ruby SDK.";
+
+                throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+            }
+
             // Special rake runner Environment properties
             final HashMap<String, String> envMap = new HashMap<String, String>();
             envMap.put(RUBYLIB_ENVIRONMENT_VARIABLE, OSUtil.appendToRUBYLIBEnvVariable(patchedRubySDKFilesRoot));

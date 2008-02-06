@@ -17,13 +17,15 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
-import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Map;
 
 /**
@@ -38,6 +40,11 @@ public class RubySDKUtil {
 
     @NonNls
     private static final String GET_LOAD_PATH_SCRIPT =  "puts $LOAD_PATH";
+    @NonNls
+    private static final String GET_GEM_PATHES_SCRIPT =  "require 'rubygems'; puts Gem.path";
+    @NonNls
+    private static final String GEMS_SUBDIR =  "/gems";
+    public final static String GEM_BUILDER_NAME = "builder";
 
     @NotNull
     public static String getSDKTestUnitAutoRunnerScriptPath(@NotNull final Map<String, String> runParameters,
@@ -46,9 +53,7 @@ public class RubySDKUtil {
 
         final String scriptSource = GET_LOAD_PATH_SCRIPT;
 
-        final String rubyExecutable = ExternalParamsUtil.getRubyInterpreterPath(runParameters, buildParameters);
-        final Runner.Output result =  Runner.runScriptFromSource(rubyExecutable, new String[0],
-                                                                 scriptSource, new String[0]);
+        final Runner.Output result = executeScriptFromSource(runParameters, buildParameters, scriptSource);
         final String loadPaths[] = TextUtil.splitByLines(result.getStdout());
         for (String path : loadPaths) {
             final String fullPath = toSystemIndependentName(path + File.separatorChar + AUTORUNNER_SCRIPT_PATH);
@@ -58,7 +63,65 @@ public class RubySDKUtil {
         }
 
         // Error
-        final String msg = "File '" + AUTORUNNER_SCRIPT_PATH + "' wasn't found in $LOAD_PATH of Ruby SDK with interpreter: '" + rubyExecutable + "'";
+        final String msg = "File '" + AUTORUNNER_SCRIPT_PATH + "' wasn't found in $LOAD_PATH of Ruby SDK with interpreter: '" + ExternalParamsUtil.getRubyInterpreterPath(runParameters, buildParameters) + "'";
         throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+    }
+
+    public static boolean isGemInstalledInSDK(@NotNull final String gemName,
+                                              @Nullable final String gemVersion,
+                                              final boolean acceptHigherVersions,
+                                              @NotNull final Map<String, String> runParameters,
+                                              @NotNull final Map<String, String> buildParameters)
+        throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
+
+        final String scriptSource = GET_GEM_PATHES_SCRIPT;
+        final Runner.Output result = executeScriptFromSource(runParameters, buildParameters, scriptSource);
+        final String gemPaths[] = TextUtil.splitByLines(result.getStdout());
+        for (String gemPath : gemPaths) {
+            final String gemsRootFolderPath = toSystemIndependentName(gemPath + GEMS_SUBDIR);
+            final File gemsRootFolderFile = new File(gemsRootFolderPath);
+            try {
+                if (!gemsRootFolderFile.isDirectory()) {
+                    continue;
+                }
+                final File[] files = gemsRootFolderFile.listFiles(new FilenameFilter() {
+                    final String gemNamePrefix = gemName + "-";
+
+                    public boolean accept(final File dir, @NotNull final String fileName) {
+                        if (!dir.equals(gemsRootFolderFile)) {
+                            return false;
+                        }
+
+                        if (!fileName.startsWith(gemNamePrefix)) {
+                            return false;
+                        }
+
+                        if (gemVersion == null) {
+                            return true;
+                        }                        
+                        final String fileGemVersion = fileName.substring(gemNamePrefix.length() + 1);
+                        return acceptHigherVersions
+                                ? fileGemVersion.compareToIgnoreCase(gemVersion) >= 0
+                                : fileGemVersion.equals(gemVersion);
+                    }
+                });
+                if (files.length != 0) {
+                    return true;
+                }
+            } catch (SecurityException e) {
+                throw new  RunBuildException(e);
+            }
+        }
+        return false;
+    }
+
+    private static Runner.Output executeScriptFromSource(@NotNull final Map<String, String> runParameters,
+                                                         @NotNull final Map<String, String> buildParameters, String scriptSource)
+            throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
+
+        final String rubyExecutable =
+                ExternalParamsUtil.getRubyInterpreterPath(runParameters, buildParameters);
+
+        return   Runner.runScriptFromSource(rubyExecutable, new String[0], scriptSource, new String[0]);
     }
 }
