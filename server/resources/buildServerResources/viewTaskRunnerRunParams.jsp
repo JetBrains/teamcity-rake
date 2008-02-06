@@ -30,6 +30,7 @@
     <li>Do not log messages to standard output (--quiet): <strong><props:displayCheckboxValue name="rakeRunner.rake.options.quiet"/></strong></li>
     <li>Do a dry run without executing actions (--dry-run): <strong><props:displayCheckboxValue name="rakeRunner.rake.options.dryrun"/></strong></li>
     <li>Rake tests options: <strong><props:displayValue name="rakeRunner.testoptions" emptyValue="not specified"/></strong></li>
+    <li>Override the list of test files with file name: <strong><props:displayValue name="rakeRunner.test.filename" emptyValue="not specified"/></strong></li>
     <li>Additional rake arguments: <strong><props:displayValue name="rakeRunner.other.rake.args" emptyValue="not specified"/></strong></li>
   </ul>
 </div>

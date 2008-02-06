@@ -49,7 +49,11 @@ public class TextUtil {
     public static boolean isEmpty(final @Nullable String s) {
         return s == null || s.length() == 0;
     }
-    
+
+    public static boolean isEmptyOrWhitespaced(final @Nullable String s) {
+        return s == null || s.trim().length() == 0;
+    }
+
     public static String removeNewLine(String s) {
         if (s.length() == 0) return s;
         if (s.charAt(s.length() - 1) == '\n')

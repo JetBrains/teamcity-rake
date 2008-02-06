@@ -51,7 +51,14 @@
     <tr>
         <th><label for="rakeRunner.testoptions">Rake tests options: </label></th>
         <td><props:textProperty name="rakeRunner.testoptions" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">If not empty rake will be invked with a 'TESTOPTS="{options}"'</span>
+            <span class="smallNote">If is specified rake will be invoked with a '"TESTOPTS={options}"'</span>
+        </td>
+        <br/>
+    </tr>
+    <tr>
+        <th><label for="rakeRunner.test.filename">Override the list of test files with file name: </label></th>
+        <td><props:textProperty name="rakeRunner.test.filename" style="width:30em;" maxlength="256"/>
+            <span class="smallNote">If is specified rake will be invoked with a '"TEST={filename}"'</span>
         </td>
         <br/>
     </tr>

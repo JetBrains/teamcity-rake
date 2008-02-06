@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Created by IntelliJ IDEA.
@@ -72,10 +73,8 @@ public class RakeTasksRunner extends RakeRunnerBase {
         try {
             // Special rake runner Environment properties
             final HashMap<String, String> envMap = new HashMap<String, String>();
-            envMap.put(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE,
-                    OSUtil.appendToRUBYLIBEnvVariable(patchedRubySDKFilesRoot));
-            envMap.put(RakeRunnerConstants.ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
-                    RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(runParams, buildParams));
+            envMap.put(RUBYLIB_ENVIRONMENT_VARIABLE, OSUtil.appendToRUBYLIBEnvVariable(patchedRubySDKFilesRoot));
+            envMap.put(ORIGINAL_SDK_AUTORUNNER_PATH_KEY, RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(runParams, buildParams));
             cmd.setEnvParams(envMap);
 
             // Ruby interpreter
@@ -85,34 +84,46 @@ public class RakeTasksRunner extends RakeRunnerBase {
             cmd.addParameter(RubySourcesUtil.getRakeRunnerPath());
 
             // Rake options
-            if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_TRACE_PROPERTY)) {
-                cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_TRACE_FLAG);
+            if (ExternalParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_OPTION_TRACE_PROPERTY)) {
+                cmd.addParameter(AGENT_CMD_LINE_RAKE_OPTION_TRACE_FLAG);
             }
-            if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_QUIET_PROPERTY)) {
-                cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_QUIET_FLAG);
+            if (ExternalParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_OPTION_QUIET_PROPERTY)) {
+                cmd.addParameter(AGENT_CMD_LINE_RAKE_OPTION_QUIET_FLAG);
             }
-            if (ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_OPTION_DRYRUN_PROPERTY)) {
-                cmd.addParameter(RakeRunnerConstants.AGENT_CMD_LINE_RAKE_OPTION_DRYRUN_FLAG);
+            if (ExternalParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_OPTION_DRYRUN_PROPERTY)) {
+                cmd.addParameter(AGENT_CMD_LINE_RAKE_OPTION_DRYRUN_FLAG);
+            }
+
+            // Other arguments
+            final String otherArgsString = runParams.get(SERVER_UI_RAKE_OTHER_ARGUMENTS_PROPERTY);
+            if (!TextUtil.isEmptyOrWhitespaced(otherArgsString)) {
+                final StringTokenizer st = new StringTokenizer(otherArgsString);
+                while (st.hasMoreTokens()) {
+                    cmd.addParameter(st.nextToken());
+                }
             }
 
             // Task name
-            final String task_name = runParams.get(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY);
+            final String task_name = runParams.get(SERVER_UI_RAKE_TASK_PROPERTY);
             if (PropertiesUtil.isEmptyOrNull(task_name)) {
-                cmd.addParameter(RakeRunnerConstants.DEFAULT_RAKE_TASK_NAME);
+                cmd.addParameter(DEFAULT_RAKE_TASK_NAME);
             } else {
                 cmd.addParameter(task_name);
             }
 
-//        if (user_params != null) {
-//            final StringTokenizer st = new StringTokenizer(user_params);
-//            while (st.hasMoreTokens()) {
-//                cmd.addParameter(st.nextToken());
-//            }
-//        }  else {
-//            throw new RunBuildException("Specify Rake task name in runner configuration settings.");
-//        }
-            //TODO if user allow
-            // cmd.addParameter("TESTOPTS=\\\"C:/home/teamcity/rubyteamcity/rakerunner/src/teamcity_testrunner.rb\\\" --runner=teamcity");
+            //TESTOPTS
+            final String testOpts = runParams.get(SERVER_UI_RAKE_TESTOPT_PROPERTY);
+            if (!TextUtil.isEmptyOrWhitespaced(testOpts)) {
+                final String trimedTestOpts = testOpts.trim();
+                cmd.addParameter("\"" + SERVER_UI_RAKE_TESTOPT_PARAM_NAME + "=" + trimedTestOpts + "\"");
+            }
+
+            //TEST
+            final String testFileName = runParams.get(SERVER_UI_RAKE_TEST_PROPERTY);
+            if (!TextUtil.isEmptyOrWhitespaced(testFileName)) {
+                final String trimedTestFileName = testFileName.trim();
+                cmd.addParameter("\"" + SERVER_UI_RAKE_TEST_PARAM_NAME + "=" + trimedTestFileName + "\"");
+            }
 
             if (inDebugMode) {
                 getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
@@ -129,7 +140,7 @@ public class RakeTasksRunner extends RakeRunnerBase {
     protected void onTextAvailable(final Map<String, String> runParameters,
                                    final ProcessEvent processEvent, final Key key) {
         super.onTextAvailable(runParameters, processEvent, key);
-        //TODO script hide run params
+
         final String text = TextUtil.removeNewLine(processEvent.getText());
         getBuildLogger().message("{AGENT OUTPUT}: " + text);
     }
