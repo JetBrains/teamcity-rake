@@ -109,7 +109,7 @@ public class RubySDKUtil {
                     return true;
                 }
             } catch (SecurityException e) {
-                throw new  RunBuildException(e);
+                throw new RunBuildException(e.getMessage(), e);
             }
         }
         return false;

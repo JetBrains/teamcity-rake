@@ -16,14 +16,13 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import com.intellij.util.PathUtil;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.util.PathUtil;
+import jetbrains.buildServer.RunBuildException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-
-import jetbrains.buildServer.RunBuildException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -62,7 +61,7 @@ public class RubySourcesUtil {
                                         + rubySourcesDir.getPath()
                                         + "). Plugin is damaged.");
         } catch (Exception e) {
-            throw new RunBuildException(e);
+            throw new RunBuildException(e.getMessage(), e);
         }
     }
 

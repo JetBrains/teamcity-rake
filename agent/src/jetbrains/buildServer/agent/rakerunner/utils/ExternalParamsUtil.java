@@ -71,7 +71,7 @@ public class ExternalParamsUtil implements RakeRunnerConstants {
             throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
         } catch (Exception e) {
             //unknown error
-            throw new RunBuildException(e);
+            throw new RunBuildException(e.getMessage(), e);
         }
     }
 
