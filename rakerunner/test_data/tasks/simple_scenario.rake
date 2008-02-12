@@ -36,7 +36,7 @@ namespace :simple_sc do
         dir_name = "dist/dir#{i}"
         user_msg "Fake status message : #{dir_name}"
         mkdir_p dir_name
-        list = FileList['common/**/*']
+        list = FileList['unit/common/**/*']
         list.exclude("**/*/.svn")
         list.each do |file|
           cp_r file, dir_name + "/common", {:verbose => true}
