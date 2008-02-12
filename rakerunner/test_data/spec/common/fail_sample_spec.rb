@@ -5,8 +5,10 @@
 
 require "spec"
 
-it "should fails" do
-  true.should == true
+describe "Simple test" do
+  it "should fails" do
+    true.should == true
+  end
 end
 
 describe "Test Data" do
