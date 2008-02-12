@@ -9,8 +9,8 @@ require 'spec/rake/spectask'
 desc "Run all examples"
 Spec::Rake::SpecTask.new('spec_examples') do |t|
   t.spec_files = FileList['spec/common/**/*_spec.rb']
-  t.spec_opts = ["--require", "spec/runner/formatter/teamcity/formatter",
-                 "--format", "Spec::Runner::Formatter::TeamcityFormatter:matrix"]
+  t.spec_opts = ["--require spec/runner/formatter/teamcity/formatter",
+                 "--format Spec::Runner::Formatter::TeamcityFormatter:matrix"]
 end
 
 Spec::Rake::SpecTask.new('spec_examples_compilation_failure') do |t|
