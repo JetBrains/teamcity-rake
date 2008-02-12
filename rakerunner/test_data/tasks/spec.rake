@@ -7,10 +7,10 @@ require 'rake'
 require 'spec/rake/spectask'
 
 desc "Run all examples"
-Spec::Rake::SpecTask.new('examples') do |t|
+Spec::Rake::SpecTask.new('spec_examples') do |t|
   t.spec_files = FileList['spec/common/**/*_spec.rb']
 end
 
-Spec::Rake::SpecTask.new('examples_compilation_failure') do |t|
+Spec::Rake::SpecTask.new('spec_examples_compilation_failure') do |t|
   t.spec_files = FileList['spec/compilation_errors/**/*_spec.rb']
 end
