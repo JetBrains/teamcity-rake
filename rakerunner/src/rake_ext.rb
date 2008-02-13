@@ -151,10 +151,8 @@ module Rake
       when SystemExit
         # Exit silently with current status
         exit_code = exc.status
-        break;
       when GetoptLong::InvalidOption
         # Exit Silently
-        break;
       else
         # Sends exception to buildserver, if exception hasn't been sent early(inside some markup block)
         if (!applicationAbortedException)
