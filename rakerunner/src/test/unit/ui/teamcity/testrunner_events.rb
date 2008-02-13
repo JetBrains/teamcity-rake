@@ -68,8 +68,7 @@ module Test
 
           # Reset all results from previous test suites. Occurs before each suite running.
           def reset_ui(count)
-            # clear faults_list for test suite
-            #fault_list.clear
+            # Do nothing
           end
 
           ########################### Tests events #######################
@@ -165,7 +164,7 @@ module Test
           def debug_log(string)
             # Logs output.
             if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-              RUNNER_LOG << "[#{Time.now}] : #{string}\n";
+              SPEC_RUNNER_LOG << "[#{Time.now}] : #{string}\n";
             end
             # Uncomment to see output in Teamcity build log.
             # puts "{TC_TR_DEBUG_LOG} #{string}\n";
