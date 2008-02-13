@@ -13,7 +13,7 @@ describe "PendingTests" do
   end
 
   it 'should raise an ExamplePendingError if a supplied block fails as expected' do
-    pending "TODO" do
+    pending "TODO (Exception)" do
       raise "Medved Exception"
     end
   end
