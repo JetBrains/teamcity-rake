@@ -26,7 +26,7 @@ Spec::Rake::SpecTask.new('spec_examples') do |t|
   t.spec_opts = ["--require spec/runner/formatter/teamcity/formatter",
                  "--format Spec::Runner::Formatter::TeamcityFormatter:matrix"]
   t.warning = true
-  t.rcov = true
+  # t.rcov = true #TODO
 end
 
 Spec::Rake::SpecTask.new('spec_examples_compilation_failure') do |t|
