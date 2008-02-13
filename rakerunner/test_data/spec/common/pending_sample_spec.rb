@@ -10,16 +10,16 @@ describe "PendingTests" do
 
   it "should be IGNORED in teamcity - ExamplePendingError exception with msg" do
 
-    raise ExamplePendingError, "ExamplePendingError was raised", caller
+    raise Spec::Example::ExamplePendingError, "ExamplePendingError was raised", caller
     end
 
   it "should be IGNORED in teamcity - ExamplePendingError exception without msg" do
 
-    raise ExamplePendingError, caller
+    raise Spec::Example::ExamplePendingError, caller
   end
 
   it "should be IGNORED in teamcity - ExamplePendingError exception without msg and stacktrace" do
 
-    raise ExamplePendingError
+    raise Spec::Example::ExamplePendingError
   end
 end
