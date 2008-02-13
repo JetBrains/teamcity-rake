@@ -22,23 +22,31 @@ describe "PendingTests" do
 
     raise Spec::Example::ExamplePendingError
   end
+end
 
-  it 'should raise an ExamplePendingError if no block is supplied' do
-      include Pending
-      pending "TODO"
-  end
 
-  it 'should raise an ExamplePendingError if a supplied block fails as expected' do
-      include Pending
-      pending "TODO" do
-        raise "oops"
+
+module Spec
+  module DSL
+    describe Pending do
+      it 'should raise an ExamplePendingError if no block is supplied' do
+        include Pending
+        pending "TODO"
       end
-  end
 
-  it 'should raise a PendingExampleFixedError if a supplied block starts working' do
-      include Pending
-      pending "TODO" do
-        # success!
+      it 'should raise an ExamplePendingError if a supplied block fails as expected' do
+        include Pending
+        pending "TODO" do
+          raise "oops"
+        end
       end
+
+      it 'should raise a PendingExampleFixedError if a supplied block starts working' do
+        include Pending
+        pending "TODO" do
+          # success!
+        end
+      end
+    end
   end
 end
