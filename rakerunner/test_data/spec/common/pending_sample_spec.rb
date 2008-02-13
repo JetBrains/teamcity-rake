@@ -28,7 +28,7 @@ end
 
 module Spec
   module DSL
-    describe Pending do
+    describe "Pending" do
       it 'should raise an ExamplePendingError if no block is supplied' do
         include Pending
         pending "TODO"
