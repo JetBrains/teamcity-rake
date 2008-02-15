@@ -31,8 +31,9 @@ namespace :simple_sc do
 
   task :create_zip do
     puts "Current dir: #{File.expand_path(".")}"
+    Kernel.warn("!!! I am WARNING !!!")
     user_block("Fake progress") do
-      5.times do |i|
+      200.times do |i|
         dir_name = "dist/dir#{i}"
         user_msg "Fake status message : #{dir_name}"
         mkdir_p dir_name
@@ -77,7 +78,5 @@ def user_msg(text)
   puts "###{text}"
   puts "puts: #{text}"
   $stdout << "stdout: #{text}"
-  $stdout.flush
-  $stderr << "stdout: #{text}"
-  $stderr.flush
+  $stderr << "stderr: #{text}"
 end
