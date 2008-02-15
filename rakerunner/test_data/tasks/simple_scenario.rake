@@ -77,4 +77,7 @@ def user_msg(text)
   puts "###{text}"
   puts "puts: #{text}"
   $stdout << "stdout: #{text}"
+  $stdout.flush
+  $stderr << "stdout: #{text}"
+  $stderr.flush
 end
