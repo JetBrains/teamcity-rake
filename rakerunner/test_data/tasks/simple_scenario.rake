@@ -75,4 +75,5 @@ end
 
 def user_msg(text)
   puts "###{text}"
+  puts text
 end
