@@ -75,5 +75,6 @@ end
 
 def user_msg(text)
   puts "###{text}"
-  puts text
+  puts "puts: #{text}"
+  $stdout << "stdout: #{text}"
 end
