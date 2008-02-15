@@ -31,6 +31,7 @@ namespace :simple_sc do
 
   task :create_zip do
     puts "Current dir: #{File.expand_path(".")}"
+    puts
     Kernel.warn("!!! I am WARNING !!!")
     user_block("Fake progress") do
       200.times do |i|
