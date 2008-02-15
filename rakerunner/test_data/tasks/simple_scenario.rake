@@ -29,10 +29,17 @@ namespace :simple_sc do
     rm_r CLEAN_FILES, {:verbose => true, :force => true}
   end
 
-  task :create_zip do
-    puts "Current dir: #{File.expand_path(".")}"
+  task :check_output do
+    $stdout << "This output was sent to $stdout"
     puts
-    Kernel.warn("!!! I am WARNING !!!")
+    puts("This output was sent to Object.puts", "Object.puts with new line\n")
+    printf("This output was %s to Object.printf", "sent")
+    Kernel.warn("This output was sent to Kernel.warn")
+  end
+
+  task :create_zip => :check_output do
+    puts "Current dir: #{File.expand_path(".")}"
+
     user_block("Fake progress") do
       200.times do |i|
         dir_name = "dist/dir#{i}"
@@ -77,7 +84,4 @@ end
 
 def user_msg(text)
   puts "###{text}"
-  puts "puts: #{text}"
-  $stdout << "stdout: #{text}"
-  $stderr << "stderr: #{text}"
 end
