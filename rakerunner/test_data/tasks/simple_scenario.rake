@@ -32,7 +32,7 @@ namespace :simple_sc do
   task :create_zip do
     puts "Current dir: #{File.expand_path(".")}"
     user_block("Fake progress") do
-      200.times do |i|
+      5.times do |i|
         dir_name = "dist/dir#{i}"
         user_msg "Fake status message : #{dir_name}"
         mkdir_p dir_name
