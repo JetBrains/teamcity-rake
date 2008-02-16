@@ -76,7 +76,7 @@ end
 module Kernel
   def warn(text)
     if ($VERBOSE)
-      Rake::TeamCityApplication.send_captured_warning("[ya warning, wr] #{text}")
+      Rake::TeamCityApplication.send_captured_warning(text)
     end
     nil
   end
