@@ -18,13 +18,14 @@ package jetbrains.buildServer.agent.rakerunner;
 
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.ProcessEvent;
+import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.openapi.util.Key;
 import com.intellij.util.containers.HashMap;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
-import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.PropertiesUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
@@ -32,6 +33,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -43,6 +46,9 @@ import java.util.StringTokenizer;
  */
 public class RakeTasksRunner extends RakeRunnerBase {
     protected static final Logger LOG = Logger.getLogger(RakeTasksRunner.class.getName());
+
+    private final List<String> myStdOutMessages = new LinkedList<String>();
+    private final List<String> myStdErrMessages = new LinkedList<String>();
 
     @NonNls
     public String getType() {
@@ -147,11 +153,59 @@ public class RakeTasksRunner extends RakeRunnerBase {
     }
 
     protected void onTextAvailable(final Map<String, String> runParameters,
-                                   final ProcessEvent processEvent, final Key key) {
-        super.onTextAvailable(runParameters, processEvent, key);
+                                   final ProcessEvent processEvent, final Key outputType) {
+        super.onTextAvailable(runParameters, processEvent, outputType);
 
         final String text = TextUtil.removeNewLine(processEvent.getText());
-        getBuildLogger().message("{AGENT OUTPUT}: " + text);
+        if (outputType == ProcessOutputTypes.SYSTEM) {
+            getBuildLogger().message(text);
+        } else if (outputType == ProcessOutputTypes.STDOUT) {
+            synchronized (myStdOutMessages) {
+                myStdOutMessages.add(processEvent.getText());
+            }
+        } else {
+            synchronized (myStdErrMessages) {
+                myStdErrMessages.add(processEvent.getText());
+            }
+        }
+    }
+
+    protected boolean shouldDumpOutputLinesOnError() {
+        return false;
+    }
+
+    protected void processTerminated(RunEnvironment runEnvironment, boolean b) {
+        dumpOutputMessages(true);
+        dumpOutputMessages(false);
+    }
+
+    private void dumpOutputMessages(final boolean dumpStdOut) {
+        final List<String> messages;
+        final String outputType;
+        if (dumpStdOut) {
+            messages = myStdOutMessages;
+            outputType = "stdout";
+        } else {
+            messages = myStdErrMessages;
+            outputType = "stderr";
+        }
+
+        synchronized (messages) {
+            if (messages.size() > 0) {
+                final StringBuilder sb = new StringBuilder();
+                sb.append(getType()).append(" uncaptured ").append(outputType).append(":\n");
+                for (String s : messages) {
+                    sb.append(s);
+                }
+                if (dumpStdOut) {
+                    getBuildLogger().message(sb.toString());
+                } else {
+                    getBuildLogger().warning(sb.toString());
+                }
+                getBuildLogger().flush();
+            }
+            messages.clear();
+        }
     }
 
     public void failRakeTaskBuild(@NotNull final MyBuildFailureException e) throws RunBuildException {
