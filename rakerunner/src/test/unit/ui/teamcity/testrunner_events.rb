@@ -18,6 +18,7 @@
 # @date: 02.06.2007
 
 if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/rakerunner_utils'
   require 'src/test/unit/ui/teamcity/rakerunner_consts'
 
   require 'src/test/unit/ui/teamcity/message_factory'
@@ -25,6 +26,7 @@ if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/std_capture_helper'
   require 'src/test/unit/ui/teamcity/runner_utils'
 else
+  require 'test/unit/ui/teamcity/rakerunner_utils'
   require 'test/unit/ui/teamcity/rakerunner_consts'
 
   require 'test/unit/ui/teamcity/message_factory'
@@ -36,10 +38,7 @@ end
 module Test
   module Unit
     module UI
-      module TeamCity
-        class InnerException < Exception
-        end
-
+      module TeamCity        
         module EventHandlers
           include Rake::TeamCity::Logger
           include Rake::TeamCity::StdCaptureHelper
@@ -157,14 +156,14 @@ module Test
               teamcity_test_name = convert_ruby_test_name(test_name)
               msg = "Finished test '#{test_name}'[#{teamcity_test_name}] doesn't correspond to current running test '#{@my_running_test_name_ruby}'[#{@my_running_test_name}]!"
               debug_log(msg)
-              raise InnerException, msg
+              raise raise Rake::TeamCity::InnerException, msg
             end
           end
 
           def debug_log(string)
             # Logs output.
             if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-              SPEC_RUNNER_LOG << "[#{Time.now}] : #{string}\n";
+              UNIT_TESTS_RUNNER_LOG << "[#{Time.now}] : #{string}\n";
             end
             # Uncomment to see output in Teamcity build log.
             # puts "{TC_TR_DEBUG_LOG} #{string}\n";

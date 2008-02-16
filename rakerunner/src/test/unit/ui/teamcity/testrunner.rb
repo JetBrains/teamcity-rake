@@ -24,8 +24,8 @@ else
 end
 
 if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-  RUNNER_LOG = File.new(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + "/rakeRunner_testrunner.log", "a+");
-  RUNNER_LOG << "\n[#{Time.now}] : Started\n";
+  UNIT_TESTS_RUNNER_LOG = File.new(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + "/rakeRunner_testrunner.log", "a+");
+  UNIT_TESTS_RUNNER_LOG << "\n[#{Time.now}] : Started\n";
 end
 
 require 'test/unit/ui/testrunnermediator'
@@ -106,7 +106,7 @@ end
 
 at_exit do
   if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-    RUNNER_LOG << "[#{Time.now}] : Finished\n\n";
-    RUNNER_LOG.close
+    UNIT_TESTS_RUNNER_LOG << "[#{Time.now}] : Finished\n\n";
+    UNIT_TESTS_RUNNER_LOG.close
   end
 end
