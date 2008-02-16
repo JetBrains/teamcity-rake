@@ -125,8 +125,8 @@ module Rake
         @dispatcher.dispatch event
       end
 
-      def started?
-        @dispatcher != nil
+      def started?        
+        (defined? @dispatcher) && (@dispatcher != nil)
       end
     end
 
