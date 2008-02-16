@@ -19,9 +19,11 @@
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/rakerunner_consts'
   require 'src/test/unit/ui/teamcity/event_queue/event_handler'
+  require 'src/test/unit/ui/teamcity/event_queue/messages_dispatcher'
 else
   require 'test/unit/ui/teamcity/rakerunner_consts'
   require 'test/unit/ui/teamcity/event_queue/event_handler'
+  require 'test/unit/ui/teamcity/event_queue/messages_dispatcher'
 end
 
 module Rake
@@ -66,7 +68,7 @@ module Rake
             process(events, count + 1)
           end
         rescue Exception => e1
-          raise ConnectionException.new("Failed: Can't send messages to server\n#{e1}")
+          raise Rake::TeamCity::ConnectionException, "Failed: Can't send messages to server\n#{e1}"
         end
       end
     end

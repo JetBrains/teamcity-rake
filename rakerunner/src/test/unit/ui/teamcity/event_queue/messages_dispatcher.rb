@@ -91,7 +91,7 @@ module Rake
         else
           new_server, new_build_id_str = MessagesDispather.get_teamcity_connection_params
           if (new_build_id_str != @build_id_str)
-            raise ConnectionException.new("Attemp to start dispatcher for other build_id when another dispatcher is running. At first stop previous one.")
+            raise ConnectionException, "Attemp to start dispatcher for other build_id when another dispatcher is running. At first stop previous one."
           end
 
         end
@@ -121,7 +121,7 @@ module Rake
       def log_one(msg)
         event = Logger::Event.new(self, msg)
 
-        raise ConnectionException.new("Dispatcher isn't running. At first start it.") unless started?
+        (raise ConnectionException, "Dispatcher isn't running. At first start it.") unless started?
         @dispatcher.dispatch event
       end
 

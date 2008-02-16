@@ -102,6 +102,18 @@ module Rake
       send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_user_message(msg)}
     end
 
+    def self.send_captured_stdout(msg)
+      send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_message(msg)}
+    end
+
+    def self.send_captured_stderr(msg)
+      send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_message(msg, :error)}
+    end
+
+    def self.send_captured_warning(msg)
+      send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_message(msg, :warning)}
+    end
+
     def self.send_xml_to_teamcity
       Rake::TeamCity.msg_dispatcher.log_one(yield)
     end
@@ -172,7 +184,7 @@ module Rake
       if !on_top_level
         # Exception was send to teamcity, now we should
         # raise special exception to prevent further handling
-        raise Rake::ApplicationAbortedException.new(exc)
+        raise Rake::ApplicationAbortedException, exc
       end
       exit_code
     end
@@ -183,7 +195,8 @@ module Rake
       if show_trace
         stacktrace = "\nStacktrace:\n" + exception.backtrace.join("\n")
       elsif Rake.application.rakefile
-        stacktrace = "\nSource: #{exception.backtrace.find {|str| str =~ /#{Rake.application.rakefile}/ }|| ""}\n(See full trace by running task with --trace)"
+        source_file = exception.backtrace.find {|str| str =~ /#{Rake.application.rakefile}/ }
+        stacktrace = (source_file ? "\nSource: #{source_file}": "") + "\n(See full trace by running task with --trace option)"
       end
       return "#{exception.class.name}: #{exception.message}", stacktrace
     end
@@ -209,16 +222,8 @@ module Rake
   end
 end
 
-#############  Object extension #############################
-class Object
-  def puts(obj)
-    Rake::TeamCityApplication.send_noraml_user_message(obj.to_s)
-  end
-
-  def printf(s, *args)
-    puts(sprintf(s, *args))
-  end
-end
+################  Output extension ############################
+require File.dirname(__FILE__) + '/ext/output_ext'
 
 ################  Module extension #############################
 class Module
