@@ -93,7 +93,7 @@ module Rake
         end
       end
 
-      def self.create_progress_message(msg, msg_status)
+      def self.create_progress_message(msg, msg_status = :normal)
         _create_stub(msg_status, "ProgressStage") do |x|
           x.myValue(msg, "class" => "java.lang.String")
         end
