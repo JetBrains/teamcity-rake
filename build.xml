@@ -74,9 +74,10 @@
             <zipfileset dir="build/jar" includes="RakeRunnerAgent.jar, RakeRunnerCommon.jar"
                         prefix="rakeRunnerPlugin/lib"/>
             <!-- Ruby sources -->
-            <zipfileset dir="rakerunner/src" excludes="test/**/*, test, spec/**/*, spec" prefix="rakeRunnerPlugin/lib/rb/runner"/>
+            <zipfileset dir="rakerunner/src" excludes="test/**/*, test, spec/**/*, spec, utils/**/*, utils" prefix="rakeRunnerPlugin/lib/rb/runner"/>
             <zipfileset dir="rakerunner/src/test" prefix="rakeRunnerPlugin/lib/rb/patch/test"/>
             <zipfileset dir="rakerunner/src/spec" prefix="rakeRunnerPlugin/lib/rb/patch/spec"/>
+            <zipfileset dir="rakerunner/src/utils" prefix="rakeRunnerPlugin/lib/rb/patch/utils"/>
         </zip>
     </target>
 
@@ -113,6 +114,18 @@
         <copy file="build/jar/rakeRunnerServer.jar" todir="${webrootdir}/WEB-INF/lib"/>
         <copy file="build/jar/rakeRunnerPlugin.zip" todir="${webrootdir}/update/plugins"/>
         <unzip src="build/jar/rakeRunnerPlugin.zip" dest="${agentdir}/plugins"/>
+    </target>
+
+    <!-- Reload On Agent Deploy -->
+    <target name="devel-reload_on_agent-deploy" depends="dist">
+        <delete includeEmptyDirs="true">
+            <fileset dir="${agentdir}/plugins/rakeRunnerPlugin" excludes="**/*.jar"/>
+        </delete>
+        <unzip src="build/jar/rakeRunnerPlugin.zip" dest="${agentdir}/plugins">
+            <patternset>
+                <include name="**/*.rb"/>
+            </patternset>
+        </unzip>
     </target>
 
     <!-- Un-deploy -->
