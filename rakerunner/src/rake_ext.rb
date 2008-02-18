@@ -19,17 +19,16 @@
 
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/rakerunner_consts'
+  require 'src/utils/logger_util'
 else
   require 'test/unit/ui/teamcity/rakerunner_consts'
+  require 'utils/logger_util'
 end
 
-RAKE_EXT_LOG_ENABLED = ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-if RAKE_EXT_LOG_ENABLED
-  RAKE_EXT_LOG = File.new(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + "/rakeRunner_rake.log", "a+")
-  RAKE_EXT_LOG << "\n[#{Time.now}] : Started\n"
-end
+RAKE_EXT_LOG = Rake::TeamCity::Utils::RakeFileLogger.new
+RAKE_EXT_LOG.log_msg("rake_ext.rb loaded.")
 
-# For RAKEVERSION =  0.7.2 - 0.8.0
+# For RAKEVERSION =  0.7.3 - 0.8.0
 require 'rake'
 
 if ENV["idea.rake.debug.sources"]
@@ -46,7 +45,6 @@ end
 ######################################################################
 
 ########## Rake  TeamCityApplication #################################
-# TODO User output from raketasks
 
 module Rake
   class TeamCityApplication < Application
@@ -58,22 +56,17 @@ module Rake
       begin
         super
       rescue Exception => e
-        if RAKE_EXT_LOG_ENABLED
-          RAKE_EXT_LOG << "\n[#{Time.now}] : Rake application initialization erors:\n #{msg}\n #{stacktrace}\n"
-        end
-
         msg, stacktrace =  Rake::TeamCityApplication.format_exception_msg(e, options.trace)
         Rake::TeamCityApplication.send_error(msg, stacktrace)
 
-        #Rake::TeamCity.msg_dispatcher.stop_dispatcher(true)  - will be closed at_exit
+        RAKE_EXT_LOG.log_msg("Rake application initialization erors:\n #{msg}\n #{stacktrace}")
         exit(1)
       else
-        if RAKE_EXT_LOG_ENABLED
-          RAKE_EXT_LOG << "\n[#{Time.now}] : Rake application initialized.\n"
-        end
+        RAKE_EXT_LOG.log_msg("Rake application initialized.")
       end
     end
 
+    #TODO move static somewhere..
     def self.send_error(msg, stacktrace)
        send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_error_message(msg, stacktrace)}
     end
@@ -354,12 +347,9 @@ class Rake::Application
 end
 
 at_exit do
-  Rake::TeamCity.msg_dispatcher.stop_dispatcher(true);
-  if RAKE_EXT_LOG_ENABLED
-    RAKE_EXT_LOG << "[#{Time.now}] : Closing connection....\n";
-    RAKE_EXT_LOG << "[#{Time.now}] : Closed.\n";
-
-    RAKE_EXT_LOG << "[#{Time.now}] : Finished\n\n";
-    RAKE_EXT_LOG.close
+  RAKE_EXT_LOG.log_block("rake_ext : Closing connection...") do
+    Rake::TeamCity.msg_dispatcher.stop_dispatcher;
   end
+  RAKE_EXT_LOG.log_msg("rak_ext.rb: Finished.");
+  RAKE_EXT_LOG.close
 end

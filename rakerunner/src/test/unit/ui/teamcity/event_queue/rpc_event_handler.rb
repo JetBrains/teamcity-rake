@@ -18,13 +18,18 @@
 # @date: 10.01.2008
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/rakerunner_consts'
+  require 'src/utils/logger_util'
   require 'src/test/unit/ui/teamcity/event_queue/event_handler'
   require 'src/test/unit/ui/teamcity/event_queue/messages_dispatcher'
 else
   require 'test/unit/ui/teamcity/rakerunner_consts'
+  require 'utils/logger_util'
   require 'test/unit/ui/teamcity/event_queue/event_handler'
   require 'test/unit/ui/teamcity/event_queue/messages_dispatcher'
 end
+
+RPC_EVENT_HANDLER_LOG = Rake::TeamCity::Utils::RPCMessagesLogger.new
+RPC_EVENT_HANDLER_LOG.log_msg("rpc_event_handler.rb loaded.", true)
 
 module Rake
   module TeamCity
@@ -43,6 +48,7 @@ module Rake
         @server = server
         @max_attemps = max_attemps
         @retry_delay = retry_delay
+        RPC_EVENT_HANDLER_LOG.log_msg("RPCEventHadler initialized.", true)
       end
 
       # Sends msg to TeamCity buildserver using RPC
@@ -59,18 +65,31 @@ module Rake
           end
 
           # Sending
-          @server.call(TEAMCITY_LOGGER_RPC_NAME, @buildId, msgs)
-
+          RPC_EVENT_HANDLER_LOG.log_block(events.hash,  msgs, true) do
+            @server.call(TEAMCITY_LOGGER_RPC_NAME, @buildId, msgs)
+          end
         rescue XMLRPC::FaultException => e
           # Retrying...
+          RPC_EVENT_HANDLER_LOG.log_msg("[h#{events.hash}]: Sending failed! Retrying...[#{count}] #{e.class.name}:#{e.message}", true)
           if count < @max_attemps
             sleep @retry_delay
             process(events, count + 1)
           end
+          RPC_EVENT_HANDLER_LOG.log_msg("[h#{events.hash}]: Successful retry.", true)
         rescue Exception => e1
+          RPC_EVENT_HANDLER_LOG.log_msg("[h#{events.hash}]: Sending failed! Exception #{e1.class.name}:#{e1.message}", true)
           raise Rake::TeamCity::ConnectionException, "Failed: Can't send messages to server\n#{e1}"
         end
       end
     end
   end
+end
+
+at_exit do
+  RPC_EVENT_HANDLER_LOG.log_block("Stop dispatcher.. Thread=[#{Thread.current}]", nil, true) do
+    Rake::TeamCity.msg_dispatcher.stop_dispatcher(true);
+  end
+
+  RPC_EVENT_HANDLER_LOG.log_msg("rpc_event_handler finished. Thread=[#{Thread.current}]", true);
+  RPC_EVENT_HANDLER_LOG.close
 end

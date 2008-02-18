@@ -32,7 +32,7 @@ describe "PendingTests" do
     end
   end
 
-  it 'should be IGNORED in teamcity - raise a PendingExampleFixedError if a supplied block starts working' do
+  it 'should be IGNORED in teamcity - raise a PendingFixedError if a supplied block starts working' do
     pending "TODO" do
       # Do nothing
     end

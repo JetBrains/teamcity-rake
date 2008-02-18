@@ -20,17 +20,17 @@
 require 'spec/runner/formatter/base_formatter'
 
 if ENV["idea.rake.debug.sources"]
+  require 'src/utils/logger_util'
   require 'src/test/unit/ui/teamcity/rakerunner_utils'
   require 'src/test/unit/ui/teamcity/rakerunner_consts'
 else
+  require 'utils/logger_util'
   require 'test/unit/ui/teamcity/rakerunner_utils'
   require 'test/unit/ui/teamcity/rakerunner_consts'
 end
 
-if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-  SPEC_RUNNER_LOG = File.new(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + "/rakeRunner_specsRunner.log", "a+");
-  SPEC_RUNNER_LOG << "\n[#{Time.now}] : Started\n";
-end
+SPEC_FORMATTER_LOG = Rake::TeamCity::Utils::RSpecFileLogger.new
+SPEC_FORMATTER_LOG.log_msg("spec formatter.rb loaded.")
 
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/rakerunner_consts'
@@ -57,7 +57,9 @@ module Spec
 
         ########## Teamcity #############################
         def log_one(msg)
-          Rake::TeamCity.msg_dispatcher.log_one(msg)
+          SPEC_FORMATTER_LOG.log_block("msg.hash", "msg") do
+            Rake::TeamCity.msg_dispatcher.log_one(msg)
+          end
         end
 
         ######## Spec formatter ########################
@@ -175,20 +177,23 @@ module Spec
           if dry_run?
             totals = "This was a dry-run"
           else
-            totals = "#{example_count} example#{'s' unless example_count == 1}, #{failure_count} failure#{'s' unless failure_count == 1}"
+            totals = "#{example_count} example#{'s' unless example_count == 1}, #{failure_count} failure#{'s' unless failure_count == 1}, #{example_count - failure_count - pending_count} passed"
             totals << ", #{pending_count} pending" if pending_count > 0
           end
-          log_one(Rake::TeamCity::MessageFactory.create_close_block(@example_group_desc, :test_suite))
-          debug_log("Example group(behaviour) finished: #{@example_group_desc}.")
 
-          status_message = "#{totals}. Finished in #{duration} seconds"
-          log_one(Rake::TeamCity::MessageFactory.create_message(status_message))
-              #TODO ---- where it is?
+          close_example_group
+
+          # Total statistic
+          log_one(Rake::TeamCity::MessageFactory.create_message(totals))
+          debug_log(totals)
+
+          # Time statistic from Spec Runner
+          status_message = "Finished in #{duration} seconds"
+          log_one(Rake::TeamCity::MessageFactory.create_progress_message(status_message))
           debug_log(status_message)
-          $stderr << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! stderr: #{status_message}"
-           #TODO ---- where it is?
-#          log_one(Rake::TeamCity::MessageFactory.create_progress_message(status_message, :normal))
+
           # close xml-rpc connection
+          debug_log("Closing dispatcher..")
           @msg_dispatcher.stop_dispatcher if @manual_start
         end
 
@@ -213,8 +218,7 @@ module Spec
           @current_behaviour_number += 1
           # Let's close the previous block
           unless current_behaviour_number == 1
-            log_one(Rake::TeamCity::MessageFactory.create_close_block(@example_group_desc, :test_suite))
-            debug_log("Close example group(behaviour): #{@example_group_desc}.")
+              close_example_group
           end
 
           # New block starts.
@@ -232,11 +236,15 @@ module Spec
           end
         end
 
+        def close_example_group
+          log_one(Rake::TeamCity::MessageFactory.create_close_block(@example_group_desc, :test_suite))
+          debug_log("Close example group(behaviour): #{@example_group_desc}.")
+        end
+
         def debug_log(string)
           # Logs output.
-          if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-            SPEC_RUNNER_LOG << "[#{Time.now}] : #{string}\n";
-          end
+          SPEC_FORMATTER_LOG.log_msg(string)
+
           # Uncomment to see output in Teamcity build log.
           # puts "{TC_TR_DEBUG_LOG} #{string}\n";
         end
@@ -275,8 +283,6 @@ module Spec
 end
 
 at_exit do
-  if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-    SPEC_RUNNER_LOG << "[#{Time.now}] : Finished\n\n";
-    SPEC_RUNNER_LOG.close
-  end
+  SPEC_FORMATTER_LOG.log_msg("spec formatter.rb: Finished")
+  SPEC_FORMATTER_LOG.close
 end

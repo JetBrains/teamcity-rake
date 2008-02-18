@@ -101,8 +101,10 @@ module Rake
 
       # Stops new events dispatching, and waiting while event queue will finish
       # <b>join_thread</b> - if true, current thread will wait dispatcher for completing event dispatching. You may use it in tests.
-      def stop_dispatcher(join_thread = false)
+      def stop_dispatcher(join_thread = true)
         if started?
+          # TODO In tests
+          # join_thread = ENV["idea.rake.debug.sources"] ? false : true;
           @dispatcher.stop(join_thread)
           @dispatcher = nil
         end

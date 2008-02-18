@@ -41,7 +41,7 @@ class LoggerTest < Test::Unit::TestCase
   end
 
   def teardown
-    @msg_dispather.stop_dispatcher
+    @msg_dispather.stop_dispatcher(false)
     super()
   end
 

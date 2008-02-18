@@ -19,10 +19,17 @@
 
 require 'thread'
 if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/rakerunner_consts'
+  require 'src/utils/logger_util'
   require 'src/test/unit/ui/teamcity/event_queue/event'
 else
+  require 'test/unit/ui/teamcity/rakerunner_consts'
+  require 'utils/logger_util'
   require 'test/unit/ui/teamcity/event_queue/event'
 end
+
+EVENTS_DISPATCHER_LOG = Rake::TeamCity::Utils::RakeFileLogger.new
+EVENTS_DISPATCHER_LOG.log_msg("events_dispatcher.rb loaded.")
 
 # Collects events and processes it by handler
 module Rake::TeamCity::Logger
@@ -31,10 +38,12 @@ module Rake::TeamCity::Logger
       @queue = Queue.new
       @events_sequence_handler = events_sequence_handler
       @exceptions_handler = exceptions_handler
+      EVENTS_DISPATCHER_LOG.log_msg("Dispatcher initialized.", true);
     end
 
     # Adds new event into event queue
     def dispatch event
+      EVENTS_DISPATCHER_LOG.log_msg("Push event: [#{event.data}]", true);
       @queue.push event
     end
 
@@ -42,16 +51,22 @@ module Rake::TeamCity::Logger
       @is_running = true
       @should_stop = false
 
-      @processor_thread = Thread.new do
-        while (@is_running && !@should_stop)
+      EVENTS_DISPATCHER_LOG.log_block("Starting dispatcher..\n", nil, true) do
+        @processor_thread = Thread.new do
+          EVENTS_DISPATCHER_LOG.log_msg("Processor thread started.", true);
+          while (@is_running && !@should_stop)
+            process_events
+          end
           process_events
+          EVENTS_DISPATCHER_LOG.log_msg("Processor thread stopped.", true);
         end
-        process_events
       end
     end
 
     # Stops events processor and wait until all events will be processed
-    def stop(join_thread = false)
+    def stop(join_thread = true)
+      EVENTS_DISPATCHER_LOG.log_msg("------------- Stop signal received, join=#{join_thread}, caller=\n#{caller.join(%Q{\n})}\n---------------", true);
+
       @is_running = false;
 
       # In test mode Thread.join may lead to DeadLock
@@ -60,7 +75,7 @@ module Rake::TeamCity::Logger
 
     # Stops events processor and doesn't process all remaing events
     def stop_immediately
-      stop(true)
+      stop(false)
     end
 
     ############################################################################
@@ -74,11 +89,22 @@ module Rake::TeamCity::Logger
 
       unless events.empty?
         begin
-          @events_sequence_handler.process(events) if @events_sequence_handler
+          EVENTS_DISPATCHER_LOG.log_block("[h#{events.hash}]", "Send events to handler [#{(events.map {|x| x.data}).join('\n')}]..", true) do
+            @events_sequence_handler.process(events) if @events_sequence_handler
+          end
         rescue Exception => e
+          EVENTS_DISPATCHER_LOG.log_msg("!!!!!!!!!! Cant process [h#{events.hash}] events [#{(events.map {|x| x.data}).join('\n')}], Exception: [#{e.class.name}:#{e.message}] occured.\nEvent is forwading to ExceptionsHandler", true);
           @exceptions_handler.process(Event.new(self, [e, events])) if @exceptions_handler
         end
       end
     end
   end
+end
+
+at_exit do
+  EVENTS_DISPATCHER_LOG.log_block("Stoping events dispatcher. Closing connection...", nil, true) do
+    Rake::TeamCity.msg_dispatcher.stop_dispatcher
+  end
+  EVENTS_DISPATCHER_LOG.log_msg("events_dispatcher.rb: Finished", true);
+  EVENTS_DISPATCHER_LOG.close
 end

@@ -155,7 +155,7 @@ end
       disp = Rake::TeamCity::MessagesDispather.new
       disp.start_dispatcher(2, 0.1, handler)
       yield
-      disp.stop_dispatcher(true)
+      disp.stop_dispatcher
     end
   end
 
