@@ -19,7 +19,7 @@ Features:
    * System properties:
        system.ruby.interpreter - Path to ruby interpreter, e.g. C:\IR\InstantRails-1.7-new\ruby\bin\ruby.exe or /usr/bin/ruby
 
-   * Rake 0.7.3
+   * Rake 0.7.3 or higher
    * install ruby gem 'builder'
         /> gem install builder
    * rails - for rails projects
@@ -66,3 +66,12 @@ Features:
 RakeRunner plugin uses own unit tests runner and loads it with RUBYLIB enviroment variable.
 Be sure that your program doesn't clear this enviroment variable. But obviously you may append
 your pathes to it.
+
+#TODO - describe properties - environment, sytem, env. on agent, build runner params
+#TODO - remind about "win32console gem"
+#TODO - about "ignored specs"
+
+#TODO --require "spec/runner/formatter/teamcity/formatter"
+#TODO --format Spec::Runner::Formatter::TeamcityFormatter:matrix
+#TODO - Open in IDE action doesn't work
+#TODO - spec task - disable fail on error
