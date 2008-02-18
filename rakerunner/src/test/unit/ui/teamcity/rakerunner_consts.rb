@@ -21,7 +21,8 @@
 TEAMCITY_RAKERUNNER_LOG_PATH_KEY = 'idea.rake.debug.log.path'
 TEAMCITY_RAKERUNNER_LOG_FILENAME_SUFFIX = '/rakeRunner_rake.log'
 TEAMCITY_RAKERUNNER_RPC_LOG_FILENAME_SUFFIX = '/rakeRunner_xmlrpc.log'
-TEAMCITY_RAKERUNNER_SPEC_LOG_FILENAME_SUFFIX = '/rakeRunner_specsRunner.log'
+TEAMCITY_RAKERUNNER_SPEC_LOG_FILENAME_SUFFIX = '/rakeRunner_rspec.log'
+TEAMCITY_RAKERUNNER_TESTUNIT_LOG_FILENAME_SUFFIX = '/rakeRunner_testUnit.log'
 
 # Teamcity connection properties
 IDEA_BUILDSERVER_BUILD_ID_KEY = 'idea.build.server.build.id'

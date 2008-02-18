@@ -18,15 +18,13 @@
 # @date: 02.06.2007
 
 if ENV["idea.rake.debug.sources"]
-  require 'src/test/unit/ui/teamcity/rakerunner_consts'
+  require 'src/utils/logger_util'
 else
-  require 'test/unit/ui/teamcity/rakerunner_consts'
+  require 'utils/logger_util'
 end
 
-if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-  UNIT_TESTS_RUNNER_LOG = File.new(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + "/rakeRunner_testrunner.log", "a+");
-  UNIT_TESTS_RUNNER_LOG << "\n[#{Time.now}] : Started\n";
-end
+UNIT_TESTS_RUNNER_LOG = Rake::TeamCity::Utils::TestUnitFileLogger.new
+UNIT_TESTS_RUNNER_LOG.log_msg("testrunner.rb loaded.")
 
 require 'test/unit/ui/testrunnermediator'
 require 'test/unit/ui/testrunnerutilities'
@@ -105,8 +103,6 @@ if __FILE__ == $0
 end
 
 at_exit do
-  if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-    UNIT_TESTS_RUNNER_LOG << "[#{Time.now}] : Finished\n\n";
-    UNIT_TESTS_RUNNER_LOG.close
-  end
+  UNIT_TESTS_RUNNER_LOG.log_msg("testrunner.rb: Finished");
+  UNIT_TESTS_RUNNER_LOG.close
 end

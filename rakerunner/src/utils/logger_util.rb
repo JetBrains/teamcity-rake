@@ -79,6 +79,13 @@ module Rake
                 ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + TEAMCITY_RAKERUNNER_SPEC_LOG_FILENAME_SUFFIX)
         end
       end
+
+      class TestUnitFileLogger < FileLogger
+        def initialize
+          super(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY],
+                ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + TEAMCITY_RAKERUNNER_TESTUNIT_LOG_FILENAME_SUFFIX)
+        end
+      end
     end
   end
 end

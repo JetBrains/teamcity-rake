@@ -163,7 +163,7 @@ module Test
           def debug_log(string)
             # Logs output.
             if ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY]
-              UNIT_TESTS_RUNNER_LOG << "[#{Time.now}] : #{string}\n";
+              UNIT_TESTS_RUNNER_LOG.log_msg(string);
             end
             # Uncomment to see output in Teamcity build log.
             # puts "{TC_TR_DEBUG_LOG} #{string}\n";
