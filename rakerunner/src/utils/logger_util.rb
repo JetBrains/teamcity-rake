@@ -27,9 +27,10 @@ module Rake
   module TeamCity
     module Utils
       class FileLogger
-        def initialize(is_enabled, path)
-          @enabled = is_enabled
-          @log_file = File.new(path, "a+")
+        def initialize(logs_dir, fileSuffix)
+          @enabled = ENV[logs_dir]
+
+          @log_file = @enabled ? File.new(ENV[logs_dir] + fileSuffix, "a+") : nil
         end
 
         def current_proc_thread_info
@@ -55,28 +56,25 @@ module Rake
         end
 
         def close
-          @log_file.close
+          @log_file.close if @enabled
         end
       end
 
       class RakeFileLogger < FileLogger
         def initialize
-          super(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY],
-                ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + TEAMCITY_RAKERUNNER_LOG_FILENAME_SUFFIX)
+          super(TEAMCITY_RAKERUNNER_LOG_PATH_KEY, TEAMCITY_RAKERUNNER_LOG_FILENAME_SUFFIX)
         end
       end
 
       class RPCMessagesLogger < FileLogger
         def initialize
-          super(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY],
-                ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + TEAMCITY_RAKERUNNER_RPC_LOG_FILENAME_SUFFIX)
+          super(TEAMCITY_RAKERUNNER_LOG_PATH_KEY, TEAMCITY_RAKERUNNER_RPC_LOG_FILENAME_SUFFIX)
         end
       end
 
       class RSpecFileLogger < FileLogger
         def initialize
-          super(ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY],
-                ENV[TEAMCITY_RAKERUNNER_LOG_PATH_KEY] + TEAMCITY_RAKERUNNER_SPEC_LOG_FILENAME_SUFFIX)
+          super(TEAMCITY_RAKERUNNER_LOG_PATH_KEY, TEAMCITY_RAKERUNNER_SPEC_LOG_FILENAME_SUFFIX)
         end
       end
 
