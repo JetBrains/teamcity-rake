@@ -41,3 +41,5 @@ require "rake/packagetask"
   task :copy_ac_ab => [:clean, :copy_ab, :copy_ac] do
     puts "Copied.. a->c"
   end
+
+  task :default => :copy_ac_ab 
