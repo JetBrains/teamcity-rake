@@ -37,7 +37,8 @@ namespace :simple_sc do
     Kernel.warn("This output was sent to Kernel.warn")
   end
 
-  task :create_zip => :check_output do
+  task :create_zip do
+    Rake::Task['simple_sc:check_output'].execute
     puts "Current dir: #{File.expand_path(".")}"
 
     user_block("Fake progress") do
@@ -58,7 +59,7 @@ namespace :simple_sc do
     rm_r FileList['dist/dir*']
   end
 
-  REVISION =  ENV["BUILD_VCS_NUMBER.1"] ? ENV["BUILD_VCS_NUMBER.1"] : "<revision>" 
+  REVISION =  ENV["BUILD_VCS_NUMBER.1"] ? ENV["BUILD_VCS_NUMBER.1"] : "<revision>"
   Rake::PackageTask.new("sample", "0.1." + REVISION) do |p|
     p.need_zip = true
     p.zip_command = "7z a -mx=9 -mmt=off"

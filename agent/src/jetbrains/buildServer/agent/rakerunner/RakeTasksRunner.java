@@ -81,7 +81,7 @@ public class RakeTasksRunner extends RakeRunnerBase {
             if (!RubySDKUtil.isGemInstalledInSDK(RubySDKUtil.GEM_BUILDER_NAME, null, true, runParams, buildParams)) {
                 final String msg = "Unable to find 'builder' gem for Ruby SDK with interpreter: '"
                                     + ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams)
-                                    + "'. This gem is mandatory for Rake tasks runner. Please install 'builder' gem for this Ruby SDK.";
+                                    + "'. This gem is mandatory for TeamCity Rake Runner. Please install 'builder' gem for this Ruby SDK.";
 
                 throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
             }
