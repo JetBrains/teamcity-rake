@@ -42,6 +42,7 @@ module Rake
       MSG_PROGRESS_STAGE = "ProgressStage";
 
       # test unit messages
+      MSG_FLOW = "Flow";
       MSG_TEST_IGNORED = "TestIgnored";
       MSG_TEST_OUTPUT = "TestOutput";
       MSG_TEST_FAILURE = "TestFailure";
@@ -67,12 +68,25 @@ module Rake
       TRUE = "true"
       FALSE = "false"
 
+      RAKE_FLOW_ID = "Rake"
+
+      #  public static BuildMessage1 createFlowMessage(final String flowId, final String parentFlowId)
+      def self.create_flow_message(flow_id=RAKE_FLOW_ID, parent_flow_id="")       #TODO
+         _create_stub(:normal, MSG_FLOW) do |x|
+          x.myValue("class" => "jetbrains.buildServer.messages.FlowData") do
+            x.myFlow flow_id
+            x.myParentFlow parent_flow_id
+          end
+        end
+      end
+
+
       # public static BuildMessage1 createTestBlockStart(String blockName)
       # public static BuildMessage1 createBlockStart(final String blockName, final String blockType)
       # public static BuildMessage1 createBlockStart(final String blockName, final String blockType, final Date timestamp)
       # public static BuildMessage1 createTestSuiteStart(String blockName)
       def self.create_open_block(block_name, block_type, msg_status = :normal)
-        _create_stub(msg_status, "BlockStart") do |x|
+        _create_stub(msg_status, MSG_BLOCK_START) do |x|
           x.myValue("class" => "jetbrains.buildServer.messages.BlockData") do
             x.blockName   block_name
             x.blockType   get_block_type(block_type)
@@ -85,7 +99,7 @@ module Rake
       # public static BuildMessage1 createBlockEnd(final String blockName, final String blockType)
       # public static BuildMessage1 createTestSuiteEnd(String blockName)
       def self.create_close_block(msg, block_type, msg_status = :normal)
-        _create_stub(msg_status, "BlockEnd") do |x|
+        _create_stub(msg_status, MSG_BLOCK_END) do |x|
           x.myValue("class" => "jetbrains.buildServer.messages.BlockData") do
             x.blockName   msg
             x.blockType   get_block_type(block_type)
@@ -94,7 +108,7 @@ module Rake
       end
 
       def self.create_progress_message(msg, msg_status = :normal)
-        _create_stub(msg_status, "ProgressStage") do |x|
+        _create_stub(msg_status, MSG_PROGRESS_STAGE) do |x|
           x.myValue(msg, "class" => "java.lang.String")
         end
       end
@@ -102,7 +116,7 @@ module Rake
       #  public static BuildMessage1 createTextMessage(final String message, final Status status)
       # public static BuildMessage1 createTextMessage(final String message)
       def self.create_message(msg, msg_status = :normal)
-        _create_stub(msg_status, "Text") do |x|
+        _create_stub(msg_status, MSG_TEXT) do |x|
           x.myValue(msg, "class" => "java.lang.String")
         end
       end
@@ -110,7 +124,7 @@ module Rake
       #  public static BuildMessage1 createError(final Throwable throwable, Status status)
       #  public static BuildMessage1 createError(final Throwable throwable)
       def self.create_error_message(msg, stack_trace)
-        _create_stub(:error, "Error") do |x|
+        _create_stub(:error, MSG_ERROR) do |x|
           x.myValue("class" => "jetbrains.buildServer.messages.ErrorData") do
             x.stackTrace stack_trace
             x.localizedMessage msg
@@ -120,7 +134,7 @@ module Rake
 
       # public static BuildMessage1 createBuildFailureDescription(final String message)
       def self.create_build_failure_message(msg)
-        _create_stub(:failure, "BuildFailureDescription") do |x|
+        _create_stub(:failure, MSG_BUILD_FAILURE_DESCRIPTION) do |x|
           x.myValue(msg, "class" => "jetbrains.buildServer.messages.ErrorData")
         end
       end
@@ -131,7 +145,7 @@ module Rake
       # public static BuildMessage1 createTestStderr(final String testName, final String output) {
       # public static BuildMessage1 createTestStdout(final String testName, final String output)
       def self.create_test_output_message(test_name, is_std_out, output)
-        _create_stub(:normal, "TestOutput") do |x|
+        _create_stub(:normal, MSG_TEST_OUTPUT) do |x|
           x.myValue("class" => "jetbrains.buildServer.messages.TestOutputData") do
             x.testName test_name
             x.isStdOut get_bool_str(is_std_out)
@@ -142,7 +156,7 @@ module Rake
 
       # public static BuildMessage1 createTestIgnoreMessage(final String testName, final String reason)
       def self.create_test_ignored_message(msg, test_name)
-        _create_stub(:normal, "TestIgnored") do |x|
+        _create_stub(:normal, MSG_TEST_IGNORED) do |x|
           x.myValue("class" => "jetbrains.buildServer.messages.IgnoredTestData") do
             x.testName test_name
             x.ignoreReason msg
@@ -167,7 +181,7 @@ module Rake
       # public static BuildMessage1 createTestFailure(final String testName, String message, final String stackTrace)
       # public static BuildMessage1 createTestFailure(final String testName, final Throwable th)
       def self.create_test_problem_message(test_name, msg, stack_trace)
-        _create_stub(:failure, "TestFailure") do |x|
+        _create_stub(:failure, MSG_TEST_FAILURE) do |x|
           x.myValue("class" => "jetbrains.buildServer.messages.TestProblemData") do
             x.testName test_name
             x.stackTrace stack_trace
@@ -221,11 +235,11 @@ module Rake
       def self._create_stub(msg_status, msg_type_id)
         x = Builder::XmlMarkup.new(:indent => 3)
         x.tag!("jetbrains.buildServer.messages.BuildMessage1") do
-          x.mySourceId    "DefaultMessage"
+          x.mySourceId    SOURCE_ID
           x.myTypeId      msg_type_id
           x.myStatus      get_msg_status(msg_status)
           x.myTimestamp   get_time
-
+          x.myFlowId      RAKE_FLOW_ID
           yield x
         end
       end
