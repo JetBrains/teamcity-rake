@@ -25,6 +25,7 @@ else
   require 'test/unit/ui/teamcity/string_ext'
 end
 
+# WARNING: Current implementation uses only one Flow id for all messages - RAKE_FLOW_ID.
 module Rake
   module TeamCity
     module MessageFactory
@@ -71,7 +72,7 @@ module Rake
       RAKE_FLOW_ID = "Rake"
 
       #  public static BuildMessage1 createFlowMessage(final String flowId, final String parentFlowId)
-      def self.create_flow_message(flow_id=RAKE_FLOW_ID, parent_flow_id="")       #TODO
+      def self.create_flow_message(flow_id=RAKE_FLOW_ID, parent_flow_id="")
          _create_stub(:normal, MSG_FLOW) do |x|
           x.myValue("class" => "jetbrains.buildServer.messages.FlowData") do
             x.myFlow flow_id

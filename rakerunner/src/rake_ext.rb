@@ -20,9 +20,11 @@
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/rakerunner_consts'
   require 'src/utils/logger_util'
+  require 'src/utils/send_messages_util'
 else
   require 'test/unit/ui/teamcity/rakerunner_consts'
   require 'utils/logger_util'
+  require 'utils/send_messages_util'
 end
 
 RAKE_EXT_LOG = Rake::TeamCity::Utils::RakeFileLogger.new
@@ -45,14 +47,15 @@ end
 ######################################################################
 
 ########## Rake  TeamCityApplication #################################
-
 module Rake
   class TeamCityApplication < Application
+    extend Rake::SendMessagesUtil
+
     attr_reader :server, :build_id_str
 
     def initialize
       Rake::TeamCity.msg_dispatcher.start_dispatcher
-
+      Rake::TeamCityApplication.send_create_ruby_flow_message
       begin
         super
       rescue Exception => e
@@ -66,58 +69,21 @@ module Rake
       end
     end
 
-    #TODO move static somewhere..
-    def self.send_error(msg, stacktrace)
-       send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_error_message(msg, stacktrace)}
-    end
-
-    def self.send_warning(msg)
-       send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_message(msg, :warning)}
-    end
-
-    def self.send_info_msg(msg)
-       send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_message(msg)}
-    end
-
-    def self.send_error_msg(msg)
-       send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_message(msg, :error)}
-    end
-
-    def self.send_open_target(msg)
-      send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_open_block(msg, :target)}
-    end
-
-    def self.send_close_target(msg)
-      send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_close_block(msg, :target)}
-    end
-
-    def self.send_noraml_user_message(msg)
-      send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_user_message(msg)}
-    end
-
-    def self.send_captured_stdout(msg)
-      send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_message(msg)}
-    end
-
-    def self.send_captured_stderr(msg)
-      send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_message(msg, :error)}
-    end
-
-    def self.send_captured_warning(msg)
-      send_xml_to_teamcity {Rake::TeamCity::MessageFactory.create_message(msg, :warning)}
-    end
-
-    def self.send_xml_to_teamcity
-      Rake::TeamCity.msg_dispatcher.log_one(yield)
-    end
-
     # Wraps block in pair of teamcity's messages: blockStart, blockEnd.
     # Then executes it. If error occurs method will send information to TeamCity and
     # raise special exception to interrupt process, but prevent futher handling of this exception
-    def self.target_exception_handling(block_msg)
-      # Log in TeamCity
-      Rake::TeamCityApplication.send_open_target(block_msg) if Rake.application.options.trace
+    def self.target_exception_handling(block_msg, is_execute = false, additional_message = "")
+      show_ivoke_block = Rake.application.options.trace || ENV[TEAMCITY_RAKERUNNER_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED]
+      create_block = is_execute || (!@already_invoked && show_ivoke_block)
 
+      block_msg = "#{is_execute ? "Execute" : "Invoke"} #{block_msg}"
+
+      # Log in TeamCity
+      Rake::TeamCityApplication.send_open_target(block_msg) if create_block
+
+      show_additional_msg = !is_execute && ENV[TEAMCITY_RAKERUNNER_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED]
+      Rake::TeamCityApplication.send_normal_user_message(additional_message) if (additional_message && !additional_message.empty? && show_additional_msg)
+      
       # Executes task safely
       begin
         yield
@@ -128,7 +94,7 @@ module Rake
         Rake::TeamCityApplication.process_exception(exc)
       ensure
         # Log in TeamCity
-        Rake::TeamCityApplication.send_close_target(block_msg) if Rake.application.options.trace
+        Rake::TeamCityApplication.send_close_target(block_msg) if create_block
       end
     end
 
@@ -185,11 +151,12 @@ module Rake
     # Formats exception message and stacktrace according current error representation options
     # Returns error msg and stacktrace
     def self.format_exception_msg(exception, show_trace = false)
-      if show_trace
-        stacktrace = "\nStacktrace:\n" + exception.backtrace.join("\n")
-      elsif Rake.application.rakefile
+      back_trace_msg = "\nStacktrace:\n" + exception.backtrace.join("\n")
+      if Rake.application.rakefile
         source_file = exception.backtrace.find {|str| str =~ /#{Rake.application.rakefile}/ }
-        stacktrace = (source_file ? "\nSource: #{source_file}": "") + "\n(See full trace by running task with --trace option)"
+        stacktrace = back_trace_msg + (source_file ? "\n\nSource: #{source_file}": "") + (show_trace ? "" : "\n(See full trace by running task with --trace option)")
+      else
+        stacktrace = back_trace_msg
       end
       return "#{exception.class.name}: #{exception.message}", stacktrace
     end
@@ -244,22 +211,35 @@ end
 
 ################# Task extnesion #########################################
 class Rake::Task
+  NEW_API = defined? invoke_with_call_chain
 
   # Overrides standart API. 0.7.3 - 0.8.0
   #
   # Invoke the task if it is needed.  Prerequites are invoked first.
-  alias standart_invoke invoke
-  private :standart_invoke
-  def invoke(*args)
-    Rake::TeamCityApplication.target_exception_handling("Invoke #{name} #{format_trace_flags}") do
-     method(:standart_invoke).arity == 0 ? standart_invoke() : standart_invoke(args)
+  def my_invoke_with_call_chain(*args)
+    Rake::TeamCityApplication.target_exception_handling(name, false, format_trace_flags) do
+     method(:standart_invoke_with_call_chain).arity == 0 ? standart_invoke_with_call_chain() : standart_invoke_with_call_chain(args)
     end
   end
+  private :my_invoke_with_call_chain
+  if NEW_API
+    # 0.8.0 and higher
+    alias :standart_invoke_with_call_chain :invoke_with_call_chain
+    # overrides 'invoke_with_call_chain' with 'my_invoke_with_call_chain'
+    alias :invoke_with_call_chain :my_invoke_with_call_chain
+  else
+    # 0.7.3
+    alias :standart_invoke_with_call_chain :invoke
+    # overrides 'invoke' with 'my_invoke_with_call_chain'
+    alias :invoke :my_invoke_with_call_chain
+  end
+  private :standart_invoke_with_call_chain
+  public :invoke
 
   # Overrides standart API. 0.7.3 - 0.8.0
   #
   # Execute the actions associated with this task.
-  alias standart_execute execute
+  alias :standart_execute :execute
   private :standart_execute
   def execute(*args)
     standart_execute_block = Proc.new do
@@ -267,9 +247,9 @@ class Rake::Task
     end
 
     if application.options.dryrun
-      Rake::TeamCityApplication.target_exception_handling("Execute (dry run) #{name}", &standart_execute_block)
+      Rake::TeamCityApplication.target_exception_handling(name, true, "(dry run)", &standart_execute_block)
     else
-      Rake::TeamCityApplication.target_exception_handling("Execute #{name}", &standart_execute_block)
+      Rake::TeamCityApplication.target_exception_handling(name, true, &standart_execute_block)
     end
   end
 end

@@ -37,3 +37,4 @@ TEAMCITY_RAKERUNNER_DISPATCHER_RETRY_DELAY = 0.25
 
 # Rakerunner system properties
 ORIGINAL_SDK_AUTORUNNER_PATH_KEY = 'rake.runner.original.sdk.test.unit.autorunner.path'
+TEAMCITY_RAKERUNNER_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED = 'teamcity.rake.runner.rake.trace.invoke.exec.stages.enabled'
