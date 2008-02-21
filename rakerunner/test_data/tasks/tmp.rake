@@ -29,6 +29,10 @@ require "rake/packagetask"
     puts ".....Cleaninig....."
   end
 
+  task :fake => :clean do
+    puts "fake"
+  end
+
   task :copy_ab => :clean do
     puts "Copied.. a->b"
   end
@@ -40,6 +44,12 @@ require "rake/packagetask"
 
   task :copy_ac_ab => [:clean, :copy_ab, :copy_ac] do
     puts "Copied.. a->c"
+
+    puts "Rake::Task['fake'].execute:"
+    Rake::Task['fake'].execute
+
+    puts "Rake::Task['fake'].invoke:"
+    Rake::Task['fake'].invoke
   end
 
   task :default => :copy_ac_ab 
