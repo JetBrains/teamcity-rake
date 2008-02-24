@@ -22,15 +22,17 @@ import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.openapi.util.Key;
 import com.intellij.util.containers.HashMap;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.runner.BuildFileRunnerUtil;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
-import jetbrains.buildServer.util.*;
+import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
+import jetbrains.buildServer.runner.BuildFileRunnerUtil;
+import jetbrains.buildServer.util.PropertiesUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -117,11 +119,9 @@ public class RakeTasksRunner extends RakeRunnerBase {
 
             // Tasks names
             final String tasks_names = runParams.get(SERVER_UI_RAKE_TASKS_PROPERTY);
-            if (PropertiesUtil.isEmptyOrNull(tasks_names)) {
-//                cmd.addParameter(DEFAULT_RAKE_TASK_NAME); //TODO check and remove
-            } else {
+            if (!PropertiesUtil.isEmptyOrNull(tasks_names)) {
                 addCmdlineArguments(cmd, tasks_names);
-            }
+            } 
 
             //Test::Unit TESTOPTS
             final String testOpts = runParams.get(SERVER_UI_RAKE_TEST_UNIT_TESTOPTS_PROPERTY);
@@ -211,12 +211,23 @@ public class RakeTasksRunner extends RakeRunnerBase {
         }
     }
 
+    @Nullable
     private File getBuildFile(Map<String, String> runParameters) throws IOException, RunBuildException {
-        final File buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);
+        final File buildFile;
         if (BuildFileRunnerUtil.isCustomBuildFileUsed(runParameters)) {
+            buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);
+        } else {
+            final String buildFilePath = runParameters.get(BUILD_FILE_PATH_KEY);
+            if (PropertiesUtil.isEmptyOrNull(buildFilePath)) {
+                //use rake defaults
+                buildFile = null;
+            } else {
+                buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);
+            }
+        }
+        if (buildFile != null) {
             myFilesToDelete.add(buildFile);
         }
-
         return buildFile;
     }
 

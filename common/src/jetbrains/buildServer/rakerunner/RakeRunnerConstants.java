@@ -53,7 +53,6 @@ public interface RakeRunnerConstants extends Constants {
     @NonNls String RUBYLIB_ENVIRONMENT_VARIABLE = "RUBYLIB";
 
 // Rake
-    @NonNls String DEFAULT_RAKE_TASK_NAME = "default"; //TODO remove
     @NonNls String RAKE_CMDLINE_OPTIONS_RAKEFILE = "--rakefile";
 
 // Teamcity Rake Runner Debug and logs
