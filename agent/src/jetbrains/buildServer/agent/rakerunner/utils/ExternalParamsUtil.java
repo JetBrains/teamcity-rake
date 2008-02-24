@@ -20,7 +20,7 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
-import org.apache.log4j.Logger;
+import jetbrains.buildServer.util.PropertiesUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -33,34 +33,25 @@ import java.util.Map;
  * @date: 22.12.2007
  */
 public class ExternalParamsUtil implements RakeRunnerConstants {
-    private static final Logger LOG = Logger.getLogger(ExternalParamsUtil.class);
-
-
-//    private static PropertyFinder RUBY_INTERPRETER_FINDER =
-//            new PropertyFinder(TARGET_RUBY_INTERPRETER,
-//                               ENV_VARIABLE_RUBY_INTERPRETER,
-//                               SYSTEM_PROPERTY_RUBY_INTERPRETER);
-
 
     @NotNull
     public static String getRubyInterpreterPath(final Map<String, String> runParameters,
                                                 final Map<String, String> buildParameters)
             throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
 
-        final String rubyInterpreterPath =
-//                RUBY_INTERPRETER_FINDER.getPropertyValue(runParameters, buildParameters);
-                runParameters.get(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER);
-//TODO "PATH" support
-        if (rubyInterpreterPath == null) {
-            final String msg = "Unable to find ruby home. Check property '";
-//TODO
-//                    + RakeRunnerConstants.TARGET_RUBY_INTERPRETER
-//                    + "', enviroment variable '"
-//                    + RakeRunnerConstants.ENV_VARIABLE_RUBY_INTERPRETER
-//                    + "' or system property '"
-//                    + RakeRunnerConstants.SYSTEM_PROPERTY_RUBY_INTERPRETER + "'";
+        final String rubyInterpreterPath;
 
-            throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+        final String uiRubyInterpreterPath = runParameters.get(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER);
+        if (PropertiesUtil.isEmptyOrNull(uiRubyInterpreterPath)) {
+            final String path = OSUtil.findRubyInterpreterInPATH(buildParameters);
+            if (path != null) {
+                rubyInterpreterPath = path;
+            } else {
+                final String msg = "Unable to find Ruby interpreter in PATH.";
+                throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+            }
+        } else {
+            rubyInterpreterPath = uiRubyInterpreterPath;
         }
 
         final File rubyInterpreter = new File(rubyInterpreterPath);
@@ -68,9 +59,9 @@ public class ExternalParamsUtil implements RakeRunnerConstants {
             if (rubyInterpreter.exists() && rubyInterpreter.isFile()) {
                 return rubyInterpreterPath;
             }
-            final String msg = "Ruby interpreter (" + rubyInterpreterPath + ") doesn't exist or isn't a file.";
+            final String msg = "Ruby interpreter '" + rubyInterpreterPath + "' doesn't exist or isn't a file.";
             throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
-        } catch (Exception e) {
+        } catch (SecurityException e) {
             //unknown error
             throw new RunBuildException(e.getMessage(), e);
         }

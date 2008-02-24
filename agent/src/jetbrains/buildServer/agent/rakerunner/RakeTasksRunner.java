@@ -232,10 +232,9 @@ public class RakeTasksRunner extends RakeRunnerBase {
     }
 
     public void failRakeTaskBuild(@NotNull final MyBuildFailureException e) throws RunBuildException {
-        getBuildLogger().error(e.getMessage());
         getBuildLogger().buildFailureDescription(e.getTitle());
 
-        throw new RunBuildException(e.getTitle());
+        throw new RunBuildException(e.getMessage());
     }
 
     public static class MyBuildFailureException extends Exception {

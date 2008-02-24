@@ -122,6 +122,6 @@ public class RubySDKUtil {
         final String rubyExecutable =
                 ExternalParamsUtil.getRubyInterpreterPath(runParameters, buildParameters);
 
-        return   Runner.runScriptFromSource(rubyExecutable, new String[0], scriptSource, new String[0]);
+        return Runner.runScriptFromSource(rubyExecutable, new String[0], scriptSource, new String[0]);
     }
 }
