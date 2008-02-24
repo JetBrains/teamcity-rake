@@ -43,20 +43,7 @@ public class RakeRunnerRunType extends RunType {
     }
 
     public PropertiesProcessor getRunnerPropertiesProcessor() {
-//        return new PropertiesProcessor() {
-//            public Collection<InvalidProperty> process(Map properties) {
-//                final List<InvalidProperty> result = new Vector<InvalidProperty>();
-//
-//                // Rake task name
-//                final String rakeTaskName =
-//                        (String)properties.get(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY);
-//                if (PropertiesUtil.isEmptyOrNull(rakeTaskName)) {
-//                    result.add(new InvalidProperty(RakeRunnerConstants.SERVER_UI_RAKE_TASK_PROPERTY,
-//                                                   "Rake task name must be specified"));
-//                }
-//                return result;
-//            }
-//        };
+        // Do nothing
         return null;
     }
 
@@ -72,8 +59,7 @@ public class RakeRunnerRunType extends RunType {
         final Map<String, String> map = new HashMap<String, String>();
         final String trueStr = Boolean.TRUE.toString();
 
-        // --trace
-        map.put(RakeRunnerConstants.SERVER_UI_RAKE_OPTION_TRACE_PROPERTY, trueStr);
+        // You can setup default properties here
 
         return map;
     }

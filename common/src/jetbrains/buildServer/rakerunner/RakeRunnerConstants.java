@@ -33,35 +33,29 @@ public interface RakeRunnerConstants extends Constants {
     /**
      * UI property: Rake task name
      */
-    @NonNls String SERVER_UI_RAKE_TASK_PROPERTY = "rakeRunner.rake.task.name";
+    @NonNls String SERVER_UI_RAKE_TASKS_PROPERTY = "ui.rakeRunner.rake.tasks.names";
 
-    @NonNls String SERVER_UI_RAKE_OPTION_TRACE_PROPERTY = "rakeRunner.rake.options.trace";
-    @NonNls String AGENT_CMD_LINE_RAKE_OPTION_TRACE_FLAG = "--trace";
+    @NonNls String SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED = "ui.rakeRunner.rake.trace.invoke.exec.stages.enabled";
+    @NonNls String RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY = "teamcity.rake.runner.rake.trace.invoke.exec.stages.enabled";
 
-    @NonNls String SERVER_UI_RAKE_OPTION_QUIET_PROPERTY = "rakeRunner.rake.options.quiet";
-    @NonNls String AGENT_CMD_LINE_RAKE_OPTION_QUIET_FLAG = "--quiet";
+    @NonNls String SERVER_UI_RAKE_TEST_UNIT_TESTOPTS_PROPERTY = "ui.rakeRunner.test.unit.options";
+    @NonNls String RAKE_TEST_UNIT_TESTOPTS_PARAM_NAME = "TESTOPTS";
 
-    @NonNls String SERVER_UI_RAKE_OPTION_DRYRUN_PROPERTY = "rakeRunner.rake.options.dryrun";
-    @NonNls String AGENT_CMD_LINE_RAKE_OPTION_DRYRUN_FLAG = "--dry-run";
+    @NonNls String SERVER_UI_RSPEC_SPEC_OPTS_PROPERTY = "ui.rakeRunner.rspec.specoptions";
+    @NonNls String RAKE__RSPEC_SPEC_OPTS_PARAM_NAME = "SPEC_OPTS";
 
-    @NonNls String SERVER_UI_RAKE_TEST_PROPERTY = "rakeRunner.test.filename";
-    @NonNls String SERVER_UI_RAKE_TEST_PARAM_NAME = "TEST";
+    @NonNls String SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY = "ui.rakeRunner.additional.rake.cmd.params";
 
-    @NonNls String SERVER_UI_RAKE_TESTOPT_PROPERTY = "rakeRunner.testoptions";
-    @NonNls String SERVER_UI_RAKE_TESTOPT_PARAM_NAME = "TESTOPTS";
-
-    @NonNls String SERVER_UI_RAKE_OTHER_ARGUMENTS_PROPERTY = "rakeRunner.other.rake.args";
+    @NonNls String SERVER_UI_RUBY_INTERPRETER = "ui.rakeRunner.ruby.interpreter";
 
 // Agent properties:
-    
-    // Ruby interpreter
-    @NonNls String SYSTEM_PROPERTY_RUBY_INTERPRETER = "system.ruby.interpreter";
-    @NonNls String TARGET_RUBY_INTERPRETER = "target.ruby.interpreter";
-    @NonNls String ENV_VARIABLE_RUBY_INTERPRETER = "RUBY_INTERPRETER";
-
     @NonNls String ORIGINAL_SDK_AUTORUNNER_PATH_KEY = "rake.runner.original.sdk.test.unit.autorunner.path";
     @NonNls String RUBYLIB_ENVIRONMENT_VARIABLE = "RUBYLIB";
 
 // Rake
-    @NonNls String DEFAULT_RAKE_TASK_NAME = "default";
+    @NonNls String DEFAULT_RAKE_TASK_NAME = "default"; //TODO remove
+    @NonNls String RAKE_CMDLINE_OPTIONS_RAKEFILE = "--rakefile";
+
+// Teamcity Rake Runner Debug and logs
+    @NonNls String RAKE_RUNNER_DEBUG_KEY = "teamcity.rake.runner.debug.mode";
 }

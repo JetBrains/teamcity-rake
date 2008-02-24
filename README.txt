@@ -75,3 +75,5 @@ your pathes to it.
 #TODO --format Spec::Runner::Formatter::TeamcityFormatter:matrix
 #TODO - Open in IDE action doesn't work
 #TODO - spec task - disable fail on error
+#TODO - System properties %..% in Ruby interpreter
+#TODO - 8.0. invoke_prerequisites problem. (renamed API) 

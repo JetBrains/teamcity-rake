@@ -19,63 +19,88 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 
-<l:settingsGroup title="Rake task">
-    <tr>
-        <th><label for="rakeRunner.rake.task.name">Rake task name: </label></th>
-        <td><props:textProperty name="rakeRunner.rake.task.name" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">E.g. 'test:functionals' or 'mytask::test'. If empty 'default' task will be used.</span>
-        </td>
-    </tr>
-</l:settingsGroup>
-
-<forms:workingDirectory />
-
-<l:settingsGroup title="Rake options">
+<l:settingsGroup title="Rake Parameters">
     <tr>
         <th>
-            <label>Options:</label>
+            <c:set var="onclick">
+                if (this.checked) {
+                $('build-file-path').focus();
+                }
+            </c:set>
+            <props:radioButtonProperty name="use-custom-build-file" value="" id="custom1"
+                                       checked="${empty propertiesBean.properties['use-custom-build-file']}" onclick="${onclick}"/>
+            <label for="custom1">Path to a Rakefile file:</label>
         </th>
         <td>
-            <props:checkboxProperty name="rakeRunner.rake.options.trace"/>
-            <label for="rakeRunner.rake.options.trace">Turn on invoke/execute tracing, enable full backtrace (--trace).</label>
-            <br/>
-
-            <props:checkboxProperty name="rakeRunner.rake.options.quiet"/>
-            <label for="rakeRunner.rake.options.quiet">Do not log messages to standard output (--quiet).</label>
-            <br/>
-
-            <props:checkboxProperty name="rakeRunner.rake.options.dryrun"/>
-            <label for="rakeRunner.rake.options.dryrun">Do a dry run without executing actions (--dry-run).</label>
+            <props:textProperty name="build-file-path" style="width:30em;" maxlength="256"/>
+            <span class="error" id="error_build-file-path"></span>
+            <span class="smallNote">Enter Rakefile path if you don't want to use a default one. Specified path should be relative to the checkout directory.</span>
         </td>
-        </tr>
-    <tr>
-        <th><label for="rakeRunner.testoptions">Rake tests options: </label></th>
-        <td><props:textProperty name="rakeRunner.testoptions" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">If is specified rake will be invoked with a '"TESTOPTS={options}"'</span>
-        </td>
-        <br/>
     </tr>
     <tr>
-        <th><label for="rakeRunner.test.filename">Override the list of test files with file name: </label></th>
-        <td><props:textProperty name="rakeRunner.test.filename" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">If is specified rake will be invoked with a '"TEST={filename}"'</span>
+        <th>
+            <c:set var="onclick">
+                if (this.checked) {
+                    try {
+                        BS.MultilineProperties.show('build-file', true);
+                        $('build-file').focus();
+                    } catch(e) {}
+                }
+            </c:set>
+            <props:radioButtonProperty name="use-custom-build-file" value="true" id="custom2" onclick="${onclick}"/>
+            <label for="custom2">Rakefile content:</label>
+        </th>
+        <td>
+            <props:multilineProperty expanded="${propertiesBean.properties['use-custom-build-file'] == true}" name="build-file" rows="10" cols="58" linkTitle="Type the Rakefile content" onkeydown="$('custom2').checked = true;"/>
+            <span class="error" id="error_build-file"></span>
         </td>
-        <br/>
+    </tr>
+    <forms:workingDirectory />
+    <tr>
+        <th><label for="ui.rakeRunner.rake.tasks.names">Rake tasks: </label></th>
+        <td><props:textProperty name="ui.rakeRunner.rake.tasks.names" style="width:30em;" maxlength="256"/>
+            <span class="smallNote">Enter tasks names separated by space character if you don't want to use 'default' task.  E.g. 'test:functionals' or 'mytask::test mytask::tes2'.</span>
+        </td>
     </tr>
     <tr>
-        <th><label for="rakeRunner.other.rake.args">Additional rake arguments: </label></th>
-        <td><props:textProperty name="rakeRunner.other.rake.args" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">If test isn't empty this arguments will be added to 'rake' command line.<br/>
-                                    E.g. 'rake {additional arguments} {runner options} {task name}'.</span>
+        <th><label for="ui.rakeRunner.additional.rake.cmd.params">Additional Rake command line parameters: </label></th>
+        <td><props:textProperty name="ui.rakeRunner.additional.rake.cmd.params" style="width:30em;" maxlength="256"/>
+            <span class="smallNote">If isn't empty this parameters will be added to 'rake' command line.<br/>
+                                    E.g. 'rake {additional parameters} {Teamcity Rake Runner options} {tasks names}'.</span>
         </td>
     </tr>
 </l:settingsGroup>
 
-<tr>
-    <th><label>Debug:</label></th>
-    <td>
-        <props:checkboxProperty name="rakeRunner.debug"/>
-        <label for="rcodedup.debug">Enable debug messages in the build log</label>
-        <span class="smallNote">This is internal option, for plugin debugging.</span>
-    </td>
-</tr>
+<l:settingsGroup title="Launching Parameters">
+    <tr>
+        <th><label for="ui.rakeRunner.ruby.interpreter">Ruby interpreter path: </label></th>
+        <td><props:textProperty name="ui.rakeRunner.ruby.interpreter" style="width:30em;" maxlength="256"/>
+            <span class="smallNote">If not specified the interpreter will be searched in the PATH</span>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            <label>Debug: </label>
+        </th>
+        <td>
+            <props:checkboxProperty name="ui.rakeRunner.rake.trace.invoke.exec.stages.enabled"/>
+            <label for="ui.rakeRunner.rake.trace.invoke.exec.stages.enabled">Track invoke/execute stages</label>
+            <br/>
+        </td>
+    </tr>
+</l:settingsGroup>
+
+<l:settingsGroup title="Tests Parameters">
+    <tr>
+        <th><label for="ui.rakeRunner.test.unit.options">Tests options(TESTOPTS): </label></th>
+        <td><props:textProperty name="ui.rakeRunner.test.unit.options" style="width:30em;" maxlength="256"/>
+            <span class="smallNote">If is specified Rake will be invoked with a "TESTOPTS={options}"</span>
+        </td>
+    </tr>
+    <tr>
+        <th><label for="ui.rakeRunner.rspec.specoptions">RSpec options(SPEC_OPTS): </label></th>
+        <td><props:textProperty name="ui.rakeRunner.rspec.specoptions" style="width:30em;" maxlength="256"/>
+            <span class="smallNote">If is specified Rake will be invoked with a "SPEC_OPTS={options}"</span>
+        </td>
+    </tr>
+</l:settingsGroup>

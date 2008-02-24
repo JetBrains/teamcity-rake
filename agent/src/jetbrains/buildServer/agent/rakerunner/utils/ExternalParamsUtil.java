@@ -18,7 +18,6 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
-import jetbrains.buildServer.agent.runner.PropertyFinder;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.apache.log4j.Logger;
@@ -37,10 +36,10 @@ public class ExternalParamsUtil implements RakeRunnerConstants {
     private static final Logger LOG = Logger.getLogger(ExternalParamsUtil.class);
 
 
-    private static PropertyFinder RUBY_INTERPRETER_FINDER =
-            new PropertyFinder(TARGET_RUBY_INTERPRETER,
-                               ENV_VARIABLE_RUBY_INTERPRETER,
-                               SYSTEM_PROPERTY_RUBY_INTERPRETER);
+//    private static PropertyFinder RUBY_INTERPRETER_FINDER =
+//            new PropertyFinder(TARGET_RUBY_INTERPRETER,
+//                               ENV_VARIABLE_RUBY_INTERPRETER,
+//                               SYSTEM_PROPERTY_RUBY_INTERPRETER);
 
 
     @NotNull
@@ -49,15 +48,17 @@ public class ExternalParamsUtil implements RakeRunnerConstants {
             throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
 
         final String rubyInterpreterPath =
-                RUBY_INTERPRETER_FINDER.getPropertyValue(runParameters, buildParameters);
-
+//                RUBY_INTERPRETER_FINDER.getPropertyValue(runParameters, buildParameters);
+                runParameters.get(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER);
+//TODO "PATH" support
         if (rubyInterpreterPath == null) {
-            final String msg = "Unable to find ruby home. Check property '"
-                    + RakeRunnerConstants.TARGET_RUBY_INTERPRETER
-                    + "', enviroment variable '"
-                    + RakeRunnerConstants.ENV_VARIABLE_RUBY_INTERPRETER
-                    + "' or system property '"
-                    + RakeRunnerConstants.SYSTEM_PROPERTY_RUBY_INTERPRETER + "'";
+            final String msg = "Unable to find ruby home. Check property '";
+//TODO
+//                    + RakeRunnerConstants.TARGET_RUBY_INTERPRETER
+//                    + "', enviroment variable '"
+//                    + RakeRunnerConstants.ENV_VARIABLE_RUBY_INTERPRETER
+//                    + "' or system property '"
+//                    + RakeRunnerConstants.SYSTEM_PROPERTY_RUBY_INTERPRETER + "'";
 
             throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
         }
