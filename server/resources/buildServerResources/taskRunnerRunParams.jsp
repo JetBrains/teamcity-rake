@@ -59,14 +59,13 @@
     <tr>
         <th><label for="ui.rakeRunner.rake.tasks.names">Rake tasks: </label></th>
         <td><props:textProperty name="ui.rakeRunner.rake.tasks.names" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">Enter tasks names separated by space character if you don't want to use 'default' task.  E.g. 'test:functionals' or 'mytask::test mytask::tes2'.</span>
+            <span class="smallNote">Enter tasks names separated by space character if you don't want to use 'default' task.</br>E.g. 'test:functionals' or 'mytask::test mytask::tes2'.</span>
         </td>
     </tr>
     <tr>
         <th><label for="ui.rakeRunner.additional.rake.cmd.params">Additional Rake command line parameters: </label></th>
         <td><props:textProperty name="ui.rakeRunner.additional.rake.cmd.params" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">If isn't empty this parameters will be added to 'rake' command line.<br/>
-                                    E.g. 'rake {additional parameters} {Teamcity Rake Runner options} {tasks names}'.</span>
+            <span class="smallNote">If isn't empty this parameters will be added to 'rake' command line.</span>
         </td>
     </tr>
 </l:settingsGroup>
@@ -75,7 +74,7 @@
     <tr>
         <th><label for="ui.rakeRunner.ruby.interpreter">Ruby interpreter path: </label></th>
         <td><props:textProperty name="ui.rakeRunner.ruby.interpreter" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">If not specified the interpreter will be searched in the PATH</span>
+            <span class="smallNote">If not specified the interpreter will be searched in the PATH.</span>
         </td>
     </tr>
     <tr>
@@ -94,13 +93,13 @@
     <tr>
         <th><label for="ui.rakeRunner.test.unit.options">Tests options(TESTOPTS): </label></th>
         <td><props:textProperty name="ui.rakeRunner.test.unit.options" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">If is specified Rake will be invoked with a "TESTOPTS={options}"</span>
+            <span class="smallNote">If is specified Rake will be invoked with a "TESTOPTS={options}".</span>
         </td>
     </tr>
     <tr>
         <th><label for="ui.rakeRunner.rspec.specoptions">RSpec options(SPEC_OPTS): </label></th>
         <td><props:textProperty name="ui.rakeRunner.rspec.specoptions" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">If is specified Rake will be invoked with a "SPEC_OPTS={options}"</span>
+            <span class="smallNote">If is specified Rake will be invoked with a "SPEC_OPTS={options}".</span>
         </td>
     </tr>
 </l:settingsGroup>

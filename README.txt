@@ -76,4 +76,6 @@ your pathes to it.
 #TODO - Open in IDE action doesn't work
 #TODO - spec task - disable fail on error
 #TODO - System properties %..% in Ruby interpreter
-#TODO - 8.0. invoke_prerequisites problem. (renamed API) 
+#TODO - 8.0. invoke_prerequisites problem. (renamed API)
+#TODO - Describe: Additional Rake command line parameters:  	 If isn't empty this parameters will be added to 'rake' command line.
+E.g. 'rake {additional parameters} {Teamcity Rake Runner options} {tasks names}'.
