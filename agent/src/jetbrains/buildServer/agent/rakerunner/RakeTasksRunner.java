@@ -51,6 +51,8 @@ public class RakeTasksRunner extends RakeRunnerBase {
     private final List<String> myStdErrMessages = new LinkedList<String>();
 
     private final Set<File> myFilesToDelete = new HashSet<File>();
+    private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require Spec::Runner::Formatter::TeamcityFormatter:matrix";
+    private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format spec/runner/formatter/teamcity/formatter";
 
     @NonNls
     public String getType() {
@@ -130,7 +132,15 @@ public class RakeTasksRunner extends RakeRunnerBase {
                 cmd.addParameter("\"" + RAKE_TEST_UNIT_TESTOPTS_PARAM_NAME + "=" + trimedTestOpts + "\"");
             }
 
-            //TODO SPEC_OPTS + runner params
+            final String specRunnerInitString = RSPEC_RUNNER_OPTIONS_REQUIRE + " " + RSPEC_RUNNERR_OPTIONS_FORMATTER;
+            String specOpts = runParams.get(SERVER_UI_RSPEC_SPEC_OPTS_PROPERTY);
+            if (TextUtil.isEmpty(specOpts)) {
+                specOpts = specRunnerInitString;
+            } else {
+                specOpts = specOpts.trim() + " " + specRunnerInitString;
+            }
+            cmd.addParameter("\"" + RAKE__RSPEC_SPEC_OPTS_PARAM_NAME + "=" + specOpts.trim() + "\"");
+
             if (inDebugMode) {
                 getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
             }
