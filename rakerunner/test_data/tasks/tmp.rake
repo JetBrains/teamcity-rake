@@ -22,10 +22,7 @@ require "rake"
 ########################################
 require "rake/packagetask"
 
-  CLEAN_FILES = FileList['dist']
-  CLEAN_FILES.clear_exclude
   task :clean do
-    #rm_r CLEAN_FILES, {:verbose => true, :force => true}
     puts ".....Cleaninig....."
   end
 
