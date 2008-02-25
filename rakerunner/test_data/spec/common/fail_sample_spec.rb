@@ -36,10 +36,10 @@ describe "Test Data" do
     end
 
     it "should fail - should raise error (other)" do
-      lambda {2 + nil}.should raise_error(StachOverflowError)
+      lambda {2 + nil}.should raise_error(StackOverflowError)
     end
     it "should fail - should raise error (no error)" do
-      lambda {2 + 3}.should raise_error(StachOverflowError)
+      lambda {2 + 3}.should raise_error(StackOverflowError)
     end
   end
 end
