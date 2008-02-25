@@ -38,8 +38,35 @@ describe "Test Data" do
     it "should fail - should raise error (other)" do
       lambda {2 + nil}.should raise_error(StackOverflowError)
     end
+
     it "should fail - should raise error (no error)" do
       lambda {2 + 3}.should raise_error(StackOverflowError)
     end
+
+    it "should fail - should have stdout output" do
+      $stdout << "Some stdout data\n"
+    end
+
+    it "should fail - should have stderr output" do
+      $stderr << "Some stderr data\n"
+    end
+
+    it "should fail - should have stderr and stdout output" do
+      $stdout << "Some stdout data\n"
+      $stderr << "Some stderr data\n"
+
+      2.should == 3
+    end
+
+    it "should fail - should have stderr from externel process output" do
+      system("ls medved_krevedko_and_preved_are_our_best_friends_")
+      system("dir medved_krevedko_and_preved_are_our_best_friends_")
+
+      2.should == 3
+    end
+
+    eval("it \"should fail and be always new (##{Time.now.to_i})\" do
+             2.should == 3
+          end")
   end
 end
