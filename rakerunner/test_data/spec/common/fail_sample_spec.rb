@@ -39,6 +39,10 @@ describe "Test Data" do
       lambda {2 + nil}.should raise_error(StackOverflowError)
     end
 
+    it "should fails - should raise error: uninitialized constant" do
+      lambda {}.should raise_error(Uninitialized_Constant)
+    end
+
     it "should fail - should raise error (no error)" do
       lambda {2 + 3}.should raise_error(StackOverflowError)
     end

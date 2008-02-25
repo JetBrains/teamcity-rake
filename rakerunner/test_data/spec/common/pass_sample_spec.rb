@@ -35,12 +35,27 @@ describe "Test Data" do
       [].should be_empty
     end
 
-    it "should pass - should raise error" do
-      lambda {2 + nil}.should raise_error(StackOverflowError)
+    it "should pass - should raise StackOverflowError" do
+      lambda {raise StackOverflowError}.should raise_error(StackOverflowError)
     end
 
-    it "should pass - should raise error: uninitialized constant" do
-      lambda {}.should raise_error(Uninitialized_Constant)
+    it "should pass - should have stdout output" do
+      $stdout << "Some stdout data\n"
+
+      2.should == 2
+    end
+
+    it "should pass - should have stderr output" do
+      $stderr << "Some stderr data\n"
+
+      2.should == 2
+    end
+
+    it "should pass - should have stderr and stdout output" do
+      $stdout << "Some stdout data\n"
+      $stderr << "Some stderr data\n"
+
+      2.should == 2
     end
   end
 end

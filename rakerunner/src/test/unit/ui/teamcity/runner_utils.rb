@@ -32,15 +32,7 @@ module Rake
                   if qualified_name.empty?
                     "#{method_name}"
                   else
-                    namespace_bound = qualified_name.rindex("::")
-                    "#{if namespace_bound
-                         name_space = qualified_name[0, namespace_bound]
-                         class_name = qualified_name[namespace_bound + 2, qualified_name.length - 1]
-                         class_name && !class_name.empty? ?  "#{name_space}.#{class_name}" : qualified_name
-                        else
-                           qualified_name
-                        end
-                    }.#{method_name}"
+                    "#{qualified_name}.#{method_name}"
                   end)
         end
         ruby_name
