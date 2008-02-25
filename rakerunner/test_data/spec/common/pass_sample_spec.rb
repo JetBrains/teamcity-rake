@@ -36,7 +36,7 @@ describe "Test Data" do
     end
 
     it "should pass - should raise StackOverflowError" do
-      lambda {raise StackOverflowError}.should raise_error(StackOverflowError)
+      lambda {raise ArgumentError}.should raise_error(ArgumentError)
     end
 
     it "should pass - should have stdout output" do

@@ -36,7 +36,7 @@ describe "Test Data" do
     end
 
     it "should fail - should raise error (other)" do
-      lambda {2 + nil}.should raise_error(StackOverflowError)
+      lambda {2 + nil}.should raise_error(ArgumentError)
     end
 
     it "should fails - should raise error: uninitialized constant" do
@@ -44,7 +44,7 @@ describe "Test Data" do
     end
 
     it "should fail - should raise error (no error)" do
-      lambda {2 + 3}.should raise_error(StackOverflowError)
+      lambda {2 + 3}.should raise_error(ArgumentError)
     end
 
     it "should fail - should have stdout output" do
