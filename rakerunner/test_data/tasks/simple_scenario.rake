@@ -69,6 +69,7 @@ namespace :simple_sc do
 
   task :build_zip => [:create_zip, :package, :remove_tmp_files]
 
+  desc "Main task"
   task :dist => [:clean, :build_zip] do
   end
 end

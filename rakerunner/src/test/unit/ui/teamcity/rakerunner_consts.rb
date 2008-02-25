@@ -18,7 +18,10 @@
 # @date: 29.01.2008
 
 # Behaviour properties
+  # Debug
 TEAMCITY_RAKERUNNER_LOG_PATH_KEY = 'teamcity.rake.runner.debug.log.path'
+TEAMCITY_RAKERUNNER_LOG_OUTPUT_HACK_DISABLED_KEY = 'teamcity.rake.runner.debug.output.hack.disabled'
+  # Log files
 TEAMCITY_RAKERUNNER_LOG_FILENAME_SUFFIX = '/rakeRunner_rake.log'
 TEAMCITY_RAKERUNNER_RPC_LOG_FILENAME_SUFFIX = '/rakeRunner_xmlrpc.log'
 TEAMCITY_RAKERUNNER_SPEC_LOG_FILENAME_SUFFIX = '/rakeRunner_rspec.log'

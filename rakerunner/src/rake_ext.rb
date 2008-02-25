@@ -36,9 +36,11 @@ require 'rake'
 if ENV["idea.rake.debug.sources"]
   require 'src/test/unit/ui/teamcity/message_factory'
   require 'src/test/unit/ui/teamcity/event_queue/messages_dispatcher'
+  require 'src/test/unit/ui/teamcity/std_capture_helper'
 else
   require 'test/unit/ui/teamcity/message_factory'
   require 'test/unit/ui/teamcity/event_queue/messages_dispatcher'
+  require 'test/unit/ui/teamcity/std_capture_helper'
 end
 ######################################################################
 ######################################################################
@@ -50,8 +52,9 @@ end
 module Rake
   class TeamCityApplication < Application
     extend Rake::SendMessagesUtil
+    extend Rake::TeamCity::StdCaptureHelper
 
-    attr_reader :server, :build_id_str
+    attr_reader :server, :build_id_str #TODO remove
 
     def initialize
       Rake::TeamCity.msg_dispatcher.start_dispatcher
@@ -81,11 +84,13 @@ module Rake
       # Log in TeamCity
       Rake::TeamCityApplication.send_open_target(block_msg) if create_block
 
-      show_additional_msg = !is_execute && ENV[TEAMCITY_RAKERUNNER_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED]
+      show_additional_msg = !is_execute && ENV[TEAMCITY_RAKERUNNER_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED] && !Rake.application.options.trace
       Rake::TeamCityApplication.send_normal_user_message(additional_message) if (additional_message && !additional_message.empty? && show_additional_msg)
       
       # Executes task safely
       begin
+        # Capture output for execution stage
+        capture_output_start if is_execute
         yield
       rescue Rake::ApplicationAbortedException => app_e
         raise
@@ -93,6 +98,15 @@ module Rake
         # Log in TeamCity
         Rake::TeamCityApplication.process_exception(exc)
       ensure
+        if is_execute
+          stdout_string, stderr_string = capture_output_end
+          if (!stdout_string.empty?)
+            Rake::TeamCityApplication.send_captured_stdout(stdout_string)
+          end
+          if (!stderr_string.empty?)
+            Rake::TeamCityApplication.send_captured_stderr(stderr_string)
+          end
+        end
         # Log in TeamCity
         Rake::TeamCityApplication.send_close_target(block_msg) if create_block
       end
@@ -183,7 +197,7 @@ module Rake
 end
 
 ################  Output extension ############################
-require File.dirname(__FILE__) + '/ext/output_ext'
+(require File.dirname(__FILE__) + '/ext/output_ext') unless ENV[TEAMCITY_RAKERUNNER_LOG_OUTPUT_HACK_DISABLED_KEY]
 
 ################  Module extension #############################
 class Module

@@ -59,7 +59,7 @@
     <tr>
         <th><label for="ui.rakeRunner.rake.tasks.names">Rake tasks: </label></th>
         <td><props:textProperty name="ui.rakeRunner.rake.tasks.names" style="width:30em;" maxlength="256"/>
-            <span class="smallNote">Enter tasks names separated by space character if you don't want to use 'default' task.</br>E.g. 'test:functionals' or 'mytask::test mytask::tes2'.</span>
+            <span class="smallNote">Enter tasks names separated by space character if you don't want to use 'default' task.<br/>E.g. 'test:functionals' or 'mytask:test mytask:test2'.</span>
         </td>
     </tr>
     <tr>

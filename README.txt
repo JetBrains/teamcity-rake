@@ -79,3 +79,4 @@ your pathes to it.
 #TODO - 8.0. invoke_prerequisites problem. (renamed API)
 #TODO - Describe: Additional Rake command line parameters:  	 If isn't empty this parameters will be added to 'rake' command line.
 E.g. 'rake {additional parameters} {Teamcity Rake Runner options} {tasks names}'.
+#TODO - internal debug options : "teamcity.rake.runner.debug.output.hack.disabled" and "teamcity.rake.runner.debug.log.path"
