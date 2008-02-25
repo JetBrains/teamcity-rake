@@ -47,8 +47,9 @@ describe "Test Data" do
       lambda {2 + 3}.should raise_error(ArgumentError)
     end
 
-    it "should fail - should have stdout output" do
-      $stdout << "Some stdout data\n"
+    it "should fail - should have 2 stdout output messages" do
+      $stdout << "msg #1: Some stdout data\n"
+      puts "msg #2: Some stdout data"
 
       2.should == 3
     end
