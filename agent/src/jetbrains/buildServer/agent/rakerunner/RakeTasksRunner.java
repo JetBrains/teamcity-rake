@@ -51,8 +51,8 @@ public class RakeTasksRunner extends RakeRunnerBase {
     private final List<String> myStdErrMessages = new LinkedList<String>();
 
     private final Set<File> myFilesToDelete = new HashSet<File>();
-    private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require Spec::Runner::Formatter::TeamcityFormatter:matrix";
-    private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format spec/runner/formatter/teamcity/formatter";
+    private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'spec/runner/formatter/teamcity/formatter'";
+    private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
 
     @NonNls
     public String getType() {
