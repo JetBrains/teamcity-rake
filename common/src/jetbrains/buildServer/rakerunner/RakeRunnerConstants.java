@@ -27,7 +27,7 @@ import jetbrains.buildServer.agent.Constants;
  */
 public interface RakeRunnerConstants extends Constants {
     @NonNls public String RUNNER_TYPE = "rake-runner";
-    @NonNls String DEBUG_PROPERTY = "rakeRunner.debug";
+    @NonNls String DEBUG_PROPERTY = "system.rakeRunner.debug";
 
 // Server properties
     /**
