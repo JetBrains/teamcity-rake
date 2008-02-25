@@ -45,10 +45,14 @@ describe "Test Data" do
 
     it "should fail - should have stdout output" do
       $stdout << "Some stdout data\n"
+
+      2.should == 3
     end
 
     it "should fail - should have stderr output" do
       $stderr << "Some stderr data\n"
+
+      2.should == 3
     end
 
     it "should fail - should have stderr and stdout output" do
