@@ -27,6 +27,6 @@ public interface RakeRunnerBundle {
     public String RUNNER_DESCRIPTION = "Runner for executing Rake tasks, Test::Unit and RSpec tests";
     public String RUNNER_DISPLAY_NAME = "Rake";
 
-    public String RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT = "Teamcity Rake Runner prerequisites error on agent..";
+    public String RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT = "Failed to run Rake..";
     String MSG_OS_NOT_SUPPORTED = "OS isn't supported!";
 }
