@@ -74,9 +74,11 @@ your pathes to it.
 #TODO --require "spec/runner/formatter/teamcity/formatter"
 #TODO --format Spec::Runner::Formatter::TeamcityFormatter:matrix
 #TODO - Open in IDE action doesn't work
-#TODO - spec task - disable fail on error
+#TODO - spec task - disable fail on error   # t.fail_on_error = false;  #TODO Uncomment to remove ugly RuntimeError if some test fails
 #TODO - System properties %..% in Ruby interpreter
 #TODO - 8.0. invoke_prerequisites problem. (renamed API)
 #TODO - Describe: Additional Rake command line parameters:  	 If isn't empty this parameters will be added to 'rake' command line.
 E.g. 'rake {additional parameters} {Teamcity Rake Runner options} {tasks names}'.
 #TODO - internal debug options : "teamcity.rake.runner.debug.output.hack.disabled" and "teamcity.rake.runner.debug.log.path" - ruby code, "system.rakeRunner.debug" - java code, system property
+#It seems that Spec::Rake::SpecTask.spec_opts is affected by SPEC_OPTS command line parameter
+#TODO example on rcov, rspec html reports(xml+artifacts) + notice about cleaning sources
