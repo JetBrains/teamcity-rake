@@ -25,7 +25,7 @@ Spec::Rake::SpecTask.new('spec_examples') do |t|
   t.spec_files = FileList['spec/common/**/*_spec.rb']
 #  t.spec_opts = ["--require spec/runner/formatter/teamcity/formatter",
 #                 "--format Spec::Runner::Formatter::TeamcityFormatter:matrix"]
-  t.spec_opts = ["--format html:html_resut", "--format progress"]
+  t.spec_opts = ["--format html:html_resut.html", "--format progress"]
   t.warning = true
   # t.fail_on_error = false;  #TODO Uncomment to remove ugly RuntimeError if some test fails
   # t.rcov = true #TODO
