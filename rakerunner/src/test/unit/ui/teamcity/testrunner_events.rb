@@ -61,7 +61,16 @@ module Test
 
           # Test suit stopped
           def finished(elapsed_time)
-            debug_log("Test suit finished: #{@suite_name} in #{elapsed_time} seconds")
+            # Total statistic
+            statistics = @result.to_s
+            log_one(Rake::TeamCity::MessageFactory.create_message(statistics))
+            debug_log(@result.to_s)
+
+            # Time statistic from Spec Runner
+            status_message = "Test suit finished: #{elapsed_time} seconds"
+            log_one(Rake::TeamCity::MessageFactory.create_progress_message(status_message))
+            debug_log(status_message)
+
             log_one(Rake::TeamCity::MessageFactory.create_close_block(@suite_name, :test_suite))
           end
 
