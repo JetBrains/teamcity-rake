@@ -28,7 +28,8 @@ Spec::Rake::SpecTask.new('spec_examples') do |t|
   # Uncomment to remove ugly RuntimeError if some test fails
   # t.fail_on_error = false;
 
-  t.rcov = true #TODO
+  t.rcov = true
+#  t.rcov_opts = [""]
 end
 
 Spec::Rake::SpecTask.new('spec_examples_compilation_failure') do |t|

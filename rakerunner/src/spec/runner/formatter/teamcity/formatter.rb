@@ -136,15 +136,15 @@ module Spec
           stop_capture_output_and_log_it
 
           message =  failure.exception.nil? ? "[Without Exception]" : "#{failure.exception.class.name}: #{failure.exception.message}"
-          backtrace = failure.exception.nil? ? nil : format_backtrace(failure.exception.backtrace)
+          backtrace = failure.exception.nil? ? "" : format_backtrace(failure.exception.backtrace)
 
           # failure description
           full_failure_description = message
-          (full_failure_description << "\n\n    " + backtrace) if backtrace
+          (full_failure_description += "\n\n    " + backtrace) if backtrace
 
-          log_one(Rake::TeamCity::MessageFactory.create_test_problem_message(@my_running_example_name, message,
-                  full_failure_description))
-          debug_log("Example failed #{@my_running_example_name}, \nError:\n#{failure.exception.class}\nMessage:\n#{message}\n\nFailure:\n#{full_failure_description}")
+          log_one(Rake::TeamCity::MessageFactory.create_test_problem_message(@my_running_example_name, message, full_failure_description))
+
+          debug_log("Example failed #{@my_running_example_name}, Message:\n#{message} \n\nBackrace:]n#{backtrace}\n\nFull failure desc:\n#{full_failure_description}")
 
           close_test_block
         end
