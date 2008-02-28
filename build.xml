@@ -17,6 +17,7 @@
     <property name="tc.extras.dir" value="${tc.root.dir}/side"/>
 
     <property name="artifacts.dir" location="build/artifacts"/>
+    <property name="artifacts.components.dir" location="${artifacts.dir}/components"/>
 
     <!-- Project Libraries -->
     <path id="classpath">
@@ -97,6 +98,16 @@
         </jar>
     </target>
 
+    <target name="make-bundle">
+        <!-- Bundle -->
+        <zip destfile="build/rakeRunnerPlugin.zip">
+            <zipfileset file="build/jar/rakeRunnerPluginServer.jar"/>
+            <zipfileset file="build/jar/rakeRunnerPluginAgent.zip"/>
+            <!-- Readme -->
+            <zipfileset file="README.txt"/>
+        </zip>
+    </target>
+
     <target name="make">
         <mkdir dir="build/jar"/>
         <mkdir dir="build/version"/>
@@ -104,6 +115,7 @@
         <antcall target="make-common"/>
         <antcall target="make-agent"/>
         <antcall target="make-server"/>
+        <antcall target="make-bundle"/>
     </target>
 
     <!-- Dist -->
@@ -137,8 +149,10 @@
 
     <target name="build.artifacts" depends="dist">
         <mkdir dir="${artifacts.dir}"/>
-        <move file ="build/jar/rakeRunnerPluginServer.jar" tofile="${artifacts.dir}/rakeRunnerPluginServer-${plugin.version}.jar"/>
-        <move file ="build/jar/rakeRunnerPluginAgent.zip" tofile="${artifacts.dir}/rakeRunnerPluginAgent-${plugin.version}.zip"/>
+        <move file ="build/jar/rakeRunnerPluginServer.jar" tofile="${artifacts.components.dir}/rakeRunnerPluginServer-${plugin.version}.jar"/>
+        <move file ="build/jar/rakeRunnerPluginAgent.zip" tofile="${artifacts.components.dir}/rakeRunnerPluginAgent-${plugin.version}.zip"/>
+        <move file ="README.txt" tofile="${artifacts.components.dir}/Readme.txt"/>
+        <move file ="build/rakeRunnerPlugin.zip" tofile="${artifacts.dir}/rakeRunnerPlugin-${plugin.version}.zip"/>
     </target>
 
     <!-- TeamCity builds -->
