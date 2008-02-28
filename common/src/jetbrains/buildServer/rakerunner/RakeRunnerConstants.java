@@ -27,10 +27,13 @@ import jetbrains.buildServer.agent.Constants;
  */
 public interface RakeRunnerConstants extends Constants {
     @NonNls public String RUNNER_TYPE = "rake-runner";
+    @NonNls String RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME = "rakeRunnerPluginServer.jar";
+    @NonNls String AGENT_BUNDLE_JAR = "RakeRunnerPluginAgent.jar";
+
+// Properties
     @NonNls String DEBUG_PROPERTY = "system.rakeRunner.debug";
 
 // Server properties
-    @NonNls String RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME = "rakeRunnerPluginServer.jar";
     /**
      * UI property: Rake task name
      */

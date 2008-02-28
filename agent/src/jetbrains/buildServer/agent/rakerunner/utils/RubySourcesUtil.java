@@ -19,6 +19,7 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.PathUtil;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,8 +35,6 @@ public class RubySourcesUtil {
     private static final Logger LOG = Logger.getInstance(RubySourcesUtil.class.getName());
 
     @NonNls
-    private static final String AGENT_BUNDLE_JAR = "RakeRunnerAgent.jar";
-    @NonNls
     private static final String RUBY_SOURCES_SUBDIR = "rb";
     @NonNls
     private static final String RUBY_SOURCES_SKD_PATCH_FOLDER = "patch";
@@ -46,8 +45,8 @@ public class RubySourcesUtil {
         final String jarPath = PathUtil.getJarPathForClass(RubySourcesUtil.class);
 
         final File rubySourcesDir;
-        if (jarPath != null && jarPath.endsWith(AGENT_BUNDLE_JAR)) {
-            rubySourcesDir = new File(jarPath.substring(0, jarPath.length() - AGENT_BUNDLE_JAR.length())
+        if (jarPath != null && jarPath.endsWith(RakeRunnerConstants.AGENT_BUNDLE_JAR)) {
+            rubySourcesDir = new File(jarPath.substring(0, jarPath.length() - RakeRunnerConstants.AGENT_BUNDLE_JAR.length())
                     + RUBY_SOURCES_SUBDIR);
         } else {
             rubySourcesDir = new File(jarPath + File.separatorChar + RUBY_SOURCES_SUBDIR);

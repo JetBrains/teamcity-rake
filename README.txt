@@ -25,12 +25,13 @@ Features:
         /> gem install builder
    * Rails gem (only for rails projects)
 
-2. Copy "rakeRunnerPluginServer.jar"
+2. Unpack "rakeRunnerPlugin-XXXX.zip"
+3. Copy "rakeRunnerPluginServer.jar"
    to "[Teamcity Server installation directory]/webapps/ROOT/WEB-INF/lib"
 
-3. To install plugin on
-   ** All agents : Copy "rakeRunnerPluginAgent.zip" to "[Teamcity Server installation directory]/webapps/ROOT/update/plugins/"
-   ** On particular agent : Copy "rakeRunnerPluginAgent.zip" to "[Teamcity Agent installation directory]/plugins/"
+4. To install plugin on
+   * All agents : Copy "rakeRunnerPluginAgent.zip" to "[Teamcity Server installation directory]/webapps/ROOT/update/plugins/"
+   * On particular agent : Copy "rakeRunnerPluginAgent.zip" to "[Teamcity Agent installation directory]/plugins/"
 
 =============================================================
 ========= Using Rake Runner Plugin  =========================
@@ -91,7 +92,8 @@ setup Spec Options in Web UI.
 6. TeamCity Ruby Plugin uses the following format of command line
    'ruby rake {Additional Rake command line parameters} {Teamcity Rake Runner options, e.g TESTOPTS} {tasks names}'.
 
-
+7. Version of agent's part of plugin - see in rakeRunnerPluginAgent-XXXX.zip/version
+   Version of server's part of plugin - see in rakeRunnerPluginServer-XXXX.jar/version
 =============================================================
 ========= TO DO =============================================
 =============================================================

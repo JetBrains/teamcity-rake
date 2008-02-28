@@ -19,6 +19,10 @@
     <property name="artifacts.dir" location="build/artifacts"/>
     <property name="artifacts.components.dir" location="${artifacts.dir}/components"/>
 
+    <property name="artifacts.plugin.server.part.file" location="${artifacts.components.dir}/rakeRunnerPluginServer.jar"/>
+    <property name="artifacts.plugin.agent.part.file" location="${artifacts.components.dir}/rakeRunnerPluginAgent.zip"/>
+    <property name="artifacts.plugin.readme.file" location="${artifacts.components.dir}/Readme.txt"/>
+
     <!-- Project Libraries -->
     <path id="classpath">
         <pathelement path="${tc.classes.dir}"/>
@@ -122,18 +126,18 @@
     <target name="dist" depends="clean,make"/>
 
     <!-- Deploy -->
-    <target name="devel-deploy" depends="dist">
-        <copy file="build/jar/rakeRunnerPluginServer.jar" todir="${webrootdir}/WEB-INF/lib"/>
-        <copy file="build/jar/rakeRunnerPluginAgent.zip" todir="${webrootdir}/update/plugins"/>
-        <unzip src="build/jar/rakeRunnerPluginAgent.zip" dest="${agentdir}/plugins"/>
+    <target name="devel-deploy" depends="build.artifacts">
+        <copy file="${artifacts.plugin.server.part.file}" todir="${webrootdir}/WEB-INF/lib"/>
+        <copy file="${artifacts.plugin.agent.part.file}" todir="${webrootdir}/update/plugins"/>
+        <unzip src="${artifacts.plugin.agent.part.file}" dest="${agentdir}/plugins"/>
     </target>
 
     <!-- Reload On Agent Deploy -->
-    <target name="devel-reload_on_agent-deploy" depends="dist">
+    <target name="devel-reload_on_agent-deploy" depends="build.artifacts">
         <delete includeEmptyDirs="true">
             <fileset dir="${agentdir}/plugins/rakeRunnerPluginAgent" excludes="**/*.jar"/>
         </delete>
-        <unzip src="build/jar/rakeRunnerPluginAgent.zip" dest="${agentdir}/plugins">
+        <unzip src="${artifacts.plugin.agent.part.file}" dest="${agentdir}/plugins">
             <patternset>
                 <include name="**/*.rb"/>
             </patternset>
@@ -149,10 +153,19 @@
 
     <target name="build.artifacts" depends="dist">
         <mkdir dir="${artifacts.dir}"/>
-        <move file ="build/jar/rakeRunnerPluginServer.jar" tofile="${artifacts.components.dir}/rakeRunnerPluginServer-${plugin.version}.jar"/>
-        <move file ="build/jar/rakeRunnerPluginAgent.zip" tofile="${artifacts.components.dir}/rakeRunnerPluginAgent-${plugin.version}.zip"/>
-        <move file ="README.txt" tofile="${artifacts.components.dir}/Readme.txt"/>
-        <move file ="build/rakeRunnerPlugin.zip" tofile="${artifacts.dir}/rakeRunnerPlugin-${plugin.version}.zip"/>
+
+        <copy file ="README.txt" tofile="${artifacts.plugin.readme.file}"/>
+
+        <move file ="build/jar/rakeRunnerPluginServer.jar" tofile="${artifacts.plugin.server.part.file}"/>
+        <move file ="build/jar/rakeRunnerPluginAgent.zip" tofile="${artifacts.plugin.agent.part.file}"/>
+
+        <!-- Bundle -->
+        <zip destfile="${artifacts.dir}/rakeRunnerPlugin-${plugin.version}.zip">
+            <zipfileset file="${artifacts.plugin.server.part.file}"/>
+            <zipfileset file="${artifacts.plugin.agent.part.file}"/>
+            <!-- Readme -->
+            <zipfileset file="${artifacts.plugin.readme.file}"/>
+        </zip>
     </target>
 
     <!-- TeamCity builds -->
