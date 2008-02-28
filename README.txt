@@ -1,84 +1,115 @@
 ============================================================
 ======= ABOUT ==============================================
 ============================================================
-Teamcity plugin for running user Rake tasks.
+TeamCity plugin for running Rake tasks, Test::Unit tests and Spec examples.
 
 Features:
- * Shows rake tasks progress on buildserver
- * Show Test::Unit tests results on buildserver
-   NOTE: Rake::Teamcity.run_tests(...) instead of Rake.run_tests(...)
- * Supports correct processing of tests results for rails tasks: test, test::functionals, etc.
-
+ * Rake Tasks Monitoring
+   ** Execution Progress and Estimation
+   ** Tasks artifacts
+ * Testing
+   ** On-the-fly Test Results Reporting
+   ** Test::Unit tests support
+   ** RSpec examples support
 
 ============================================================
 ======= INSTALLATION =======================================
 ============================================================
-1. Agent Reqirements
-   * Enviroment variables:
-       RUBY_INTERPRETER - Path to ruby interpreter, e.g. C:\IR\InstantRails-1.7-new\ruby\bin\ruby.exe or /usr/bin/ruby
-   * System properties:
-       system.ruby.interpreter - Path to ruby interpreter, e.g. C:\IR\InstantRails-1.7-new\ruby\bin\ruby.exe or /usr/bin/ruby
-
+1. Agent's Reqirements
+   * Ruby 1.8.6.
    * Rake 0.7.3 or higher
-   * install ruby gem 'builder'
+   * RSpec 1.1.3
+
+   * Builder gem.
+     TeamCity Rake Runner uses 'builder' gem. Please install it.
         /> gem install builder
-   * rails - for rails projects
+   * Rails gem (only for rails projects)
 
-   * patch Ruby Test/Unit API :
-      - rename [ruby_home]/lib/ruby/1.8/test/unit/autorunner.rb to [ruby_home]/lib/ruby/1.8/test/unit/autorunner_old.rb
-      - rename rakerunner/src/ext/lib/ruby/1.8/test/unit/autorunner.rb to [ruby_home]/lib/ruby/1.8/test/unit/autorunner.rb
-      - copy all necessary files to [ruby_home]/lib/ruby/1.8/test/unit/ui/teamcity/*.*
+2. Copy "rakeRunnerPluginServer.jar"
+   to "[Teamcity Server installation directory]/webapps/ROOT/WEB-INF/lib"
 
-2. RUBY_INTERPRETER or system.ruby.interpreter must be set on agent. If system property is set corresponding environment variable will be ignored.
-
-============================================================
-======= BUILD  =============================================
-============================================================
-1. Setup Teamcity libraries root dir in build file properties:
-   E.g.
-     tc.root.dir - dist\Teamcity
-2. Run "dist" task
-
-
-============================================================
-======== PROJECT,  SOURCES =================================
-============================================================
-
-1.Before opening the project in IDEA for the first time:
-- recreate dist directory
-- TeamCity-*.tar.gz in dist/
-- run "ant extract" (see build.xml)
-
-============================================================
-======= DEPLOYING ==========================================
-============================================================
-1. As plugins
-2. Using "devel-deploy" task:
-   Setup Teamcity BuildServer directories in build file properties.
-
-   E.g.
-     agentdir - c:\soft\Teamcity_6527\buildAgent
-     webrootdir - c:\soft\Teamcity_6527\webapps\ROOT
+3. To install plugin on
+   ** All agents : Copy "rakeRunnerPluginAgent.zip" to "[Teamcity Server installation directory]/webapps/ROOT/update/plugins/"
+   ** On particular agent : Copy "rakeRunnerPluginAgent.zip" to "[Teamcity Agent installation directory]/plugins/"
 
 =============================================================
-========= LIMITATIONS =======================================
+========= Using Rake Runner Plugin  =========================
 =============================================================
-RakeRunner plugin uses own unit tests runner and loads it with RUBYLIB enviroment variable.
-Be sure that your program doesn't clear this enviroment variable. But obviously you may append
+1. Create build configuration and set "Rake" build runner.
+2. Setup runner options.
+3. In field "Ruby interpreter path" you can use values of environment and system variables.
+E.g.
+%env.I_AM_DEFINED_IN_BUILDAGENT_CONFIGURATION%
+4. Save options and run build.
+5. If you use spec task we advise you to disable option "faile on error"
+
+------------
+E.g:
+
+Spec::Rake::SpecTask.new('spec_examples') do |t|
+  t.spec_files = FileList['spec/common/**/*_spec.rb']
+  t.fail_on_error = false;
+  t.rcov = true
+end
+------------
+
+Otherwise RSpec will show redundant Runtime Exception if any example fails.
+
+6. You can show "rcov" and "rspec" html reports as additional tabs on Build details page.
+
+a) Read "Including Third-Party Reports in the Build Results" article on http://www.jetbrains.net/confluence/display/TCD3/Including+Third-Party+Reports+in+the+Build+Results#IncludingThird-PartyReportsintheBuildResults-TCInfoXML
+b) Add
+------------
+      <report-tab title="RSpec Report" basePath="." startPage="rspec_html_resut.html" />
+      <report-tab title="RCov Report" basePath="coverage" />
+------------
+  to .BuildServer/config/main-config.xml file
+c) Add "coverage=>coverage, rspec_html_resut.html" to [Build configuration]/[General Setting]/[Artifact paths]
+d) "--format html:rspec_html_resut.html" to [Build configuration]/[Runner: Rake]/[RSpec options(SPEC_OPTS)]
+e) Before running tests your rake task should delete "coverage" and "rspec_html_resut.html" files from your project's root.
+f) Run build and open build details.
+
+=============================================================
+========= NOTES =======================================
+=============================================================
+1. RakeRunner plugin uses own unit tests runner and loads it with RUBYLIB enviroment variable.
+Be sure that your program doesn't clear this environment variable. But obviously you may append
 your pathes to it.
 
-#TODO - describe properties - environment, sytem, env. on agent, build runner params
-#TODO - remind about "win32console gem"
-#TODO - about "ignored specs"
+2. On windows with enabled "colouring" option RSpec will suggest install "win32console" gem.
+ You will see this warning in build log, but you can ignore it. Teamcity Rake Runner Plugin doesn't use this gem.
 
-#TODO --require "spec/runner/formatter/teamcity/formatter"
-#TODO --format Spec::Runner::Formatter::TeamcityFormatter:matrix
-#TODO - Open in IDE action doesn't work
-#TODO - spec task - disable fail on error   # t.fail_on_error = false;  #TODO Uncomment to remove ugly RuntimeError if some test fails
-#TODO - System properties %..% in Ruby interpreter
-#TODO - 8.0. invoke_prerequisites problem. (renamed API)
-#TODO - Describe: Additional Rake command line parameters:  	 If isn't empty this parameters will be added to 'rake' command line.
-E.g. 'rake {additional parameters} {Teamcity Rake Runner options} {tasks names}'.
-#TODO - internal debug options : "teamcity.rake.runner.debug.output.hack.disabled" and "teamcity.rake.runner.debug.log.path" - ruby code, "system.rakeRunner.debug" - java code, system property
-#It seems that Spec::Rake::SpecTask.spec_opts is affected by SPEC_OPTS command line parameter
-#TODO example on rcov, rspec html reports(xml+artifacts) + notice about cleaning sources
+3. Rake Runner Plugin runs spec examples with custom formatter. If you use additional console
+formatter you will see redundant information in Build Log.
+
+4. It seems that Spec::Rake::SpecTask.spec_opts is affected by SPEC_OPTS command line parameter.
+Rake Runner Plugin always uses SPEC_OPTS to setup it's custom formatter. Thus you should
+setup Spec Options in Web UI.
+
+5. In "Overwiew" tab Teamcity Rake Runner names pending specs as "Ignored Tests"
+
+6. TeamCity Ruby Plugin uses the following format of command line
+   'ruby rake {Additional Rake command line parameters} {Teamcity Rake Runner options, e.g TESTOPTS} {tasks names}'.
+
+
+=============================================================
+========= TO DO =============================================
+=============================================================
+* "Open in IDE" action doesn't work for tests and spec examples
+
+=============================================================
+=============================================================
+=============================================================
+========= INTERNAL ===========================================
+=============================================================
+Debug loggers options:
+
+Use environament variables:
+ * "teamcity.rake.runner.debug.output.hack.disabled" - set variable
+  with any value do disable output capturing from rake tasks.
+
+ * "teamcity.rake.runner.debug.log.path" - enables logger in Ruby
+   part of plugin
+
+System properties:
+ * "system.rakeRunner.debug" - enables loggers for JAVA part of plugin

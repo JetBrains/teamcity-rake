@@ -30,6 +30,7 @@ public interface RakeRunnerConstants extends Constants {
     @NonNls String DEBUG_PROPERTY = "system.rakeRunner.debug";
 
 // Server properties
+    @NonNls String RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME = "rakeRunnerPluginServer.jar";
     /**
      * UI property: Rake task name
      */

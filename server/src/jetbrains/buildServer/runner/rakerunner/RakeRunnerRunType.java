@@ -34,11 +34,10 @@ import java.util.Map;
  * @date: 03.06.2007
  */
 public class RakeRunnerRunType extends RunType {
-    private static final String RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME = "rakeRunnerServer.jar";
 
     public RakeRunnerRunType(final RunTypeRegistry runTypeRegistry,
                              final WebResourcesManager resourcesManager) {
-        resourcesManager.addPluginResources("rake-runner", RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME);
+        resourcesManager.addPluginResources("rake-runner", RakeRunnerConstants.RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME);
         runTypeRegistry.registerRunType(this);
     }
 

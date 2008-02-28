@@ -64,20 +64,20 @@
         </javac>
         <copy file="agent/src/build-agent-plugin.xml" todir="build/agent/classes"/>
         <!-- Agent Jar -->
-        <jar destfile="build/jar/RakeRunnerAgent.jar">
+        <jar destfile="build/jar/RakeRunnerPluginAgent.jar">
             <fileset dir="build/agent/classes"/>
         </jar>
 
         <!-- Bundle -->
-        <zip destfile="build/jar/rakeRunnerPlugin.zip">
-            <zipfileset dir="build/version" prefix="rakeRunnerPlugin/version"/>
-            <zipfileset dir="build/jar" includes="RakeRunnerAgent.jar, RakeRunnerCommon.jar"
-                        prefix="rakeRunnerPlugin/lib"/>
+        <zip destfile="build/jar/rakeRunnerPluginAgent.zip">
+            <zipfileset dir="build/version" prefix="rakeRunnerPluginAgent/version"/>
+            <zipfileset dir="build/jar" includes="RakeRunnerPluginAgent.jar, RakeRunnerCommon.jar"
+                        prefix="rakeRunnerPluginAgent/lib"/>
             <!-- Ruby sources -->
-            <zipfileset dir="rakerunner/src" excludes="test/**/*, test, spec/**/*, spec, utils/**/*, utils" prefix="rakeRunnerPlugin/lib/rb/runner"/>
-            <zipfileset dir="rakerunner/src/test" prefix="rakeRunnerPlugin/lib/rb/patch/test"/>
-            <zipfileset dir="rakerunner/src/spec" prefix="rakeRunnerPlugin/lib/rb/patch/spec"/>
-            <zipfileset dir="rakerunner/src/utils" prefix="rakeRunnerPlugin/lib/rb/patch/utils"/>
+            <zipfileset dir="rakerunner/src" excludes="test/**/*, test, spec/**/*, spec, utils/**/*, utils" prefix="rakeRunnerPluginAgent/lib/rb/runner"/>
+            <zipfileset dir="rakerunner/src/test" prefix="rakeRunnerPluginAgent/lib/rb/patch/test"/>
+            <zipfileset dir="rakerunner/src/spec" prefix="rakeRunnerPluginAgent/lib/rb/patch/spec"/>
+            <zipfileset dir="rakerunner/src/utils" prefix="rakeRunnerPluginAgent/lib/rb/patch/utils"/>
         </zip>
     </target>
 
@@ -90,7 +90,7 @@
         <copy file="server/src/META-INF/build-server-plugin-rakerunner.xml"
               todir="build/server/classes/META-INF"/>
 
-        <jar destfile="build/jar/rakeRunnerServer.jar">
+        <jar destfile="build/jar/rakeRunnerPluginServer.jar">
             <fileset dir="build/server/classes"/>
             <fileset dir="server/resources"/>
             <fileset dir="build" includes="version; version/**/*" />
@@ -111,17 +111,17 @@
 
     <!-- Deploy -->
     <target name="devel-deploy" depends="dist">
-        <copy file="build/jar/rakeRunnerServer.jar" todir="${webrootdir}/WEB-INF/lib"/>
-        <copy file="build/jar/rakeRunnerPlugin.zip" todir="${webrootdir}/update/plugins"/>
-        <unzip src="build/jar/rakeRunnerPlugin.zip" dest="${agentdir}/plugins"/>
+        <copy file="build/jar/rakeRunnerPluginServer.jar" todir="${webrootdir}/WEB-INF/lib"/>
+        <copy file="build/jar/rakeRunnerPluginAgent.zip" todir="${webrootdir}/update/plugins"/>
+        <unzip src="build/jar/rakeRunnerPluginAgent.zip" dest="${agentdir}/plugins"/>
     </target>
 
     <!-- Reload On Agent Deploy -->
     <target name="devel-reload_on_agent-deploy" depends="dist">
         <delete includeEmptyDirs="true">
-            <fileset dir="${agentdir}/plugins/rakeRunnerPlugin" excludes="**/*.jar"/>
+            <fileset dir="${agentdir}/plugins/rakeRunnerPluginAgent" excludes="**/*.jar"/>
         </delete>
-        <unzip src="build/jar/rakeRunnerPlugin.zip" dest="${agentdir}/plugins">
+        <unzip src="build/jar/rakeRunnerPluginAgent.zip" dest="${agentdir}/plugins">
             <patternset>
                 <include name="**/*.rb"/>
             </patternset>
@@ -130,15 +130,15 @@
 
     <!-- Un-deploy -->
     <target name="devel-undeploy">
-        <delete file="${webrootdir}/WEB-INF/lib/rakeRunnerServer.jar"/>
-        <delete file="${webrootdir}/update/plugins/rakeRunnerPlugin.zip"/>
-        <delete dir="${agentdir}/plugins/rakeRunnerPlugin"/>
+        <delete file="${webrootdir}/WEB-INF/lib/rakeRunnerPluginServer.jar"/>
+        <delete file="${webrootdir}/update/plugins/rakeRunnerPluginAgent.zip"/>
+        <delete dir="${agentdir}/plugins/rakeRunnerPluginAgent"/>
     </target>
 
     <target name="build.artifacts" depends="dist">
         <mkdir dir="${artifacts.dir}"/>
-        <move file ="build/jar/rakeRunnerServer.jar" tofile="${artifacts.dir}/rakeRunnerServer-${plugin.version}.jar"/>
-        <move file ="build/jar/rakeRunnerPlugin.zip" tofile="${artifacts.dir}/rakeRunnerPlugin-${plugin.version}.zip"/>
+        <move file ="build/jar/rakeRunnerPluginServer.jar" tofile="${artifacts.dir}/rakeRunnerPluginServer-${plugin.version}.jar"/>
+        <move file ="build/jar/rakeRunnerPluginAgent.zip" tofile="${artifacts.dir}/rakeRunnerPluginAgent-${plugin.version}.zip"/>
     </target>
 
     <!-- TeamCity builds -->

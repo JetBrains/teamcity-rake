@@ -1,0 +1,46 @@
+============================================================
+======== PROJECT,  SOURCES =================================
+============================================================
+
+1.Before opening the project in IDEA for the first time:
+  - Create "dist" directory under project root
+  - Download dowload Teamcity 3.1 libraries (Teamcity-XXXX.tar.gz)
+  - Copy TeamCity-*.tar.gz in dist/
+  - Run "ant extract" (see build.xml)
+
+============================================================
+======= BUILD  =============================================
+============================================================
+1. Download dowload Teamcity 3.1 libraries (Teamcity-XXXX.tar.gz)
+2. Unpack libraries somewhere (e.g. dist\Teamcity).
+3. Set directory with Teamcity libraries as tc.root.dir Ant build property.
+   E.g.
+     tc.root.dir - dist\Teamcity
+4. Run "dist" task
+
+
+============================================================
+======= DEPLOYING ==========================================
+============================================================
+1. As plugins
+2. Using "devel-deploy" task:
+   Setup Teamcity BuildServer directories in build file properties.
+
+   E.g.
+     agentdir - c:\soft\Teamcity_6527\buildAgent
+     webrootdir - c:\soft\Teamcity_6527\webapps\ROOT
+
+
+============================================================
+======= SOURCES ============================================
+============================================================
+[agent] - Agent's part of Teamcity Rake Runner, JAVA
+
+[common] - Common code for Agent's and Server's parts or Teamcity Rake Runner, JAVA
+
+[dist] - Contains Teamcity libraries
+
+[rakerunner/src] - Agent's part of Teamcity Rake Runner, RUBY. Contains basic functionality for running Rake tasks, tests and spec.
+[rakerunner/test_data] - Contains small ruby project for testing puproses.
+
+[server] - Server's part of Teamcity Rake Runner, JAVA
