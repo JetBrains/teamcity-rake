@@ -92,26 +92,9 @@ setup Spec Options in Web UI.
 6. TeamCity Ruby Plugin uses the following format of command line
    'ruby rake {Additional Rake command line parameters} {Teamcity Rake Runner options, e.g TESTOPTS} {tasks names}'.
 
-7. Version of agent's part of plugin - see in rakeRunnerPluginAgent-XXXX.zip/version
-   Version of server's part of plugin - see in rakeRunnerPluginServer-XXXX.jar/version
+7. Version of agent's part of plugin - see in rakeRunnerPluginAgent.zip/version
+   Version of server's part of plugin - see in rakeRunnerPluginServer.jar/version
 =============================================================
 ========= TO DO =============================================
 =============================================================
 * "Open in IDE" action doesn't work for tests and spec examples
-
-=============================================================
-=============================================================
-=============================================================
-========= INTERNAL ===========================================
-=============================================================
-Debug loggers options:
-
-Use environament variables:
- * "teamcity.rake.runner.debug.output.hack.disabled" - set variable
-  with any value do disable output capturing from rake tasks.
-
- * "teamcity.rake.runner.debug.log.path" - enables logger in Ruby
-   part of plugin
-
-System properties:
- * "system.rakeRunner.debug" - enables loggers for JAVA part of plugin

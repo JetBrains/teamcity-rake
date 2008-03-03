@@ -44,3 +44,20 @@
 [rakerunner/test_data] - Contains small ruby project for testing puproses.
 
 [server] - Server's part of Teamcity Rake Runner, JAVA
+
+=============================================================
+=============================================================
+=============================================================
+========= INTERNAL PROPERTIES ===============================
+=============================================================
+Debug loggers options:
+
+Use environament variables:
+ * "teamcity.rake.runner.debug.output.hack.disabled" - set variable
+  with any value do disable output capturing from rake tasks.
+
+ * "teamcity.rake.runner.debug.log.path" - enables logger in Ruby
+   part of plugin
+
+System properties:
+ * "system.rakeRunner.debug" - enables loggers for JAVA part of plugin
