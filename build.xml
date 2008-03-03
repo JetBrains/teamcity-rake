@@ -19,8 +19,10 @@
     <property name="artifacts.dir" location="build/artifacts"/>
     <property name="artifacts.components.dir" location="${artifacts.dir}/components"/>
 
-    <property name="artifacts.plugin.server.part.file" location="${artifacts.components.dir}/rakeRunnerPluginServer.jar"/>
-    <property name="artifacts.plugin.agent.part.file" location="${artifacts.components.dir}/rakeRunnerPluginAgent.zip"/>
+    <property name="webapp.dir" value="webapps"/>
+    <property name="artifacts.plugin.server.part.file" location="${artifacts.components.dir}/${webapp.dir}/ROOT/WEB-INF/lib/rakeRunnerPluginServer.jar"/>
+    <property name="artifacts.plugin.agent.part.file" location="${artifacts.components.dir}/${webapp.dir}/ROOT/update/plugins/rakeRunnerPluginAgent.zip"/>
+    <property name="artifacts.plugin.webapp.dir" location="${artifacts.components.dir}/webapps"/>
     <property name="artifacts.plugin.readme.file" location="${artifacts.components.dir}/Readme.txt"/>
 
     <!-- Project Libraries -->
@@ -161,8 +163,7 @@
 
         <!-- Bundle -->
         <zip destfile="${artifacts.dir}/rakeRunnerPlugin-${plugin.version}.zip">
-            <zipfileset file="${artifacts.plugin.server.part.file}"/>
-            <zipfileset file="${artifacts.plugin.agent.part.file}"/>
+            <zipfileset dir="${artifacts.plugin.webapp.dir}" prefix="${webapp.dir}" />
             <!-- Readme -->
             <zipfileset file="${artifacts.plugin.readme.file}"/>
         </zip>
