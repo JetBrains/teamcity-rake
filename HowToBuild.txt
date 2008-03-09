@@ -59,5 +59,7 @@ Use environament variables:
  * "teamcity.rake.runner.debug.log.path" - enables logger in Ruby
    part of plugin
 
+ * "teamcity.rake.runner.debug.log.rspec.xml.msgs" - enable XML messages logging in rspec log
+
 System properties:
  * "system.rakeRunner.debug" - enables loggers for JAVA part of plugin
