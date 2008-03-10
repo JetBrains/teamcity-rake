@@ -86,7 +86,7 @@ module Test
             teamcity_test_name = convert_ruby_test_name(test_name)
             debug_log("Test started #{test_name}...[#{teamcity_test_name}]")
 
-            capture_output_start
+            @old_out, @old_err, @new_out, @new_err = capture_output_start_external
 
             @my_running_test_name = teamcity_test_name
             @my_running_test_name_ruby = test_name
@@ -97,7 +97,7 @@ module Test
           def test_finished(test_name)
             assert_test_valid(test_name)
             
-            stdout_string, stderr_string = capture_output_end
+            stdout_string, stderr_string = capture_output_end_external(@old_out, @old_err, @new_out, @new_err)
             if (!stdout_string.empty?)
               log_one(Rake::TeamCity::MessageFactory.create_test_output_message(@my_running_test_name, true, stdout_string))
             end
