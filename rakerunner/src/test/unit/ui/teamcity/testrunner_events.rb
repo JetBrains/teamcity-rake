@@ -165,7 +165,7 @@ module Test
               teamcity_test_name = convert_ruby_test_name(test_name)
               msg = "Finished test '#{test_name}'[#{teamcity_test_name}] doesn't correspond to current running test '#{@my_running_test_name_ruby}'[#{@my_running_test_name}]!"
               debug_log(msg)
-              raise raise Rake::TeamCity::InnerException, msg
+              raise Rake::TeamCity::InnerException, msg, caller 
             end
           end
 
