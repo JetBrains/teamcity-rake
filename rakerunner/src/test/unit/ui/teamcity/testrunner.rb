@@ -66,8 +66,16 @@ class Test::Unit::UI::TeamCity::TestRunner
     # open xml-rpc connection
     msg_dispatcher.start_dispatcher if manual_start
 
-    start_mediator
-
+    # Saves STDOUT, STDERR, because capturer in tests can break it.
+    sout, serr = copy_stdout_stderr
+    begin
+      start_mediator
+    ensure
+      # Repairs stdout and stderr just in case
+      sout.flush
+      serr.flush
+      reopen_stdout_stderr(sout, serr)
+    end
     # close xml-rpc connection
     msg_dispatcher.stop_dispatcher if manual_start
 
