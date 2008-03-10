@@ -46,10 +46,6 @@ module Rake
         return old_out, old_err, new_out, new_err
       end
 
-      def capture_output_start
-        @old_out, @old_err, @new_out, @new_err = capture_output_start_external
-      end
-
       def copy_stdout_stderr
         return STDOUT.dup, STDERR.dup
       end
@@ -71,10 +67,13 @@ module Rake
 
         reopen_stdout_stderr(old_out, old_err)
 
-        new_out.close
-        new_err.close
+        return get_redirected_stdout_stderr_from_files(new_out, new_err)
+      end
 
+      # Closes files' streams and gets its output.
+      def get_redirected_stdout_stderr_from_files(new_out, new_err)
         begin
+          new_out.close
           new_out.open
           s_out = new_out.readlines.join
           new_out.close
@@ -83,18 +82,15 @@ module Rake
         end
 
         begin
+          new_err.close
           new_err.open
           s_err = new_err.readlines.join
           new_err.close
         rescue Exception => ex
           s_err = "Error: Teamcity agent is unable to capture STDERR: #{ex}"
         end
-
+        
         return s_out, s_err
-      end
-
-      def capture_output_end
-        capture_output_end_external(@old_out, @old_err, @new_out, @new_err)
       end
     end
   end
