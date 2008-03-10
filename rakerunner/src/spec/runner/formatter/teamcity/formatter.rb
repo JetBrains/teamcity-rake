@@ -47,6 +47,7 @@ else
   require 'test/unit/ui/teamcity/std_capture_helper'
   require 'test/unit/ui/teamcity/runner_utils'
 end
+
 module Spec
   module Runner
     module Formatter
@@ -55,6 +56,8 @@ module Spec
         include Rake::TeamCity::StdCaptureHelper
         include Rake::TeamCity::RunnerUtils
 
+        TEAMCITY_RAKE_RUNNER_ISNT_COMPATIBLE_MESSAGE =  "TeamCity Rake Runner Plugin isn't compatible with this RSpec version.\n\n"
+        TEAMCITY_FORMATTER_INTERNAL_ERRORS =[]
         ########## Teamcity #############################
         def log_one(msg)
           block = Proc.new {Rake::TeamCity.msg_dispatcher.log_one(msg)}
@@ -89,8 +92,14 @@ module Spec
           @msg_dispatcher =  Rake::TeamCity.msg_dispatcher
           @manual_start = !@msg_dispatcher.started?
 
-          # open xml-rpc connection
+          # Opens xml-rpc connection
           @msg_dispatcher.start_dispatcher if @manual_start
+
+          # Saves STDOUT, STDERR because bugs in RSpec/formatter can break it
+          @sout, @serr = copy_stdout_stderr
+
+          debug_log("Starting.. (#{@example_count} examples)")
+          log_one(Rake::TeamCity::MessageFactory.create_progress_message("Starting.. (#{@example_count} examples)"))
         end
 
 
@@ -187,21 +196,22 @@ module Spec
             # old API
             example_group_desc, example, message = args
           else
-             log_and_raise_internal_error "TeamCity Ruby plugin ins't compatible with this RSpec version.\n BaseFormatter.example_pendin arity = #{method_arity}."
+            log_and_raise_internal_error TEAMCITY_RAKE_RUNNER_ISNT_COMPATIBLE_MESSAGE + "BaseFormatter.example_pendin arity = #{method_arity}.", true
           end
           example_pending_3args(example_group_desc, example, message)
         end
 
         # example_group_desc - can be nil
         def example_pending_3args(example_group_desc, example, message)
-
           debug_log("pending: #{example_group_desc}, #{example.description}, #{message}, #{example}")
+
+          # stop capturing
+          stop_capture_output_and_log_it(example)
+
           if example_group_desc
             #Old API, 1.1.3
             assert_example_group_valid(example_group_desc)
           end
-
-          stop_capture_output_and_log_it(example)
 
           # example service data
           example_data = @@RUNNING_EXAMPLES_STORAGE[example]
@@ -221,6 +231,11 @@ module Spec
 #        end
 
         def dump_summary(duration, example_count, failure_count, pending_count)
+          # Repairs stdout and stderr just in case
+          @sout.flush
+          @serr.flush
+          reopen_stdout_stderr(@sout, @serr)
+
           if dry_run?
             totals = "This was a dry-run"
           else
@@ -239,17 +254,34 @@ module Spec
           debug_log(status_message)
           log_one(Rake::TeamCity::MessageFactory.create_progress_message(status_message))
 
+          unless @example_count == example_count
+            msg = TEAMCITY_RAKE_RUNNER_ISNT_COMPATIBLE_MESSAGE + "Error: Not all examples have been run! (#{example_count} of #{@example_count})"
+
+            log_and_raise_internal_error msg
+            debug_log(msg)
+          end
+
           unless @@RUNNING_EXAMPLES_STORAGE.empty?
             # unfinished examples statistics
-            msg = "TeamCity Ruby plugin ins't compatible with this RSpec version.\n Following examples weren't finished:"
+            msg = TEAMCITY_RAKE_RUNNER_ISNT_COMPATIBLE_MESSAGE + "Following examples weren't finished:"
+            count = 1
             @@RUNNING_EXAMPLES_STORAGE.each { |key, value|
-              msg += "\n#{value.full_name}"
+              msg << "\n  #{count}. Example : '#{value.full_name}'"
+              sout_str, serr_str = get_redirected_stdout_stderr_from_files(value.stdout_file_new, value.stderr_file_new)
+              unless sout_str.empty?
+                msg << "\n[Example Output]:\n#{sout_str}"
+              end
+              unless serr_str.empty?
+                msg << "\n[Example Error Output]:\n#{serr_str}"
+              end
+              
+              count += 1
             }
             log_and_raise_internal_error msg
           end
 
           # close xml-rpc connection
-          debug_log("Closing dispatcher..")
+          debug_log("Closing dispatcher.. Manual start=[#{@manual_start}]")
           @msg_dispatcher.stop_dispatcher if @manual_start
         end
 
@@ -342,18 +374,23 @@ module Spec
            if (example_group_desc !=  @example_group_desc)
               msg = "Example group(behaviour) [#{example_group_desc}] doesn't correspond to current running example group [#{ @example_group_desc}]!"
               debug_log(msg)
-              close_test_block
 
               raise Rake::TeamCity::InnerException, msg, caller
             end
         end
         ######################################################
-        def log_and_raise_internal_error(msg)
+        def log_and_raise_internal_error(msg, raise_now = false)
           debug_log(msg)
           log_one(Rake::TeamCity::MessageFactory.create_error_message(msg, ""))
 
-          raise Rake::TeamCity::InnerException, msg, caller
+          excep_data = [msg, caller]
+          if raise_now
+            raise Rake::TeamCity::InnerException, *excep_data
+          end
+          TEAMCITY_FORMATTER_INTERNAL_ERRORS << excep_data
         end
+
+        ######################################################
         ######################################################
         class RunningExampleData
           attr_reader :full_name # full task name, example name in build log
@@ -389,4 +426,14 @@ end
 at_exit do
   SPEC_FORMATTER_LOG.log_msg("spec formatter.rb: Finished")
   SPEC_FORMATTER_LOG.close
+
+  unless  Spec::Runner::Formatter::TeamcityFormatter::TEAMCITY_FORMATTER_INTERNAL_ERRORS.empty?
+    several_exc = Spec::Runner::Formatter::TeamcityFormatter::TEAMCITY_FORMATTER_INTERNAL_ERRORS.length > 1
+    excep_data = Spec::Runner::Formatter::TeamcityFormatter::TEAMCITY_FORMATTER_INTERNAL_ERRORS[0]
+
+    common_msg = (several_exc ? "Several exceptions have occured. First exception:\n" : "") + excep_data[0] + "\n"
+    common_backtrace = excep_data[1]
+
+    raise Rake::TeamCity::InnerException, common_msg, common_backtrace
+  end
 end

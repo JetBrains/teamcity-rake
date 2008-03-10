@@ -54,15 +54,13 @@ module Rake
     extend Rake::SendMessagesUtil
     extend Rake::TeamCity::StdCaptureHelper
 
-    attr_reader :server, :build_id_str #TODO remove
-
     def initialize
       Rake::TeamCity.msg_dispatcher.start_dispatcher
       Rake::TeamCityApplication.send_create_ruby_flow_message
       begin
         super
       rescue Exception => e
-        msg, stacktrace =  Rake::TeamCityApplication.format_exception_msg(e, options.trace)
+        msg, stacktrace =  Rake::TeamCityApplication.format_exception_msg(e)
         Rake::TeamCityApplication.send_error(msg, stacktrace)
 
         RAKE_EXT_LOG.log_msg("Rake application initialization erors:\n #{msg}\n #{stacktrace}")
@@ -87,10 +85,12 @@ module Rake
       show_additional_msg = !is_execute && ENV[TEAMCITY_RAKERUNNER_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED] && !Rake.application.options.trace
       Rake::TeamCityApplication.send_normal_user_message(additional_message) if (additional_message && !additional_message.empty? && show_additional_msg)
       
+      # Capture output for execution stage
+      if is_execute
+        old_out, old_err, new_out, new_err = capture_output_start_external
+      end
       # Executes task safely
       begin
-        # Capture output for execution stage
-        capture_output_start if is_execute
         yield
       rescue Rake::ApplicationAbortedException => app_e
         raise
@@ -99,12 +99,17 @@ module Rake
         Rake::TeamCityApplication.process_exception(exc)
       ensure
         if is_execute
-          stdout_string, stderr_string = capture_output_end
-          if (!stdout_string.empty?)
+          stdout_string, stderr_string = capture_output_end_external(old_out, old_err, new_out, new_err)
+
+          unless (stdout_string.empty?)
+            Rake::TeamCityApplication.send_captured_stdout("Task[#{block_msg}] stdout\nstdout")
             Rake::TeamCityApplication.send_captured_stdout(stdout_string)
+            RAKE_EXT_LOG.log_msg("Task[#{block_msg}] Std Output:\n[#{stdout_string}]")
           end
-          if (!stderr_string.empty?)
+          unless (stderr_string.empty?)
+            Rake::TeamCityApplication.send_captured_stderr("Task[#{block_msg}] stdout\nstderr")
             Rake::TeamCityApplication.send_captured_stderr(stderr_string)
+            RAKE_EXT_LOG.log_msg("Task[#{block_msg}] Std Error:\n[#{stderr_string}]")
           end
         end
         # Log in TeamCity
@@ -142,8 +147,7 @@ module Rake
         # Sends exception to buildserver, if exception hasn't been sent early(inside some markup block)
         if (!applicationAbortedException)
           # Send exception in current opened teamcity mark-up block.
-          trace = Rake.application.options.trace
-          msg, stacktrace = Rake::TeamCityApplication.format_exception_msg(exc, trace)
+          msg, stacktrace = Rake::TeamCityApplication.format_exception_msg(exc)
           Rake::TeamCityApplication.send_error(msg, stacktrace)
         end
 
@@ -164,7 +168,7 @@ module Rake
 
     # Formats exception message and stacktrace according current error representation options
     # Returns error msg and stacktrace
-    def self.format_exception_msg(exception, show_trace = false)
+    def self.format_exception_msg(exception, show_trace = true)
       back_trace_msg = "\nStacktrace:\n" + exception.backtrace.join("\n")
       if Rake.application.rakefile
         source_file = exception.backtrace.find {|str| str =~ /#{Rake.application.rakefile}/ }
@@ -197,7 +201,7 @@ module Rake
 end
 
 ################  Output extension ############################
-(require File.dirname(__FILE__) + '/ext/output_ext') unless ENV[TEAMCITY_RAKERUNNER_LOG_OUTPUT_HACK_DISABLED_KEY]
+(require File.dirname(__FILE__) + '/ext/output_ext') unless (ENV[TEAMCITY_RAKERUNNER_LOG_OUTPUT_HACK_DISABLED_KEY] || ENV[TEAMCITY_RAKERUNNER_LOG_OUTPUT_CAPTURER_DISABLED_KEY])
 
 ################  Module extension #############################
 class Module
