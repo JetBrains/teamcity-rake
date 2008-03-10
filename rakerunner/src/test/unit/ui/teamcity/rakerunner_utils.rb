@@ -19,7 +19,7 @@
 
 module Rake
   module TeamCity
-    class InnerException < SystemExit
+    class InnerException < Exception
     end
   end
 end
