@@ -54,7 +54,10 @@ Debug loggers options:
 
 Use environament variables:
  * "teamcity.rake.runner.debug.output.hack.disabled" - set variable
-  with any value do disable output capturing from rake tasks.
+  with any value do disable output capturing hack from rake tasks.
+
+ * "teamcity.rake.runner.debug.output.capturer.disabled" - set variable
+  with any value do disable all output capturing from rake tasks.
 
  * "teamcity.rake.runner.debug.log.path" - enables logger in Ruby
    part of plugin

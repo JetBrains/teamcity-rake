@@ -22,6 +22,7 @@
 TEAMCITY_RAKERUNNER_LOG_RSPEC_XML_MSFS_KEY = 'teamcity.rake.runner.debug.log.rspec.xml.msgs'
 TEAMCITY_RAKERUNNER_LOG_PATH_KEY = 'teamcity.rake.runner.debug.log.path'
 TEAMCITY_RAKERUNNER_LOG_OUTPUT_HACK_DISABLED_KEY = 'teamcity.rake.runner.debug.output.hack.disabled'
+TEAMCITY_RAKERUNNER_LOG_OUTPUT_CAPTURER_DISABLED_KEY = 'teamcity.rake.runner.debug.output.capturer.disabled'
   # Log files
 TEAMCITY_RAKERUNNER_LOG_FILENAME_SUFFIX = '/rakeRunner_rake.log'
 TEAMCITY_RAKERUNNER_RPC_LOG_FILENAME_SUFFIX = '/rakeRunner_xmlrpc.log'

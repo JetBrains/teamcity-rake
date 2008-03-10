@@ -16,6 +16,11 @@
 #
 # @author: Roman.Chernyatchik
 # @date: 10.01.2008
+if ENV["idea.rake.debug.sources"]
+  require 'src/test/unit/ui/teamcity/rakerunner_consts'
+else
+  require 'test/unit/ui/teamcity/rakerunner_consts'
+end
 
 module Rake
   module TeamCity
@@ -24,15 +29,19 @@ module Rake
     module StdCaptureHelper
       require 'tempfile'
 
+      CAPTURE_DISABLED = ENV[TEAMCITY_RAKERUNNER_LOG_OUTPUT_CAPTURER_DISABLED_KEY]
+
       def capture_output_start_external
-        old_out = STDOUT.dup
-        old_err = STDERR.dup
+        old_out, old_err = copy_stdout_stderr
+
+        if CAPTURE_DISABLED
+          return old_out, old_err, nil, nil
+        end
 
         new_out = Tempfile.new("tempfile_out")
         new_err = Tempfile.new("tempfile_err")
 
-        STDOUT.reopen(new_out)
-        STDERR.reopen(new_err)
+        reopen_stdout_stderr(new_out, new_err)
 
         return old_out, old_err, new_out, new_err
       end
@@ -41,13 +50,26 @@ module Rake
         @old_out, @old_err, @new_out, @new_err = capture_output_start_external
       end
 
+      def copy_stdout_stderr
+        return STDOUT.dup, STDERR.dup
+      end
+
+      def reopen_stdout_stderr(sout, serr)
+        STDOUT.reopen(sout)
+        STDERR.reopen(serr)
+        nil
+      end
+
       # returns STDOUT and STDERR content
       def capture_output_end_external(old_out, old_err, new_out, new_err)
         STDOUT.flush
         STDERR.flush
 
-        STDOUT.reopen(old_out)
-        STDERR.reopen(old_err)
+        if CAPTURE_DISABLED
+          return "", ""
+        end
+
+        reopen_stdout_stderr(old_out, old_err)
 
         new_out.close
         new_err.close
