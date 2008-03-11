@@ -102,12 +102,10 @@ module Rake
           stdout_string, stderr_string = capture_output_end_external(old_out, old_err, new_out, new_err)
 
           unless (stdout_string.empty?)
-            Rake::TeamCityApplication.send_captured_stdout("Task[#{block_msg}] stdout\nstdout")
             Rake::TeamCityApplication.send_captured_stdout(stdout_string)
             RAKE_EXT_LOG.log_msg("Task[#{block_msg}] Std Output:\n[#{stdout_string}]")
           end
           unless (stderr_string.empty?)
-            Rake::TeamCityApplication.send_captured_stderr("Task[#{block_msg}] stdout\nstderr")
             Rake::TeamCityApplication.send_captured_stderr(stderr_string)
             RAKE_EXT_LOG.log_msg("Task[#{block_msg}] Std Error:\n[#{stderr_string}]")
           end
