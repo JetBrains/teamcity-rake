@@ -56,7 +56,9 @@ module Spec
         include Rake::TeamCity::StdCaptureHelper
         include Rake::TeamCity::RunnerUtils
 
-        TEAMCITY_RAKE_RUNNER_ISNT_COMPATIBLE_MESSAGE =  "TeamCity Rake Runner Plugin isn't compatible with this RSpec version.\n\n"
+        RUNNER_ISNT_COMPATIBLE_MESSAGE =  "TeamCity Rake Runner Plugin isn't compatible with this RSpec version.\n\n"
+        RUNNER_RSPEC_FAILED = "Failed to run RSpec.."
+
         TEAMCITY_FORMATTER_INTERNAL_ERRORS =[]
         ########## Teamcity #############################
         def log_one(msg)
@@ -196,7 +198,7 @@ module Spec
             # old API
             example_group_desc, example, message = args
           else
-            log_and_raise_internal_error TEAMCITY_RAKE_RUNNER_ISNT_COMPATIBLE_MESSAGE + "BaseFormatter.example_pendin arity = #{method_arity}.", true
+            log_and_raise_internal_error RUNNER_ISNT_COMPATIBLE_MESSAGE + "BaseFormatter.example_pendin arity = #{method_arity}.", true
           end
           example_pending_3args(example_group_desc, example, message)
         end
@@ -255,7 +257,7 @@ module Spec
           log_one(Rake::TeamCity::MessageFactory.create_progress_message(status_message))
 
           unless @example_count == example_count
-            msg = TEAMCITY_RAKE_RUNNER_ISNT_COMPATIBLE_MESSAGE + "Error: Not all examples have been run! (#{example_count} of #{@example_count})"
+            msg = RUNNER_ISNT_COMPATIBLE_MESSAGE + "Error: Not all examples have been run! (#{example_count} of #{@example_count})"
 
             log_and_raise_internal_error msg
             debug_log(msg)
@@ -263,7 +265,7 @@ module Spec
 
           unless @@RUNNING_EXAMPLES_STORAGE.empty?
             # unfinished examples statistics
-            msg = TEAMCITY_RAKE_RUNNER_ISNT_COMPATIBLE_MESSAGE + "Following examples weren't finished:"
+            msg = RUNNER_ISNT_COMPATIBLE_MESSAGE + "Following examples weren't finished:"
             count = 1
             @@RUNNING_EXAMPLES_STORAGE.each { |key, value|
               msg << "\n  #{count}. Example : '#{value.full_name}'"
@@ -382,6 +384,7 @@ module Spec
         def log_and_raise_internal_error(msg, raise_now = false)
           debug_log(msg)
           log_one(Rake::TeamCity::MessageFactory.create_error_message(msg, ""))
+          log_one(Rake::TeamCity::MessageFactory.create_build_failure(RUNNER_RSPEC_FAILED))
 
           excep_data = [msg, caller]
           if raise_now

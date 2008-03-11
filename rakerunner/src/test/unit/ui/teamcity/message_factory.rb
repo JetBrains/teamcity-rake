@@ -37,7 +37,7 @@ module Rake
       SOURCE_ID = "DefaultMessage";
       MSG_ERROR = "Error";
       MSG_TEXT = "Text";
-      MSG_BUILD_FAILURE_DESCRIPTION = "BuildFailureDescription";
+      MSG_BUILD_FAILURE = "BuildFailureDescription";
       MSG_BLOCK_START = "BlockStart";
       MSG_BLOCK_END = "BlockEnd";
 
@@ -135,10 +135,10 @@ module Rake
         end
       end
 
-      # public static BuildMessage1 createBuildFailureDescription(final String message)
-      def self.create_build_failure_message(msg, additional_flowid_suffix="")
-        _create_stub(:failure, MSG_BUILD_FAILURE_DESCRIPTION, additional_flowid_suffix) do |x|
-          x.myValue(msg, "class" => "jetbrains.buildServer.messages.ErrorData")
+      # public static BuildMessage1 createBuildFailure(final String message)
+      def self.create_build_failure(msg, additional_flowid_suffix="")
+        _create_stub(:failure, MSG_BUILD_FAILURE, additional_flowid_suffix) do |x|
+           x.myValue(msg, "class" => "java.lang.String")
         end
       end
 

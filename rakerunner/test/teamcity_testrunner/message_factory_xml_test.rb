@@ -20,7 +20,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 require 'src/test/unit/ui/teamcity/message_factory'
-
+#TODO add flow
 
 module Rake::TeamCity::MessageFactory
   def rescue_action(e)
@@ -120,7 +120,7 @@ module Rake::TeamCity
     end
 
     def test_create_build_failure_message
-      assert_equal(<<-STRING, MessageFactory.create_build_failure_message("name"))
+      assert_equal(<<-STRING, MessageFactory.create_build_failure("name"))
 <jetbrains.buildServer.messages.BuildMessage1>
    <mySourceId>DefaultMessage</mySourceId>
    <myTypeId>BuildFailureDescription</myTypeId>
