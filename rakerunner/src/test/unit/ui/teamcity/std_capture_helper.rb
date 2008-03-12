@@ -47,7 +47,11 @@ module Rake
       end
 
       def copy_stdout_stderr
-        return STDOUT.dup, STDERR.dup
+         if CAPTURE_DISABLED
+           return STDOUT, STDERR
+         else
+           return STDOUT.dup, STDERR.dup
+         end
       end
 
       def reopen_stdout_stderr(sout, serr)
