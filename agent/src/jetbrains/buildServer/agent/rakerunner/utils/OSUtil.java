@@ -51,7 +51,7 @@ public class OSUtil {
     }
     private static String RUBY_EXE_WIN = "ruby.exe";
     private static String RUBY_EXE_WIN_BAT = "ruby.bat";
-    private static String RUBY_EXE_UNIX = "jruby";
+    private static String RUBY_EXE_UNIX = "ruby";
     private static String JRUBY_EXE_WIN = "jruby.exe";
     private static String JRUBY_EXE_WIN_BAT = "jruby.bat";
     private static String JRUBY_EXE_UNIX = "jruby";
