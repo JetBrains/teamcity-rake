@@ -29,6 +29,7 @@ import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
+import jetbrains.buildServer.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -128,8 +129,7 @@ public class RakeTasksRunner extends RakeRunnerBase {
             //Test::Unit TESTOPTS
             final String testOpts = runParams.get(SERVER_UI_RAKE_TEST_UNIT_TESTOPTS_PROPERTY);
             if (!TextUtil.isEmptyOrWhitespaced(testOpts)) {
-                final String trimedTestOpts = testOpts.trim();
-                cmd.addParameter("\"" + RAKE_TEST_UNIT_TESTOPTS_PARAM_NAME + "=" + trimedTestOpts + "\"");
+                cmd.addParameter(RAKE_TEST_UNIT_TESTOPTS_PARAM_NAME + "=" + testOpts.trim());
             }
 
             final String specRunnerInitString = RSPEC_RUNNER_OPTIONS_REQUIRE + " " + RSPEC_RUNNERR_OPTIONS_FORMATTER;
@@ -154,11 +154,22 @@ public class RakeTasksRunner extends RakeRunnerBase {
         }
     }
 
-    private void addCmdlineArguments(GeneralCommandLine cmdLine, String argsString) {
-        final StringTokenizer st = new StringTokenizer(argsString);
-        while (st.hasMoreTokens()) {
-            cmdLine.addParameter(st.nextToken());
+    private void addCmdlineArguments(@NotNull final GeneralCommandLine cmdLine, @NotNull final String argsString) {
+        final List<String> stringList = StringUtil.splitHonorQuotes(argsString, ' ');
+        for (String arg : stringList) {
+            cmdLine.addParameter(stripDoubleQuoteAroundValue(arg));
         }
+    }
+
+    private String stripDoubleQuoteAroundValue(@NotNull final String str) {
+        String text = str;
+        if (StringUtil.startsWithChar(text, '\"')) {
+            text = text.substring(1);
+        }
+        if (StringUtil.endsWithChar(text, '\"')) {
+            text = text.substring(0, text.length() - 1);
+        }
+        return text;
     }
 
     protected void onTextAvailable(final Map<String, String> runParameters,
