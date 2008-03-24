@@ -20,7 +20,6 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.openapi.util.Key;
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.containers.HashMap;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
@@ -141,9 +140,7 @@ public class RakeTasksRunner extends RakeRunnerBase {
                 specOpts = specOpts.trim() + " " + specRunnerInitString;
             }
 
-            if (SystemInfo.isWindows) {
-                cmd.addParameter(RAKE__RSPEC_SPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
-            }
+            cmd.addParameter(RAKE__RSPEC_SPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
 
             if (inDebugMode) {
                 getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
