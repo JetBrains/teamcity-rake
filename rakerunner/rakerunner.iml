@@ -4,7 +4,6 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Ruby SDK 1.8.6" jdkType="RUBY_SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntryProperties />
   </component>
   <component name="RModuleContentRootManager">
     <TEST_URLS url="file://$MODULE_DIR$/test" />
