@@ -7,7 +7,7 @@
     <!-- For devel-deploy -->
     <!--<property name="webrootdir" value="c:/soft/Teamcity_6527/webapps/ROOT"/>-->
     <!--<property name="agentdir" value="c:/soft/Teamcity_6527/buildAgent"/>-->
-                                                                         
+
     <!-- TeamCity libraries -->
     <!--<property name="tc.root.dir" value="dist/TeamCity"/>-->
 
@@ -29,20 +29,22 @@
     <path id="classpath">
         <pathelement path="${tc.classes.dir}"/>
         <pathelement location="${tc.lib.dir}/annotations.jar"/>
-        <pathelement location="${tc.lib.dir}/common.jar"/>
+        <pathelement location="${tc.lib.dir}/common-api.jar"/>
         <pathelement location="${tc.lib.dir}/xmlrpc-2.0.1.jar"/>
         <pathelement location="${tc.lib.dir}/openapi.jar"/>
         <pathelement location="${tc.lib.dir}/log4j-1.2.12.jar"/>
-        <pathelement location="${tc.lib.dir}/messages.jar"/>
-        <pathelement location="${tc.lib.dir}/server-model.jar"/>
-        <pathelement location="${tc.agentlib.dir}/agent-openapi.jar"/>
+        <!--<pathelement location="${tc.lib.dir}/messages.jar"/>-->
+        <!--<pathelement location="${tc.lib.dir}/server.jar"/>-->
+        <pathelement location="${tc.lib.dir}/server-api.jar"/>
+        <pathelement location="${tc.lib.dir}/util.jar"/>
+        <pathelement location="${tc.lib.dir}/xstream-1.2.1.jar"/>
+
+        <pathelement location="${tc.agentlib.dir}/agent-api.jar"/>
         <pathelement location="${tc.agentlib.dir}/buildServerAgent.jar"/>
         <pathelement location="${tc.agentlib.dir}/buildServerServerLogging.jar"/>
         <pathelement location="${tc.agentlib.dir}/buildServerCommonRuntime.jar"/>
         <pathelement location="${tc.agentlib.dir}/buildServerRuntimeUtil.jar"/>
-        <pathelement location="${tc.lib.dir}/utils.jar"/>
-        <pathelement location="${tc.lib.dir}/server-openapi.jar"/>
-        <pathelement location="${tc.lib.dir}/xstream-1.2.1.jar"/>
+        <pathelement location="${tc.agentlib.dir}/buildServerRuntimeUtil.jar"/>
     </path>
 
     <target name="clean">
@@ -69,10 +71,11 @@
             <classpath path="build/common/classes"/>
             <classpath refid="classpath"/>
         </javac>
-        <copy file="agent/src/build-agent-plugin.xml" todir="build/agent/classes"/>
+
         <!-- Agent Jar -->
         <jar destfile="build/jar/RakeRunnerPluginAgent.jar">
             <fileset dir="build/agent/classes"/>
+            <fileset dir="agent/resources"/>
         </jar>
 
         <!-- Bundle -->
@@ -81,21 +84,16 @@
             <zipfileset dir="build/jar" includes="RakeRunnerPluginAgent.jar, RakeRunnerCommon.jar"
                         prefix="rakeRunnerPluginAgent/lib"/>
             <!-- Ruby sources -->
-            <zipfileset dir="rakerunner/src" excludes="test/**/*, test, spec/**/*, spec, utils/**/*, utils" prefix="rakeRunnerPluginAgent/lib/rb/runner"/>
-            <zipfileset dir="rakerunner/src/test" prefix="rakeRunnerPluginAgent/lib/rb/patch/test"/>
-            <zipfileset dir="rakerunner/src/spec" prefix="rakeRunnerPluginAgent/lib/rb/patch/spec"/>
-            <zipfileset dir="rakerunner/src/utils" prefix="rakeRunnerPluginAgent/lib/rb/patch/utils"/>
+            <zipfileset dir="rakerunner/src" prefix="rakeRunnerPluginAgent/lib/rb"/>
         </zip>
     </target>
 
     <target name="make-server">
-        <mkdir dir="build/server/classes/META-INF"/>
+        <mkdir dir="build/server/classes"/>      
         <javac srcdir="server/src" debug="on" destdir="build/server/classes">
             <classpath path="build/common/classes"/>
             <classpath refid="classpath"/>
         </javac>
-        <copy file="server/src/META-INF/build-server-plugin-rakerunner.xml"
-              todir="build/server/classes/META-INF"/>
 
         <jar destfile="build/jar/rakeRunnerPluginServer.jar">
             <fileset dir="build/server/classes"/>
@@ -125,7 +123,8 @@
     </target>
 
     <!-- Dist -->
-    <target name="dist" depends="clean,make"/>
+    <target name="dist" depends="clean,Unpack rakeRunnerRuby-src.zip,make"/>
+    <target name="dist2" depends="clean,dist-rakeRunnerRuby-src.zip,Unpack rakeRunnerRuby-src.zip,make"/>
 
     <!-- Deploy -->
     <target name="devel-deploy" depends="build.artifacts">
@@ -169,6 +168,25 @@
         </zip>
     </target>
 
+    <!-- Rake runner ruby part -->
+    <target name="Unpack rakeRunnerRuby-src.zip">
+        <delete dir="dist/rakeRunnerRuby"/>
+        <unzip dest="dist/rakeRunnerRuby">
+            <fileset dir=".">
+                <include name="dist/rakeRunnerRuby-src.zip"/>
+            </fileset>
+        </unzip>
+    </target>
+
+    <target name="dist-rakeRunnerRuby-src.zip">
+        <!-- Bundle -->
+        <zip destfile="dist/rakeRunnerRuby-src.zip">
+            <!-- Ruby sources -->
+            <zipfileset dir="rakerunner/src"/>
+        </zip>
+    </target>
+
+
     <!-- TeamCity builds -->
     <target name="Unpack TeamCity-*.tar.gz">
         <!-- Extract TeamCity -->
@@ -178,7 +196,7 @@
                 <include name="dist/TeamCity-*.tar.gz"/>
             </fileset>
         </untar>
-        
+
         <!-- Extract RakeRunner -->
         <delete dir="dist/RakeRunner"/>
         <mkdir dir="dist/RakeRunner"/>

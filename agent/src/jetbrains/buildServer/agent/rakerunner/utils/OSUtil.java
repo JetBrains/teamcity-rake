@@ -29,98 +29,95 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
- * Created by IntelliJ IDEA.
- *
- * @author: Roman.Chernyatchik
- * @date: 30.01.2008
+ * @author Roman.Chernyatchik
  */
 public class OSUtil {
 
-    public static String INDEPENDENT_PATH_SEPARATOR = "/";
+  public static String INDEPENDENT_PATH_SEPARATOR = "/";
 
-    private static String ENVIRONMENT_PATH_VARIABLE_NAME;
+  private static String ENVIRONMENT_PATH_VARIABLE_NAME;
 
-    static {
-        if (SystemInfo.isWindows) {
-            ENVIRONMENT_PATH_VARIABLE_NAME = "Path";
-        } else if (SystemInfo.isUnix) {
-            ENVIRONMENT_PATH_VARIABLE_NAME = "PATH";
-        } else {
-            throw new RuntimeException(RakeRunnerBundle.MSG_OS_NOT_SUPPORTED);
+  static {
+    if (SystemInfo.isWindows) {
+      ENVIRONMENT_PATH_VARIABLE_NAME = "Path";
+    } else if (SystemInfo.isUnix) {
+      ENVIRONMENT_PATH_VARIABLE_NAME = "PATH";
+    } else {
+      throw new RuntimeException(RakeRunnerBundle.MSG_OS_NOT_SUPPORTED);
+    }
+  }
+  private static String RUBY_EXE_WIN = "ruby.exe";
+  private static String RUBY_EXE_WIN_BAT = "ruby.bat";
+  private static String RUBY_EXE_UNIX = "ruby";
+  private static String JRUBY_EXE_WIN = "jruby.exe";
+  private static String JRUBY_EXE_WIN_BAT = "jruby.bat";
+  private static String JRUBY_EXE_UNIX = "jruby";
+
+  public static String appendToRUBYLIBEnvVariable(@NotNull final String additionalPath) {
+    final String rubyLibVal = System.getenv(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE);
+
+    final String pathValue;
+    if (TextUtil.isEmpty(rubyLibVal)) {
+      pathValue = toSystemDependentName(additionalPath);
+    } else {
+      pathValue = rubyLibVal + File.pathSeparatorChar + toSystemDependentName(additionalPath);
+    }
+
+    return pathValue;
+  }
+
+  public static String getPATHEnvVariable(@NotNull final Map<String, String> buildParameters) {
+    return buildParameters.get(Constants.ENV_PREFIX + ENVIRONMENT_PATH_VARIABLE_NAME);
+  }
+
+  @Nullable
+  public static String findExecutableByNameInPATH(@NotNull final String exeName,
+                                                  @NotNull final Map<String, String> buildParameters) {
+    final String path = getPATHEnvVariable(buildParameters);
+    if (path != null) {
+      final StringTokenizer st = new StringTokenizer(path, File.pathSeparator);
+
+      //tokens - are pathes with system-dependent slashes
+      while (st.hasMoreTokens()) {
+        final String possible_path = st.nextToken() + INDEPENDENT_PATH_SEPARATOR + exeName;
+        if (FileUtil.checkIfExists(possible_path)) {
+          return possible_path;
         }
+      }
     }
-    private static String RUBY_EXE_WIN = "ruby.exe";
-    private static String RUBY_EXE_WIN_BAT = "ruby.bat";
-    private static String RUBY_EXE_UNIX = "ruby";
-    private static String JRUBY_EXE_WIN = "jruby.exe";
-    private static String JRUBY_EXE_WIN_BAT = "jruby.bat";
-    private static String JRUBY_EXE_UNIX = "jruby";
+    return null;
+  }
 
-    public static String appendToRUBYLIBEnvVariable(@NotNull final String additionalPath) {
-        final String rubyLibVal = System.getenv(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE);
-
-        final String pathValue;
-        if (TextUtil.isEmpty(rubyLibVal)) {
-            pathValue = toSystemDependentName(additionalPath);
-        } else {
-            pathValue = rubyLibVal + File.pathSeparatorChar + toSystemDependentName(additionalPath);
-        }
-
-        return pathValue;
+  @Nullable
+  public static String findRubyInterpreterInPATH(@NotNull final Map<String, String> buildParameters) {
+    if (SystemInfo.isWindows) {
+      //ruby.exe file
+      String path = findExecutableByNameInPATH(RUBY_EXE_WIN, buildParameters);
+      if (path != null) {
+        return path;
+      }
+      //ruby.bat file
+      path = findExecutableByNameInPATH(RUBY_EXE_WIN_BAT, buildParameters);
+      if (path != null) {
+        return path;
+      }
+      //jruby.exe file
+      path = findExecutableByNameInPATH(JRUBY_EXE_WIN, buildParameters);
+      if (path != null) {
+        return path;
+      }
+      //jruby.bat file
+      return findExecutableByNameInPATH(JRUBY_EXE_WIN_BAT, buildParameters);
+    } else if (SystemInfo.isUnix) {
+      //ruby file
+      String path = findExecutableByNameInPATH(RUBY_EXE_UNIX, buildParameters);
+      if (path != null) {
+        return path;
+      }
+      //jruby file
+      return findExecutableByNameInPATH(JRUBY_EXE_UNIX, buildParameters);
+    } else {
+      throw new RuntimeException(RakeRunnerBundle.MSG_OS_NOT_SUPPORTED);
     }
-
-    public static String getPATHEnvVariable(@NotNull final Map<String, String> buildParameters) {
-        return buildParameters.get(Constants.ENV_PREFIX + ENVIRONMENT_PATH_VARIABLE_NAME);
-    }
-
-    @Nullable
-    public static String findExecutableByNameInPATH(@NotNull final String exeName,
-                                                    @NotNull final Map<String, String> buildParameters) {
-        final String path = getPATHEnvVariable(buildParameters);
-        if (path != null) {
-            final StringTokenizer st = new StringTokenizer(path, File.pathSeparator);
-
-            //tokens - are pathes with system-dependent slashes
-            while (st.hasMoreTokens()) {
-                final String possible_path = st.nextToken() + INDEPENDENT_PATH_SEPARATOR + exeName;
-                if (FileUtil.checkIfExists(possible_path)) {
-                    return possible_path;
-                }
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public static String findRubyInterpreterInPATH(@NotNull final Map<String, String> buildParameters) {
-        if (SystemInfo.isWindows) {
-            //ruby.exe file
-            String path = findExecutableByNameInPATH(RUBY_EXE_WIN, buildParameters);
-            if (path != null) {
-                return path;
-            }
-            //ruby.bat file
-            path = findExecutableByNameInPATH(RUBY_EXE_WIN_BAT, buildParameters);
-            if (path != null) {
-                return path;
-            }
-            //jruby.exe file
-            path = findExecutableByNameInPATH(JRUBY_EXE_WIN, buildParameters);
-            if (path != null) {
-                return path;
-            }
-            //jruby.bat file
-            return findExecutableByNameInPATH(JRUBY_EXE_WIN_BAT, buildParameters);
-        } else if (SystemInfo.isUnix) {
-            //ruby file
-            String path = findExecutableByNameInPATH(RUBY_EXE_UNIX, buildParameters);
-            if (path != null) {
-                return path;
-            }
-            //jruby file
-            return findExecutableByNameInPATH(JRUBY_EXE_UNIX, buildParameters);
-        } else {
-            throw new RuntimeException(RakeRunnerBundle.MSG_OS_NOT_SUPPORTED);
-        }
-    }
+  }
 }

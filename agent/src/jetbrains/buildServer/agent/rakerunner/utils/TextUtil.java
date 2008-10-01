@@ -21,55 +21,52 @@ import org.jetbrains.annotations.Nullable;
 import java.util.regex.Pattern;
 
 /**
- * Created by IntelliJ IDEA.
- *
- * @author: Roman.Chernyatchik
- * @date: 24.12.2007
+ * @author Roman.Chernyatchik
  */
 public class TextUtil {
-    private static final Pattern EOL_SPLIT_PATTERN = Pattern.compile(" *(\r|\n|\r\n)+ *");
+  private static final Pattern EOL_SPLIT_PATTERN = Pattern.compile(" *(\r|\n|\r\n)+ *");
 
-    /**
-     * Unions many strings in one
-     *
-     * @param strings Srtings to concat
-     * @return The result of concantenation
-     */
-    public static String concat(final String... strings) {
-        final StringBuilder result = new StringBuilder(strings[0]);
-        for (int i = 1; i < strings.length; i++) {
-            if (strings[i] != null && strings[i].length() > 0) {
-                result.append(' ');
-                result.append(strings[i]);
-            }
-        }
-        return result.toString();
+  /**
+   * Unions many strings in one
+   *
+   * @param strings Srtings to concat
+   * @return The result of concantenation
+   */
+  public static String concat(final String... strings) {
+    final StringBuilder result = new StringBuilder(strings[0]);
+    for (int i = 1; i < strings.length; i++) {
+      if (strings[i] != null && strings[i].length() > 0) {
+        result.append(' ');
+        result.append(strings[i]);
+      }
     }
-    
-    public static boolean isEmpty(final @Nullable String s) {
-        return s == null || s.length() == 0;
-    }
+    return result.toString();
+  }
 
-    public static boolean isEmptyOrWhitespaced(final @Nullable String s) {
-        return s == null || s.trim().length() == 0;
-    }
+  public static boolean isEmpty(final @Nullable String s) {
+    return s == null || s.length() == 0;
+  }
 
-    public static String removeNewLine(String s) {
-        if (s.length() == 0) return s;
-        if (s.charAt(s.length() - 1) == '\n')
-            s = s.substring(0, s.length() - 1);
-        if (s.charAt(s.length() - 1) == '\r')
-            s = s.substring(0, s.length() - 1);
-        return s;
-    }
+  public static boolean isEmptyOrWhitespaced(final @Nullable String s) {
+    return s == null || s.trim().length() == 0;
+  }
 
-    /**
-     * Splits string by lines.
-     *
-     * @param string String to split
-     * @return array of strings
-     */
-    public static String[] splitByLines(final String string) {
-        return EOL_SPLIT_PATTERN.split(string);
-    }
+  public static String removeNewLine(String s) {
+    if (s.length() == 0) return s;
+    if (s.charAt(s.length() - 1) == '\n')
+      s = s.substring(0, s.length() - 1);
+    if (s.charAt(s.length() - 1) == '\r')
+      s = s.substring(0, s.length() - 1);
+    return s;
+  }
+
+  /**
+   * Splits string by lines.
+   *
+   * @param string String to split
+   * @return array of strings
+   */
+  public static String[] splitByLines(final String string) {
+    return EOL_SPLIT_PATTERN.split(string);
+  }
 }

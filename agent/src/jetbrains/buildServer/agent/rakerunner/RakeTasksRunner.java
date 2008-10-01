@@ -17,14 +17,12 @@
 package jetbrains.buildServer.agent.rakerunner;
 
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.execution.process.ProcessOutputTypes;
-import com.intellij.openapi.util.Key;
 import com.intellij.util.containers.HashMap;
+import com.intellij.openapi.util.Key;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
-import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
+import jetbrains.buildServer.agent.runner.GenericProgramRunner;
+import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
@@ -37,244 +35,277 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Created by IntelliJ IDEA.
- *
- * @author: Roman Chernyatchik
- * @date: 03.06.2007
+ * @author Roman.Chernyatchik
  */
-public class RakeTasksRunner extends RakeRunnerBase {
-    protected static final Logger LOG = Logger.getLogger(RakeTasksRunner.class.getName());
+public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerConstants {
+  protected static final Logger LOG = Logger.getLogger(RakeTasksRunner.class.getName());
 
-    private final List<String> myStdOutMessages = new LinkedList<String>();
-    private final List<String> myStdErrMessages = new LinkedList<String>();
+//  private final List<String> myStdOutMessages = new LinkedList<String>();
+//  private final List<String> myStdErrMessages = new LinkedList<String>();
 
-    private final Set<File> myFilesToDelete = new HashSet<File>();
-    private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'spec/runner/formatter/teamcity/formatter'";
-    private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
+  private final Set<File> myFilesToDelete = new HashSet<File>();
+  private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'spec/runner/formatter/teamcity/formatter'";
+  private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
 
-    @NonNls
-    public String getType() {
-        return RakeRunnerConstants.RUNNER_TYPE;
+  @NonNls
+  public String getType() {
+    return RakeRunnerConstants.RUNNER_TYPE;
+  }
+
+  public boolean canRun(final BuildAgentConfiguration agentConfiguration) {
+      return true;
+  }
+
+  protected void buildCommandLine(@NotNull final GeneralCommandLine cmd,
+                                  @NotNull final File soourcesRootDir,
+                                  @NotNull final Map<String, String> runParams,
+                                  @NotNull final Map<String, String> buildParams)
+      throws IOException, RunBuildException {
+
+    // runParams - all server-ui options
+    // buildParams - system properties (system.*), environment vars (env.*)
+
+    final boolean inDebugMode = ConfigurationParamsUtil.isParameterEnabled(buildParams, RakeRunnerConstants.DEBUG_PROPERTY);
+
+//    for (String s : runParams.keySet()) {
+//      //TODO
+//      getBuildLogger().message("[rr]debug runP[ " + s + "]:" + runParams.get(s));
+//    }
+//    for (String s : buildParams.keySet()) {
+//      //TODO
+//      getBuildLogger().message("[rr]debug buildP[ " + s + "]:" + buildParams.get(s));
+//    }
+//    getBuildLogger().message("[rr]debug enabled2:" + ConfigurationParamsUtil.isParameterEnabled(runParams, "system." + RakeRunnerConstants.DEBUG_PROPERTY));
+
+    final File buildFile = getBuildFile(runParams);
+
+    try {
+      // Special rake runner Environment properties
+      final HashMap<String, String> envMap = new HashMap<String, String>();
+
+// SDK patch
+      addTestRunnerPatchFiles(runParams, buildParams, envMap);
+
+
+// Other runner ENV parameters
+      // track invoke/execute stages
+      if (ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED)) {
+        envMap.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
+      }
+      cmd.setEnvParams(envMap);
+
+      // explicit output capturer
+      if (!ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_OUTPUT_CAPTURER_ENABLED)) {
+        envMap.put(LOG_OUTPUT_CAPTURER_DISABLED_KEY, Boolean.TRUE.toString());
+      }
+
+// CommandLine options
+
+      // Ruby interpreter
+      cmd.setExePath(ConfigurationParamsUtil.getRubyInterpreterPath(runParams, buildParams));
+
+      // Rake runner script
+      cmd.addParameter(RubyProjectSourcesUtil.getRakeRunnerPath());
+
+      // Rake options
+      // Custom Rakefile if specified
+      if (buildFile != null) {
+        cmd.addParameter(RAKE_CMDLINE_OPTIONS_RAKEFILE);
+        cmd.addParameter(buildFile.getAbsolutePath());
+      }
+      // Other arguments
+      final String otherArgsString = runParams.get(SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY);
+      if (!TextUtil.isEmptyOrWhitespaced(otherArgsString)) {
+        addCmdlineArguments(cmd, otherArgsString);
+      }
+
+      // Tasks names
+      final String tasks_names = runParams.get(SERVER_UI_RAKE_TASKS_PROPERTY);
+      if (!PropertiesUtil.isEmptyOrNull(tasks_names)) {
+        addCmdlineArguments(cmd, tasks_names);
+      }
+
+      //Test::Unit TESTOPTS
+      final String testOpts = runParams.get(SERVER_UI_RAKE_TEST_UNIT_TESTOPTS_PROPERTY);
+      if (!TextUtil.isEmptyOrWhitespaced(testOpts)) {
+        cmd.addParameter(RAKE_TEST_UNIT_TESTOPTS_PARAM_NAME + "=" + testOpts.trim());
+      }
+
+      final String specRunnerInitString = RSPEC_RUNNER_OPTIONS_REQUIRE + " " + RSPEC_RUNNERR_OPTIONS_FORMATTER;
+      String specOpts = runParams.get(SERVER_UI_RSPEC_SPEC_OPTS_PROPERTY);
+      if (TextUtil.isEmpty(specOpts)) {
+        specOpts = specRunnerInitString;
+      } else {
+        specOpts = specOpts.trim() + " " + specRunnerInitString;
+      }
+
+      cmd.addParameter(RAKE__RSPEC_SPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
+
+      if (inDebugMode) {
+        getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
+      }
+    } catch (MyBuildFailureException e) {
+      failRakeTaskBuild(e);
     }
 
-    protected void modifyBuildEnvironment(final Map<String, String> environment,
-                                          final Map<String, String> runParameters,
-                                          final Map<String, String> buildParameters,
-                                          final File tempDir) {
-        super.modifyBuildEnvironment(environment, runParameters, buildParameters, tempDir);
+    if (inDebugMode) {
+      getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + soourcesRootDir.getCanonicalPath() + "]");
+    }
+  }
 
-        environment.put(AgentRuntimeProperties.BUILD_ID,
-                        runParameters.get(AgentRuntimeProperties.BUILD_ID));
-        environment.put(AgentRuntimeProperties.OWN_PORT,
-                        runParameters.get(AgentRuntimeProperties.OWN_PORT));
+//  protected void onTextAvailable(final Map<String, String> runParameters,
+//                                 final ProcessEvent processEvent, final Key outputType) {
+//    super.onTextAvailable(runParameters, processEvent, outputType);
+//
+//    final String text = TextUtil.removeNewLine(processEvent.getText());
+//    if (outputType == ProcessOutputTypes.SYSTEM) {
+//      getBuildLogger().message(text);
+//    } else if (outputType == ProcessOutputTypes.STDOUT) {
+//      synchronized (myStdOutMessages) {
+//        myStdOutMessages.add(processEvent.getText());
+//      }
+//    } else {
+//      synchronized (myStdErrMessages) {
+//        myStdErrMessages.add(processEvent.getText());
+//      }
+//    }
+//  }
+
+  protected void failRakeTaskBuild(@NotNull final MyBuildFailureException e) throws RunBuildException {
+    getBuildLogger().buildFailureDescription(e.getTitle());
+
+    throw new RunBuildException(e.getMessage());
+  }
+
+  protected boolean shouldDumpOutputLinesOnError() {
+    return false;
+  }
+
+  @Override
+  protected void onOutput(final String text, final Key key) {
+    super.onOutput(text, key);
+    getBuildLogger().message(text);
+  }
+
+  protected void processTerminated(RunEnvironment runEnvironment, final boolean isFailed) {
+    super.processTerminated(runEnvironment, isFailed);
+    
+//    dumpOutputMessages(true);
+//    dumpOutputMessages(false);
+
+    // Remove tmp files
+    for (File file : myFilesToDelete) {
+      jetbrains.buildServer.util.FileUtil.delete(file);
+    }
+    myFilesToDelete.clear();
+  }
+
+//  private void dumpOutputMessages(final boolean dumpStdOut) {
+//    final List<String> messages;
+//    final String outputType;
+//    if (dumpStdOut) {
+//      messages = myStdOutMessages;
+//      outputType = "stdout";
+//    } else {
+//      messages = myStdErrMessages;
+//      outputType = "stderr";
+//    }
+//
+//    synchronized (messages) {
+//      if (messages.size() > 0) {
+//        final StringBuilder sb = new StringBuilder();
+//        sb.append(getType()).append(" uncaptured ").append(outputType).append(":\n");
+//        for (String s : messages) {
+//          sb.append(s);
+//        }
+//        if (dumpStdOut) {
+//          getBuildLogger().message(sb.toString());
+//        } else {
+//          getBuildLogger().warning(sb.toString());
+//        }
+//        getBuildLogger().flush();
+//      }
+//      messages.clear();
+//    }
+//  }
+
+  private void addTestRunnerPatchFiles(final Map<String, String> runParams,
+                                       final Map<String, String> buildParams,
+                                       final HashMap<String, String> envMap)
+      throws MyBuildFailureException, RunBuildException {
+
+    final String patchedRubySDKFilesRoot = RubyProjectSourcesUtil.getPatchedRubySDKFilesRoot();
+    // adds out patch to loadpath
+    envMap.put(RUBYLIB_ENVIRONMENT_VARIABLE,
+        OSUtil.appendToRUBYLIBEnvVariable(patchedRubySDKFilesRoot));
+    // due to patching loadpath we replace original autorunner but it is used buy our tests runner
+    envMap.put(ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
+        RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(runParams, buildParams));
+    envMap.put(ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY,
+        RubySDKUtil.getSDKTestUnitTestRunnerMediatorScriptPath(runParams, buildParams));
+  }
+
+  private void addCmdlineArguments(@NotNull final GeneralCommandLine cmdLine, @NotNull final String argsString) {
+    final List<String> stringList = StringUtil.splitHonorQuotes(argsString, ' ');
+    for (String arg : stringList) {
+      cmdLine.addParameter(stripDoubleQuoteAroundValue(arg));
+    }
+  }
+
+  private String stripDoubleQuoteAroundValue(@NotNull final String str) {
+    String text = str;
+    if (StringUtil.startsWithChar(text, '\"')) {
+      text = text.substring(1);
+    }
+    if (StringUtil.endsWithChar(text, '\"')) {
+      text = text.substring(0, text.length() - 1);
+    }
+    return text;
+  }
+ 
+  @Nullable
+  private File getBuildFile(Map<String, String> runParameters) throws IOException, RunBuildException {
+    final File buildFile;
+    if (BuildFileRunnerUtil.isCustomBuildFileUsed(runParameters)) {
+      buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);
+    } else {
+      final String buildFilePath = runParameters.get(BUILD_FILE_PATH_KEY);
+      if (PropertiesUtil.isEmptyOrNull(buildFilePath)) {
+        //use rake defaults
+        buildFile = null;
+      } else {
+        buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);
+      }
+    }
+    if (buildFile != null) {
+      myFilesToDelete.add(buildFile);
+    }
+    return buildFile;
+  }
+
+  public static class MyBuildFailureException extends Exception {
+    private final String msg;
+    private final String title;
+
+    public MyBuildFailureException(@NotNull final String msg,
+                                   @NotNull final String title) {
+      this.msg = msg;
+      this.title = title;
     }
 
-    protected void buildCommandLine(@NotNull final GeneralCommandLine cmd,
-                                    @NotNull final File soourcesRootDir,
-                                    @NotNull final Map<String, String> runParams,
-                                    @NotNull final Map<String, String> buildParams)
-            throws IOException, RunBuildException {
-
-        final boolean inDebugMode = ExternalParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.DEBUG_PROPERTY);
-
-        final File buildFile = getBuildFile(runParams);
-
-        final String patchedRubySDKFilesRoot = RubySourcesUtil.getPatchedRubySDKFilesRoot();
-        try {
-            // Prerequisites
-            if (!RubySDKUtil.isGemInstalledInSDK(RubySDKUtil.GEM_BUILDER_NAME, null, true, runParams, buildParams)) {
-                final String msg = "Unable to find 'builder' gem for Ruby SDK with interpreter: '"
-                                    + ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams)
-                                    + "'. This gem is mandatory for TeamCity Rake Runner. Please install 'builder' gem for this Ruby SDK.";
-
-                throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
-            }
-
-            // Special rake runner Environment properties
-            final HashMap<String, String> envMap = new HashMap<String, String>();
-            envMap.put(RUBYLIB_ENVIRONMENT_VARIABLE, OSUtil.appendToRUBYLIBEnvVariable(patchedRubySDKFilesRoot));
-            envMap.put(ORIGINAL_SDK_AUTORUNNER_PATH_KEY, RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(runParams, buildParams));
-            if (ExternalParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED)) {
-                envMap.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
-            }
-            cmd.setEnvParams(envMap);
-
-            // Ruby interpreter
-            cmd.setExePath(ExternalParamsUtil.getRubyInterpreterPath(runParams, buildParams));
-
-            // Rake runner script
-            cmd.addParameter(RubySourcesUtil.getRakeRunnerPath());
-
-            // Rake options
-            // Custom Rakefile if specified
-            if (buildFile != null) {
-                cmd.addParameter(RAKE_CMDLINE_OPTIONS_RAKEFILE);
-                cmd.addParameter(buildFile.getAbsolutePath());
-            }
-            // Other arguments
-            final String otherArgsString = runParams.get(SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY);
-            if (!TextUtil.isEmptyOrWhitespaced(otherArgsString)) {
-                addCmdlineArguments(cmd, otherArgsString);
-            }
-
-            // Tasks names
-            final String tasks_names = runParams.get(SERVER_UI_RAKE_TASKS_PROPERTY);
-            if (!PropertiesUtil.isEmptyOrNull(tasks_names)) {
-                addCmdlineArguments(cmd, tasks_names);
-            } 
-
-            //Test::Unit TESTOPTS
-            final String testOpts = runParams.get(SERVER_UI_RAKE_TEST_UNIT_TESTOPTS_PROPERTY);
-            if (!TextUtil.isEmptyOrWhitespaced(testOpts)) {
-                cmd.addParameter(RAKE_TEST_UNIT_TESTOPTS_PARAM_NAME + "=" + testOpts.trim());
-            }
-
-            final String specRunnerInitString = RSPEC_RUNNER_OPTIONS_REQUIRE + " " + RSPEC_RUNNERR_OPTIONS_FORMATTER;
-            String specOpts = runParams.get(SERVER_UI_RSPEC_SPEC_OPTS_PROPERTY);
-            if (TextUtil.isEmpty(specOpts)) {
-                specOpts = specRunnerInitString;
-            } else {
-                specOpts = specOpts.trim() + " " + specRunnerInitString;
-            }
-
-            cmd.addParameter(RAKE__RSPEC_SPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
-
-            if (inDebugMode) {
-                getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
-            }
-        } catch (MyBuildFailureException e) {
-            failRakeTaskBuild(e);
-        }
-
-        if (inDebugMode) {
-            getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + soourcesRootDir.getCanonicalPath() + "]");
-        }
+    public String getMessage() {
+      return msg;
     }
 
-    private void addCmdlineArguments(@NotNull final GeneralCommandLine cmdLine, @NotNull final String argsString) {
-        final List<String> stringList = StringUtil.splitHonorQuotes(argsString, ' ');
-        for (String arg : stringList) {
-            cmdLine.addParameter(stripDoubleQuoteAroundValue(arg));
-        }
+    public String getTitle() {
+      return title;
     }
+  }
 
-    private String stripDoubleQuoteAroundValue(@NotNull final String str) {
-        String text = str;
-        if (StringUtil.startsWithChar(text, '\"')) {
-            text = text.substring(1);
-        }
-        if (StringUtil.endsWithChar(text, '\"')) {
-            text = text.substring(0, text.length() - 1);
-        }
-        return text;
-    }
-
-    protected void onTextAvailable(final Map<String, String> runParameters,
-                                   final ProcessEvent processEvent, final Key outputType) {
-        super.onTextAvailable(runParameters, processEvent, outputType);
-
-        final String text = TextUtil.removeNewLine(processEvent.getText());
-        if (outputType == ProcessOutputTypes.SYSTEM) {
-            getBuildLogger().message(text);
-        } else if (outputType == ProcessOutputTypes.STDOUT) {
-            synchronized (myStdOutMessages) {
-                myStdOutMessages.add(processEvent.getText());
-            }
-        } else {
-            synchronized (myStdErrMessages) {
-                myStdErrMessages.add(processEvent.getText());
-            }
-        }
-    }
-
-    protected boolean shouldDumpOutputLinesOnError() {
-        return false;
-    }
-
-    protected void processTerminated(RunEnvironment runEnvironment, final boolean isFailed) {
-        dumpOutputMessages(true);
-        dumpOutputMessages(false);
-
-        for (File file : myFilesToDelete) {
-          jetbrains.buildServer.util.FileUtil.delete(file);
-        }
-        myFilesToDelete.clear();
-    }
-
-    private void dumpOutputMessages(final boolean dumpStdOut) {
-        final List<String> messages;
-        final String outputType;
-        if (dumpStdOut) {
-            messages = myStdOutMessages;
-            outputType = "stdout";
-        } else {
-            messages = myStdErrMessages;
-            outputType = "stderr";
-        }
-
-        synchronized (messages) {
-            if (messages.size() > 0) {
-                final StringBuilder sb = new StringBuilder();
-                sb.append(getType()).append(" uncaptured ").append(outputType).append(":\n");
-                for (String s : messages) {
-                    sb.append(s);
-                }
-                if (dumpStdOut) {
-                    getBuildLogger().message(sb.toString());
-                } else {
-                    getBuildLogger().warning(sb.toString());
-                }
-                getBuildLogger().flush();
-            }
-            messages.clear();
-        }
-    }
-
-    @Nullable
-    private File getBuildFile(Map<String, String> runParameters) throws IOException, RunBuildException {
-        final File buildFile;
-        if (BuildFileRunnerUtil.isCustomBuildFileUsed(runParameters)) {
-            buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);
-        } else {
-            final String buildFilePath = runParameters.get(BUILD_FILE_PATH_KEY);
-            if (PropertiesUtil.isEmptyOrNull(buildFilePath)) {
-                //use rake defaults
-                buildFile = null;
-            } else {
-                buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);
-            }
-        }
-        if (buildFile != null) {
-            myFilesToDelete.add(buildFile);
-        }
-        return buildFile;
-    }
-
-    public void failRakeTaskBuild(@NotNull final MyBuildFailureException e) throws RunBuildException {
-        getBuildLogger().buildFailureDescription(e.getTitle());
-
-        throw new RunBuildException(e.getMessage());
-    }
-
-    public static class MyBuildFailureException extends Exception {
-        private final String msg;
-        private final String title;
-
-        public MyBuildFailureException(@NotNull final String msg,
-                                       @NotNull final String title) {
-            this.msg = msg;
-            this.title = title;
-        }
-
-        public String getMessage() {
-            return msg;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-    }
 }

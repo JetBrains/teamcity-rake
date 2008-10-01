@@ -19,8 +19,7 @@ package jetbrains.buildServer.rakerunner;
 /**
  * Created by IntelliJ IDEA.
  * 
- * @author: Roman.Chernyatchik
- * @date: 22.12.2007
+ * @author Roman.Chernyatchik
  */
 
 public interface RakeRunnerBundle {
