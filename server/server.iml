@@ -2,13 +2,7 @@
 <module relativePaths="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
-      <configuration>
-        <options>
-          <option name="enableValidation" value="true" />
-          <option name="reportErrorsAsWarnings" value="true" />
-        </options>
-        <customNs />
-      </configuration>
+      <configuration />
     </facet>
     <facet type="web" name="Web">
       <configuration>
@@ -18,16 +12,16 @@
         <webroots>
           <root url="file://$MODULE_DIR$/resources/buildServerResources" relative="/plugins/rake-runner" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src" />
+        </sourceRoots>
         <building>
           <setting name="EXPLODED_URL" value="file://" />
           <setting name="EXPLODED_ENABLED" value="false" />
           <setting name="JAR_URL" value="file://" />
           <setting name="JAR_ENABLED" value="false" />
-          <setting name="BUILD_MODULE_ON_FRAME_DEACTIVATION" value="false" />
-          <setting name="BUILD_EXTERNAL_DEPENDENCIES" value="false" />
           <setting name="EXCLUDE_EXPLODED_DIRECTORY" value="true" />
           <setting name="RUN_JASPER_VALIDATION" value="true" />
-          <setting name="BUILD_ONLY_WEB_RESOURCES" value="false" />
         </building>
         <packaging>
           <containerElement type="module" name="common">
@@ -38,7 +32,7 @@
             <attribute name="method" value="1" />
             <attribute name="URI" value="/WEB-INF/classes" />
           </containerElement>
-          <containerElement type="library" name="agent-openapi.jar" level="project">
+          <containerElement type="library" name="agent-api.jar" level="project">
             <attribute name="method" value="0" />
             <attribute name="URI" value="/WEB-INF/lib" />
           </containerElement>
@@ -62,7 +56,7 @@
             <attribute name="method" value="0" />
             <attribute name="URI" value="/WEB-INF/lib" />
           </containerElement>
-          <containerElement type="library" name="common.jar" level="project">
+          <containerElement type="library" name="common-api.jar" level="project">
             <attribute name="method" value="0" />
             <attribute name="URI" value="/WEB-INF/lib" />
           </containerElement>
@@ -82,7 +76,7 @@
             <attribute name="method" value="0" />
             <attribute name="URI" value="/WEB-INF/lib" />
           </containerElement>
-          <containerElement type="library" name="server-openapi.jar" level="project">
+          <containerElement type="library" name="server-api.jar" level="project">
             <attribute name="method" value="0" />
             <attribute name="URI" value="/WEB-INF/lib" />
           </containerElement>
@@ -90,7 +84,7 @@
             <attribute name="method" value="0" />
             <attribute name="URI" value="/WEB-INF/lib" />
           </containerElement>
-          <containerElement type="library" name="utils.jar" level="project">
+          <containerElement type="library" name="util.jar" level="project">
             <attribute name="method" value="0" />
             <attribute name="URI" value="/WEB-INF/lib" />
           </containerElement>
@@ -109,6 +103,7 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -116,21 +111,20 @@
     <orderEntry type="module" module-name="common" />
     <orderEntry type="library" name="spring-2.0.7" level="project" />
     <orderEntry type="library" name="annotations.jar" level="project" />
-    <orderEntry type="library" name="common.jar" level="project" />
+    <orderEntry type="library" name="common-api.jar" level="project" />
     <orderEntry type="library" name="xmlrpc-2.0.1.jar" level="project" />
     <orderEntry type="library" name="openapi.jar" level="project" />
     <orderEntry type="library" name="log4j-1.2.12.jar" level="project" />
     <orderEntry type="library" name="messages.jar" level="project" />
     <orderEntry type="library" name="server-model.jar" level="project" />
-    <orderEntry type="library" name="agent-openapi.jar" level="project" />
+    <orderEntry type="library" name="agent-api.jar" level="project" />
     <orderEntry type="library" name="buildServerAgent.jar" level="project" />
     <orderEntry type="library" name="buildServerServerLogging.jar" level="project" />
     <orderEntry type="library" name="buildServerCommonRuntime.jar" level="project" />
     <orderEntry type="library" name="buildServerRuntimeUtil.jar" level="project" />
-    <orderEntry type="library" name="utils.jar" level="project" />
-    <orderEntry type="library" name="server-openapi.jar" level="project" />
+    <orderEntry type="library" name="util.jar" level="project" />
+    <orderEntry type="library" name="server-api.jar" level="project" />
     <orderEntry type="library" name="xstream-1.2.1.jar" level="project" />
-    <orderEntryProperties />
   </component>
   <component name="copyright">
     <Base>

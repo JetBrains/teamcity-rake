@@ -8,21 +8,20 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="annotations.jar" level="project" />
-    <orderEntry type="library" name="common.jar" level="project" />
+    <orderEntry type="library" name="common-api.jar" level="project" />
     <orderEntry type="library" name="xmlrpc-2.0.1.jar" level="project" />
     <orderEntry type="library" name="openapi.jar" level="project" />
     <orderEntry type="library" name="log4j-1.2.12.jar" level="project" />
     <orderEntry type="library" name="messages.jar" level="project" />
     <orderEntry type="library" name="server-model.jar" level="project" />
-    <orderEntry type="library" name="agent-openapi.jar" level="project" />
+    <orderEntry type="library" name="agent-api.jar" level="project" />
     <orderEntry type="library" name="buildServerAgent.jar" level="project" />
     <orderEntry type="library" name="buildServerServerLogging.jar" level="project" />
     <orderEntry type="library" name="buildServerCommonRuntime.jar" level="project" />
     <orderEntry type="library" name="buildServerRuntimeUtil.jar" level="project" />
-    <orderEntry type="library" name="utils.jar" level="project" />
-    <orderEntry type="library" name="server-openapi.jar" level="project" />
+    <orderEntry type="library" name="util.jar" level="project" />
+    <orderEntry type="library" name="server-api.jar" level="project" />
     <orderEntry type="library" name="xstream-1.2.1.jar" level="project" />
-    <orderEntryProperties />
   </component>
   <component name="copyright">
     <Base>
