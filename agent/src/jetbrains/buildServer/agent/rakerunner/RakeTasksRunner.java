@@ -17,12 +17,14 @@
 package jetbrains.buildServer.agent.rakerunner;
 
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.util.containers.HashMap;
+import com.intellij.execution.process.ProcessEvent;
+import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.openapi.util.Key;
+import com.intellij.util.containers.HashMap;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.agent.runner.GenericProgramRunner;
-import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
@@ -46,11 +48,8 @@ import java.util.Set;
 public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerConstants {
   protected static final Logger LOG = Logger.getLogger(RakeTasksRunner.class.getName());
 
-//  private final List<String> myStdOutMessages = new LinkedList<String>();
-//  private final List<String> myStdErrMessages = new LinkedList<String>();
-
   private final Set<File> myFilesToDelete = new HashSet<File>();
-  private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'spec/runner/formatter/teamcity/formatter'";
+  private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'teamcity/spec/runner/formatter/teamcity/formatter'";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
 
   @NonNls
@@ -73,18 +72,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
 
     final boolean inDebugMode = ConfigurationParamsUtil.isParameterEnabled(buildParams, RakeRunnerConstants.DEBUG_PROPERTY);
 
-//    for (String s : runParams.keySet()) {
-//      //TODO
-//      getBuildLogger().message("[rr]debug runP[ " + s + "]:" + runParams.get(s));
-//    }
-//    for (String s : buildParams.keySet()) {
-//      //TODO
-//      getBuildLogger().message("[rr]debug buildP[ " + s + "]:" + buildParams.get(s));
-//    }
-//    getBuildLogger().message("[rr]debug enabled2:" + ConfigurationParamsUtil.isParameterEnabled(runParams, "system." + RakeRunnerConstants.DEBUG_PROPERTY));
-
     final File buildFile = getBuildFile(runParams);
-
     try {
       // Special rake runner Environment properties
       final HashMap<String, String> envMap = new HashMap<String, String>();
@@ -98,12 +86,13 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
       if (ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED)) {
         envMap.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
       }
-      cmd.setEnvParams(envMap);
 
       // explicit output capturer
       if (!ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_OUTPUT_CAPTURER_ENABLED)) {
         envMap.put(LOG_OUTPUT_CAPTURER_DISABLED_KEY, Boolean.TRUE.toString());
       }
+
+      cmd.setEnvParams(envMap);
 
 // CommandLine options
 
@@ -159,24 +148,6 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     }
   }
 
-//  protected void onTextAvailable(final Map<String, String> runParameters,
-//                                 final ProcessEvent processEvent, final Key outputType) {
-//    super.onTextAvailable(runParameters, processEvent, outputType);
-//
-//    final String text = TextUtil.removeNewLine(processEvent.getText());
-//    if (outputType == ProcessOutputTypes.SYSTEM) {
-//      getBuildLogger().message(text);
-//    } else if (outputType == ProcessOutputTypes.STDOUT) {
-//      synchronized (myStdOutMessages) {
-//        myStdOutMessages.add(processEvent.getText());
-//      }
-//    } else {
-//      synchronized (myStdErrMessages) {
-//        myStdErrMessages.add(processEvent.getText());
-//      }
-//    }
-//  }
-
   protected void failRakeTaskBuild(@NotNull final MyBuildFailureException e) throws RunBuildException {
     getBuildLogger().buildFailureDescription(e.getTitle());
 
@@ -188,16 +159,31 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
   }
 
   @Override
-  protected void onOutput(final String text, final Key key) {
-    super.onOutput(text, key);
-    getBuildLogger().message(text);
+  protected void onOutput(final String lineWithoutLF, final Key lastOutputKey) {
+    super.onOutput(lineWithoutLF, lastOutputKey);
+    final String s = StringUtil.stripNewLine(lineWithoutLF);
+
+    if (lastOutputKey == ProcessOutputTypes.STDERR) {
+//      getBuildLogger().error(s);
+      getBuildLogger().warning(s);
+    }
+    else {
+      //TODO: think about SystemOutput
+      getBuildLogger().message(s);
+    }
   }
 
-  protected void processTerminated(RunEnvironment runEnvironment, final boolean isFailed) {
+  protected void processWillBeTerminated(final Map<String, String> runParameters,
+                                         final ProcessEvent processEvent,
+                                         final boolean b) {
+    getBuildLogger().flush();
+    super.processWillBeTerminated(runParameters, processEvent, b);
+  }
+
+  protected void processTerminated(final RunEnvironment runEnvironment,
+                                   final boolean isFailed) {
+    getBuildLogger().flush();
     super.processTerminated(runEnvironment, isFailed);
-    
-//    dumpOutputMessages(true);
-//    dumpOutputMessages(false);
 
     // Remove tmp files
     for (File file : myFilesToDelete) {
@@ -205,35 +191,6 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     }
     myFilesToDelete.clear();
   }
-
-//  private void dumpOutputMessages(final boolean dumpStdOut) {
-//    final List<String> messages;
-//    final String outputType;
-//    if (dumpStdOut) {
-//      messages = myStdOutMessages;
-//      outputType = "stdout";
-//    } else {
-//      messages = myStdErrMessages;
-//      outputType = "stderr";
-//    }
-//
-//    synchronized (messages) {
-//      if (messages.size() > 0) {
-//        final StringBuilder sb = new StringBuilder();
-//        sb.append(getType()).append(" uncaptured ").append(outputType).append(":\n");
-//        for (String s : messages) {
-//          sb.append(s);
-//        }
-//        if (dumpStdOut) {
-//          getBuildLogger().message(sb.toString());
-//        } else {
-//          getBuildLogger().warning(sb.toString());
-//        }
-//        getBuildLogger().flush();
-//      }
-//      messages.clear();
-//    }
-//  }
 
   private void addTestRunnerPatchFiles(final Map<String, String> runParams,
                                        final Map<String, String> buildParams,

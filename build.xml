@@ -30,21 +30,18 @@
         <pathelement path="${tc.classes.dir}"/>
         <pathelement location="${tc.lib.dir}/annotations.jar"/>
         <pathelement location="${tc.lib.dir}/common-api.jar"/>
-        <pathelement location="${tc.lib.dir}/xmlrpc-2.0.1.jar"/>
-        <pathelement location="${tc.lib.dir}/openapi.jar"/>
         <pathelement location="${tc.lib.dir}/log4j-1.2.12.jar"/>
-        <!--<pathelement location="${tc.lib.dir}/messages.jar"/>-->
-        <!--<pathelement location="${tc.lib.dir}/server.jar"/>-->
+        <pathelement location="${tc.lib.dir}/openapi.jar"/>
+        <pathelement location="${tc.lib.dir}/server.jar"/>
         <pathelement location="${tc.lib.dir}/server-api.jar"/>
         <pathelement location="${tc.lib.dir}/util.jar"/>
         <pathelement location="${tc.lib.dir}/xstream-1.2.1.jar"/>
+        <pathelement location="${tc.lib.dir}/xmlrpc-2.0.1.jar"/>
 
+        <pathelement location="${tc.agentlib.dir}/agent.jar"/>
         <pathelement location="${tc.agentlib.dir}/agent-api.jar"/>
-        <pathelement location="${tc.agentlib.dir}/buildServerAgent.jar"/>
-        <pathelement location="${tc.agentlib.dir}/buildServerServerLogging.jar"/>
-        <pathelement location="${tc.agentlib.dir}/buildServerCommonRuntime.jar"/>
-        <pathelement location="${tc.agentlib.dir}/buildServerRuntimeUtil.jar"/>
-        <pathelement location="${tc.agentlib.dir}/buildServerRuntimeUtil.jar"/>
+        <pathelement location="${tc.agentlib.dir}/server-logging.jar"/>
+        <pathelement location="${tc.agentlib.dir}/runtime-util.jar"/>
     </path>
 
     <target name="clean">
@@ -84,7 +81,7 @@
             <zipfileset dir="build/jar" includes="RakeRunnerPluginAgent.jar, RakeRunnerCommon.jar"
                         prefix="rakeRunnerPluginAgent/lib"/>
             <!-- Ruby sources -->
-            <zipfileset dir="rakerunner/src" prefix="rakeRunnerPluginAgent/lib/rb"/>
+            <zipfileset dir="agent/src/rb" prefix="rakeRunnerPluginAgent/lib/rb"/>
         </zip>
     </target>
 

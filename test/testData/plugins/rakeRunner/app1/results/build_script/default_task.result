@@ -1,0 +1,4 @@
+##teamcity[blockOpened name='Execute build_script:my_default_task' type='$TARGET_BLOCK$'] NORMAL
+##teamcity[blockClosed name='Execute build_script:my_default_task' type='$TARGET_BLOCK$'] NORMAL
+##teamcity[blockOpened name='Execute default' type='$TARGET_BLOCK$'] NORMAL
+##teamcity[blockClosed name='Execute default' type='$TARGET_BLOCK$'] NORMAL

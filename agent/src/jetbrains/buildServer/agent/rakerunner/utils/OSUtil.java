@@ -17,10 +17,10 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.SystemInfo;
-import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
-import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
-import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
 import jetbrains.buildServer.agent.Constants;
+import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

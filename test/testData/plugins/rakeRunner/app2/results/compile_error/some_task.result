@@ -1,0 +1,4 @@
+RuntimeError: Don't know how to build task 'compile_error:some_task' ERROR
+Stacktrace: ERROR
+rake_ext.rb:318:in `standard_exception_handling' ERROR
+Rake aborted! ERROR

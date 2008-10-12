@@ -17,12 +17,11 @@
 package jetbrains.buildServer.rakerunner;
 
 import org.jetbrains.annotations.NonNls;
-import jetbrains.buildServer.agent.Constants;
 
 /**
  * @author Roman Chernyatchik
  */
-public interface RakeRunnerConstants extends Constants {
+public interface RakeRunnerConstants {
   @NonNls public String RUNNER_TYPE = "rake-runner";
   @NonNls String RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME = "rakeRunnerPluginServer.jar";
   @NonNls String AGENT_BUNDLE_JAR = "RakeRunnerPluginAgent.jar";

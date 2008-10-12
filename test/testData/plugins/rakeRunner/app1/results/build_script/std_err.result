@@ -1,0 +1,2 @@
+$stderr<<msg1 WARNING
+STDERR<<msg2 WARNING
