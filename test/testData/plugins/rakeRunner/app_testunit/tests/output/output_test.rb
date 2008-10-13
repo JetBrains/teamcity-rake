@@ -5,9 +5,9 @@ class OutputTest < Test::Unit::TestCase
 
   def test_pass
     $stdout << "test:$stdout<<msg1"
-    STDOUT << "\ntest:STDOUT<<msg2"
+    STDOUT << "\ntest:STDOUT<<msg2\n"
     $stderr << "test:$stderr<<msg3\n"
-    STDERR << "test:STDERR<<msg4"
+    STDERR << "test:STDERR<<msg4\n"
 
     $stdout.flush
     STDOUT.flush
@@ -20,9 +20,9 @@ class OutputTest < Test::Unit::TestCase
 
   def test_fail
     $stdout << "test:$stdout<<msg5"
-    STDOUT << "\ntest:STDOUT<<msg6"
+    STDOUT << "\ntest:STDOUT<<msg6\n"
     $stderr << "test:$stderr<<msg7\n"
-    STDERR << "test:STDERR<<msg8"
+    STDERR << "test:STDERR<<msg8\n"
 
     $stdout.flush
     STDOUT.flush
@@ -35,9 +35,9 @@ class OutputTest < Test::Unit::TestCase
 
   def test_error
     $stdout << "test:$stdout<<msg9"
-    STDOUT << "\ntest:STDOUT<<msg10"
+    STDOUT << "\ntest:STDOUT<<msg10\n"
     $stderr << "test:$stderr<<msg11\n"
-    STDERR << "test:STDERR<<msg12"
+    STDERR << "test:STDERR<<msg12\n"
 
     $stdout.flush
     STDOUT.flush

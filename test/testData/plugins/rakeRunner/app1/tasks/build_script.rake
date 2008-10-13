@@ -25,7 +25,7 @@ namespace :build_script do
   task :std_out do
     puts "puts.msg1"
     $stdout << "$stdout<<msg2\n"
-    STDOUT << "STDOUT<<msg3"
+    STDOUT << "STDOUT<<msg3\n"
 
     $stdout.flush
     STDOUT.flush
@@ -34,14 +34,14 @@ namespace :build_script do
   task :std_out2 do
     $stdout << "$stdout<<msg1"
 
-    STDOUT << "\nSTDOUT<<msg2"
+    STDOUT << "\nSTDOUT<<msg2\n"
     $stdout.flush
     STDOUT.flush
   end
 
   task :std_out3 do
-    $stdout << "$stdout<<msg1"
-    STDOUT << "STDOUT<<msg2"
+    $stdout << "$stdout<<msg1\n"
+    STDOUT << "STDOUT<<msg2\n"
 
     $stdout.flush
     STDOUT.flush
@@ -49,25 +49,37 @@ namespace :build_script do
 
   task :std_err do
     $stderr << "$stderr<<msg1\n"
-    STDERR << "STDERR<<msg2"
+    STDERR << "STDERR<<msg2\n"
 
     $stderr.flush
     STDERR.flush
   end
 
   task :std_err2 do
-    $stderr << "$stderr<<msg1"
-    STDERR << "STDERR<<msg2"
+    $stderr << "$stderr<<msg1\n"
+    STDERR << "STDERR<<msg2\n"
 
     $stderr.flush
     STDERR.flush
   end
 
   task :std_out_external do
-    ruby "-e", %{$stdout << '$stdout_<<_external'}
+    ruby "-e", %{$stdout << '$stdout_<<_external\n'}
   end
   task :std_err_external do
-    ruby "-e", %{$stderr << '$stderr_<<_external'}
+    ruby "-e", %{$stderr << '$stderr_<<_external\n'}
+  end
+
+  task :std_out_err_wo_newline do
+    $stdout << "$stdout"
+    STDOUT << "STDOUT"
+    $stderr << "$stderr"
+    STDERR << "STDERR"
+
+    $stdout.flush
+    STDOUT.flush
+    $stderr.flush
+    STDERR.flush
   end
 
   task :show_one_task do

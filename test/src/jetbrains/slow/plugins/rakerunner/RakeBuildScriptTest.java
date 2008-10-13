@@ -55,6 +55,12 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
     initAndDoTest("build_script:std_err2", true, "app1");
   }
 
+  public void testBuildScript_std_out_err_wo_newline() throws Throwable {
+    setPartialMessagesChecker();
+
+    initAndDoTest("build_script:std_out_err_wo_newline", true, "app1");
+  }
+
   public void testBuildScript_stderr_external() throws Throwable {
     setPartialMessagesChecker();
 
