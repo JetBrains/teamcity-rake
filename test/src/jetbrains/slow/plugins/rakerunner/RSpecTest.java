@@ -11,6 +11,8 @@ import java.util.Map;
  */
 @Test(groups = {"all","slow"})
 public class RSpecTest extends AbstractRakeRunnerTest {
+  //TODO in test data replace duration and stacktrace params with fake macros
+
   public RSpecTest(String s) {
     super(s);
   }
@@ -19,25 +21,42 @@ public class RSpecTest extends AbstractRakeRunnerTest {
     setWorkingDir(runParameters, "app_rspec");
   }
 
-//  public void testBuildScript_stdout() throws Throwable {
-//    setPartialMessagesChecker();
-//
-//    initAndDoTest("build_script:std_out", true, "app_rspec");
-//  }
+  public void testSpecOutput() throws Throwable {
+    setPartialMessagesChecker();
 
-  //TODO - test std
-  //TODO - test err
-  //TODO - test pass
-  //TODO - test failure
-  //TODO - test error
-  //TODO - test location info
-  //TODO - test duration
-  //TODO - test timestamp
+    initAndDoTest("output:spec_output", false, "app_rspec");
+  }
 
-  //TODO - suite empty
-  //TODO - suite tests
+  public void testSpecGeneral() throws Throwable {
+    setPartialMessagesChecker();
 
-  //TODO - test compilation error
+    initAndDoTest("stat:general", true, "app_rspec");
+  }
+
+  public void testSpecPassed()  throws Throwable {
+    setPartialMessagesChecker();
+    initAndDoTest("stat:passed", true, "app_rspec");
+  }
+
+  public void testSpecFailed()  throws Throwable {
+    setPartialMessagesChecker();
+    initAndDoTest("stat:failed", false, "app_rspec");
+  }
+
+  public void testSpecError()  throws Throwable {
+    setPartialMessagesChecker();
+    initAndDoTest("stat:error", false, "app_rspec");
+  }
+
+  public void testSpecIgnored()  throws Throwable {
+    setPartialMessagesChecker();
+    initAndDoTest("stat:ignored", true, "app_rspec");
+  }
+
+  public void testSpecCompileError()  throws Throwable {
+    setPartialMessagesChecker();
+    initAndDoTest("stat:compile_error", false, "app_rspec");
+  }
 
   //TODO - capturer
 }

@@ -18,10 +18,7 @@
 # @date: 27.12.2007
 
 require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
+require 'spec/rake/spectask'
 
 #############################################
 Dir["tasks/**/*.rake"].sort.each {|ext| load ext}
-
-task :default => :"build_script:my_default_task"

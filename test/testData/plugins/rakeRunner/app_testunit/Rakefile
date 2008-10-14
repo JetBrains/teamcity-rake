@@ -23,5 +23,3 @@ require 'rake/rdoctask'
 
 #############################################
 Dir["tasks/**/*.rake"].sort.each {|ext| load ext}
-
-task :default => :"build_script:my_default_task"
