@@ -114,4 +114,8 @@ namespace :build_script do
 
   task :embedded_tasks => [:some_task0, :some_task1] do
   end
+
+  task :cmd_failed do
+    ruby "-e", "2/0"
+  end
 end

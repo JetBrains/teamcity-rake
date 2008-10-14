@@ -11,6 +11,8 @@ import java.util.Map;
  */
 @Test(groups = {"all","slow"})
 public class TestUnitTest extends AbstractRakeRunnerTest {
+  //TODO in test data replace duration and stacktrace params with fake macros
+
   public TestUnitTest(String s) {
     super(s);
   }
@@ -25,43 +27,31 @@ public class TestUnitTest extends AbstractRakeRunnerTest {
     initAndDoTest("tests:test_output", false, "app_testunit");
   }
 
-  public void testTestSucessful() throws Throwable {
+  public void testTestGeneral() throws Throwable {
     setPartialMessagesChecker();
     
     initAndDoTest("stat:general", true, "app_testunit");
-
-    assertSucessful();
   }
 
   public void testTestPassed()  throws Throwable {
-    setNullMessageChecker();
-    initAndDoTest("stat:general", true, "app_testunit");
-
-    assertFailed();
+    setPartialMessagesChecker();
+    initAndDoTest("stat:passed", true, "app_testunit");
   }
 
-  public void testTestIgnored()  throws Throwable {
-    setNullMessageChecker();
-    initAndDoTest("stat:general", true, "app_testunit");
-
-    // no ignored tests
-    assertIgnored();
+  public void testTestFailed()  throws Throwable {
+    setPartialMessagesChecker();
+    initAndDoTest("stat:failed", false, "app_testunit");
   }
 
-  //TODO - setup/teardown
-  //TODO - test std
-  //TODO - test err
-  //TODO - test pass
-  //TODO - test failure
-  //TODO - test error
-  //TODO - test location info
-  //TODO - test duration
-  //TODO - test timestamp
+  public void testTestError()  throws Throwable {
+    setPartialMessagesChecker();
+    initAndDoTest("stat:error", false, "app_testunit");
+  }
 
-  //TODO - suite empty
-  //TODO - suite tests
-
-  //TODO - test compilation error
+  public void testTestCompileError()  throws Throwable {
+    setPartialMessagesChecker();
+    initAndDoTest("stat:compile_error", false, "app_testunit");
+  }
 
   //TODO - capturer
 }

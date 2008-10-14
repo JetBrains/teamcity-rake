@@ -148,6 +148,13 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
     initAndDoTest("build_script:embedded_tasks", "_trace", true, "app1");
   }
 
+  public void testBuildScript_cmd_failed() throws Throwable {
+    setPartialMessagesChecker();
+    rakeUI_EnableTraceOption();
+
+    initAndDoTest("build_script:cmd_failed", false, "app1");
+  }
+
   //TODO - output capturer
   //TODO - artifacts?
 }
