@@ -583,6 +583,27 @@
             </SvnBranchConfiguration>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/test">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchMap">
+                <map>
+                  <entry key="http://svn.jetbrains.org/teamcity/plugins/rake-runner/branches">
+                    <value>
+                      <list />
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="branchUrls">
+                <list>
+                  <option value="http://svn.jetbrains.org/teamcity/plugins/rake-runner/branches" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="http://svn.jetbrains.org/teamcity/plugins/rake-runner/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
       </map>
     </option>
     <option name="myVersion" value="124" />

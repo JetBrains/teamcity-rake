@@ -2,12 +2,12 @@
 
 --1--##teamcity[testSuiteStarted name='Failed1Test'location='ruby_qn://Failed1Test'] NORMAL
 --1--##teamcity[testStarted name='Failed1Test.test_error11' captureStandartOutput='true' location='ruby_qn://Failed1Test.test_error11'] NORMAL
---1--##teamcity[testFailed name='Failed1Test.test_error11' message='ZeroDivisionError: divided by 0' details='
---1--##teamcity[testFinished name='Failed1Test.test_error11' duration='
+--1--##teamcity[testFailed name='Failed1Test.test_error11' message='ZeroDivisionError: divided by 0' details='##STACKTRACE##' error='true'] NORMAL
+--1--##teamcity[testFinished name='Failed1Test.test_error11' duration='##DURATION##'] NORMAL
 
 --1--##teamcity[testStarted name='Failed1Test.test_error12' captureStandartOutput='true' location='ruby_qn://Failed1Test.test_error12'] NORMAL
---1--##teamcity[testFailed name='Failed1Test.test_error12' message='TypeError: can|'t convert nil into String' details='
---1--##teamcity[testFinished name='Failed1Test.test_error12' duration='
+--1--##teamcity[testFailed name='Failed1Test.test_error12' message='TypeError: can|'t convert nil into String' details='##STACKTRACE##' error='true'] NORMAL
+--1--##teamcity[testFinished name='Failed1Test.test_error12' duration='##DURATION##'] NORMAL
 --1--##teamcity[testSuiteFinished name='Failed1Test'] NORMAL
 
 --1--2 tests, 0 assertions, 0 failures, 2 errors NORMAL

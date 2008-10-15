@@ -11,8 +11,6 @@ import java.util.Map;
  */
 @Test(groups = {"all","slow"})
 public class RSpecTest extends AbstractRakeRunnerTest {
-  //TODO in test data replace duration and stacktrace params with fake macros
-
   public RSpecTest(String s) {
     super(s);
   }
@@ -25,12 +23,6 @@ public class RSpecTest extends AbstractRakeRunnerTest {
     setPartialMessagesChecker();
 
     initAndDoTest("output:spec_output", false, "app_rspec");
-  }
-
-  public void testSpecGeneral() throws Throwable {
-    setPartialMessagesChecker();
-
-    initAndDoTest("stat:general", true, "app_rspec");
   }
 
   public void testSpecPassed()  throws Throwable {
@@ -50,7 +42,7 @@ public class RSpecTest extends AbstractRakeRunnerTest {
 
   public void testSpecIgnored()  throws Throwable {
     setPartialMessagesChecker();
-    initAndDoTest("stat:ignored", true, "app_rspec");
+    initAndDoTest("stat:ignored", false, "app_rspec");
   }
 
   public void testSpecCompileError()  throws Throwable {

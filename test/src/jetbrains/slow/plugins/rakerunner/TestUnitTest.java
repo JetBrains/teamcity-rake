@@ -11,8 +11,6 @@ import java.util.Map;
  */
 @Test(groups = {"all","slow"})
 public class TestUnitTest extends AbstractRakeRunnerTest {
-  //TODO in test data replace duration and stacktrace params with fake macros
-
   public TestUnitTest(String s) {
     super(s);
   }

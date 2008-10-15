@@ -13,4 +13,10 @@ describe "Pending" do
       krevedko.should be("ya!")
     end
   end
+
+  it "should be fixed pending" do
+    pending("some") do
+      true.should == true
+    end
+  end
 end

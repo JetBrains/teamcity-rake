@@ -4,10 +4,12 @@ import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.BuildRunner;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.slow.PartialBuildMessagesChecker;
 import jetbrains.slow.RunnerTestBase;
 
 import java.io.File;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * @author Roman Chernyatchik
@@ -65,9 +67,32 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
                                              "true");
   }
 
+  @Override
+  protected void setPartialMessagesChecker() {
+    myChecker = new PartialBuildMessagesChecker() {
+      private final Pattern DURATION_VALUE_PATTERN = Pattern.compile(" duration='([\\d]+)'");
+      private final Pattern FAILURE_DETAILS_VALUE_PATTERN = Pattern.compile(" details='(([^']||\\|')+)[^|]'");
 
+      @Override
+      public void assertMessagesEquals(final File file,
+                                       final String actual) throws Throwable {
 
-  //////////////////////////////////////////////////
+        final String patchedActual =
+            removeDetails(removeDuration(actual));
+        super.assertMessagesEquals(file, patchedActual);
+      }
+
+      private String removeDetails(String actualWithoutDuration) {
+        return FAILURE_DETAILS_VALUE_PATTERN.matcher(actualWithoutDuration).replaceAll(" details='##STACKTRACE##'");
+      }
+
+      private String removeDuration(String actual) {
+        return DURATION_VALUE_PATTERN.matcher(actual).replaceAll(" duration='##DURATION##'");
+      }
+    };
+  }
+
+//////////////////////////////////////////////////
   // NUnitRunnerTestCase
   //TODO - refactor
   ////////////////////////////////////////////////////

@@ -24,7 +24,7 @@
 --3--spec:after STDERR WARNING
 
 
---1--##teamcity[testStarted name='Output should pass' captureStandartOutput='true' location='file://./spec/output/output_spec.rb:29'] NORMAL
---1--##teamcity[testStarted name='Output should fail' captureStandartOutput='true' location='file://./spec/output/output_spec.rb:44'] NORMAL
---1--##teamcity[testStarted name='Output should error' captureStandartOutput='true' location='file://./spec/output/output_spec.rb:59'] NORMAL
+--1--##teamcity[testStarted name='Output should pass' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb:29'] NORMAL
+--1--##teamcity[testStarted name='Output should fail' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb:44'] NORMAL
+--1--##teamcity[testStarted name='Output should error' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb:59'] NORMAL
 
