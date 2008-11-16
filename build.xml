@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="rakerunner-teamcity" default="dist">
     <!-- External directories -->
-    <property name="rakerunner.bin.dir" value="dist/RakeRunner/bin"/>
     <property name="plugin.revision" value="${build.vcs.number.1}"/>
     <property name="plugin.version" value="${rake.runner.plugin.version}.${plugin.revision}"/>
     <!-- For devel-deploy -->
@@ -15,6 +14,8 @@
     <property name="tc.agentlib.dir" value="${tc.root.dir}/buildAgent/lib"/>
     <property name="tc.classes.dir" value="${tc.lib.dir}/../classes"/>
     <property name="tc.extras.dir" value="${tc.root.dir}/side"/>
+
+    <property name="rakerunner.ruby.src" value="dist/rakeRunnerRuby"/>
 
     <property name="artifacts.dir" location="build/artifacts"/>
     <property name="artifacts.components.dir" location="${artifacts.dir}/components"/>
@@ -81,7 +82,7 @@
             <zipfileset dir="build/jar" includes="RakeRunnerPluginAgent.jar, RakeRunnerCommon.jar"
                         prefix="rakeRunnerPluginAgent/lib"/>
             <!-- Ruby sources -->
-            <zipfileset dir="agent/src/rb" prefix="rakeRunnerPluginAgent/lib/rb"/>
+            <zipfileset dir="${rakerunner.ruby.src}" prefix="rakeRunnerPluginAgent/lib/rb"/>
         </zip>
     </target>
 
@@ -180,7 +181,7 @@
         <!-- Bundle -->
         <zip destfile="dist/rakeRunnerRuby-src.zip">
             <!-- Ruby sources -->
-            <zipfileset dir="rakerunner/src"/>
+            <zipfileset dir="${rakerunner.ruby.src}"/>
         </zip>
     </target>
 
