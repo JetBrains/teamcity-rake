@@ -150,7 +150,7 @@
         <delete dir="${agentdir}/plugins/rakeRunnerPluginAgent"/>
     </target>
 
-    <target name="build.artifacts" depends="dist">
+    <target name="build.artifacts" depends="dist_full">
         <mkdir dir="${artifacts.dir}"/>
 
         <copy file ="README.txt" tofile="${artifacts.plugin.readme.file}"/>
