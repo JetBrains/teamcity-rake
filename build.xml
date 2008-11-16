@@ -121,6 +121,7 @@
 
     <!-- Dist -->
     <target name="dist" depends="clean,Unpack rakeRunnerRuby-src.zip,make"/>
+    <target name="dist_full" depends="clean,Unpack TeamCity-*.tar.gz,Unpack rakeRunnerRuby-src.zip,make"/>
     <target name="dist2" depends="clean,dist-rakeRunnerRuby-src.zip,Unpack rakeRunnerRuby-src.zip,make"/>
 
     <!-- Deploy -->
@@ -190,7 +191,7 @@
         <delete dir="${tc.root.dir}"/>
         <untar compression="gzip" dest="dist">
             <fileset dir=".">
-                <include name="dist/TeamCity-*.tar.gz"/>
+                <include name="dist/tc/TeamCity-*.tar.gz"/>
             </fileset>
         </untar>
 
