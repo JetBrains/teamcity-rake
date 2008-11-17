@@ -40,27 +40,15 @@
   <component name="ChangeListManager">
     <list name="imls" comment="imls" />
     <list default="true" readonly="true" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/output/spec_output.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/output/spec_output.result" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java" afterPath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java" afterPath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/general.result" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/compile_error.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/compile_error.result" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent/src/rb/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/agent/agent.iml" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/common/rake-runner-common.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/agent/rake-runner-agent.iml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/common/common.iml" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/server.iml" afterPath="$PROJECT_DIR$/server/rake-runner-server.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner.ipr" afterPath="$PROJECT_DIR$/rake-runner.ipr" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/passed.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/passed.result" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner_events.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner_events.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/error.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/error.result" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/testrunnermediator.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/testrunnermediator.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/runner_utils.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/runner_utils.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner.iws" afterPath="$PROJECT_DIR$/rake-runner.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/test.iml" afterPath="$PROJECT_DIR$/test/rake-runner-test.iml" />
     </list>
     <ignored path="rake-runner.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -125,10 +113,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="error.result" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result">
+      <file leaf-file-name="build.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="83" selection-start="898" selection-end="898" vertical-scroll-proportion="0.49484536">
+            <state line="31" column="21" selection-start="1876" selection-end="1876" vertical-scroll-proportion="0.04481793">
               <folding />
             </state>
           </provider>
@@ -144,6 +132,14 @@
   <component name="InspectionPassRegistrar">
     <option name="LOAD_NEW_PROBLEMS" value="true" />
   </component>
+  <component name="JspContextManager">
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/myChangesList.jsp" context-file="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/myChanges.jsp" />
+    <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/changePopupRow.jspf" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/buildChanges.jsp" />
+    <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/userChangeInfo.jsp" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/myChangesList.jsp" />
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/userChangeInfo.jsp" context-file="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/myChangesList.jsp" />
+    <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/myChangesBuild.jsp" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/userChangeInfo.jsp" />
+    <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/buildLog/testInfoRefreshableInner.jsp" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/buildLog/testsInfo.jsp" />
+  </component>
   <component name="LastSuccessfulUpdateTracker">
     <option name="changeLists">
       <list>
@@ -154,27 +150,15 @@
           <option name="name" value="Default" />
           <option name="files">
             <list>
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/output/spec_output.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/output/spec_output.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java" afterPath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java" afterPath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/general.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/compile_error.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/compile_error.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/rb/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" beforeRevision="6" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/agent.iml" />
+              <ChangedFile afterPath="$PROJECT_DIR$/common/rake-runner-common.iml" />
+              <ChangedFile afterPath="$PROJECT_DIR$/agent/rake-runner-agent.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/common/common.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/server.iml" afterPath="$PROJECT_DIR$/server/rake-runner-server.iml" />
               <ChangedFile beforePath="$PROJECT_DIR$/rake-runner.ipr" afterPath="$PROJECT_DIR$/rake-runner.ipr" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/passed.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/passed.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner.rb" beforeRevision="5" />
-              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner_events.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner_events.rb" beforeRevision="16" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/error.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/error.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/testrunnermediator.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/testrunnermediator.rb" beforeRevision="3" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result" />
-              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/runner_utils.rb" afterPath="$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/runner_utils.rb" beforeRevision="2" />
+              <ChangedFile beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
               <ChangedFile beforePath="$PROJECT_DIR$/rake-runner.iws" afterPath="$PROJECT_DIR$/rake-runner.iws" />
-              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result" afterPath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/test.iml" afterPath="$PROJECT_DIR$/test/rake-runner-test.iml" />
             </list>
           </option>
         </PersistentChangeList>
@@ -218,7 +202,7 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
+          <option name="myItemId" value="rake-runner-root" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -228,631 +212,11 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
+          <option name="myItemId" value="rake-runner-root" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="testData" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugins" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rakeRunner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="app_testunit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="testData" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugins" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rakeRunner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="app_testunit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="tests" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="statistics" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="testData" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugins" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rakeRunner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="app_testunit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="tests" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="statistics" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="failed" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="testData" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugins" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rakeRunner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="app_testunit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="tests" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="statistics" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="compile_error" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="testData" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugins" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rakeRunner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="app_testunit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="tests" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="testData" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugins" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rakeRunner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="app_testunit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="results" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="tests" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="testData" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugins" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rakeRunner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="app_testunit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="results" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="stat" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="testData" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="plugins" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rakeRunner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="test" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rakerunner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="server" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="common" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rb" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rb" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rb" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="patch" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="unit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rb" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="patch" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="unit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="ui" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rb" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="patch" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="unit" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="ui" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="teamcity" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rb" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="patch" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="teamcity" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rb" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="patch" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="teamcity" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="utils" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rb" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="patch" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="teamcity" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="teamcity" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-      </PATH>
-      <PATH>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="agent" />
-          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-        </PATH_ELEMENT>
-        <PATH_ELEMENT>
-          <option name="myItemId" value="src" />
+          <option name="myItemId" value="rakerunner3" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -876,83 +240,25 @@
     </navigator>
   </component>
   <component name="PropertiesComponent">
-    <property name="GoToClass.includeJavaFiles" value="false" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatWidth6" value="758" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeOrder5" value="5" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeWidth2" value="71" />
-    <property name="TEMP_MODULE_EXPLODED_DIR_FOR_server/web/Web" value="C:\Documents and Settings\Roman.Chernyatchik\Local Settings\Temp\webExplodedDir62302tmp" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatOrder5" value="5" />
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeWidth4" value="66" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeWidth3" value="66" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatWidth3" value="67" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatWidth1" value="93" />
-    <property name="GoToClass.includeLibraries" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="project.structure.side.proportion" value="0.2054002" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeOrder0" value="0" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeOrder3" value="3" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatWidth0" value="54" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeWidth1" value="92" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="RunManagerConfig.showSettingsBeforeRunnig" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeOrder2" value="2" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeWidth6" value="750" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatOrder0" value="0" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="options.splitter.main.proportions" value="0.3" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatWidth2" value="71" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeOrder4" value="4" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeOrder1" value="1" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatOrder6" value="6" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeOrder6" value="6" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatOrder2" value="2" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeWidth5" value="66" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatOrder3" value="3" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatWidth4" value="67" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatOrder1" value="1" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatWidth5" value="67" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_flatOrder4" value="4" />
-    <property name="FileHistory.org.jetbrains.idea.perforce.application.PerforceVcsHistoryProvider_treeWidth0" value="66" />
+    <property name="options.searchVisible" value="true" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="project.structure.side.proportion" value="0.28532854" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
   </component>
   <component name="RubyDocSettings">
     <RUBY_DOC NAME="DEFAULTS" VALUE="TRUE" />
     <RUBY_DOC NAME="NUMBER" VALUE="0" />
   </component>
-  <component name="RunManager" selected="TestNG.RakeBuildScriptTest">
-    <tempConfiguration default="false" name="RakeBuildScriptTest.testBuildScript_stderr_external" type="TestNG" factoryName="TestNG" enabled="false" merge="false" sample_coverage="true" runner="emma">
-      <module name="test" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="SUITE_NAME" value="" />
-      <option name="PACKAGE_NAME" value="jetbrains.slow.plugins.rakerunner" />
-      <option name="MAIN_CLASS_NAME" value="jetbrains.slow.plugins.rakerunner.RakeBuildScriptTest" />
-      <option name="METHOD_NAME" value="testBuildScript_stderr_external" />
-      <option name="GROUP_NAME" value="" />
-      <option name="TEST_OBJECT" value="METHOD" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="OUTPUT_DIRECTORY" value="" />
-      <option name="ANNOTATION_TYPE" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="ADDITIONAL_CLASS_PATH" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <option name="PROPERTIES_FILE" value="" />
-      <envs />
-      <properties />
-      <listeners />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="Make" value="true" />
-      </method>
-    </tempConfiguration>
+  <component name="RunManager" selected="TestNG.jetbrains.slow.plugins.rakerunner">
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1081,7 +387,7 @@
       <RTEST_RUN_CONFIG_SETTINGS_ID NAME="INHERITANCE_CHECK_DISABLED" VALUE="false" />
     </configuration>
     <configuration default="false" name="RakeBuildScriptTest" type="TestNG" factoryName="TestNG" enabled="false" merge="false" sample_coverage="true" runner="emma">
-      <module name="test" />
+      <module name="rake-runner-test" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
       <option name="SUITE_NAME" value="" />
@@ -1112,7 +418,7 @@
       </method>
     </configuration>
     <configuration default="false" name="TestUnitTest" type="TestNG" factoryName="TestNG" enabled="false" merge="false" runner="emma">
-      <module name="test" />
+      <module name="rake-runner-test" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="SUITE_NAME" />
@@ -1143,7 +449,7 @@
       </method>
     </configuration>
     <configuration default="false" name="RSpecTest" type="TestNG" factoryName="TestNG" enabled="false" merge="false" runner="emma">
-      <module name="test" />
+      <module name="rake-runner-test" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="SUITE_NAME" />
@@ -1173,11 +479,42 @@
         <option name="Make" value="true" />
       </method>
     </configuration>
+    <configuration default="false" name="jetbrains.slow.plugins.rakerunner" type="TestNG" factoryName="TestNG" enabled="false" merge="false" runner="emma">
+      <module name="rake-runner-test" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" value="jetbrains.slow.plugins.rakerunner" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="PACKAGE" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="ADDITIONAL_CLASS_PATH" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
     <list size="4">
       <item index="0" class="java.lang.String" itemvalue="TestNG.RakeBuildScriptTest" />
       <item index="1" class="java.lang.String" itemvalue="TestNG.TestUnitTest" />
       <item index="2" class="java.lang.String" itemvalue="TestNG.RSpecTest" />
-      <item index="3" class="java.lang.String" itemvalue="TestNG.RakeBuildScriptTest.testBuildScript_stderr_external" />
+      <item index="3" class="java.lang.String" itemvalue="TestNG.jetbrains.slow.plugins.rakerunner" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1233,26 +570,27 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="9" y="26" width="1272" height="953" extended-state="0" />
+    <frame x="43" y="24" width="1216" height="974" extended-state="0" />
     <editor active="false" />
     <layout>
+      <window_info id="Web Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
+      <window_info id="Dataflow to this" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" />
       <window_info id="Exception Analyzer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" />
-      <window_info id="Slice" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25980392" sideWeight="0.41234568" order="0" side_tool="false" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24400684" sideWeight="0.5078219" order="0" side_tool="false" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962963" sideWeight="0.5" order="3" side_tool="false" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="8" side_tool="false" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2777778" sideWeight="0.5" order="14" side_tool="false" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47412756" sideWeight="0.5" order="14" side_tool="false" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" />
-      <window_info id="TeamCity" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962963" sideWeight="0.5" order="11" side_tool="false" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14705883" sideWeight="0.41234568" order="8" side_tool="false" />
+      <window_info id="TeamCity" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851985" sideWeight="0.5" order="11" side_tool="false" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16523972" sideWeight="0.5078219" order="8" side_tool="false" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2691358" sideWeight="0.5" order="10" side_tool="false" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.57901233" sideWeight="0.5" order="4" side_tool="false" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.48375452" sideWeight="0.5" order="10" side_tool="false" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.57901233" sideWeight="0.5" order="4" side_tool="false" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39950982" sideWeight="0.5740741" order="2" side_tool="false" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" />
@@ -1262,6 +600,7 @@
       <window_info id="RDoc" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="17" side_tool="false" />
       <window_info id="Maven projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" />
       <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" />
+      <window_info id="Slice" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" />
       <window_info id="EJB" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="6" side_tool="false" />
       <window_info id="Module Dependencies" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
@@ -1278,7 +617,7 @@
     <option name="PERFORM_CHECKOUT_IN_BACKGROUND" value="true" />
     <option name="PERFORM_ADD_REMOVE_IN_BACKGROUND" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="RSpec tests added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Libs were reorganized, modules were renamed for TC naming codestyle" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="REFORMAT_BEFORE_FILE_COMMIT" value="false" />
@@ -1303,6 +642,12 @@
     <MESSAGE value="Progress message with tests count before running tests" />
     <MESSAGE value="RSpec 1.0.1 - 1.1.8 support" />
     <MESSAGE value="RSpec tests added" />
+    <MESSAGE value="RSpec tests updated" />
+    <MESSAGE value="build.xml fixed" />
+    <MESSAGE value="build.artifacts tasks was corrected" />
+    <MESSAGE value="ruby sources path corrected in build.xml" />
+    <MESSAGE value="RakeRunner: Support of message &quot;priority&quot;" />
+    <MESSAGE value="Libs were reorganized, modules were renamed for TC naming codestyle" />
   </component>
   <component name="VssConfiguration">
     <option name="CLIENT_PATH" value="" />
@@ -1357,16 +702,16 @@
         <filter targetName="devel-deploy" isVisible="false" />
         <filter targetName="devel-reload_on_agent-deploy" isVisible="false" />
         <filter targetName="devel-undeploy" isVisible="false" />
-        <filter targetName="dist" isVisible="false" />
-        <filter targetName="dist-rakeRunnerRuby-src.zip" isVisible="false" />
-        <filter targetName="dist2" isVisible="false" />
+        <filter targetName="dist_full" isVisible="false" />
+        <filter targetName="dist_local" isVisible="false" />
         <filter targetName="make" isVisible="false" />
         <filter targetName="make-agent" isVisible="false" />
         <filter targetName="make-bundle" isVisible="false" />
         <filter targetName="make-common" isVisible="false" />
         <filter targetName="make-server" isVisible="false" />
-        <filter targetName="Unpack rakeRunnerRuby-src.zip" isVisible="false" />
-        <filter targetName="Unpack TeamCity-*.tar.gz" isVisible="false" />
+        <filter targetName="pack-rakeRunnerRuby-src.zip" isVisible="false" />
+        <filter targetName="unpack rakeRunnerRuby-src.zip" isVisible="false" />
+        <filter targetName="unpack TeamCity-*.tar.gz" isVisible="false" />
       </targetFilters>
       <treeView value="true" />
       <verbose value="true" />
@@ -1374,71 +719,6 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="36" selection-start="948" selection-end="948" vertical-scroll-proportion="-14.315789">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/testrunnermediator.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="21" selection-start="1260" selection-end="1260" vertical-scroll-proportion="0.58575195">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed1_test.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="44" selection-start="190" selection-end="190" vertical-scroll-proportion="-7.5789475">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/output/spec_output.result">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.97709924">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="112" selection-start="3271" selection-end="3271" vertical-scroll-proportion="0.33206108">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="42" selection-start="291" selection-end="291" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="method#testSpecOutput#0;class#RSpecTest#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/passed.result">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="0" selection-start="1206" selection-end="1206" vertical-scroll-proportion="0.5496183">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/compile_error.result">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/error.result">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="124" selection-start="1342" selection-end="1342" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="138" selection-start="1362" selection-end="1362" vertical-scroll-proportion="0.73282444">
@@ -1481,9 +761,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/TestUnitTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="305" selection-end="305" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="83" selection-start="898" selection-end="898" vertical-scroll-proportion="0.49484536">
+        <state line="9" column="83" selection-start="898" selection-end="898" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent/rake-runner-agent.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="114" column="31" selection-start="3838" selection-end="3844" vertical-scroll-proportion="-4.592233">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="21" selection-start="1876" selection-end="1876" vertical-scroll-proportion="0.04481793">
           <folding />
         </state>
       </provider>
@@ -1513,7 +828,13 @@
           <value>
             <UIState>
               <option name="proportions">
-                <SplitterProportionsDataImpl />
+                <SplitterProportionsDataImpl>
+                  <option name="proportions">
+                    <list>
+                      <option value="0.2" />
+                    </list>
+                  </option>
+                </SplitterProportionsDataImpl>
               </option>
             </UIState>
           </value>
@@ -1543,7 +864,13 @@
           <value>
             <UIState>
               <option name="proportions">
-                <SplitterProportionsDataImpl />
+                <SplitterProportionsDataImpl>
+                  <option name="proportions">
+                    <list>
+                      <option value="0.2" />
+                    </list>
+                  </option>
+                </SplitterProportionsDataImpl>
               </option>
             </UIState>
           </value>

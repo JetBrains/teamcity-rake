@@ -9,7 +9,6 @@
       <maximumHeapSize value="128" />
       <maximumStackSize value="32" />
       <properties>
-        <property name="tc.root.dir" value="dist\TeamCity" />
         <property name="agentdir" value="/Users/romeo/app/TeamCity-7724/buildAgent" />
         <property name="webrootdir" value="/Users/romeo/app/TeamCity-7724/webapps/ROOT" />
         <property name="build.vcs.number.1" value="none" />
@@ -238,13 +237,6 @@
       <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
         <option name="myLocal" value="false" />
-        <inspection_tool class="RubyDuckType" level="WARNING" enabled="true" />
-        <inspection_tool class="RubyArgCount" level="ERROR" enabled="true" />
-        <inspection_tool class="JRubyImplement" level="ERROR" enabled="true" />
-        <inspection_tool class="RubyLocalVar" level="WARNING" enabled="true" />
-        <inspection_tool class="RubyResolve" level="WARNING" enabled="true" />
-        <inspection_tool class="RubyWrongHash" level="ERROR" enabled="true" />
-        <inspection_tool class="WrongTopLevelPackage" level="ERROR" enabled="true" />
       </profile>
     </profiles>
     <list size="0" />
@@ -426,10 +418,11 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/agent/agent.iml" filepath="$PROJECT_DIR$/agent/agent.iml" />
-      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/server/server.iml" filepath="$PROJECT_DIR$/server/server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/test/test.iml" filepath="$PROJECT_DIR$/test/test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/agent/rake-runner-agent.iml" filepath="$PROJECT_DIR$/agent/rake-runner-agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/rake-runner-common.iml" filepath="$PROJECT_DIR$/common/rake-runner-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-root.iml" filepath="$PROJECT_DIR$/rake-runner-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/server/rake-runner-server.iml" filepath="$PROJECT_DIR$/server/rake-runner-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test/rake-runner-test.iml" filepath="$PROJECT_DIR$/test/rake-runner-test.iml" />
     </modules>
   </component>
   <component name="ProjectReloadState">
@@ -451,14 +444,6 @@
       <autoscrollFromSource />
       <sortByType />
     </navigator>
-  </component>
-  <component name="PropertiesComponent">
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
-    <property name="GoToClass.includeLibraries" value="false" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
   </component>
   <component name="RUBY_DOC_SETTINGS">
     <RUBY_DOC NAME="DEFAULTS" VALUE="TRUE" />
@@ -586,15 +571,6 @@
         <entry key="$PROJECT_DIR$/test">
           <value>
             <SvnBranchConfiguration>
-              <option name="branchMap">
-                <map>
-                  <entry key="http://svn.jetbrains.org/teamcity/plugins/rake-runner/branches">
-                    <value>
-                      <list />
-                    </value>
-                  </entry>
-                </map>
-              </option>
               <option name="branchUrls">
                 <list>
                   <option value="http://svn.jetbrains.org/teamcity/plugins/rake-runner/branches" />
@@ -834,71 +810,71 @@
   <component name="libraryTable">
     <library name="spring-2.0.7">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/spring.jar!/" />
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/commons-logging.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/commons-logging.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/spring.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="annotations.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/annotations.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/annotations.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="common-api.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/common-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/common-api.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="xmlrpc-2.0.1.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/xmlrpc-2.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/xmlrpc-2.0.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="openapi.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/openapi.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/openapi.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="log4j-1.2.12.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/log4j-1.2.12.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/log4j-1.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="agent-api.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/buildAgent/lib/agent-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib/agent-api.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="util.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/util.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/util.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="server-api.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/server-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/server-api.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="xstream-1.2.1.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib/xstream-1.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/xstream-1.2.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
@@ -924,33 +900,32 @@
     </library>
     <library name="t_All_jars">
       <CLASSES>
-        <root url="file://$PROJECT_DIR$/dist/TeamCity/buildAgent/lib" />
-        <root url="file://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib" />
-        <root url="file://$PROJECT_DIR$/dist/TeamCity/lib" />
+        <root url="file://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib" />
+        <root url="file://$PROJECT_DIR$/lib/TeamCity/lib" />
+        <root url="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
-      <jarDirectory url="file://$PROJECT_DIR$/dist/TeamCity/buildAgent/lib" recursive="false" />
-      <jarDirectory url="file://$PROJECT_DIR$/dist/TeamCity/lib" recursive="false" />
-      <jarDirectory url="file://$PROJECT_DIR$/dist/TeamCity/webapps/ROOT/WEB-INF/lib" recursive="false" />
+      <jarDirectory url="file://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib" recursive="false" />
+      <jarDirectory url="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib" recursive="false" />
     </library>
     <library name="agent.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/buildAgent/lib/agent.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib/agent.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="server-logging.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/buildAgent/lib/server-logging.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib/server-logging.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="runtime-util.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist/TeamCity/buildAgent/lib/runtime-util.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib/runtime-util.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

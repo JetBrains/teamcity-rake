@@ -15,9 +15,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="agent" />
-    <orderEntry type="module" module-name="common" />
-    <orderEntry type="module" module-name="server" />
+    <orderEntry type="module" module-name="rake-runner-agent" />
+    <orderEntry type="module" module-name="rake-runner-common" />
+    <orderEntry type="module" module-name="rake-runner-server" />
     <orderEntry type="library" name="t_test-framework" level="project" />
     <orderEntry type="library" name="t_All_jars" level="project" />
     <orderEntry type="library" name="testng.jar" level="project" />

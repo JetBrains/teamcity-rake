@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="rakerunner-teamcity" default="dist">
+<project name="rakerunner-teamcity" default="dist_full">
     <!-- External directories -->
     <property name="plugin.revision" value="${build.vcs.number.1}"/>
     <property name="plugin.version" value="${rake.runner.plugin.version}.${plugin.revision}"/>
@@ -7,15 +7,18 @@
     <!--<property name="webrootdir" value="c:/soft/Teamcity_6527/webapps/ROOT"/>-->
     <!--<property name="agentdir" value="c:/soft/Teamcity_6527/buildAgent"/>-->
 
+    <!-- Dist libraries -->
+    <property name="rakerunner.libs" value="lib"/>
+    <property name="rakerunner.libs.dist" value="${rakerunner.libs}/dist"/>
+    <property name="rakerunner.ruby.src" value="${rakerunner.libs}/rakeRunnerRuby"/>
+
     <!-- TeamCity libraries -->
-    <!--<property name="tc.root.dir" value="dist/TeamCity"/>-->
+    <property name="teamcity.dist" value="${rakerunner.libs}/TeamCity"/>
 
-    <property name="tc.lib.dir" value="${tc.root.dir}/webapps/ROOT/WEB-INF/lib"/>
-    <property name="tc.agentlib.dir" value="${tc.root.dir}/buildAgent/lib"/>
+    <property name="tc.lib.dir" value="${teamcity.dist}/webapps/ROOT/WEB-INF/lib"/>
+    <property name="tc.agentlib.dir" value="${teamcity.dist}/buildAgent/lib"/>
     <property name="tc.classes.dir" value="${tc.lib.dir}/../classes"/>
-    <property name="tc.extras.dir" value="${tc.root.dir}/side"/>
-
-    <property name="rakerunner.ruby.src" value="dist/rakeRunnerRuby"/>
+    <property name="tc.extras.dir" value="${teamcity.dist}/side"/>
 
     <property name="artifacts.dir" location="build/artifacts"/>
     <property name="artifacts.components.dir" location="${artifacts.dir}/components"/>
@@ -121,9 +124,8 @@
     </target>
 
     <!-- Dist -->
-    <target name="dist" depends="clean,Unpack rakeRunnerRuby-src.zip,make"/>
-    <target name="dist_full" depends="clean,Unpack TeamCity-*.tar.gz,Unpack rakeRunnerRuby-src.zip,make"/>
-    <target name="dist2" depends="clean,dist-rakeRunnerRuby-src.zip,Unpack rakeRunnerRuby-src.zip,make"/>
+    <target name="dist_full" depends="clean,unpack TeamCity-*.tar.gz,unpack rakeRunnerRuby-src.zip,make"/>
+    <target name="dist_from_src" depends="clean,pack-rakeRunnerRuby-src.zip,unpack rakeRunnerRuby-src.zip,make"/>
 
     <!-- Deploy -->
     <target name="devel-deploy" depends="build.artifacts">
@@ -168,18 +170,18 @@
     </target>
 
     <!-- Rake runner ruby part -->
-    <target name="Unpack rakeRunnerRuby-src.zip">
-        <delete dir="dist/rakeRunnerRuby"/>
-        <unzip dest="dist/rakeRunnerRuby">
+    <target name="unpack rakeRunnerRuby-src.zip">
+        <delete dir="${rakerunner.ruby.src}"/>
+        <unzip dest="${rakerunner.ruby.src}">
             <fileset dir=".">
-                <include name="dist/rakeRunnerRuby-src.zip"/>
+                <include name="${rakerunner.libs.dist}/rakeRunnerRuby-src.zip"/>
             </fileset>
         </unzip>
     </target>
 
-    <target name="dist-rakeRunnerRuby-src.zip">
+    <target name="pack-rakeRunnerRuby-src.zip">
         <!-- Bundle -->
-        <zip destfile="dist/rakeRunnerRuby-src.zip">
+        <zip destfile="${rakerunner.libs.dist}/rakeRunnerRuby-src.zip">
             <!-- Ruby sources -->
             <zipfileset dir="${rakerunner.ruby.src}"/>
         </zip>
@@ -187,22 +189,13 @@
 
 
     <!-- TeamCity builds -->
-    <target name="Unpack TeamCity-*.tar.gz">
+    <target name="unpack TeamCity-*.tar.gz">
         <!-- Extract TeamCity -->
-        <delete dir="${tc.root.dir}"/>
-        <untar compression="gzip" dest="dist">
+        <delete dir="${teamcity.dist}"/>
+        <untar compression="gzip" dest="${rakerunner.libs}">
             <fileset dir=".">
-                <include name="dist/tc/TeamCity-*.tar.gz"/>
+                <include name="${rakerunner.libs.dist}/TeamCity-*.tar.gz"/>
             </fileset>
         </untar>
-
-        <!-- Extract RakeRunner -->
-        <delete dir="dist/RakeRunner"/>
-        <mkdir dir="dist/RakeRunner"/>
-        <unzip dest="dist/RakeRunner">
-            <fileset dir=".">
-                <include name="dist/RakeRunner-*.zip"/>
-            </fileset>
-        </unzip>
     </target>
 </project>
