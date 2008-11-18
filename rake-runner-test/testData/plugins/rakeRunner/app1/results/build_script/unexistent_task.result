@@ -1,0 +1,4 @@
+--1--##teamcity[message='RuntimeError: Don|'t know how to build task |'build_script:unexistent_task|'|n|nStacktrace:|n
+--1--##teamcity[message='Rake aborted!', type='error'] NORMAL
+--2--type='error'] NORMAL
+

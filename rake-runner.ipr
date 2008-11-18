@@ -8,12 +8,15 @@
       <customJdkName value="" />
       <maximumHeapSize value="128" />
       <maximumStackSize value="32" />
-      <properties>
-        <property name="agentdir" value="/Users/romeo/app/TeamCity-7724/buildAgent" />
-        <property name="webrootdir" value="/Users/romeo/app/TeamCity-7724/webapps/ROOT" />
-        <property name="build.vcs.number.1" value="none" />
-        <property name="rake.runner.plugin.version" value="2.0" />
-      </properties>
+      <properties />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/rake-runner.xml">
+      <additionalClassPath />
+      <antReference projectDefault="true" />
+      <customJdkName value="" />
+      <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
+      <properties />
     </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
@@ -219,6 +222,89 @@
               <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/t2_test.rb" />
               <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/t3_test.rb" />
               <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/compilation_errors/compilation_error_test.rb" />
+            </files>
+          </module>
+          <module name="rake-runner-agent">
+            <files>
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/rake_exceptions.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/rakerunner_consts.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/runner_common.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/utils/logger_util.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/utils/runner_utils.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/utils/service_message_factory.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/utils/std_capture_helper.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/utils/string_ext.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/utils/url_formatter.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/test/unit/autorunner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/test/unit/ui/teamcity/testrunner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/test/unit/ui/teamcity/testrunner_events.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/test/unit/ui/testrunnermediator.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/runner/ext/output_ext.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/runner/rake_ext.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/runner/rakerunner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/runner/runner_settings.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/runner/specs_in_folder_runner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/runner/tunit_class_runner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/runner/tunit_in_folder_runner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/classes/rb/sm_factory_provider_loader.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/rake_exceptions.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/rakerunner_consts.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/runner_common.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/logger_util.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/runner_utils.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/service_message_factory.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/std_capture_helper.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/string_ext.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/utils/url_formatter.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/test/unit/autorunner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/teamcity/testrunner_events.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/patch/test/unit/ui/testrunnermediator.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/runner/ext/output_ext.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/runner/rake_ext.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/runner/rakerunner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/runner/runner_settings.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/runner/specs_in_folder_runner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/runner/tunit_class_runner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/runner/tunit_in_folder_runner.rb" />
+              <file url="file://$PROJECT_DIR$/agent/src/rb/sm_factory_provider_loader.rb" />
+            </files>
+          </module>
+          <module name="rake-runner-test">
+            <files>
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/Rakefile" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/tasks/build_script.rake" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/Rakefile" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/tasks/compile_error.rake" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/Rakefile" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error1_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error2_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error3_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error1_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error2_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed1_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed2_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed1_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed2_spec.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/tasks/output.rake" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/tasks/stat.rake" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/Rakefile" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tasks/output.rake" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tasks/stat.rake" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output/output_test.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output/setup_output_test.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output/teardown_output_test.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/compile_error/error1_test.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/error/error1_test.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed1_test.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed2_test.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/general/pass_test.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed1_test.rb" />
+              <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed2_test.rb" />
             </files>
           </module>
         </modules>
@@ -808,124 +894,86 @@
     </LanguageOptions>
   </component>
   <component name="libraryTable">
-    <library name="spring-2.0.7">
-      <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/commons-logging.jar!/" />
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/spring.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
     <library name="annotations.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/annotations.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/annotations.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="common-api.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/common-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/openapi/common-api.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="xmlrpc-2.0.1.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/xmlrpc-2.0.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/xmlrpc-2.0.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="openapi.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/openapi.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/openapi.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="log4j-1.2.12.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/log4j-1.2.12.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/log4j-1.2.12.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="agent-api.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib/agent-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/openapi/agent-api.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="util.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/util.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/util.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="server-api.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/server-api.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/openapi/server-api.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="xstream-1.2.1.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib/xstream-1.2.1.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/server/xstream-1.2.1.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
-    </library>
-    <library name="testng.jar">
-      <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/testng-5.7-jdk15.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES>
-        <root url="jar://$PROJECT_DIR$/lib/testng-src.jar!/" />
-      </SOURCES>
-    </library>
-    <library name="t_test-framework">
-      <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/test.jar!/" />
-        <root url="jar://$PROJECT_DIR$/lib/server.jar!/" />
-        <root url="jar://$PROJECT_DIR$/lib/license-keygen.jar!/" />
-        <root url="jar://$PROJECT_DIR$/lib/license-common.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="t_All_jars">
-      <CLASSES>
-        <root url="file://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib" />
-        <root url="file://$PROJECT_DIR$/lib/TeamCity/lib" />
-        <root url="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-      <jarDirectory url="file://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib" recursive="false" />
-      <jarDirectory url="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/WEB-INF/lib" recursive="false" />
     </library>
     <library name="agent.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib/agent.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/agent/agent.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="server-logging.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib/server-logging.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/agent/server-logging.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
     </library>
     <library name="runtime-util.jar">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/TeamCity/buildAgent/lib/runtime-util.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/teamcity/openapi/runtime-util.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

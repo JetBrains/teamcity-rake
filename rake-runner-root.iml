@@ -3,14 +3,13 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/agent" />
-      <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/common" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/lib" />
-      <excludeFolder url="file://$MODULE_DIR$/projectFilesBackup" />
-      <excludeFolder url="file://$MODULE_DIR$/server" />
-      <excludeFolder url="file://$MODULE_DIR$/test" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/lib/rakeRunnerRuby" />
+      <excludeFolder url="file://$MODULE_DIR$/rake-runner-agent" />
+      <excludeFolder url="file://$MODULE_DIR$/rake-runner-common" />
+      <excludeFolder url="file://$MODULE_DIR$/rake-runner-server" />
+      <excludeFolder url="file://$MODULE_DIR$/rake-runner-test" />
       <excludeFolder url="file://$MODULE_DIR$/test-output" />
     </content>
     <orderEntry type="inheritedJdk" />

@@ -38,9 +38,202 @@
     <option name="historyRevisionsNumber" value="4" />
   </component>
   <component name="ChangeListManager">
+    <list name="waiting" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/HOW_TO_BUILD.txt" />
+    </list>
     <list name="imls" comment="imls" />
     <list default="true" readonly="true" name="Default" comment="">
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/compile_error/error1_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/compile_error/error1_test.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/general" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/general" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/results/compile_error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/results/compile_error" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/server/annotations.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/TextUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/TextUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/Rakefile" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/Rakefile" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/rake-runner-agent.iml" afterPath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/error/error1_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/error/error1_test.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/tasks/stat.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/tasks/stat.rake" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/OSUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/OSUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output/output_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/output/output_test.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/cmd_failed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/cmd_failed.result" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/openapi/server-api.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test" afterPath="$PROJECT_DIR$/rake-runner-test" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/resources" afterPath="$PROJECT_DIR$/rake-runner-agent/resources" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" afterPath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/server/server.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/tests" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/tests" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rake-runner.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner.iws" afterPath="$PROJECT_DIR$/rake-runner.iws" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/openapi/agent-api.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubySDKUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubySDKUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out2.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out2.result" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/server/openapi.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/RakeTasksRunner.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/RakeTasksRunner.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_task.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/resources/META-INF/build-server-plugin-rakerunner.xml" afterPath="$PROJECT_DIR$/rake-runner-server/resources/META-INF/build-server-plugin-rakerunner.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/resources/META-INF" afterPath="$PROJECT_DIR$/rake-runner-agent/resources/META-INF" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_err2.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_err2.result" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/openapi/runtime-util.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_embedded_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_embedded_task.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/embedded_tasks_trace.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/embedded_tasks_trace.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error1_spec.rb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/testng-jdk15.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/agent/server-logging.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out_external.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out_external.result" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/server/xstream-1.2.1.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/src/jetbrains/buildServer" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains/buildServer" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/error.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/error.result" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/server/util.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/embedded_tasks.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/embedded_tasks.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed1_spec.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/tasks" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/tasks" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/server/xmlrpc-2.0.1.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/show_one_task_trace.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/show_one_task_trace.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed2_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed2_spec.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/src/jetbrains/buildServer/runner" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains/buildServer/runner" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/Rakefile" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/Rakefile" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed2_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed2_test.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out3.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out3.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/results/compile_error/some_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/results/compile_error/some_task.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/rake-runner-server.iml" afterPath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/common/rake-runner-common.iml" afterPath="$PROJECT_DIR$/rake-runner-common/rake-runner-common.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/TestUnitTest.java" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/TestUnitTest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/tasks/output.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/tasks/output.rake" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubyProjectSourcesUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubyProjectSourcesUtil.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" afterPath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/common/src" afterPath="$PROJECT_DIR$/rake-runner-common/src" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed1_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed1_test.rb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent-internal.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/warning_in_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/warning_in_task.result" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/agent" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/output" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/output" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed2_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed2_test.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed1_spec.rb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rake-runner-common/rake-runner-common-internal.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/FileUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/FileUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_err.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_err.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/Rakefile" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/Rakefile" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/common/src/jetbrains/buildServer/rakerunner/RakeRunnerBundle.java" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains/buildServer/rakerunner/RakeRunnerBundle.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tasks/stat.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tasks/stat.rake" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/jetbrains" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output/setup_output_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/output/setup_output_test.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/web/WEB-INF" afterPath="$PROJECT_DIR$/rake-runner-server/web/WEB-INF" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/compile_error.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/compile_error.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tasks/output.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tasks/output.rake" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/compile_error.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/compile_error.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out_err_wo_newline.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out_err_wo_newline.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/ConfigurationParamsUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/ConfigurationParamsUtil.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData" afterPath="$PROJECT_DIR$/rake-runner-test/testData" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/resources/buildServerResources" afterPath="$PROJECT_DIR$/rake-runner-server/resources/buildServerResources" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build-common.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/jetbrains/slow" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/results" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/results" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/unexistent_task_stacktrace.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/unexistent_task_stacktrace.result" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/server/log4j-1.2.12.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/common" afterPath="$PROJECT_DIR$/rake-runner-common" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/general" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/general" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/resources" afterPath="$PROJECT_DIR$/rake-runner-server/resources" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/web" afterPath="$PROJECT_DIR$/rake-runner-server/web" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/Rakefile" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/Rakefile" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed2_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed2_spec.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error2_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error2_spec.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/error" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RakeBuildScriptTest.java" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/RakeBuildScriptTest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubyScriptRunner.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubyScriptRunner.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/passed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/passed.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/show_one_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/show_one_task.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/tasks" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/tasks" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_embedded_task_trace.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_embedded_task_trace.result" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src" afterPath="$PROJECT_DIR$/rake-runner-agent/src" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/resources/buildServerResources/taskRunnerRunParams.jsp" afterPath="$PROJECT_DIR$/rake-runner-server/resources/buildServerResources/taskRunnerRunParams.jsp" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/tasks" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/tasks" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/resources/META-INF" afterPath="$PROJECT_DIR$/rake-runner-server/resources/META-INF" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/common/src/jetbrains/buildServer" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains/buildServer" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/tests/test_output.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/tests/test_output.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/common/src/jetbrains/buildServer/rakerunner" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains/buildServer/rakerunner" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/src/jetbrains" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/web/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/rake-runner-server/web/WEB-INF/web.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/openapi/common-api.jar" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/general/pass_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/general/pass_test.rb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rake-runner-server/rake-runner-server-internal.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/resources/buildServerResources/viewTaskRunnerRunParams.jsp" afterPath="$PROJECT_DIR$/rake-runner-server/resources/buildServerResources/viewTaskRunnerRunParams.jsp" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tasks" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tasks" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/output/spec_output.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/output/spec_output.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/common/src/jetbrains/buildServer/rakerunner/RakeRunnerConstants.java" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains/buildServer/rakerunner/RakeRunnerConstants.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output/teardown_output_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/output/teardown_output_test.rb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/openapi" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/src" afterPath="$PROJECT_DIR$/rake-runner-server/src" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/agent/agent.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rake-runner-test/rake-runner-test-internal.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" afterPath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/default_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/default_task.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/src/jetbrains/buildServer/runner/rakerunner/RakeRunnerRunType.java" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains/buildServer/runner/rakerunner/RakeRunnerRunType.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent/resources/META-INF/build-agent-plugin.xml" afterPath="$PROJECT_DIR$/rake-runner-agent/resources/META-INF/build-agent-plugin.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error2_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error2_spec.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-root.iml" afterPath="$PROJECT_DIR$/rake-runner-root.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/teamcity-plugin.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/output" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_err_external.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_err_external.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/tasks/compile_error.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/tasks/compile_error.rake" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/output" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/output" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error1_spec.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src" afterPath="$PROJECT_DIR$/rake-runner-test/src" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/compile_error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/compile_error" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server/src/jetbrains/buildServer/runner/rakerunner" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains/buildServer/runner/rakerunner" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/unexistent_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/unexistent_task.result" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/teamcity/server" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/first_time_check.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/first_time_check.result" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner.ipr" afterPath="$PROJECT_DIR$/rake-runner.ipr" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error3_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error3_spec.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/common/src/jetbrains" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/rake-runner-test.iml" afterPath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed1_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed1_test.rb" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/tasks/build_script.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/tasks/build_script.rake" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/server" afterPath="$PROJECT_DIR$/rake-runner-server" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/agent" afterPath="$PROJECT_DIR$/rake-runner-agent" />
     </list>
     <ignored path="rake-runner.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -108,8 +301,97 @@
       <file leaf-file-name="build.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="21" selection-start="1876" selection-end="1876" vertical-scroll-proportion="0.04481793">
+            <state line="91" column="0" selection-start="3646" selection-end="3646" vertical-scroll-proportion="0.76978415">
+              <folding>
+                <marker date="1227031898000" expanded="true" signature="94:3644" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build-common.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build-common.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="41" column="16" selection-start="1539" selection-end="1539" vertical-scroll-proportion="-13.666667">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rake-runner.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rake-runner.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="0" selection-start="88" selection-end="139" vertical-scroll-proportion="-3.6363637">
+              <folding>
+                <marker date="1227029902000" expanded="true" signature="80:20985" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="223:273" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="551:1082" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="1119:1303" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="1342:1686" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="1767:1853" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="1898:1978" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="2029:2116" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="2166:2253" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="2305:2393" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="2440:2523" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="2575:2664" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="2714:2801" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="2855:2944" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="2988:3068" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="3120:3208" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="3261:3350" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="3932:4005" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="4058:4543" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="4604:5219" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="5285:5341" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="5409:5491" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="5545:5672" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="5620:5662" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="6008:6837" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="6238:6580" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="6637:6825" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="6719:6813" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="7118:7240" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="7746:7819" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="7870:7880" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="7939:8075" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="8139:8195" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="8261:8341" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="8939:9057" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="9573:9646" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="9698:10473" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="10533:11370" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="11435:11491" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="11558:11639" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="11692:11851" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="11765:11841" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="12225:13224" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="12453:12790" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="12846:13212" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="12932:13026" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="13106:13200" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="13501:13621" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="14147:14220" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="14273:14888" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="14949:15628" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="15694:15750" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="15818:15900" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="15954:16115" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="16029:16105" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="16495:17506" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="16725:17067" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="17124:17494" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="17212:17306" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="17388:17482" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="17787:17909" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="18409:18482" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="18533:18931" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="18990:19317" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="19381:19437" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="19503:19583" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="20292:20410" placeholder="..." />
+                <marker date="1227029902000" expanded="true" signature="20471:20544" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -125,16 +407,22 @@
     <option name="LOAD_NEW_PROBLEMS" value="true" />
   </component>
   <component name="JspContextManager">
-    <jsp-to-context jsp-file="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/myChangesList.jsp" context-file="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/myChanges.jsp" />
-    <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/changePopupRow.jspf" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/buildChanges.jsp" />
-    <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/userChangeInfo.jsp" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/myChangesList.jsp" />
-    <jsp-to-context jsp-file="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/userChangeInfo.jsp" context-file="file://$PROJECT_DIR$/lib/TeamCity/webapps/ROOT/myChangesList.jsp" />
     <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/myChangesBuild.jsp" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/userChangeInfo.jsp" />
     <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/buildLog/testInfoRefreshableInner.jsp" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/buildLog/testsInfo.jsp" />
+    <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/userChangeInfo.jsp" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/myChangesList.jsp" />
+    <jsp-to-context jsp-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/changePopupRow.jspf" context-file="file:///Users/romeo/work/perforce/TeamServer/BuildServer/web/exploded/buildChanges.jsp" />
   </component>
   <component name="LastSuccessfulUpdateTracker">
     <option name="changeLists">
       <list>
+        <PersistentChangeList>
+          <option name="name" value="waiting" />
+          <option name="files">
+            <list>
+              <ChangedFile afterPath="$PROJECT_DIR$/HOW_TO_BUILD.txt" />
+            </list>
+          </option>
+        </PersistentChangeList>
         <PersistentChangeList>
           <option name="name" value="imls" />
         </PersistentChangeList>
@@ -142,7 +430,197 @@
           <option name="name" value="Default" />
           <option name="files">
             <list>
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/compile_error/error1_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/compile_error/error1_test.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/general" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/general" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/results/compile_error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/results/compile_error" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/server/annotations.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/TextUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/TextUtil.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/Rakefile" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/Rakefile" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/rake-runner-agent.iml" afterPath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/error/error1_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/error/error1_test.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/tasks/stat.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/tasks/stat.rake" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/OSUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/OSUtil.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output/output_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/output/output_test.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/cmd_failed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/cmd_failed.result" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/openapi/server-api.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test" afterPath="$PROJECT_DIR$/rake-runner-test" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/resources" afterPath="$PROJECT_DIR$/rake-runner-agent/resources" />
+              <ChangedFile beforePath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" afterPath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/server/server.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/tests" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/tests" />
+              <ChangedFile afterPath="$PROJECT_DIR$/rake-runner.xml" />
               <ChangedFile beforePath="$PROJECT_DIR$/rake-runner.iws" afterPath="$PROJECT_DIR$/rake-runner.iws" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/openapi/agent-api.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubySDKUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubySDKUtil.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out2.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out2.result" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/server/openapi.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/RakeTasksRunner.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/RakeTasksRunner.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_task.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/resources/META-INF/build-server-plugin-rakerunner.xml" afterPath="$PROJECT_DIR$/rake-runner-server/resources/META-INF/build-server-plugin-rakerunner.xml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/resources/META-INF" afterPath="$PROJECT_DIR$/rake-runner-agent/resources/META-INF" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_err2.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_err2.result" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/openapi/runtime-util.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_embedded_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_embedded_task.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/embedded_tasks_trace.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/embedded_tasks_trace.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error1_spec.rb" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/testng-jdk15.jar" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/agent/server-logging.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out_external.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out_external.result" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/server/xstream-1.2.1.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/src/jetbrains/buildServer" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains/buildServer" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/error.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/error.result" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/server/util.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/embedded_tasks.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/embedded_tasks.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed1_spec.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/tasks" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/tasks" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/server/xmlrpc-2.0.1.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/show_one_task_trace.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/show_one_task_trace.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed2_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/failed/failed2_spec.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/src/jetbrains/buildServer/runner" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains/buildServer/runner" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/Rakefile" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/Rakefile" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed2_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed2_test.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out3.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out3.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/results/compile_error/some_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/results/compile_error/some_task.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/rake-runner-server.iml" afterPath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/common/rake-runner-common.iml" afterPath="$PROJECT_DIR$/rake-runner-common/rake-runner-common.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/TestUnitTest.java" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/TestUnitTest.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/tasks/output.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/tasks/output.rake" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubyProjectSourcesUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubyProjectSourcesUtil.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" afterPath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/common/src" afterPath="$PROJECT_DIR$/rake-runner-common/src" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed1_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed1_test.rb" />
+              <ChangedFile afterPath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent-internal.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/warning_in_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/warning_in_task.result" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/agent" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/output" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/output" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed2_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed2_test.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed1_spec.rb" />
+              <ChangedFile afterPath="$PROJECT_DIR$/rake-runner-common/rake-runner-common-internal.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/FileUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/FileUtil.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_err.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_err.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/Rakefile" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/Rakefile" />
+              <ChangedFile beforePath="$PROJECT_DIR$/common/src/jetbrains/buildServer/rakerunner/RakeRunnerBundle.java" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains/buildServer/rakerunner/RakeRunnerBundle.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tasks/stat.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tasks/stat.rake" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output/setup_output_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/output/setup_output_test.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/web/WEB-INF" afterPath="$PROJECT_DIR$/rake-runner-server/web/WEB-INF" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/compile_error.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/compile_error.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tasks/output.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tasks/output.rake" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/compile_error.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/compile_error.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out_err_wo_newline.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out_err_wo_newline.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/ConfigurationParamsUtil.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/ConfigurationParamsUtil.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData" afterPath="$PROJECT_DIR$/rake-runner-test/testData" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/resources/buildServerResources" afterPath="$PROJECT_DIR$/rake-runner-server/resources/buildServerResources" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_out.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_out.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics" />
+              <ChangedFile afterPath="$PROJECT_DIR$/build-common.xml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains/slow" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/results" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/results" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/unexistent_task_stacktrace.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/unexistent_task_stacktrace.result" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/server/log4j-1.2.12.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/common" afterPath="$PROJECT_DIR$/rake-runner-common" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/general" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/general" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/resources" afterPath="$PROJECT_DIR$/rake-runner-server/resources" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/web" afterPath="$PROJECT_DIR$/rake-runner-server/web" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/Rakefile" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/Rakefile" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed2_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed/passed2_spec.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error2_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error2_spec.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/error" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RakeBuildScriptTest.java" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/RakeBuildScriptTest.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubyScriptRunner.java" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils/RubyScriptRunner.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/passed.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/passed.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/show_one_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/show_one_task.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/tasks" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/tasks" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_embedded_task_trace.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/exception_in_embedded_task_trace.result" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src" afterPath="$PROJECT_DIR$/rake-runner-agent/src" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer/agent/rakerunner/utils" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer/agent/rakerunner/utils" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/src/jetbrains/buildServer" afterPath="$PROJECT_DIR$/rake-runner-agent/src/jetbrains/buildServer" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/resources/buildServerResources/taskRunnerRunParams.jsp" afterPath="$PROJECT_DIR$/rake-runner-server/resources/buildServerResources/taskRunnerRunParams.jsp" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/tasks" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/tasks" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/resources/META-INF" afterPath="$PROJECT_DIR$/rake-runner-server/resources/META-INF" />
+              <ChangedFile beforePath="$PROJECT_DIR$/common/src/jetbrains/buildServer" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains/buildServer" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/tests/test_output.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/tests/test_output.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/common/src/jetbrains/buildServer/rakerunner" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains/buildServer/rakerunner" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/src/jetbrains" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/web/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/rake-runner-server/web/WEB-INF/web.xml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/openapi/common-api.jar" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/general/pass_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/general/pass_test.rb" />
+              <ChangedFile afterPath="$PROJECT_DIR$/rake-runner-server/rake-runner-server-internal.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/resources/buildServerResources/viewTaskRunnerRunParams.jsp" afterPath="$PROJECT_DIR$/rake-runner-server/resources/buildServerResources/viewTaskRunnerRunParams.jsp" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tasks" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tasks" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/output/spec_output.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/output/spec_output.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/common/src/jetbrains/buildServer/rakerunner/RakeRunnerConstants.java" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains/buildServer/rakerunner/RakeRunnerConstants.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output/teardown_output_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/output/teardown_output_test.rb" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/openapi" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/src" afterPath="$PROJECT_DIR$/rake-runner-server/src" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/agent/agent.jar" />
+              <ChangedFile afterPath="$PROJECT_DIR$/rake-runner-test/rake-runner-test-internal.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" afterPath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/default_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/default_task.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/src/jetbrains/buildServer/runner/rakerunner/RakeRunnerRunType.java" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains/buildServer/runner/rakerunner/RakeRunnerRunType.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent/resources/META-INF/build-agent-plugin.xml" afterPath="$PROJECT_DIR$/rake-runner-agent/resources/META-INF/build-agent-plugin.xml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error2_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error2_spec.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/rake-runner-root.iml" afterPath="$PROJECT_DIR$/rake-runner-root.iml" />
+              <ChangedFile afterPath="$PROJECT_DIR$/teamcity-plugin.xml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/output" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/output" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/std_err_external.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/std_err_external.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app2/tasks/compile_error.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app2/tasks/compile_error.rake" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/output" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/output" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error1_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error1_spec.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java" afterPath="$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/src" afterPath="$PROJECT_DIR$/rake-runner-test/src" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/compile_error" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/compile_error" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server/src/jetbrains/buildServer/runner/rakerunner" afterPath="$PROJECT_DIR$/rake-runner-server/src/jetbrains/buildServer/runner/rakerunner" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/unexistent_task.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/unexistent_task.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored" />
+              <ChangedFile afterPath="$PROJECT_DIR$/lib/teamcity/server" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script/first_time_check.result" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script/first_time_check.result" />
+              <ChangedFile beforePath="$PROJECT_DIR$/rake-runner.ipr" afterPath="$PROJECT_DIR$/rake-runner.ipr" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/results/build_script" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/results/build_script" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error3_spec.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/compile_error/error3_spec.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/common/src/jetbrains" afterPath="$PROJECT_DIR$/rake-runner-common/src/jetbrains" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/rake-runner-test.iml" afterPath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed1_test.rb" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/tests/statistics/failed/failed1_test.rb" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/tasks/build_script.rake" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1/tasks/build_script.rake" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app1" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat" />
+              <ChangedFile beforePath="$PROJECT_DIR$/server" afterPath="$PROJECT_DIR$/rake-runner-server" />
+              <ChangedFile beforePath="$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed" afterPath="$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/spec/statistics/passed" />
+              <ChangedFile beforePath="$PROJECT_DIR$/agent" afterPath="$PROJECT_DIR$/rake-runner-agent" />
             </list>
           </option>
         </PersistentChangeList>
@@ -179,6 +657,10 @@
           <option name="myItemId" value="rake-runner" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="rake-runner-test" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
       </PATH>
       <PATH>
         <PATH_ELEMENT>
@@ -186,7 +668,7 @@
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
         </PATH_ELEMENT>
         <PATH_ELEMENT>
-          <option name="myItemId" value="rake-runner-root" />
+          <option name="myItemId" value="rake-runner-server" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
       </PATH>
@@ -199,9 +681,39 @@
           <option name="myItemId" value="rake-runner-root" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
+      </PATH>
+      <PATH>
         <PATH_ELEMENT>
-          <option name="myItemId" value="rakerunner3" />
+          <option name="myItemId" value="rake-runner" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="rake-runner-root" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="rake-runner" />
           <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="rake-runner" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="rake-runner-common" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="rake-runner" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="rake-runner-agent" />
+          <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
         </PATH_ELEMENT>
       </PATH>
     </subPane>
@@ -224,18 +736,23 @@
     </navigator>
   </component>
   <component name="PropertiesComponent">
+    <property name="GenerateAntBuildDialog.inclineRuntiemClasspath" value="false" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="options.searchVisible" value="true" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="GenerateAntBuildDialog.enableUiFormCompile" value="false" />
+    <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
+    <property name="GenerateAntBuildDialog.backupFiles" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="GenerateAntBuildDialog.generateSingleFile" value="true" />
+    <property name="GoToClass.includeLibraries" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
-    <property name="project.structure.side.proportion" value="0.28532854" />
-    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
+    <property name="project.structure.side.proportion" value="0.16021602" />
+    <property name="options.lastSelected" value="com.intellij.compiler.options.CompilerConfigurable$3" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
   </component>
   <component name="RubyDocSettings">
@@ -554,7 +1071,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="43" y="24" width="1216" height="974" extended-state="0" />
+    <frame x="53" y="23" width="1216" height="974" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Web Preview" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" />
@@ -563,17 +1080,17 @@
       <window_info id="Exception Analyzer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24400684" sideWeight="0.5078219" order="0" side_tool="false" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24400684" sideWeight="0.58002406" order="0" side_tool="false" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962963" sideWeight="0.5" order="3" side_tool="false" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="8" side_tool="false" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47412756" sideWeight="0.5" order="14" side_tool="false" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39350182" sideWeight="0.5" order="14" side_tool="false" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" />
       <window_info id="TeamCity" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32851985" sideWeight="0.5" order="11" side_tool="false" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16523972" sideWeight="0.5078219" order="8" side_tool="false" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15325342" sideWeight="0.58002406" order="8" side_tool="false" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" />
-      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.48375452" sideWeight="0.5" order="10" side_tool="false" />
+      <window_info id="Changes" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.41155234" sideWeight="0.5" order="10" side_tool="false" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.57901233" sideWeight="0.5" order="4" side_tool="false" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39950982" sideWeight="0.5740741" order="2" side_tool="false" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" />
@@ -683,107 +1200,216 @@
       <targetFilters>
         <filter targetName="build.artifacts" isVisible="false" />
         <filter targetName="clean" isVisible="false" />
-        <filter targetName="devel-deploy" isVisible="false" />
-        <filter targetName="devel-reload_on_agent-deploy" isVisible="false" />
-        <filter targetName="devel-undeploy" isVisible="false" />
-        <filter targetName="dist_full" isVisible="false" />
-        <filter targetName="dist_local" isVisible="false" />
-        <filter targetName="make" isVisible="false" />
-        <filter targetName="make-agent" isVisible="false" />
-        <filter targetName="make-bundle" isVisible="false" />
-        <filter targetName="make-common" isVisible="false" />
-        <filter targetName="make-server" isVisible="false" />
+        <filter targetName="dist" isVisible="false" />
         <filter targetName="pack-rakeRunnerRuby-src.zip" isVisible="false" />
         <filter targetName="unpack rakeRunnerRuby-src.zip" isVisible="false" />
         <filter targetName="unpack TeamCity-*.tar.gz" isVisible="false" />
+        <filter targetName="update-jars-from-dist" isVisible="false" />
       </targetFilters>
+      <treeView value="true" />
+      <verbose value="true" />
+      <viewClosedWhenNoErrors value="false" />
+    </buildFile>
+    <buildFile url="file://$PROJECT_DIR$/rake-runner.xml">
+      <antCommandLine value="" />
+      <runInBackground value="true" />
+      <targetFilters />
       <treeView value="true" />
       <verbose value="true" />
       <viewClosedWhenNoErrors value="false" />
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/failed.result">
       <provider selected="true" editor-type-id="text-editor">
         <state line="12" column="138" selection-start="1362" selection-end="1362" vertical-scroll-proportion="0.73282444">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_rspec/results/stat/ignored.result">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="71" selection-start="564" selection-end="564" vertical-scroll-proportion="0.10996564">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/compile_error.result">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/compile_error.result">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/passed.result">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="87" selection-start="1182" selection-end="1200" vertical-scroll-proportion="0.6335878">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/general.result">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1" column="0" selection-start="38" selection-end="38" vertical-scroll-proportion="0.05498282">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/failed.result">
       <provider selected="true" editor-type-id="text-editor">
         <state line="4" column="114" selection-start="390" selection-end="390" vertical-scroll-proportion="0.21993127">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/TestUnitTest.java">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/TestUnitTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="0" selection-start="308" selection-end="308" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/RSpecTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="0" selection-start="305" selection-end="305" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/testData/plugins/rakeRunner/app_testunit/results/stat/error.result">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="83" selection-start="898" selection-end="898" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent/rake-runner-agent.iml">
+    <entry file="file://$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/agent/src/rb/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb">
+    <entry file="file://$PROJECT_DIR$/rake-runner-test/src/jetbrains/slow/plugins/rakerunner/AbstractRakeRunnerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="31" selection-start="3838" selection-end="3844" vertical-scroll-proportion="-4.592233">
+        <state line="2" column="34" selection-start="78" selection-end="78" vertical-scroll-proportion="0.0">
+          <folding>
+            <marker date="1226924158000" expanded="true" signature="51:439" placeholder="..." />
+            <marker date="1226924158000" expanded="true" signature="441:478" placeholder="/**...*/" />
+            <marker date="1226924158000" expanded="true" signature="591:610" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="674:696" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="741:780" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="839:878" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="936:1095" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="1227:1368" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="1560:1629" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="1886:2248" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="2294:2467" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="2526:3450" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="2578:3445" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="2935:3090" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="3157:3283" placeholder="{...}" />
+            <marker date="1226924158000" expanded="true" signature="3336:3439" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/teamcity-plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="24" selection-start="307" selection-end="315" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build-common.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="16" selection-start="1539" selection-end="1539" vertical-scroll-proportion="-13.666667">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rake-runner.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="88" selection-end="139" vertical-scroll-proportion="-3.6363637">
+          <folding>
+            <marker date="1227029902000" expanded="true" signature="80:20985" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="223:273" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="551:1082" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="1119:1303" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="1342:1686" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="1767:1853" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="1898:1978" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="2029:2116" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="2166:2253" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="2305:2393" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="2440:2523" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="2575:2664" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="2714:2801" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="2855:2944" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="2988:3068" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="3120:3208" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="3261:3350" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="3932:4005" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="4058:4543" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="4604:5219" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="5285:5341" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="5409:5491" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="5545:5672" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="5620:5662" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="6008:6837" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="6238:6580" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="6637:6825" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="6719:6813" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="7118:7240" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="7746:7819" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="7870:7880" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="7939:8075" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="8139:8195" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="8261:8341" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="8939:9057" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="9573:9646" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="9698:10473" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="10533:11370" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="11435:11491" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="11558:11639" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="11692:11851" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="11765:11841" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="12225:13224" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="12453:12790" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="12846:13212" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="12932:13026" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="13106:13200" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="13501:13621" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="14147:14220" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="14273:14888" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="14949:15628" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="15694:15750" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="15818:15900" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="15954:16115" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="16029:16105" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="16495:17506" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="16725:17067" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="17124:17494" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="17212:17306" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="17388:17482" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="17787:17909" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="18409:18482" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="18533:18931" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="18990:19317" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="19381:19437" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="19503:19583" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="20292:20410" placeholder="..." />
+            <marker date="1227029902000" expanded="true" signature="20471:20544" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/build.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="21" selection-start="1876" selection-end="1876" vertical-scroll-proportion="0.04481793">
-          <folding />
+        <state line="91" column="0" selection-start="3646" selection-end="3646" vertical-scroll-proportion="0.76978415">
+          <folding>
+            <marker date="1227031898000" expanded="true" signature="94:3644" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>

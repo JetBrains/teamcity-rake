@@ -1,9 +1,0 @@
---1--##teamcity[blockOpened name='Execute build_script:exception_in_task' type='$TARGET_BLOCK$'] NORMAL
---1--##teamcity[message='ZeroDivisionError: divided by 0|n|nStacktrace:|n
---1--##teamcity[blockClosed name='Execute build_script:exception_in_task' type='$TARGET_BLOCK$'] NORMAL
---1--##teamcity[message='Rake aborted!', type='error'] NORMAL
---0--##teamcity[blockOpened name='Execute build_script:exception_in_embedded_task' type='$TARGET_BLOCK$'] NORMAL
---0--##teamcity[blockClosed name='Execute build_script:exception_in_embedded_task' type='$TARGET_BLOCK$'] NORMAL
---1--##teamcity[blockOpened name='Invoke build_script:exception_in_embedded_task' type='$TARGET_BLOCK$'] NORMAL
---1--##teamcity[blockClosed name='Invoke build_script:exception_in_embedded_task' type='$TARGET_BLOCK$'] NORMAL
---2--type='error'] NORMAL

@@ -1,0 +1,21 @@
+--1--##teamcity[testCount '3'] NORMAL
+--1--##teamcity[progressMessage 'Starting.. (3 examples)'] NORMAL
+
+--1--##teamcity[testSuiteStarted name='Pending'location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb:4'] NORMAL
+
+--1--##teamcity[testStarted name='Pending should pending method' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb:6'] NORMAL
+--1--##teamcity[testIgnored name='Pending should pending method' message='get sing of medved'] NORMAL
+--1--##teamcity[testFinished name='Pending should pending method' duration='##DURATION##'] NORMAL
+
+--1--##teamcity[testStarted name='Pending should pending block' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb:11'] NORMAL
+--1--##teamcity[testIgnored name='Pending should pending block' message='get sing of krevedko'] NORMAL
+--1--##teamcity[testFinished name='Pending should pending block' duration='##DURATION##'] NORMAL
+
+--1--##teamcity[testStarted name='Pending should be fixed pending' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/ignored/pending1_spec.rb:17'] NORMAL
+--1--##teamcity[testFailed name='Pending should be fixed pending' message='Expected pending |'some|' to fail. No Error was raised.' details='##STACKTRACE##' error='true'] NORMAL
+--1--##teamcity[testFinished name='Pending should be fixed pending' duration='##DURATION##'] NORMAL
+
+--1--##teamcity[testSuiteFinished name='Pending'] NORMAL
+
+--1--3 examples, 1 failure, 0 passed, 2 pending NORMAL
+--1--Finished in ##TIME## NORMAL

@@ -1,0 +1,2 @@
+--1--$stdout<<msg1 NORMAL
+--1--STDOUT<<msg2 NORMAL

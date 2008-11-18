@@ -1,4 +1,0 @@
---1--##teamcity[blockOpened name='Execute stat:compile_error' type='$TARGET_BLOCK$'] NORMAL
---1--##teamcity[message='RuntimeError:
---1--##teamcity[blockClosed name='Execute stat:compile_error' type='$TARGET_BLOCK$'] NORMAL
---1--##teamcity[message='Rake aborted!', type='error'] NORMAL

@@ -1,5 +1,0 @@
---1--##teamcity[blockOpened name='Execute stat:compile_error' type='$TARGET_BLOCK$'] NORMAL
---1--error1_test.rb:7: syntax error, unexpected $undefined (SyntaxError) WARNING
---1--##teamcity[message='RuntimeError: Command failed with status (1)
---1--##teamcity[blockClosed name='Execute stat:compile_error' type='$TARGET_BLOCK$'] NORMAL
---1--##teamcity[message='Rake aborted!', type='error'] NORMAL

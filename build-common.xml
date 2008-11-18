@@ -1,0 +1,113 @@
+<project name="Common build script for TC plugins" default="dist" basedir=".">
+  <property name="dist" value="${basedir}/dist"/>
+  <property name="lib" value="${basedir}/lib"/>
+
+  <property name="teamcity.dist" value="../../dist"/>
+
+  <import file="${plugin}.xml"/>
+
+  <target name="deploy" depends="dist">
+    <copy file="${dist}/${plugin}-plugin.zip" todir="${teamcity.dist}/webapps/ROOT/WEB-INF/plugins" />
+  </target>
+
+  <target name="update-jars-from-dist">
+    <pathconvert property="openapi.jars" pathsep=",">
+      <fileset dir="${lib}/teamcity/openapi" includes="*.jar"/>
+      <map from="${lib}/teamcity/openapi/" to=''/>
+    </pathconvert>
+
+    <pathconvert property="server.jars" pathsep=",">
+      <fileset dir="${lib}/teamcity/server" includes="*.jar"/>
+      <map from="${lib}/teamcity/server/" to=''/>
+    </pathconvert>
+
+    <pathconvert property="agent.jars" pathsep=",">
+      <fileset dir="${lib}/teamcity/agent" includes="*.jar"/>
+      <map from="${lib}/teamcity/agent/" to=''/>
+    </pathconvert>
+
+    <copy todir="${lib}/teamcity/openapi" verbose="true" overwrite="true">
+      <filelist dir="${teamcity.dist}/openapi" files="${openapi.jars}" />
+    </copy>
+
+    <copy todir="${lib}/teamcity/server" verbose="true" overwrite="true">
+      <filelist dir="${teamcity.dist}/tmp/WEB-INF/lib" files="${server.jars}" />
+    </copy>
+
+    <copy todir="${lib}/teamcity/agent" verbose="true" overwrite="true">
+      <filelist dir="${teamcity.dist}/agent/lib" files="${agent.jars}" />
+    </copy>
+  </target>
+
+  <target name="dist">
+    <antcall target="all" />
+
+    <delete dir="${dist}"/>
+    <mkdir dir="${dist}/unpacked"/>
+    <jar destfile="${dist}/unpacked/${plugin}-common.jar" basedir="${basedir}/out/production/${plugin}-common"/>
+    <jar destfile="${dist}/unpacked/${plugin}-server.jar" basedir="${basedir}/out/production/${plugin}-server">
+        <fileset dir="${plugin}-server/resources" />
+    </jar>
+    <jar destfile="${dist}/unpacked/${plugin}-agent.jar" basedir="${basedir}/out/production/${plugin}-agent"/>
+
+    <!--Plugin jars bundle from unpacked directory -->
+    <antcall target="layout plugin bundle"/>
+
+    <!--Plugin sources bundle  -->
+    <zip basedir="${basedir}" destfile="${dist}/${plugin}-src.zip">
+      <exclude name="**/.svn/**"/>
+      <exclude name="*.iws"/>
+      <exclude name="test-output/**"/>
+      <exclude name="lib/**"/>
+      <exclude name="out/**"/>
+      <exclude name="dist/**"/>
+      <exclude name="deps/**"/>
+    </zip>
+  </target>
+
+  <target name="layout plugin bundle">
+    <!-- plugin's bundle for agent-->
+    <zip destfile="${dist}/${plugin}-agent.zip">
+      <zipfileset dir="${dist}/unpacked" prefix="${plugin}/lib">
+        <include name="${plugin}-agent.jar"/>
+        <include name="${plugin}-common.jar"/>
+      </zipfileset>
+    </zip>
+
+    <!-- whole plugin's bundle -->
+    <zip destfile="${dist}/${plugin}-plugin.zip">
+      <zipfileset dir="${dist}" prefix="agent">
+        <include name="${plugin}-agent.zip"/>
+      </zipfileset>
+      <zipfileset dir="${basedir}" prefix="">
+        <include name="teamcity-plugin.xml"/>
+      </zipfileset>
+      <zipfileset dir="${dist}/unpacked" prefix="server">
+        <include name="${plugin}-server.jar"/>
+        <include name="${plugin}-common.jar"/>
+      </zipfileset>
+    </zip>
+
+    <!--Delete temp file  -->
+    <delete file="${dist}/${plugin}-agent.zip"/>
+  </target>
+
+  <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${basedir}/lib/testng-jdk15.jar"/>
+
+  <target name="test" depends="all">
+
+    <testng haltonfailure="no" failureProperty="failure_found" listener="org.testng.reporters.TestHTMLReporter"
+            outputdir="${basedir}/test-output" classpathref="${plugin}-tests.runtime.module.classpath"
+            dumpcommand="true"
+            workingdir="${basedir}">
+
+      <jvmarg value="-ea"/>
+
+      <sysproperty key="java.awt.headless" value="true"/>
+
+      <xmlfileset dir="${basedir}">
+        <include name="testng.xml"/>
+      </xmlfileset>
+    </testng>
+  </target>
+</project>

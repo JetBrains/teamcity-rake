@@ -1,0 +1,26 @@
+--1--##teamcity[testCount '4'] NORMAL
+
+--1--##teamcity[testSuiteStarted name='Failed1Test'location='ruby_qn://Failed1Test'] NORMAL
+--1--##teamcity[testStarted name='Failed1Test.test_failed11' captureStandartOutput='true' location='ruby_qn://Failed1Test.test_failed11'] NORMAL
+--1--##teamcity[testFailed name='Failed1Test.test_failed11' message='<false> is not true.' details='##STACKTRACE##'] NORMAL
+--1--##teamcity[testFinished name='Failed1Test.test_failed11' duration='##DURATION##'] NORMAL
+
+--1--##teamcity[testStarted name='Failed1Test.test_failed12' captureStandartOutput='true' location='ruby_qn://Failed1Test.test_failed12'] NORMAL
+--1--##teamcity[testFailed name='Failed1Test.test_failed12' message='RuntimeError: ' details='##STACKTRACE##' error='true'] NORMAL
+--1--##teamcity[testFinished name='Failed1Test.test_failed12' duration='##DURATION##'] NORMAL
+
+--1--##teamcity[testStarted name='Failed1Test.test_pass13' captureStandartOutput='true' location='ruby_qn://Failed1Test.test_pass13'] NORMAL
+--1--##teamcity[testFailed name='Failed1Test.test_pass13' message='RuntimeError: failure message' details='##STACKTRACE##' error='true'] NORMAL
+--1--##teamcity[testFinished name='Failed1Test.test_pass13' duration='##DURATION##'] NORMAL
+--1--##teamcity[testSuiteFinished name='Failed1Test'] NORMAL
+
+--1--##teamcity[testSuiteStarted name='Failed2Test'location='ruby_qn://Failed2Test'] NORMAL
+--1--##teamcity[testStarted name='Failed2Test.test_failed2' captureStandartOutput='true' location='ruby_qn://Failed2Test.test_failed2'] NORMAL
+--1--##teamcity[testFailed name='Failed2Test.test_failed2' message='<false> is not true.' details='##STACKTRACE##'] NORMAL
+--1--##teamcity[testFinished name='Failed2Test.test_failed2' duration='##DURATION##'] NORMAL
+--1--##teamcity[testSuiteFinished name='Failed2Test'] NORMAL
+
+--1--4 tests, 2 assertions, 2 failures, 2 errors NORMAL
+--1--Test suite finished: ##TIME## NORMAL
+
+--1--Rake aborted

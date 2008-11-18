@@ -1,0 +1,30 @@
+--1--spec:$stdout<<msg1 NORMAL
+--1--spec:STDOUT<<msg2 NORMAL
+--1--spec:$stderr<<msg3 WARNING
+--1--spec:STDERR<<msg4 WARNING
+
+--1--spec:$stdout<<msg5 NORMAL
+--1--spec:STDOUT<<msg6 NORMAL
+--1--spec:$stderr<<msg7 WARNING
+--1--spec:STDERR<<msg8 WARNING
+
+--1--test:$stdout<<msg9 NORMAL
+--1--test:STDOUT<<msg10 NORMAL
+--1--test:$stderr<<msg11 WARNING
+--1--test:STDERR<<msg12 WARNING
+
+--3--spec:before $stdout NORMAL
+--3--spec:before STDOUT NORMAL
+--3--spec:before $stderr WARNING
+--3--spec:before STDERR WARNING
+
+--3--spec:after $stdout NORMAL
+--3--spec:after STDOUT NORMAL
+--3--spec:after $stderr
+--3--spec:after STDERR WARNING
+
+
+--1--##teamcity[testStarted name='Output should pass' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb:29'] NORMAL
+--1--##teamcity[testStarted name='Output should fail' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb:44'] NORMAL
+--1--##teamcity[testStarted name='Output should error' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/output/output_spec.rb:59'] NORMAL
+
