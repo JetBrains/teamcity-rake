@@ -23,8 +23,8 @@ import org.jetbrains.annotations.NonNls;
  */
 public interface RakeRunnerConstants {
   @NonNls public String RUNNER_TYPE = "rake-runner";
-  @NonNls String RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME = "rakeRunnerPluginServer.jar";
-  @NonNls String AGENT_BUNDLE_JAR = "RakeRunnerPluginAgent.jar";
+  @NonNls String RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME = "rake-runner-server.jar";
+  @NonNls String AGENT_BUNDLE_JAR = "rake-runner-agent.jar";
 
 // Server properties
 

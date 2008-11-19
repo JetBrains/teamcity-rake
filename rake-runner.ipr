@@ -504,11 +504,11 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/agent/rake-runner-agent.iml" filepath="$PROJECT_DIR$/agent/rake-runner-agent.iml" />
-      <module fileurl="file://$PROJECT_DIR$/common/rake-runner-common.iml" filepath="$PROJECT_DIR$/common/rake-runner-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" filepath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-common/rake-runner-common.iml" filepath="$PROJECT_DIR$/rake-runner-common/rake-runner-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/rake-runner-root.iml" filepath="$PROJECT_DIR$/rake-runner-root.iml" />
-      <module fileurl="file://$PROJECT_DIR$/server/rake-runner-server.iml" filepath="$PROJECT_DIR$/server/rake-runner-server.iml" />
-      <module fileurl="file://$PROJECT_DIR$/test/rake-runner-test.iml" filepath="$PROJECT_DIR$/test/rake-runner-test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" filepath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" filepath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" />
     </modules>
   </component>
   <component name="ProjectReloadState">
