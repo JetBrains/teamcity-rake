@@ -51,7 +51,10 @@
     <jar destfile="${dist}/unpacked/${plugin}-agent.jar" basedir="${basedir}/out/production/${plugin}-agent"/>
 
     <!--Plugin jars bundle from unpacked directory -->
-    <antcall target="layout plugin bundle"/>
+    <antcall target="layout agent plugin bundle"/>
+    <antcall target="layout whole plugin bundle"/>
+    <!--Delete temp file  -->
+    <delete file="${dist}/${plugin}-agent.zip"/>
 
     <!--Plugin sources bundle  -->
     <zip basedir="${basedir}" destfile="${dist}/${plugin}-src.zip">
@@ -65,7 +68,7 @@
     </zip>
   </target>
 
-  <target name="layout plugin bundle">
+  <target name="layout agent plugin bundle">
     <!-- plugin's bundle for agent-->
     <zip destfile="${dist}/${plugin}-agent.zip">
       <zipfileset dir="${dist}/unpacked" prefix="${plugin}/lib">
@@ -73,7 +76,9 @@
         <include name="${plugin}-common.jar"/>
       </zipfileset>
     </zip>
+  </target>
 
+  <target name="layout whole plugin bundle">
     <!-- whole plugin's bundle -->
     <zip destfile="${dist}/${plugin}-plugin.zip">
       <zipfileset dir="${dist}" prefix="agent">
@@ -87,9 +92,6 @@
         <include name="${plugin}-common.jar"/>
       </zipfileset>
     </zip>
-
-    <!--Delete temp file  -->
-    <delete file="${dist}/${plugin}-agent.zip"/>
   </target>
 
   <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${basedir}/lib/testng-jdk15.jar"/>

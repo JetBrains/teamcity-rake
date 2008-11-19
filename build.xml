@@ -21,18 +21,27 @@
         <property name="dist" value="${dist}"/>
       </ant>
 
-  <!--PATCH: Add ruby files-->
+  <!--PATCH: Add ruby files, set version -->
       <!-- Remove existing plugin bundle -->
       <delete file="${dist}/${plugin}-plugin.zip"/>
-      <!-- Pack rb files to agent part of runner -->
-      <jar destfile="${dist}/unpacked/${plugin}-agent.jar" update="true">
-            <zipfileset dir="${rakerunner.ruby.src}" prefix="rb" />
-      </jar>
       <!-- Recreate plugin bundle from unpacked directory -->
-      <ant antfile="build-common.xml" target="layout plugin bundle">
+      <!--agent  -->
+      <ant antfile="build-common.xml" target="layout agent plugin bundle">
         <property name="plugin" value="${plugin}"/>
         <property name="dist" value="${dist}"/>
       </ant>
+      <!-- Pack rb files to agent part of runner -->
+      <zip destfile="${dist}/${plugin}-agent.zip" update="true">
+        <zipfileset dir="${rakerunner.ruby.src}" prefix="${plugin}/lib/rb" />
+      </zip>
+      <!--whole zip -->
+      <ant antfile="build-common.xml" target="layout whole plugin bundle">
+        <property name="plugin" value="${plugin}"/>
+        <property name="dist" value="${dist}"/>
+      </ant>
+      <!--Delete temp file  -->
+      <delete file="${dist}/${plugin}-agent.zip"/>
+
       <!--Set build and vcs version  -->
       <copyfile src="teamcity-plugin.xml" dest="${dist}/teamcity-plugin.xml" />
       <replace file="${dist}/teamcity-plugin.xml" token="REVISION" value="${build.vcs.number.1}"/>  
@@ -48,7 +57,7 @@
       <delete file="${dist}/teamcity-plugin.xml"/>
     </target>
 
-    <!--Update jar from TeamCity distributive-->
+<!-- Update jar from TeamCity distributive-->
     <target name="update-jars-from-dist">
       <ant antfile="build-common.xml" target="update-jars-from-dist">
         <property name="plugin" value="${plugin}"/>
@@ -71,7 +80,7 @@
         <!-- Bundle -->
         <zip destfile="${rakerunner.libs.dist}/rakeRunnerRuby-src.zip">
             <!-- Ruby sources -->
-            <zipfileset dir="${rakerunner.ruby.src}"/>
+            <zipfileset dir="${plugin}-agent/src/rb"/>
         </zip>
     </target>
 
@@ -88,4 +97,8 @@
 
 <!--Build task for external buildserver  -->
   <target name="build.artifacts" depends="unpack TeamCity-*.tar.gz,unpack rakeRunnerRuby-src.zip, dist"/>
+
+<!--Build task for rake-runner project  -->
+  <target name="build_project" depends="pack-rakeRunnerRuby-src.zip, build.artifacts"/>
+
 </project>
