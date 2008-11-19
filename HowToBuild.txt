@@ -1,68 +1,55 @@
-============================================================
-======== PROJECT,  SOURCES =================================
-============================================================
+Rake tasks runner support for TeamCity 4.x
 
-1.Before opening the project in IDEA for the first time:
-  - Create "dist" directory under project root
-  - Download dowload Teamcity 3.1 libraries (Teamcity-XXXX.tar.gz)
-  - Copy TeamCity-*.tar.gz in dist/
-  - Run "ant extract" (see build.xml)
+=============
+1. Build
+ * Run "build_project" task
 
-============================================================
-======= BUILD  =============================================
-============================================================
-1. Download dowload Teamcity 3.1 libraries (Teamcity-XXXX.tar.gz)
-2. Unpack libraries somewhere (e.g. dist\Teamcity).
-3. Set directory with Teamcity libraries as tc.root.dir Ant build property.
-   E.g.
-     tc.root.dir - dist\Teamcity
-4. Run "dist" task
+2. Deploying
+ * Copy "dist/rake-runner-plugin.zip" to "[TeamCity]/webapps/ROOT/WEB-INF/plugins" folder
 
+3. Updating bundled TeamCity libraries
+ * Download dowload Teamcity 4.x libraries (Teamcity-XXXX.tar.gz)
+ * Copy TeamCity-XXXX.tar.gz in lib/dist/
+ * Ant task "build_project" wil automatically update bundled TC libraries
 
-============================================================
-======= DEPLOYING ==========================================
-============================================================
-1. As plugins
-2. Using "devel-deploy" task:
-   Setup Teamcity BuildServer directories in build file properties.
+4. Sources
 
-   E.g.
-     agentdir - c:\soft\Teamcity_6527\buildAgent
-     webrootdir - c:\soft\Teamcity_6527\webapps\ROOT
+ * root
+ ** [rake-runner-agent] - Agent's part of Teamcity Rake Runner, JAVA and RUBY sources
+ ** [rake-runner-common] - Common code for Agent's and Server's parts or Teamcity Rake Runner, JAVA
+ ** [rake-runner-server] - Server's part of Teamcity Rake Runner, JAVA
+ ** [rake-runner-test] - Tests for rake-runner. TeamCity tests API is required for running tests
+ ** [dist] - Build artifacts
+ ** [lib/dist] - TeamCity libs for updating bundled libs and packed ruby souces for build script
+ ** [lib/teamcity] - Bundled teamcity libraries
 
+5. Updating rake-runner.xml
 
-============================================================
-======= SOURCES ============================================
-============================================================
-[agent] - Agent's part of Teamcity Rake Runner, JAVA
+ * Open rake-runner project (rake-runner.ipr)
+ * Delete JRuby facets from all modules and delet all global variables for JRuby sdks
+ * IDEA->Build->Generate Ant Build:
+   - "Generate single-file and build"
+   - "Overwrite previously generated files"
+   - Uncheck "Enable UI forms compilation" and "Use JDSK definitions from project files"
+ * remove <property file="rake-runner.properties"/> line from rake-runner.xml
+ * delete file rake-runner.properties
+ * remove section "JDK definitions"  (including classpath properties and project.jdk.*) from rake-runner.xml
+ * all invalid properties concerned to jdk
+ * delete target "j2ee.build.rake-runner-serverweb" and it's usages
 
-[common] - Common code for Agent's and Server's parts or Teamcity Rake Runner, JAVA
+6. Internal Properties
 
-[dist] - Contains Teamcity libraries
+  Debug loggers options:
 
-[rakerunner/src] - Agent's part of Teamcity Rake Runner, RUBY. Contains basic functionality for running Rake tasks, tests and spec.
-[rakerunner/test_data] - Contains small ruby project for testing puproses.
+  Use environament variables:
+   * "teamcity.rake.runner.debug.output.hack.disabled" - set variable
+    in "true" to disable output capturing hack that overrides operations with standard output.
 
-[server] - Server's part of Teamcity Rake Runner, JAVA
+   * "teamcity.rake.runner.debug.output.capturer.enabled" - set variable
+    in "true" to use plugin's output capturing from rake tests instead of common TeamcCity behaviour.
 
-=============================================================
-=============================================================
-=============================================================
-========= INTERNAL PROPERTIES ===============================
-=============================================================
-Debug loggers options:
+   * "teamcity.rake.runner.debug.log.path" - enables logger in Ruby
+     part of plugin. Value of thin variable should be path for existing diractory in which plugin will save log files
 
-Use environament variables:
- * "teamcity.rake.runner.debug.output.hack.disabled" - set variable
-  with any value do disable output capturing hack from rake tasks.
-
- * "teamcity.rake.runner.debug.output.capturer.disabled" - set variable
-  with any value do disable all output capturing from rake tasks.
-
- * "teamcity.rake.runner.debug.log.path" - enables logger in Ruby
-   part of plugin
-
- * "teamcity.rake.runner.debug.log.rspec.xml.msgs" - enable XML messages logging in rspec log
-
-System properties:
- * "system.rakeRunner.debug" - enables loggers for JAVA part of plugin
+  System properties:
+   * "teamcity.rake.runner.debug.mode" - set variable to enable loggin from JAVA code of agent part
