@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="rakerunner-teamcity" default="dist">
+<project name="rakerunner-teamcity" default="build_project">
     <!--plugin name-->
     <property name="plugin" value="rake-runner"/>
     <property name="build.vcs.number.1" value="local"/>
@@ -43,7 +43,7 @@
       <delete file="${dist}/${plugin}-agent.zip"/>
 
       <!--Set build and vcs version  -->
-      <copyfile src="teamcity-plugin.xml" dest="${dist}/teamcity-plugin.xml" />
+      <copy file="teamcity-plugin.xml" tofile="${dist}/teamcity-plugin.xml" />
       <replace file="${dist}/teamcity-plugin.xml" token="REVISION" value="${build.vcs.number.1}"/>  
       <zip destfile="${dist}/${plugin}-plugin.zip" update="true">
         <zipfileset file="${dist}/teamcity-plugin.xml"/>
@@ -51,7 +51,7 @@
 
       <!-- Sources zip -->
       <zip destfile="${dist}/${plugin}-src.zip" update="true">
-        <zipfileset dir="${rakerunner.ruby.src}" prefix="${plugin}-agent/src/rb"/>
+        <zipfileset dir="${rakerunner.ruby.src}" prefix="${rakerunner.ruby.src}"/>
         <zipfileset file="${dist}/teamcity-plugin.xml"/>
       </zip>
       <delete file="${dist}/teamcity-plugin.xml"/>
@@ -77,10 +77,11 @@
     </target>
 
     <target name="pack-rakeRunnerRuby-src.zip">
+        <mkdir dir="${rakerunner.libs.dist}"/>
         <!-- Bundle -->
         <zip destfile="${rakerunner.libs.dist}/rakeRunnerRuby-src.zip">
             <!-- Ruby sources -->
-            <zipfileset dir="${plugin}-agent/src/rb"/>
+            <zipfileset dir="${rakerunner.ruby.src}"/>
         </zip>
     </target>
 
@@ -99,6 +100,6 @@
   <target name="build.artifacts" depends="unpack TeamCity-*.tar.gz,unpack rakeRunnerRuby-src.zip, dist"/>
 
 <!--Build task for rake-runner project  -->
-  <target name="build_project" depends="pack-rakeRunnerRuby-src.zip, build.artifacts"/>
+  <target name="build_project" depends="unpack TeamCity-*.tar.gz,dist"/>
 
 </project>

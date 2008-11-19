@@ -2,6 +2,8 @@ Rake tasks runner support for TeamCity 4.x
 
 =============
 1. Build
+ * Copy archive with ruby sources (rakeRunnerRuby-src.zip) to "lib/dist"
+ * Run "unpack rakeRunnerRuby-src.zip" task
  * Run "build_project" task
 
 2. Deploying
@@ -14,14 +16,18 @@ Rake tasks runner support for TeamCity 4.x
 
 4. Sources
 
- * root
- ** [rake-runner-agent] - Agent's part of Teamcity Rake Runner, JAVA and RUBY sources
- ** [rake-runner-common] - Common code for Agent's and Server's parts or Teamcity Rake Runner, JAVA
- ** [rake-runner-server] - Server's part of Teamcity Rake Runner, JAVA
- ** [rake-runner-test] - Tests for rake-runner. TeamCity tests API is required for running tests
- ** [dist] - Build artifacts
- ** [lib/dist] - TeamCity libs for updating bundled libs and packed ruby souces for build script
- ** [lib/teamcity] - Bundled teamcity libraries
+ |- root
+ |--- [rake-runner-agent] - Agent's part of Teamcity Rake Runner, JAVA sources
+ |--- [rake-runner-common] - Common code for Agent's and Server's parts or Teamcity Rake Runner, JAVA
+ |--- [rake-runner-server] - Server's part of Teamcity Rake Runner, JAVA
+ |--- [rake-runner-test] - Tests for rake-runner. TeamCity tests API is required for running tests
+ |--- [dist] - Build artifacts
+ |--- [lib/dist] - TeamCity libs for updating bundled libs and packed ruby souces for build script and RUBY part distributive
+ |--- [lib/teamcity] - Bundled teamcity libraries
+ |--- [lib/rakeRunnerRuby] - Unpacked RUBY part of plugin.
+ |--- [out] - Compilation output directory
+ |--- copyright.txt - Copyright for sources
+ |--- HowToBuild.txt - this file
 
 5. Updating rake-runner.xml
 
