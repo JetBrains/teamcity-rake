@@ -82,15 +82,19 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
 
 
 // Other runner ENV parameters
+      // set runner mode to "buildserver" mode
+      envMap.put(RAKE_MODE_KEY, RAKE_MODE_BUILDSERVER);
+
       // track invoke/execute stages
       if (ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED)) {
         envMap.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
       }
 
-      // explicit output capturer
-      if (!ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_OUTPUT_CAPTURER_ENABLED)) {
-        envMap.put(LOG_OUTPUT_CAPTURER_DISABLED_KEY, Boolean.TRUE.toString());
-      }
+      //TODO it seems it is deprecated
+      //// explicit output capturer
+      //if (!ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_OUTPUT_CAPTURER_ENABLED)) {
+      //  envMap.put(LOG_OUTPUT_CAPTURER_DISABLED_KEY, Boolean.TRUE.toString());
+      //}
 
       cmd.setEnvParams(envMap);
 
