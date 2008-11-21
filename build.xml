@@ -8,7 +8,7 @@
     <property name="teamcity.dist" value="../../dist"/>
     <property name="rakerunner.libs" value="lib"/>
     <property name="rakerunner.libs.dist" value="${rakerunner.libs}/dist"/>
-    <property name="rakerunner.ruby.src" value="${rakerunner.libs}/rakeRunnerRuby"/>
+    <property name="rakerunner.ruby.src" value="${rakerunner.libs}/rake-runner-ruby"/>
 
     <!--For external buildserver-->
     <property name="dist" value="${basedir}/dist"/>
@@ -30,7 +30,7 @@
         <property name="plugin" value="${plugin}"/>
         <property name="dist" value="${dist}"/>
       </ant>
-      <!-- Pack rb files to agent part of runner -->
+      <!-- Pack rb cd ./files to agent part of runner -->
       <zip destfile="${dist}/${plugin}-agent.zip" update="true">
         <zipfileset dir="${rakerunner.ruby.src}" prefix="${plugin}/lib/rb" />
       </zip>
@@ -67,19 +67,19 @@
     </target>
 
 <!-- Rake runner ruby part -->
-    <target name="unpack rakeRunnerRuby-src.zip">
+    <target name="unpack rake-runner-ruby-src.zip">
         <delete dir="${rakerunner.ruby.src}"/>
         <unzip dest="${rakerunner.ruby.src}">
             <fileset dir=".">
-                <include name="${rakerunner.libs.dist}/rakeRunnerRuby-src.zip"/>
+                <include name="${rakerunner.libs.dist}/rake-runner-ruby-src.zip"/>
             </fileset>
         </unzip>
     </target>
 
-    <target name="pack-rakeRunnerRuby-src.zip">
+    <target name="pack-rake-runner-ruby-src.zip">
         <mkdir dir="${rakerunner.libs.dist}"/>
         <!-- Bundle -->
-        <zip destfile="${rakerunner.libs.dist}/rakeRunnerRuby-src.zip">
+        <zip destfile="${rakerunner.libs.dist}/rake-runner-ruby-src.zip">
             <!-- Ruby sources -->
             <zipfileset dir="${rakerunner.ruby.src}"/>
         </zip>
@@ -97,7 +97,9 @@
     </target>
 
 <!--Build task for external buildserver  -->
-  <target name="build.artifacts" depends="unpack TeamCity-*.tar.gz,unpack rakeRunnerRuby-src.zip, dist"/>
+  <target name="build.artifacts" depends="unpack TeamCity-*.tar.gz,unpack rake-runner-ruby-src.zip, dist">
+    <copy  file="${rakerunner.libs.dist}/rake-runner-ruby-src.zip" todir="${dist}"/>
+  </target>
 
 <!--Build task for rake-runner project  -->
   <target name="build_project" depends="unpack TeamCity-*.tar.gz,dist"/>
