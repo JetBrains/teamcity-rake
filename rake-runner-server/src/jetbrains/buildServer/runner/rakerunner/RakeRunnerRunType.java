@@ -16,25 +16,21 @@
 
 package jetbrains.buildServer.runner.rakerunner;
 
+import java.util.HashMap;
+import java.util.Map;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
 import jetbrains.buildServer.serverSide.SBuildType;
-import jetbrains.buildServer.web.openapi.WebResourcesManager;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Roman Chernyatchik
  */
 public class RakeRunnerRunType extends RunType {
 
-  public RakeRunnerRunType(final RunTypeRegistry runTypeRegistry,
-                           final WebResourcesManager resourcesManager) {
-    resourcesManager.addPluginResources("rake-runner", RakeRunnerConstants.RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME);
+  public RakeRunnerRunType(final RunTypeRegistry runTypeRegistry) {
     runTypeRegistry.registerRunType(this);
   }
 
