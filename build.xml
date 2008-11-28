@@ -15,6 +15,7 @@
 
 <!--for TC build script-->
     <target name="dist">
+      <mkdir dir="${rakerunner.ruby.src}"/>
       <ant antfile="build-common.xml" target="dist">
         <property name="plugin" value="${plugin}"/>
         <property name="teamcity.dist" value="${teamcity.dist}"/>
