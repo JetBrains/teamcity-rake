@@ -37,10 +37,6 @@ public class RubySDKUtil {
 
   @NonNls
   private static final String GET_LOAD_PATH_SCRIPT =  "puts $LOAD_PATH";
-  @NonNls
-  private static final String GET_GEM_PATHES_SCRIPT =  "require 'rubygems'; puts Gem.path";
-  @NonNls
-  private static final String GEMS_SUBDIR =  "/gems";
 
   @NotNull
   public static String getSDKTestUnitAutoRunnerScriptPath(@NotNull final Map<String, String> runParameters,
@@ -57,54 +53,6 @@ public class RubySDKUtil {
 
     return findSdkScript(runParameters, buildParameters, TESTRUNNERMEDIATOR_SCRIPT_PATH);
   }
-
-//  public static boolean isGemInstalledInSDK(@NotNull final String gemName,
-//                                            @Nullable final String gemVersion,
-//                                            final boolean acceptHigherVersions,
-//                                            @NotNull final Map<String, String> runParameters,
-//                                            @NotNull final Map<String, String> buildParameters)
-//      throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
-//
-//    final String scriptSource = GET_GEM_PATHES_SCRIPT;
-//    final RubyScriptRunner.Output result = executeScriptFromSource(runParameters, buildParameters, scriptSource);
-//    final String gemPaths[] = TextUtil.splitByLines(result.getStdout());
-//    for (String gemPath : gemPaths) {
-//      final String gemsRootFolderPath = toSystemIndependentName(gemPath + GEMS_SUBDIR);
-//      final File gemsRootFolderFile = new File(gemsRootFolderPath);
-//      try {
-//        if (!gemsRootFolderFile.isDirectory()) {
-//          continue;
-//        }
-//        final File[] files = gemsRootFolderFile.listFiles(new FilenameFilter() {
-//          final String gemNamePrefix = gemName + "-";
-//
-//          public boolean accept(final File dir, @NotNull final String fileName) {
-//            if (!dir.equals(gemsRootFolderFile)) {
-//              return false;
-//            }
-//
-//            if (!fileName.startsWith(gemNamePrefix)) {
-//              return false;
-//            }
-//
-//            if (gemVersion == null) {
-//              return true;
-//            }
-//            final String fileGemVersion = fileName.substring(gemNamePrefix.length() + 1);
-//            return acceptHigherVersions
-//                ? fileGemVersion.compareToIgnoreCase(gemVersion) >= 0
-//                : fileGemVersion.equals(gemVersion);
-//          }
-//        });
-//        if (files.length != 0) {
-//          return true;
-//        }
-//      } catch (SecurityException e) {
-//        throw new RunBuildException(e.getMessage(), e);
-//      }
-//    }
-//    return false;
-//  }
 
   private static RubyScriptRunner.Output executeScriptFromSource(@NotNull final Map<String, String> runParameters,
                                                        @NotNull final Map<String, String> buildParameters, String scriptSource)
