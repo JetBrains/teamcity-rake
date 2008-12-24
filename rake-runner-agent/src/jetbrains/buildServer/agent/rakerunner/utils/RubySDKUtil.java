@@ -139,6 +139,19 @@ public class RubySDKUtil {
       }
     }
 
+    // file wasn't found
+    if (!TextUtil.isEmpty(result.getStderr())) {
+      throw new RakeTasksRunner.MyBuildFailureException(result.getStdout() + "\n" + result.getStderr(),
+                                                        RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+    }
+
+    for (String path : loadPaths) {
+      if (path.contains("JAVA_HOME")) {
+        throw new RakeTasksRunner.MyBuildFailureException(result.getStdout(),
+                                                          RakeRunnerBundle.RUNNER_ERROR_TITLE_JRUBY_PROBLEMS_IN_CONF_ON_AGENT);
+      }
+    }
+
     // Error
     final String msg = "File '" + scriptPath + "' wasn't found in $LOAD_PATH of Ruby SDK with interpreter: '" + ConfigurationParamsUtil.getRubyInterpreterPath(runParameters, buildParameters) + "'";
     throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);

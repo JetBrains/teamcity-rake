@@ -27,5 +27,6 @@ public interface RakeRunnerBundle {
     public String RUNNER_DISPLAY_NAME = "Rake";
 
     public String RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT = "Failed to run Rake..";
+    public String RUNNER_ERROR_TITLE_JRUBY_PROBLEMS_IN_CONF_ON_AGENT = "Failed to run JRuby..";
     String MSG_OS_NOT_SUPPORTED = "OS isn't supported!";
 }
