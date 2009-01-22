@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2008 JetBrains s.r.o.
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,12 @@ import com.intellij.execution.process.*;
 import com.intellij.openapi.util.Key;
 import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
 import com.intellij.openapi.vfs.CharsetToolkit;
-import org.apache.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
+import org.apache.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Roman.Chernyatchik

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2008 JetBrains s.r.o.
+ * Copyright 2000-2009 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,15 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.SystemInfo;
+import java.io.File;
+import java.util.Map;
+import java.util.StringTokenizer;
 import jetbrains.buildServer.agent.Constants;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * @author Roman.Chernyatchik
