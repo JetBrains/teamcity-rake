@@ -17,6 +17,7 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import org.testng.annotations.Test;
@@ -32,6 +33,10 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
     setWorkingDir(runParameters, "app1");
+  }
+
+  protected File getTestDataPath(final String buildFileName) {
+    return new File("svnrepo/rake-runner/rake-runner-test/testData/" + getTestDataSuffixPath() + buildFileName);
   }
 
   public void testBuildScript_stdout() throws Throwable {
@@ -168,6 +173,12 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
     rakeUI_EnableTraceOption();
 
     initAndDoTest("build_script:cmd_failed", false, "app1");
+  }
+
+  public void testBuildScript_task_args() throws Throwable {
+    setPartialMessagesChecker();
+
+    initAndDoTest("build_script:task_args", false, "app1");
   }
 
   //TODO - output capturer

@@ -118,4 +118,12 @@ namespace :build_script do
   task :cmd_failed do
     ruby "-e", "2/0"
   end
+
+  task :task_args do |t, args|
+    project_list = ["rake", "msbuild"]
+    args.with_defaults(:projects => project_list)
+    args.projects.each do |p|
+      puts "Project: #{p}"
+    end
+  end
 end
