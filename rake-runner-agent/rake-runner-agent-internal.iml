@@ -49,15 +49,6 @@
     <orderEntry type="module" module-name="common-runtime" />
     <orderEntry type="module" module-name="rake-runner-common-internal" />
     <orderEntry type="module" module-name="server-logging" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/j2ee.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
   </component>
 </module>
 
