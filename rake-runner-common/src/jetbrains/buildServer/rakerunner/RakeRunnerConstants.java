@@ -31,12 +31,12 @@ public interface RakeRunnerConstants {
   // task name
   @NonNls String SERVER_UI_RAKE_TASKS_PROPERTY = "ui.rakeRunner.rake.tasks.names";
 
-  @NonNls String RAKE_MODE_KEY = "teamcity.rake.runner.mode";
+  @NonNls String RAKE_MODE_KEY = "TEAMCITY_RAKE_RUNNER_MODE";
   @NonNls String RAKE_MODE_BUILDSERVER = "buildserver";
 
   // trace/invoke
   @NonNls String SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED = "ui.rakeRunner.rake.trace.invoke.exec.stages.enabled";
-  @NonNls String RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY = "teamcity.rake.runner.rake.trace.invoke.exec.stages.enabled";
+  @NonNls String RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY = "TEAMCITY_RAKE_TRACE";
 
   // TEST_OPTS
   @NonNls String SERVER_UI_RAKE_TEST_UNIT_TESTOPTS_PROPERTY = "ui.rakeRunner.test.unit.options";
@@ -62,10 +62,8 @@ public interface RakeRunnerConstants {
 
   // SDK hack
   @NonNls String RUBYLIB_ENVIRONMENT_VARIABLE = "RUBYLIB";
-  @NonNls String ORIGINAL_SDK_AUTORUNNER_PATH_KEY = "rake.runner.original.sdk.test.unit.autorunner.path";
-  @NonNls String ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY = "rake.runner.original.sdk.test.unit.testrunnermadiator.path";
-
-  @NonNls String LOG_OUTPUT_CAPTURER_DISABLED_KEY = "teamcity.rake.runner.debug.output.capturer.disabled";
+  @NonNls String ORIGINAL_SDK_AUTORUNNER_PATH_KEY = "TEAMCIY_RAKE_TU_AUTORUNNER_PATH";
+  @NonNls String ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY = "TEAMCITY_RAKE_TU_TESTRUNNERMADIATOR_PATH";
 
   // Rake
   @NonNls String RAKE_CMDLINE_OPTIONS_RAKEFILE = "--rakefile";
