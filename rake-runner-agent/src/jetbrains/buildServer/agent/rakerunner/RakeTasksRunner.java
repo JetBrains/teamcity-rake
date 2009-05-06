@@ -36,7 +36,6 @@ import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_P
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
-import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,8 +44,6 @@ import org.jetbrains.annotations.Nullable;
  * @author Roman.Chernyatchik
  */
 public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerConstants {
-  protected static final Logger LOG = Logger.getLogger(RakeTasksRunner.class.getName());
-
   private final Set<File> myFilesToDelete = new HashSet<File>();
   private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'teamcity/spec/runner/formatter/teamcity/formatter'";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
@@ -60,6 +57,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
       return true;
   }
 
+  @Override
   protected void buildCommandLine(@NotNull final GeneralCommandLine cmd,
                                   @NotNull final File soourcesRootDir,
                                   @NotNull final Map<String, String> runParams,
@@ -157,6 +155,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     throw new RunBuildException(e.getMessage());
   }
 
+  @Override
   protected boolean shouldDumpOutputLinesOnError() {
     return false;
   }
@@ -176,6 +175,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     }
   }
 
+  @Override
   protected void processWillBeTerminated(final Map<String, String> runParameters,
                                          final ProcessEvent processEvent,
                                          final boolean b) {
@@ -183,6 +183,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     super.processWillBeTerminated(runParameters, processEvent, b);
   }
 
+  @Override
   protected void processTerminated(final RunEnvironment runEnvironment,
                                    final boolean isFailed) {
     getBuildLogger().flush();
@@ -259,6 +260,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
       this.title = title;
     }
 
+    @Override
     public String getMessage() {
       return msg;
     }
