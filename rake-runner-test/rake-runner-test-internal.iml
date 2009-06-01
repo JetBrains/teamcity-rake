@@ -12,7 +12,7 @@
     <orderEntry type="module" module-name="rake-runner-common-internal" />
     <orderEntry type="module" module-name="rake-runner-server-internal" />
     <orderEntry type="library" name="testng" level="project" />
-    <orderEntry type="module" module-name="test" />
+    <orderEntry type="module" module-name="test-core" />
     <orderEntry type="module" module-name="agent-openapi" />
     <orderEntry type="module" module-name="runtime-util" />
     <orderEntry type="module" module-name="common" />
