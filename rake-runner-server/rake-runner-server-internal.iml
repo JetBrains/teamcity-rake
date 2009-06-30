@@ -71,11 +71,11 @@
           </containerElement>
           <containerElement type="module" name="rake-runner-server-internal">
             <attribute name="method" value="5" />
-            <attribute name="URI" value="/WEB-INF/lib/rake-runner-server.jar" />
+            <attribute name="URI" value="/WEB-INF/plugins/rake-runner/rake-runner-server.jar" />
           </containerElement>
           <containerElement type="module" name="rake-runner-common-internal">
             <attribute name="method" value="5" />
-            <attribute name="URI" value="/WEB-INF/lib/rake-runner-common.jar" />
+            <attribute name="URI" value="/WEB-INF/plugins/rake-runner/rake-runner-common.jar" />
           </containerElement>
         </packaging>
       </configuration>
