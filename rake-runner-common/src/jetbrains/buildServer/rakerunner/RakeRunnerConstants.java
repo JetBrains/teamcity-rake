@@ -38,14 +38,6 @@ public interface RakeRunnerConstants {
   @NonNls String SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED = "ui.rakeRunner.rake.trace.invoke.exec.stages.enabled";
   @NonNls String RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY = "TEAMCITY_RAKE_TRACE";
 
-  // TEST_OPTS
-  @NonNls String SERVER_UI_RAKE_TEST_UNIT_TESTOPTS_PROPERTY = "ui.rakeRunner.test.unit.options";
-  @NonNls String RAKE_TEST_UNIT_TESTOPTS_PARAM_NAME = "TESTOPTS";
-
-  // SPEC_OPTS
-  @NonNls String SERVER_UI_RSPEC_SPEC_OPTS_PROPERTY = "ui.rakeRunner.rspec.specoptions";
-  @NonNls String RAKE__RSPEC_SPEC_OPTS_PARAM_NAME = "SPEC_OPTS";
-
   // Additional CMD params
   @NonNls String SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY = "ui.rakeRunner.additional.rake.cmd.params";
 
@@ -54,6 +46,24 @@ public interface RakeRunnerConstants {
 
   // Enable rake output capturer
   @NonNls String SERVER_UI_RAKE_OUTPUT_CAPTURER_ENABLED = "ui.rakeRunner.rake.output.capturer.enabled";
+
+  // Test Frameworks
+
+  // Test::Unit
+  @NonNls String SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.testunit.enabled";
+
+  // RSpec
+  @NonNls String SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.rspec.enabled";
+  @NonNls String SERVER_UI_RAKE_RSPEC_OPTS_PROPERTY = "ui.rakeRunner.rspec.specoptions";
+  @NonNls String RAKE_RSPEC_OPTS_PARAM_NAME = "SPEC_OPTS";
+
+  // Test-Spec
+  @NonNls String SERVER_UI_RAKE_TESTSPEC_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.testspec.enabled";
+
+  // Cucumber
+  @NonNls String SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.cucumber.enabled";
+  @NonNls String SERVER_UI_RAKE_CUCUMBER_OPTS_PROPERTY = "ui.rakeRunner.cucumber.options";
+  @NonNls String RAKE_CUCUMBER_OPTS_PARAM_NAME = "CUCUMBER_OPTS";
 
 // Agent properties:
 

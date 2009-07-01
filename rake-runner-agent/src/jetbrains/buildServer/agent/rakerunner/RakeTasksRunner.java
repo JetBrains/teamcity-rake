@@ -121,21 +121,15 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
         addCmdlineArguments(cmd, tasks_names);
       }
 
-      //Test::Unit TESTOPTS
-      final String testOpts = runParams.get(SERVER_UI_RAKE_TEST_UNIT_TESTOPTS_PROPERTY);
-      if (!TextUtil.isEmptyOrWhitespaced(testOpts)) {
-        cmd.addParameter(RAKE_TEST_UNIT_TESTOPTS_PARAM_NAME + "=" + testOpts.trim());
-      }
-
       final String specRunnerInitString = RSPEC_RUNNER_OPTIONS_REQUIRE + " " + RSPEC_RUNNERR_OPTIONS_FORMATTER;
-      String specOpts = runParams.get(SERVER_UI_RSPEC_SPEC_OPTS_PROPERTY);
+      String specOpts = runParams.get(SERVER_UI_RAKE_RSPEC_OPTS_PROPERTY);
       if (TextUtil.isEmpty(specOpts)) {
         specOpts = specRunnerInitString;
       } else {
         specOpts = specOpts.trim() + " " + specRunnerInitString;
       }
 
-      cmd.addParameter(RAKE__RSPEC_SPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
+      cmd.addParameter(RAKE_RSPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
 
       if (inDebugMode) {
         getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
