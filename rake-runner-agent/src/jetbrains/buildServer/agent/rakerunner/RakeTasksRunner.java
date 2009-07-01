@@ -87,12 +87,6 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
         envMap.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
       }
 
-      //TODO it seems it is deprecated
-      //// explicit output capturer
-      //if (!ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_OUTPUT_CAPTURER_ENABLED)) {
-      //  envMap.put(LOG_OUTPUT_CAPTURER_DISABLED_KEY, Boolean.TRUE.toString());
-      //}
-
       cmd.setEnvParams(envMap);
 
 // CommandLine options
