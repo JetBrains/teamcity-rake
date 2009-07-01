@@ -47,6 +47,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
   private final Set<File> myFilesToDelete = new HashSet<File>();
   private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'teamcity/spec/runner/formatter/teamcity/formatter'";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
+  private final String CUCUMBER_RUNNERR_OPTIONS_FORMATTER = "--format Teamcity::Cucumber::Formatter";
 
   @NonNls
   public String getType() {
@@ -95,6 +96,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
       cmd.setExePath(ConfigurationParamsUtil.getRubyInterpreterPath(runParams, buildParams));
 
       // Rake runner script
+      //TODO add custom rake runner script support!!!
       cmd.addParameter(RubyProjectSourcesUtil.getRakeRunnerPath());
 
       // Rake options
@@ -103,6 +105,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
         cmd.addParameter(RAKE_CMDLINE_OPTIONS_RAKEFILE);
         cmd.addParameter(buildFile.getAbsolutePath());
       }
+
       // Other arguments
       final String otherArgsString = runParams.get(SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY);
       if (!TextUtil.isEmptyOrWhitespaced(otherArgsString)) {
@@ -115,15 +118,11 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
         addCmdlineArguments(cmd, tasks_names);
       }
 
-      final String specRunnerInitString = RSPEC_RUNNER_OPTIONS_REQUIRE + " " + RSPEC_RUNNERR_OPTIONS_FORMATTER;
-      String specOpts = runParams.get(SERVER_UI_RAKE_RSPEC_OPTS_PROPERTY);
-      if (TextUtil.isEmpty(specOpts)) {
-        specOpts = specRunnerInitString;
-      } else {
-        specOpts = specOpts.trim() + " " + specRunnerInitString;
-      }
+      // rspec
+      attachRSpecFormatterIfNeeded(cmd, runParams);
 
-      cmd.addParameter(RAKE_RSPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
+      // cucumber
+      attachCucumberFormatterIfNeeded(cmd, runParams);
 
       if (inDebugMode) {
         getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
@@ -154,11 +153,9 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     final String s = StringUtil.stripNewLine(lineWithoutLF);
 
     if (lastOutputKey == ProcessOutputTypes.STDERR) {
-//      getBuildLogger().error(s);
       getBuildLogger().warning(s);
     }
     else {
-      //TODO: think about SystemOutput
       getBuildLogger().message(s);
     }
   }
@@ -184,10 +181,37 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     myFilesToDelete.clear();
   }
 
+  private void attachRSpecFormatterIfNeeded(final GeneralCommandLine cmd,
+                                            final Map<String, String> runParams) {
+    //attach RSpec formatter only if spec reporter enabled
+    if (ConfigurationParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY)) {
+      final String specRunnerInitString = RSPEC_RUNNER_OPTIONS_REQUIRE + " " + RSPEC_RUNNERR_OPTIONS_FORMATTER;
+      String specOpts = runParams.get(SERVER_UI_RAKE_RSPEC_OPTS_PROPERTY);
+      if (TextUtil.isEmpty(specOpts)) {
+        specOpts = specRunnerInitString;
+      } else {
+        specOpts = specOpts.trim() + " " + specRunnerInitString;
+      }
+
+      cmd.addParameter(RAKE_RSPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
+    }
+  }
+
+  private void attachCucumberFormatterIfNeeded(final GeneralCommandLine cmd,
+                                               final Map<String, String> runParams) {
+    //attach Cucumber formatter only if cucumber reporter enabled
+    if (ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY)) {
+      //TODO use additional options!
+      cmd.addParameter(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + CUCUMBER_RUNNERR_OPTIONS_FORMATTER);
+    }
+  }
+
   private void addTestRunnerPatchFiles(final Map<String, String> runParams,
                                        final Map<String, String> buildParams,
                                        final HashMap<String, String> envMap)
       throws MyBuildFailureException, RunBuildException {
+
+    //TODO separate Test::Unit hack from others formatters
 
     final String patchedRubySDKFilesRoot = RubyProjectSourcesUtil.getPatchedRubySDKFilesRoot();
     // adds out patch to loadpath
