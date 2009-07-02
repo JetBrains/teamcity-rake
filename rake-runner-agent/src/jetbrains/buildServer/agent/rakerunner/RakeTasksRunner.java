@@ -282,9 +282,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     final File buildFile;
     if (BuildFileRunnerUtil.isCustomBuildFileUsed(runParameters)) {
       buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);
-      if (buildFile != null) {
-        myFilesToDelete.add(buildFile);
-      }
+      myFilesToDelete.add(buildFile);
     } else {
       final String buildFilePath = runParameters.get(BUILD_FILE_PATH_KEY);
       if (PropertiesUtil.isEmptyOrNull(buildFilePath)) {
