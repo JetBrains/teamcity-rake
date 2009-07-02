@@ -75,7 +75,7 @@ public class RubySDKUtil {
   private static String findSdkScript(final Map<String, String> runParameters,
                                       final Map<String, String> buildParameters,
                                       final String scriptPath) throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
-
+    //TODO unit-test gem of ruby1.9 support
     final String scriptSource = GET_LOAD_PATH_SCRIPT;
     final RubyScriptRunner.Output result = executeScriptFromSource(runParameters, buildParameters, scriptSource);
     final String loadPaths[] = TextUtil.splitByLines(result.getStdout());

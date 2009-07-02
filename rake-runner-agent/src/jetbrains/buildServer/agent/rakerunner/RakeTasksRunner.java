@@ -72,19 +72,24 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
 
     final File buildFile = getBuildFile(runParams);
     try {
-      // Special rake runner Environment properties
+// Special rake runner Environment properties
       final HashMap<String, String> envMap = new HashMap<String, String>();
 
-// SDK patch
+      // SDK patch
       addTestRunnerPatchFiles(runParams, buildParams, envMap);
 
+      // attached frameworks info
+      if (SupportedTestFramework.isAnyFrameworkActivated()) {
+        envMap.put(RAKERUNNER_USED_FRAMEWORKS_KEY,
+                   SupportedTestFramework.getActivatedFrameworksConfig(runParams));
 
-// Other runner ENV parameters
+      }
+
       // set runner mode to "buildserver" mode
       envMap.put(RAKE_MODE_KEY, RAKE_MODE_BUILDSERVER);
 
       // track invoke/execute stages
-      if (ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED)) {
+      if (ConfigurationParamsUtil.isTraceStagesOptionEnabled(runParams)) {
         envMap.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
       }
 
@@ -184,7 +189,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
   private void attachRSpecFormatterIfNeeded(final GeneralCommandLine cmd,
                                             final Map<String, String> runParams) {
     //attach RSpec formatter only if spec reporter enabled
-    if (ConfigurationParamsUtil.isParameterEnabled(runParams, RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY)) {
+    if (SupportedTestFramework.RSPEC.isActivated(runParams)) {
       final String specRunnerInitString = RSPEC_RUNNER_OPTIONS_REQUIRE + " " + RSPEC_RUNNERR_OPTIONS_FORMATTER;
       String specOpts = runParams.get(SERVER_UI_RAKE_RSPEC_OPTS_PROPERTY);
       if (TextUtil.isEmpty(specOpts)) {
@@ -200,7 +205,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
   private void attachCucumberFormatterIfNeeded(final GeneralCommandLine cmd,
                                                final Map<String, String> runParams) {
     //attach Cucumber formatter only if cucumber reporter enabled
-    if (ConfigurationParamsUtil.isParameterEnabled(runParams, SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY)) {
+    if (SupportedTestFramework.CUCUMBER.isActivated(runParams)) {
       //TODO use additional options!
       cmd.addParameter(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + CUCUMBER_RUNNERR_OPTIONS_FORMATTER);
     }
@@ -211,37 +216,48 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
                                        final HashMap<String, String> envMap)
       throws MyBuildFailureException, RunBuildException {
 
-    //TODO separate Test::Unit hack from others formatters
 
-    final String patchedRubySDKFilesRoot = RubyProjectSourcesUtil.getPatchedRubySDKFilesRoot();
-    // adds out patch to loadpath
+    if (!SupportedTestFramework.isAnyFrameworkActivated(runParams)) {
+      // do nothing
+      return;
+    }
+
+    final StringBuilder buff = new StringBuilder();
+
+    // common part
+    buff.append(RubyProjectSourcesUtil.getLoadPath_PatchRoot_Common());
+
+    // Enable Test::Unit patch for : test::unit, test::spec and shoulda frameworks
+    if (SupportedTestFramework.isTestUnitBasedFrameworksActivated(runParams)) {
+      buff.append(File.pathSeparatorChar);
+      buff.append(RubyProjectSourcesUtil.getLoadPath_PatchRoot_TestUnit());
+
+      // due to patching loadpath we replace original autorunner but it is used buy our tests runner
+      envMap.put(ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
+                 RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(runParams, buildParams));
+      envMap.put(ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY,
+                 RubySDKUtil.getSDKTestUnitTestRunnerMediatorScriptPath(runParams, buildParams));
+    }
+
+    // for bdd frameworks
+    if (SupportedTestFramework.CUCUMBER.isActivated(runParams)
+        || SupportedTestFramework.RSPEC.isActivated(runParams)) {
+      buff.append(File.pathSeparatorChar);
+      buff.append(RubyProjectSourcesUtil.getLoadPath_PatchRoot_Bdd());
+    }
+
+    // patch loadpath
     envMap.put(RUBYLIB_ENVIRONMENT_VARIABLE,
-        OSUtil.appendToRUBYLIBEnvVariable(patchedRubySDKFilesRoot));
-    // due to patching loadpath we replace original autorunner but it is used buy our tests runner
-    envMap.put(ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
-        RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(runParams, buildParams));
-    envMap.put(ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY,
-        RubySDKUtil.getSDKTestUnitTestRunnerMediatorScriptPath(runParams, buildParams));
+               OSUtil.appendToRUBYLIBEnvVariable(buff.toString()));
   }
 
   private void addCmdlineArguments(@NotNull final GeneralCommandLine cmdLine, @NotNull final String argsString) {
     final List<String> stringList = StringUtil.splitHonorQuotes(argsString, ' ');
     for (String arg : stringList) {
-      cmdLine.addParameter(stripDoubleQuoteAroundValue(arg));
+      cmdLine.addParameter(TextUtil.stripDoubleQuoteAroundValue(arg));
     }
   }
 
-  private String stripDoubleQuoteAroundValue(@NotNull final String str) {
-    String text = str;
-    if (StringUtil.startsWithChar(text, '\"')) {
-      text = text.substring(1);
-    }
-    if (StringUtil.endsWithChar(text, '\"')) {
-      text = text.substring(0, text.length() - 1);
-    }
-    return text;
-  }
- 
   @Nullable
   private File getBuildFile(Map<String, String> runParameters) throws IOException, RunBuildException {
     final File buildFile;

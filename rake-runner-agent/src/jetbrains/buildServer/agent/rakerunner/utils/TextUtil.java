@@ -18,6 +18,8 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+import jetbrains.buildServer.util.StringUtil;
 
 /**
  * @author Roman.Chernyatchik
@@ -67,5 +69,16 @@ public class TextUtil {
    */
   public static String[] splitByLines(final String string) {
     return EOL_SPLIT_PATTERN.split(string);
+  }
+
+  public static String stripDoubleQuoteAroundValue(@NotNull final String str) {
+    String text = str;
+    if (StringUtil.startsWithChar(text, '\"')) {
+      text = text.substring(1);
+    }
+    if (StringUtil.endsWithChar(text, '\"')) {
+      text = text.substring(0, text.length() - 1);
+    }
+    return text;
   }
 }

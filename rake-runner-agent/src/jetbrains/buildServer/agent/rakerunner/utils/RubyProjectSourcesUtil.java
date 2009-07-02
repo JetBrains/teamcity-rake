@@ -33,8 +33,11 @@ public class RubyProjectSourcesUtil {
   @NonNls
   private static final String RUBY_SOURCES_SUBDIR = "rb";
   @NonNls
-  private static final String RUBY_SOURCES_SKD_PATCH_FOLDER = "patch";
-  private static final String RUBY_SOURCES_RAKE_RUNNER = "runner"+ File.separatorChar + "rakerunner.rb";
+  private static final String PATCH_FOLDER = File.separatorChar + "patch" + File.separatorChar;
+  private static final String PATCH_FOLDER_BDD = PATCH_FOLDER  + "bdd";
+  private static final String PATCH_FOLDER_COMMON = PATCH_FOLDER + "common";
+  private static final String PATCH_FOLDER_TESTUNIT = PATCH_FOLDER + "testunit";
+  private static final String RUBY_SOURCES_RAKE_RUNNER =  + File.separatorChar + "runner"+ File.separatorChar + "rakerunner.rb";
 
   @NotNull
   private static String getRootPath() throws RunBuildException {
@@ -62,13 +65,21 @@ public class RubyProjectSourcesUtil {
 
   @NotNull
   public static String getRakeRunnerPath() throws RunBuildException {
-    final String path = getRootPath();
-    return path + File.separatorChar + RUBY_SOURCES_RAKE_RUNNER;
+    return getRootPath() + RUBY_SOURCES_RAKE_RUNNER;
   }
 
   @NotNull
-  public static String getPatchedRubySDKFilesRoot() throws RunBuildException {
-    final String path = getRootPath();
-    return path + File.separatorChar + RUBY_SOURCES_SKD_PATCH_FOLDER;
+  public static String getLoadPath_PatchRoot_Bdd() throws RunBuildException {
+    return getRootPath() +PATCH_FOLDER_BDD;
+  }
+
+  @NotNull
+  public static String getLoadPath_PatchRoot_Common() throws RunBuildException {
+    return getRootPath() + PATCH_FOLDER_COMMON;
+  }
+
+  @NotNull
+  public static String getLoadPath_PatchRoot_TestUnit() throws RunBuildException {
+    return getRootPath() + PATCH_FOLDER_TESTUNIT;
   }
 }

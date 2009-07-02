@@ -60,9 +60,12 @@ public interface RakeRunnerConstants {
   // Test-Spec
   @NonNls String SERVER_UI_RAKE_TESTSPEC_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.testspec.enabled";
 
+  // Shoulda
+  @NonNls String SERVER_UI_RAKE_SHOULDA_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.should.enabled";
+
   // Cucumber
   @NonNls String SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.cucumber.enabled";
-  @NonNls String SERVER_UI_RAKE_CUCUMBER_OPTS_PROPERTY = "ui.rakeRunner.cucumber.options";
+  //@NonNls String SERVER_UI_RAKE_CUCUMBER_OPTS_PROPERTY = "ui.rakeRunner.cucumber.options";
   @NonNls String RAKE_CUCUMBER_OPTS_PARAM_NAME = "CUCUMBER_OPTS";
 
 // Agent properties:
@@ -77,4 +80,7 @@ public interface RakeRunnerConstants {
 
   // Rake
   @NonNls String RAKE_CMDLINE_OPTIONS_RAKEFILE = "--rakefile";
+
+  // Attached frameworks
+  @NonNls String RAKERUNNER_USED_FRAMEWORKS_KEY = "TEAMCITY_RAKE_RNNER_USED_FRAMEWORKS";
 }
