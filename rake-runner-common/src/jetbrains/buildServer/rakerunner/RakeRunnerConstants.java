@@ -69,6 +69,9 @@ public interface RakeRunnerConstants {
   @NonNls String RAKE_CUCUMBER_OPTS_PARAM_NAME = "CUCUMBER_OPTS";
 
 // Agent properties:
+  // Custom rake tasks runner script
+  @NonNls String CUSTOM_RAKERUNNER_SCRIPT = "system.teamcity.rake.runner.custom.runner";
+
 
   // Teamcity Rake Runner Debug and logs
   @NonNls String DEBUG_PROPERTY = "system.teamcity.rake.runner.debug.mode";
@@ -82,5 +85,5 @@ public interface RakeRunnerConstants {
   @NonNls String RAKE_CMDLINE_OPTIONS_RAKEFILE = "--rakefile";
 
   // Attached frameworks
-  @NonNls String RAKERUNNER_USED_FRAMEWORKS_KEY = "TEAMCITY_RAKE_RNNER_USED_FRAMEWORKS";
+  @NonNls String RAKERUNNER_USED_FRAMEWORKS_KEY = "TEAMCITY_RAKE_RUNNER_USED_FRAMEWORKS";
 }

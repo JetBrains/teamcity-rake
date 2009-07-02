@@ -68,7 +68,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     // runParams - all server-ui options
     // buildParams - system properties (system.*), environment vars (env.*)
 
-    final boolean inDebugMode = ConfigurationParamsUtil.isParameterEnabled(buildParams, RakeRunnerConstants.DEBUG_PROPERTY);
+    final boolean inDebugMode = ConfigurationParamsUtil.isParameterEnabled(buildParams, DEBUG_PROPERTY);
 
     final File buildFile = getBuildFile(runParams);
     try {
@@ -101,8 +101,17 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
       cmd.setExePath(ConfigurationParamsUtil.getRubyInterpreterPath(runParams, buildParams));
 
       // Rake runner script
-      //TODO add custom rake runner script support!!!
-      cmd.addParameter(RubyProjectSourcesUtil.getRakeRunnerPath());
+      final String rakeRunnerPath;
+      final String customRakeRunnerScript = buildParams.get(RakeRunnerConstants.CUSTOM_RAKERUNNER_SCRIPT);
+      if (!TextUtil.isEmpty(customRakeRunnerScript)) {
+        // use custom runner
+        rakeRunnerPath = customRakeRunnerScript;
+      } else {
+        // default one
+        rakeRunnerPath = RubyProjectSourcesUtil.getRakeRunnerPath();
+      }
+
+      cmd.addParameter(rakeRunnerPath);
 
       // Rake options
       // Custom Rakefile if specified
