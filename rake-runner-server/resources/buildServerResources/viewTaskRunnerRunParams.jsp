@@ -55,8 +55,8 @@
     <div class="nestedParameter">
         <ul style="list-style: circle; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
           <li>
+            Test::Unit:
             <div class="parameter">
-              Test::Unit:
               <div class="nestedParameter">
                 <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
                   <li>Enabled: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.testunit.enabled"/></strong></li>
@@ -66,9 +66,12 @@
             </div>
           </li>
 
+          <li>Test-Spec: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.testspec.enabled"/></strong></li>
+          <li>Shoulda: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.shoulda.enabled"/></strong></li>
+
           <li>
+            RSpec:
             <div class="parameter">
-              RSpec:
               <div class="nestedParameter">
                 <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
                   <li>Enabled:<strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.rspec.enabled"/></strong></li>
@@ -78,11 +81,9 @@
             </div>
           </li>
 
-          <li>Test-Spec: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.testspec.enabled"/></strong></li>
-
           <li>
+            Cucumber:
             <div class="parameter">
-              Cucumber:
               <div class="nestedParameter">
                 <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
                   <li>Enabled:<strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.cucumber.enabled"/></strong></li>

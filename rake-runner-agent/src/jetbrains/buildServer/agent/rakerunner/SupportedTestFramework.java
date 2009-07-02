@@ -21,12 +21,9 @@ import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.agent.rakerunner.utils.ConfigurationParamsUtil;
 
 /**
-* Created by IntelliJ IDEA.
-* User: romeo
-* Date: Jul 2, 2009
-* Time: 1:20:34 PM
-* To change this template use File | Settings | File Templates.
+* @author Roman.Chernyatchik
 */
+
 public enum SupportedTestFramework {
   TEST_UNIT(":test_unit", RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY),
   TEST_SPEC(":test_spec", RakeRunnerConstants.SERVER_UI_RAKE_TESTSPEC_ENABLED_PROPERTY),

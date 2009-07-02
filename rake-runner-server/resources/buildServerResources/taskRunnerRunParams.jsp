@@ -113,6 +113,17 @@
     <td/>
   </tr>
 
+      <%-- Shoulda --%>
+    <th>
+      <label>Shoulda</label>
+    </th>
+    <td>
+      <props:checkboxProperty name="ui.rakeRunner.frameworks.shoulda.enabled"/>
+      <label for="ui.rakeRunner.frameworks.shoulda.enabled">Enabled</label>
+    </td>
+    <td/>
+  </tr>
+
   <tr>
       <%-- RSpec --%>
     <th>

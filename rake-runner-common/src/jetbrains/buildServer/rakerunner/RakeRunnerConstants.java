@@ -61,7 +61,7 @@ public interface RakeRunnerConstants {
   @NonNls String SERVER_UI_RAKE_TESTSPEC_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.testspec.enabled";
 
   // Shoulda
-  @NonNls String SERVER_UI_RAKE_SHOULDA_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.should.enabled";
+  @NonNls String SERVER_UI_RAKE_SHOULDA_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.shoulda.enabled";
 
   // Cucumber
   @NonNls String SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY = "ui.rakeRunner.frameworks.cucumber.enabled";
