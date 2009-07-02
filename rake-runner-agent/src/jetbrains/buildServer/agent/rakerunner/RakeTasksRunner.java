@@ -79,7 +79,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
       addTestRunnerPatchFiles(runParams, buildParams, envMap);
 
       // attached frameworks info
-      if (SupportedTestFramework.isAnyFrameworkActivated()) {
+      if (SupportedTestFramework.isAnyFrameworkActivated(runParams)) {
         envMap.put(RAKERUNNER_USED_FRAMEWORKS_KEY,
                    SupportedTestFramework.getActivatedFrameworksConfig(runParams));
 
