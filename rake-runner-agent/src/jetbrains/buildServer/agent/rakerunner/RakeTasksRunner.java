@@ -206,8 +206,18 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
                                                final Map<String, String> runParams) {
     //attach Cucumber formatter only if cucumber reporter enabled
     if (SupportedTestFramework.CUCUMBER.isActivated(runParams)) {
-      //TODO use additional options!
-      cmd.addParameter(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + CUCUMBER_RUNNERR_OPTIONS_FORMATTER);
+      //TODO use additional options when cucumber will support it!
+      //cmd.addParameter(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + CUCUMBER_RUNNERR_OPTIONS_FORMATTER);
+
+      final String cucumberRunnerInitString = CUCUMBER_RUNNERR_OPTIONS_FORMATTER;
+      String cucumberOpts = runParams.get(SERVER_UI_RAKE_CUCUMBER_OPTS_PROPERTY);
+      if (TextUtil.isEmpty(cucumberOpts)) {
+        cucumberOpts = cucumberRunnerInitString;
+      } else {
+        cucumberOpts = cucumberOpts.trim() + " " + cucumberRunnerInitString;
+      }
+
+      cmd.addParameter(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + cucumberOpts.trim());
     }
   }
 
