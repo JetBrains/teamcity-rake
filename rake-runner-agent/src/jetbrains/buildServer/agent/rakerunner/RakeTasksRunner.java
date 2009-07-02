@@ -102,7 +102,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
 
       // Rake runner script
       final String rakeRunnerPath;
-      final String customRakeRunnerScript = buildParams.get(RakeRunnerConstants.CUSTOM_RAKERUNNER_SCRIPT);
+      final String customRakeRunnerScript = buildParams.get(CUSTOM_RAKERUNNER_SCRIPT);
       if (!TextUtil.isEmpty(customRakeRunnerScript)) {
         // use custom runner
         rakeRunnerPath = customRakeRunnerScript;
