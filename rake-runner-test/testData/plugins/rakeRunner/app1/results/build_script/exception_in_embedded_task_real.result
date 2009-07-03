@@ -1,0 +1,2 @@
+--1--##teamcity[message text='ZeroDivisionError: divided by 0' status='ERROR' errorDetails='$STACK_TRACE$' timestamp='$TIME$'] NORMAL
+--1--##teamcity[message text='Rake aborted!' status='ERROR' timestamp='$TIME$'] NORMAL

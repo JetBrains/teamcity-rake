@@ -37,7 +37,7 @@ public class RubyProjectSourcesUtil {
   private static final String PATCH_FOLDER_BDD = PATCH_FOLDER  + "bdd";
   private static final String PATCH_FOLDER_COMMON = PATCH_FOLDER + "common";
   private static final String PATCH_FOLDER_TESTUNIT = PATCH_FOLDER + "testunit";
-  private static final String RUBY_SOURCES_RAKE_RUNNER =  + File.separatorChar + "runner"+ File.separatorChar + "rakerunner.rb";
+  private static final String RUBY_SOURCES_RAKE_RUNNER = File.separatorChar + "runner"+ File.separatorChar + "rakerunner.rb";
 
   @NotNull
   private static String getRootPath() throws RunBuildException {
@@ -45,19 +45,21 @@ public class RubyProjectSourcesUtil {
 
     final File rubySourcesDir;
     if (jarPath != null && jarPath.endsWith(RakeRunnerConstants.AGENT_BUNDLE_JAR)) {
+      // compiled mode
       rubySourcesDir = new File(jarPath.substring(0, jarPath.length() - RakeRunnerConstants.AGENT_BUNDLE_JAR.length())
           + RUBY_SOURCES_SUBDIR);
     } else {
-      rubySourcesDir = new File(jarPath + File.separatorChar + RUBY_SOURCES_SUBDIR);
+      // debug mode
+      rubySourcesDir = new File(jarPath + File.separatorChar + "../../lib/rake-runner-ruby");
     }
 
     try {
       if (rubySourcesDir.exists() && rubySourcesDir.isDirectory()) {
-        return rubySourcesDir.getPath();
+        return rubySourcesDir.getCanonicalPath();
       }
       throw new RunBuildException("Unable to find bundled ruby scripts folder("
-          + rubySourcesDir.getPath()
-          + "). Plugin is damaged.");
+          + rubySourcesDir.getCanonicalPath()
+          + " [original path: " + rubySourcesDir.getPath() + "]). Plugin is damaged.");
     } catch (Exception e) {
       throw new RunBuildException(e.getMessage(), e);
     }

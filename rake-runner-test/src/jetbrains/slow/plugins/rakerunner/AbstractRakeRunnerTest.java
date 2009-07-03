@@ -30,6 +30,7 @@ import jetbrains.slow.RunnerTestBase;
  * @author Roman Chernyatchik
  */
 public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
+
   public AbstractRakeRunnerTest(String s) {
     super(s);
   }
@@ -65,6 +66,12 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
     initAndDoTest(task_full_name, "", shouldPass, testDataApp);
   }
 
+ protected void initAndDoRealTest(final String task_full_name,
+                              final boolean shouldPass,
+                              final String testDataApp) throws Throwable {
+    initAndDoTest(task_full_name, "_real", shouldPass, testDataApp);
+  }
+
   protected void initAndDoTest(final String task_full_name,
                                final String result_file_suffix,
                                final boolean shouldPass,
@@ -80,6 +87,11 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
   protected void rakeUI_EnableTraceOption() {
     myAgentRunningBuildEx.addRunnerParameter(RakeRunnerConstants.SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED,
                                              "true");
+  }
+
+  protected void setMockingOptions(final MockingOptions... options) {
+    MockingOptions.addToBuildParams(options,
+                                    myAgentRunningBuildEx.getModifiableBuildParameters());
   }
 
   @Override

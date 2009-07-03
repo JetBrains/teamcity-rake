@@ -236,14 +236,9 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
       throws MyBuildFailureException, RunBuildException {
 
 
-    if (!SupportedTestFramework.isAnyFrameworkActivated(runParams)) {
-      // do nothing
-      return;
-    }
-
     final StringBuilder buff = new StringBuilder();
 
-    // common part
+    // common part - for rake taks and tests
     buff.append(RubyProjectSourcesUtil.getLoadPath_PatchRoot_Common());
 
     // Enable Test::Unit patch for : test::unit, test::spec and shoulda frameworks

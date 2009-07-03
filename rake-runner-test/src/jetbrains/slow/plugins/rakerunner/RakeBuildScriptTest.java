@@ -20,7 +20,9 @@ import java.io.IOException;
 import java.io.File;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
+import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 import org.testng.annotations.Test;
+import org.testng.annotations.BeforeMethod;
 
 /**
  * @author Roman Chernyatchik
@@ -33,6 +35,13 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
     setWorkingDir(runParameters, "app1");
+  }
+
+  @BeforeMethod
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
+    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
   }
 
   protected File getTestDataPath(final String buildFileName) {
@@ -117,11 +126,24 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
 
     initAndDoTest("build_script:exception_in_task", false, "app1");
   }
+  public void testBuildScript_exception_in_task_real() throws Throwable {
+    setPartialMessagesChecker();
+
+    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
+    initAndDoRealTest("build_script:exception_in_task", false, "app1");
+  }
 
   public void testBuildScript_exception_in_embedded_task() throws Throwable {
     setPartialMessagesChecker();
 
+    //TODO: by some reason containing block is missed...
     initAndDoTest("build_script:exception_in_embedded_task", false, "app1");
+  }
+  public void testBuildScript_exception_in_embedded_task_real() throws Throwable {
+    setPartialMessagesChecker();
+
+    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
+    initAndDoRealTest("build_script:exception_in_embedded_task", false, "app1");
   }
 
   public void testBuildScript_exception_in_embedded_task_trace() throws Throwable {
@@ -173,6 +195,12 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
     rakeUI_EnableTraceOption();
 
     initAndDoTest("build_script:cmd_failed", false, "app1");
+  }
+  public void testBuildScript_cmd_failed_real() throws Throwable {
+    setPartialMessagesChecker();
+    rakeUI_EnableTraceOption();
+    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
+    initAndDoRealTest("build_script:cmd_failed", false, "app1");
   }
 
   public void testBuildScript_task_args() throws Throwable {
