@@ -1,3 +1,3 @@
---1--##teamcity[blockOpened name='Execute build_script:warning_in_task' type='$TARGET_BLOCK$'] NORMAL
+--1--##teamcity[blockOpened name='Execute build_script:warning_in_task' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL
 --1--warning: already initialized constant MY_CONST WARNING
---1--##teamcity[blockClosed name='Execute build_script:warning_in_task' type='$TARGET_BLOCK$'] NORMAL
+--1--##teamcity[blockClosed name='Execute build_script:warning_in_task' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL

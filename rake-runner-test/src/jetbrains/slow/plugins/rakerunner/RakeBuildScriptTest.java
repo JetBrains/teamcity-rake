@@ -115,6 +115,13 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
     initAndDoTest("build_script:unexistent_task", false, "app1");
   }
 
+  public void testBuildScript_unexistent_task_real() throws Throwable {
+    setPartialMessagesChecker();
+
+    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
+    initAndDoRealTest("build_script:unexistent_task", false, "app1");
+  }
+
   public void testBuildScript_unexistent_task_stacktrace() throws Throwable {
     setPartialMessagesChecker();
 
@@ -168,6 +175,7 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
   public void testBuildScript_compile_error_task() throws Throwable {
     setPartialMessagesChecker();
     
+    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
     initAndDoTest("compile_error:some_task", false, "app2");
   }
 
@@ -206,7 +214,8 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
   public void testBuildScript_task_args() throws Throwable {
     setPartialMessagesChecker();
 
-    initAndDoTest("build_script:task_args", false, "app1");
+    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
+    initAndDoTest("build_script:task_args", true, "app1");
   }
 
   //TODO - output capturer

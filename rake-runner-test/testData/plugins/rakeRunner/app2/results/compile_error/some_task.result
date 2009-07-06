@@ -1,3 +1,2 @@
---1--##teamcity[message='RuntimeError: Don|'t know how to build task |'compile_error:some_task|'|n|nStacktrace:|n
---1--##teamcity[message='Rake aborted!', type='error'] NORMAL
---2--type='error'] NORMAL
+--1--##teamcity[message text='RuntimeError: Don|'t know how to build task |'compile_error:some_task|'' status='ERROR' errorDetails='$STACK_TRACE$' timestamp='$TIME$'] NORMAL
+--1--##teamcity[message text='Rake aborted!' status='ERROR' timestamp='$TIME$'] NORMAL
