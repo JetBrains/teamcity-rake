@@ -1,4 +1,4 @@
---1--##teamcity[blockOpened name='Execute build_script:task_args' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL
+--1--##teamcity[blockOpened name='Execute build_script:task_args' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
 --1--Project: rake NORMAL
 --1--Project: msbuild NORMAL
---1--##teamcity[blockClosed name='Execute build_script:task_args' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL
+--1--##teamcity[blockClosed name='Execute build_script:task_args' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL

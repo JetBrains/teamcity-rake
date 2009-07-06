@@ -1,4 +1,4 @@
---1--##teamcity[blockOpened name='Execute build_script:exception_in_task' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL
---1--##teamcity[message text='$MESSAGE$' status='ERROR' errorDetails='$STACK_TRACE$' timestamp='$TIME$'] NORMAL
---1--##teamcity[blockClosed name='Execute build_script:exception_in_task' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL
---1--##teamcity[message text='$MESSAGE$' status='ERROR' timestamp='$TIME$'] NORMAL
+--1--##teamcity[blockOpened name='Execute build_script:exception_in_task' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
+--1--##teamcity[message text='##MESSAGE##' status='ERROR' errorDetails='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[blockClosed name='Execute build_script:exception_in_task' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
+--1--##teamcity[message text='##MESSAGE##' status='ERROR' timestamp='##TIME##'] NORMAL

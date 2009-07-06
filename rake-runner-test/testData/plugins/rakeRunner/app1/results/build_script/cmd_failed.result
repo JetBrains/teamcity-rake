@@ -1,2 +1,2 @@
---1--##teamcity[message text='$MESSAGE$' status='ERROR' errorDetails='$STACK_TRACE$' timestamp='$TIME$'] NORMAL
---1--##teamcity[message text='$MESSAGE$' status='ERROR' timestamp='$TIME$']
+--1--##teamcity[message text='##MESSAGE##' status='ERROR' errorDetails='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[message text='##MESSAGE##' status='ERROR' timestamp='##TIME##']

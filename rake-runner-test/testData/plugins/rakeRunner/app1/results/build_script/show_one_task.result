@@ -1,5 +1,5 @@
---1--##teamcity[blockOpened name='Execute build_script:show_one_task' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL
---1--##teamcity[blockClosed name='Execute build_script:show_one_task' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL
---0--##teamcity[blockOpened name='Invoke build_script:show_one_task' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL
---0--##teamcity[blockClosed name='Invoke build_script:show_one_task' type='$TARGET_BLOCK$' timestamp='$TIME$'] NORMAL
+--1--##teamcity[blockOpened name='Execute build_script:show_one_task' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
+--1--##teamcity[blockClosed name='Execute build_script:show_one_task' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
+--0--##teamcity[blockOpened name='Invoke build_script:show_one_task' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
+--0--##teamcity[blockClosed name='Invoke build_script:show_one_task' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
 
