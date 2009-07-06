@@ -51,6 +51,9 @@ public enum SupportedTestFramework {
   public boolean isActivated(final Map<String, String> runParams) {
     return ConfigurationParamsUtil.isParameterEnabled(runParams, getFrameworkUIProperty());
   }
+  public void activate(final Map<String, String> runParams) {
+    ConfigurationParamsUtil.setParameterEnabled(runParams, getFrameworkUIProperty(), true);
+  }
 
   public static String getActivatedFrameworksConfig(final Map<String, String> runParams) {
     final StringBuilder buff = new StringBuilder();

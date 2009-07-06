@@ -19,51 +19,60 @@ package jetbrains.slow.plugins.rakerunner;
 import java.io.IOException;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
+import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 import org.testng.annotations.Test;
+import org.testng.annotations.BeforeMethod;
 
 /**
  * @author Roman Chernyatchik
  */
 @Test(groups = {"all","slow"})
-public class RSpecTest extends AbstractRakeRunnerTest {
-  public RSpecTest(String s) {
+public class RSpecBuildLogTest extends AbstractRakeRunnerTest {
+  public RSpecBuildLogTest(String s) {
     super(s);
+  }
+
+  @BeforeMethod
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
+    myShouldTranslateMessages = true;
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
     setWorkingDir(runParameters, "app_rspec");
-  }
-
-  public void testSpecOutput() throws Throwable {
-    setPartialMessagesChecker();
-
-    initAndDoTest("output:spec_output", false, "app_rspec");
+    // enable rspec
+    SupportedTestFramework.RSPEC.activate(runParameters);
   }
 
   public void testSpecPassed()  throws Throwable {
-    setPartialMessagesChecker();
-    initAndDoTest("stat:passed", true, "app_rspec");
+    doTestWithoutLogCheck("stat:passed", true, "app_rspec");
+
+    assertTestsCount(3, 0, 0);
   }
 
   public void testSpecFailed()  throws Throwable {
-    setPartialMessagesChecker();
-    initAndDoTest("stat:failed", false, "app_rspec");
+    doTestWithoutLogCheck("stat:failed", false, "app_rspec");
+
+    assertTestsCount(0, 3, 0);
   }
 
   public void testSpecError()  throws Throwable {
-    setPartialMessagesChecker();
-    initAndDoTest("stat:error", false, "app_rspec");
+    doTestWithoutLogCheck("stat:error", false, "app_rspec");
+
+    assertTestsCount(0, 3, 0);
   }
 
   public void testSpecIgnored()  throws Throwable {
-    setPartialMessagesChecker();
-    initAndDoTest("stat:ignored", false, "app_rspec");
+    doTestWithoutLogCheck("stat:ignored", false, "app_rspec");
+
+    assertTestsCount(0, 1, 2);
   }
 
   public void testSpecCompileError()  throws Throwable {
-    setPartialMessagesChecker();
-    initAndDoTest("stat:compile_error", false, "app_rspec");
-  }
+    doTestWithoutLogCheck("stat:compile_error", false, "app_rspec");
 
-  //TODO - capturer
+    assertTestsCount(0, 0, 0);
+  }
 }

@@ -1,0 +1,3 @@
+puts.msg1 NORMAL
+$stdout<<msg2 NORMAL
+STDOUT<<msg3 NORMAL

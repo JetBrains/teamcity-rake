@@ -1,0 +1,8 @@
+--1--Invoke build_script:cmd_failed $TARGET_BLOCK$ ERROR
+--1-- (first_time) NORMAL
+--1-- -e:1:in `/': divided by 0 (ZeroDivisionError) WARNING
+--1-- Execute build_script:cmd_failed $TARGET_BLOCK$ ERROR
+--1--  	from -e:1 WARNING
+--1--  RuntimeError: Command failed with status (1)
+--1--  ##STACK_TRACE## ERROR
+--1--Rake aborted! ERROR

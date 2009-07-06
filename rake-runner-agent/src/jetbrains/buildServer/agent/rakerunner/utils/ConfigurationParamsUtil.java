@@ -78,4 +78,10 @@ public class ConfigurationParamsUtil implements RakeRunnerConstants {
   public static boolean isTraceStagesOptionEnabled(final Map<String, String> runParams) {
     return isParameterEnabled(runParams, SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED);
   }
+
+  public static void setParameterEnabled(final Map<String, String> runParams,
+                                         final String frameworkUIProperty,
+                                         final boolean isEnabled) {
+    runParams.put(frameworkUIProperty, Boolean.valueOf(isEnabled).toString());
+  }
 }

@@ -20,18 +20,26 @@ import java.io.IOException;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import org.testng.annotations.Test;
+import org.testng.annotations.BeforeMethod;
 
 /**
  * @author Roman Chernyatchik
  */
 @Test(groups = {"all","slow"})
-public class TestUnitTest extends AbstractRakeRunnerTest {
-  public TestUnitTest(String s) {
+public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
+  public TestUnitMessagesTest(String s) {
     super(s);
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
     setWorkingDir(runParameters, "app_testunit");
+  }
+
+  @BeforeMethod
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
+    myShouldTranslateMessages = false;
   }
 
   public void testTestsOutput() throws Throwable {
@@ -66,5 +74,5 @@ public class TestUnitTest extends AbstractRakeRunnerTest {
     initAndDoTest("stat:compile_error", false, "app_testunit");
   }
 
-  //TODO - capturer
+  //TODO - location
 }

@@ -17,22 +17,49 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.BuildRunner;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
+import jetbrains.buildServer.messages.BuildMessage1;
+import jetbrains.buildServer.messages.ServerMessagesTranslator;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.serverSide.impl.RunningBuildImpl;
 import jetbrains.slow.PartialBuildMessagesChecker;
 import jetbrains.slow.RunnerTestBase;
+import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
+import org.jetbrains.annotations.Nullable;
+import org.testng.annotations.BeforeMethod;
 
 /**
  * @author Roman Chernyatchik
  */
 public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
+  protected boolean myShouldTranslateMessages = false;
 
   public AbstractRakeRunnerTest(String s) {
     super(s);
+  }
+
+  @BeforeMethod
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
+    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
+  }
+
+  protected List<BuildMessage1> translateMessages(final ArrayList<BuildMessage1> result, final RunningBuildImpl runningBuild) {
+    if (myShouldTranslateMessages) {
+      return myServerCreator.getSingletonService(ServerMessagesTranslator.class).translateMessages(result, runningBuild);
+    }
+    return result; 
+  }
+
+  protected File getTestDataPath(final String buildFileName) {
+    return new File("svnrepo/rake-runner/rake-runner-test/testData/" + getTestDataSuffixPath() + buildFileName);
   }
 
   protected void finishProcess(final BuildRunner buildRunner) {
@@ -72,15 +99,29 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
     initAndDoTest(task_full_name, "_real", shouldPass, testDataApp);
   }
 
+  protected void doTestWithoutLogCheck(final String task_full_name,
+                                      final boolean shouldPass,
+                                      final String testDataApp) throws Throwable {
+    initAndDoTest(task_full_name, null, shouldPass, testDataApp);
+  }
+
   protected void initAndDoTest(final String task_full_name,
-                               final String result_file_suffix,
+                               @Nullable final String result_file_suffix,
                                final boolean shouldPass,
                                final String testDataApp) throws Throwable {
     myAgentRunningBuildEx.addRunnerParameter(AgentRuntimeProperties.BUILD_WORKING_DIR,
                                              getTestDataPath(testDataApp).getAbsolutePath());
     setTaskNames(task_full_name);
 
-    doTest(testDataApp + "/results/" + task_full_name.replace(":", "/") + result_file_suffix);
+    final String resultFileName = result_file_suffix == null
+                                  ? null
+                                  : testDataApp + "/results/"
+                                    + task_full_name.replace(":", "/")
+                                    + result_file_suffix
+                                    // lets automatically expect "_log"
+                                    // suffix to each translated result (build log) file
+                                    + (myShouldTranslateMessages ? "_log" : "");
+    doTest(resultFileName);
     assertEquals(shouldPass, !myBuildFailed);
   }
 

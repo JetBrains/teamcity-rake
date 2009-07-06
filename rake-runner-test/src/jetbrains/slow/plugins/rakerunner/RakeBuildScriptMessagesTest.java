@@ -17,7 +17,6 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import java.io.IOException;
-import java.io.File;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
@@ -28,24 +27,20 @@ import org.testng.annotations.BeforeMethod;
  * @author Roman Chernyatchik
  */
 @Test(groups = {"all","slow"})
-public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
-  public RakeBuildScriptTest(String s) {
+public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
+  public RakeBuildScriptMessagesTest(String s) {
     super(s);
-  }
-
-  protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
-    setWorkingDir(runParameters, "app1");
   }
 
   @BeforeMethod
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
+    myShouldTranslateMessages = false;
   }
 
-  protected File getTestDataPath(final String buildFileName) {
-    return new File("svnrepo/rake-runner/rake-runner-test/testData/" + getTestDataSuffixPath() + buildFileName);
+  protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    setWorkingDir(runParameters, "app1");
   }
 
   public void testBuildScript_stdout() throws Throwable {
@@ -217,7 +212,4 @@ public class RakeBuildScriptTest extends AbstractRakeRunnerTest {
     setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
     initAndDoTest("build_script:task_args", true, "app1");
   }
-
-  //TODO - output capturer
-  //TODO - artifacts?
 }

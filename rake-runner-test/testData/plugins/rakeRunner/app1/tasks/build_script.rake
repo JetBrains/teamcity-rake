@@ -119,6 +119,10 @@ namespace :build_script do
     ruby "-e", "2/0"
   end
 
+  task  :depends_on_cmd_failed => :cmd_failed do
+    puts "finished task"
+  end
+
   task :task_args do |t, args|
     project_list = ["rake", "msbuild"]
     # rake shold be >= 0.8.7

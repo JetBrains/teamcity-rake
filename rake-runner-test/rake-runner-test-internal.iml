@@ -18,6 +18,7 @@
     <orderEntry type="module" module-name="common" />
     <orderEntry type="library" name="JUnit" level="project" />
     <orderEntry type="module" module-name="agent" />
+    <orderEntry type="module" module-name="server" />
   </component>
   <component name="RModuleSettingsStorage">
     <RMODULE_SETTINGS_STORAGE_ID NAME="NUMBER" VALUE="0" />

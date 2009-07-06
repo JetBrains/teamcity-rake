@@ -1,0 +1,5 @@
+--1--Invoke build_script:embedded_tasks $TARGET_BLOCK$ NORMAL
+--1-- (first_time) NORMAL
+--1-- Execute build_script:some_task0 $TARGET_BLOCK$ NORMAL
+--1-- Execute build_script:some_task1 $TARGET_BLOCK$ NORMAL
+--1-- Execute build_script:embedded_tasks $TARGET_BLOCK$ NORMAL
