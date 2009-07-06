@@ -18,7 +18,6 @@ package jetbrains.slow.plugins.rakerunner;
 
 import java.io.File;
 import java.util.Map;
-import java.util.regex.Pattern;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.BuildRunner;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
@@ -30,6 +29,7 @@ import jetbrains.slow.RunnerTestBase;
  * @author Roman Chernyatchik
  */
 public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
+  //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
 
   public AbstractRakeRunnerTest(String s) {
     super(s);
@@ -90,6 +90,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
   }
 
   protected void setMockingOptions(final MockingOptions... options) {
+    //myCheckerMockOptions = options;
     MockingOptions.addToBuildParams(options,
                                     myAgentRunningBuildEx.getModifiableBuildParameters());
   }
@@ -97,103 +98,54 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
   @Override
   protected void setPartialMessagesChecker() {
     myChecker = new PartialBuildMessagesChecker() {
-      private final Pattern DURATION_VALUE_PATTERN = Pattern.compile(" duration='([\\d]+)'");
-      private final Pattern FAILURE_DETAILS_VALUE_PATTERN = Pattern.compile(" details='(([^']||\\|')+)[^|]'");
+      //  (all except ' and |) or |' or |n or |r or || or |]
+      //private final String VALUE_PATTERN = "'(([^'|]||\\|'||\\|n||\\|r||\\|\\|||\\|\\])+)'";
+      //private final Pattern TIMESTAMP_VALUE_PATTERN = Pattern.compile(" timestamp=" + VALUE_PATTERN);
+      //private final Pattern ERROR_DETAILS_VALUE_PATTERN = Pattern.compile(" errorDetails=" + VALUE_PATTERN);
+      //private final Pattern MESSAGE_TEXT_PATTERN = Pattern.compile("message text=" + VALUE_PATTERN);
+      //private final Pattern LOCATION_PATTERN = Pattern.compile("location=" + VALUE_PATTERN);
 
       @Override
       public void assertMessagesEquals(final File file,
                                        final String actual) throws Throwable {
 
-        final String patchedActual =
-            removeDetails(removeDuration(actual));
+        //final String patchedActual =  mockMessageText(mockErrorDetails(mockTimeStamp(actual)));
+        String patchedActual =  actual;
+
+        //for (MockingOptions option : myCheckerMockOptions) {
+        //  switch (option) {
+        //    case FAKE_ERROR_MSG:
+        //      patchedActual = mockErrorDetails(patchedActual);
+        //      break;
+        //    case FAKE_LOCATION_URL:
+        //      patchedActual = mockLocation(patchedActual);
+        //      break;
+        //    case FAKE_STACK_TRACE:
+        //      patchedActual = mockErrorDetails(patchedActual);
+        //      break;
+        //    case FAKE_TIME:
+        //      patchedActual = mockTimeStamp(patchedActual);
+        //      break;
+        //  }
+        //}
         super.assertMessagesEquals(file, patchedActual);
       }
 
-      private String removeDetails(String actualWithoutDuration) {
-        return FAILURE_DETAILS_VALUE_PATTERN.matcher(actualWithoutDuration).replaceAll(" details='##STACKTRACE##'");
-      }
-
-      private String removeDuration(String actual) {
-        return DURATION_VALUE_PATTERN.matcher(actual).replaceAll(" duration='##DURATION##'");
-      }
+      //private String mockErrorDetails(final String text) {
+      //  return ERROR_DETAILS_VALUE_PATTERN.matcher(text).replaceAll(" errorDetails='##STACK_TRACE##'");
+      //}
+      //
+      //private String mockTimeStamp(String actual) {
+      //  return TIMESTAMP_VALUE_PATTERN.matcher(actual).replaceAll(" timestamp='##TIME##'");
+      //}
+      //
+      //private String mockMessageText(String actual) {
+      //  return MESSAGE_TEXT_PATTERN.matcher(actual).replaceAll("message text='##MESSAGE##'");
+      //}
+      //
+      //private String mockLocation(String actual) {
+      //  return LOCATION_PATTERN.matcher(actual).replaceAll("location='$LOCATION$'");
+      //}
     };
   }
-
-//////////////////////////////////////////////////
-  // NUnitRunnerTestCase
-  //TODO - refactor
-  ////////////////////////////////////////////////////
-//  protected void assertSucessful(final String... tests) {
-//    final List<TestBlockBean> tests1 = buildStatistics(1).getPassedTests();
-//    final String STATUS = "successful";
-//
-//    assertCollection(tests1, STATUS, tests);
-//  }
-//
-//  protected void assertFailed(final String... tests) {
-//    final List<TestBlockBean> tests1 = buildStatistics(1).getFailedTests();
-//    final String STATUS = "failed";
-//
-//    assertCollection(tests1, STATUS, tests);
-//  }
-//
-//  protected void assertIgnored(final String... tests) {
-//    final List<TestBlockBean> tests1 = buildStatistics(1).getIgnoredTests();
-//    final String STATUS = "ignored";
-//
-//    assertCollection(tests1, STATUS, tests);
-//  }
-//
-//  protected void assertTestsCount(final int expectedCount) {
-//    assertEquals(expectedCount, buildStatistics(1).getAllTestCount());
-//  }
-//
-//  private void assertCollection(final List<TestBlockBean> tests1, final String STATUS, final String... tests) {
-//    String errors = "";
-//    boolean shouldFail = tests1.size() != tests.length;
-//
-//    if (shouldFail) {
-//      errors = "There are more than expected " + STATUS + " tests";
-//    }
-//
-//    for (String s : tests) {
-//      boolean hasTest = false;
-//      for (TestBlockBean testBlockBean : tests1) {
-//        if (testBlockBean.getTestName().equals(s)) {
-//          hasTest = true;
-//          break;
-//        }
-//      }
-//      if (!hasTest) {
-//        shouldFail = true;
-//
-//        errors += "Test does was not " + STATUS + " " + s + "\r\n";
-//      }
-//    }
-//
-//    if (shouldFail) {
-//      dumpTestsInfo();
-//
-//      Assert.assertFalse(shouldFail, errors);
-//    }
-//  }
-//
-//  protected void dumpTestsInfo() {
-//    final BuildStatistics builder = buildStatistics(1);
-//    final String report = dumpTestsList("Failed", builder.getFailedTests()) +
-//                          dumpTestsList("Ignored", builder.getIgnoredTests()) +
-//                          dumpTestsList("Success", builder.getPassedTests());
-//
-//    Loggers.TEST.warn("report = \r\n" + report);
-//    System.out.println("report = " + report);
-//
-//  }
-//
-//  private String dumpTestsList(final String message, final List<TestBlockBean> bean) {
-//    String str = "\r\nDump tests from " + message + ":\r\n";
-//    for (TestBlockBean blockBean : bean) {
-//      str += "  " + blockBean.getTestName() + "\r\n";
-//    }
-//    return str;
-//  }
 }
