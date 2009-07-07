@@ -1,20 +1,21 @@
---1--##teamcity[testCount '4'] NORMAL
+--0--##teamcity[testCount count='4' timestamp='##TIME##'] NORMAL
+--1--##teamcity[progressMessage 'Starting.. (4 tests)'] NORMAL
 
---1--##teamcity[testSuiteStarted name='Passed1Test'location='ruby_qn://Passed1Test'] NORMAL
---1--##teamcity[testStarted name='Passed1Test.test_pass1' captureStandartOutput='true' location='ruby_qn://Passed1Test.test_pass1'] NORMAL
---1--##teamcity[testFinished name='Passed1Test.test_pass1' duration='##DURATION##'] NORMAL
+--1--##teamcity[testSuiteStarted name='Passed1Test' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Passed1Test.test_pass1' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Passed1Test.test_pass1' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testStarted name='Passed1Test.test_pass12' captureStandartOutput='true' location='ruby_qn://Passed1Test.test_pass12'] NORMAL
---1--##teamcity[testFinished name='Passed1Test.test_pass12' duration='##DURATION##'] NORMAL
+--1--##teamcity[testStarted name='Passed1Test.test_pass12' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Passed1Test.test_pass12' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testStarted name='Passed1Test.test_pass13' captureStandartOutput='true' location='ruby_qn://Passed1Test.test_pass13'] NORMAL
---1--##teamcity[testFinished name='Passed1Test.test_pass13' duration='##DURATION##'] NORMAL
---1--##teamcity[testSuiteFinished name='Passed1Test'] NORMAL
+--1--##teamcity[testStarted name='Passed1Test.test_pass13' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Passed1Test.test_pass13' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testSuiteFinished name='Passed1Test' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testSuiteStarted name='Passed2Test'location='ruby_qn://Passed2Test'] NORMAL
---1--##teamcity[testStarted name='Passed2Test.test_pass2' captureStandartOutput='true' location='ruby_qn://Passed2Test.test_pass2'] NORMAL
---1--##teamcity[testFinished name='Passed2Test.test_pass2' duration='##DURATION##'] NORMAL
---1--##teamcity[testSuiteFinished name='Passed2Test'] NORMAL
+--1--##teamcity[testSuiteStarted name='Passed2Test' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Passed2Test.test_pass2' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Passed2Test.test_pass2' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testSuiteFinished name='Passed2Test' timestamp='##TIME##'] NORMAL
 
 --1--4 tests, 3 assertions, 0 failures, 0 errors NORMAL
 --1--Test suite finished: ##TIME## NORMAL

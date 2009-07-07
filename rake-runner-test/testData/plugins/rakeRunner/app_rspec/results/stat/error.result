@@ -1,24 +1,23 @@
---1--##teamcity[testCount '3'] NORMAL
 --1--##teamcity[progressMessage 'Starting.. (3 examples)'] NORMAL
+--0--##teamcity[testCount count='3' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testStarted name='Spec error should error11' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error1_spec.rb:6'] NORMAL
---1--##teamcity[testFailed name='Spec error should error11' message='ZeroDivisionError: divided by 0' details='##STACKTRACE##' error='true'] NORMAL
---1--##teamcity[testFinished name='Spec error should error11' duration='##DURATION##'] NORMAL
+--1--##teamcity[testStarted name='Spec error should error11' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Spec error should error11' message='ZeroDivisionError: divided by 0' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Spec error should error11' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testStarted name='Spec error should error12' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error1_spec.rb:11'] NORMAL
---1--##teamcity[testFailed name='Spec error should error12' message='ZeroDivisionError: divided by 0' details='##STACKTRACE##' error='true'] NORMAL
---1--##teamcity[testFinished name='Spec error should error12' duration='##DURATION##'] NORMAL
+--1--##teamcity[testStarted name='Spec error should error12' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Spec error should error12' message='ZeroDivisionError: divided by 0' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Spec error should error12' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testStarted name='Spec error should error2' captureStandartOutput='true' location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error2_spec.rb:6'] NORMAL
---1--##teamcity[testFailed name='Spec error should error2' message='ZeroDivisionError: divided by 0' details='##STACKTRACE##' error='true'] NORMAL
---1--##teamcity[testFinished name='Spec error should error2' duration='##DURATION##'] NORMAL
+--1--##teamcity[testStarted name='Spec error should error2' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Spec error should error2' message='ZeroDivisionError: divided by 0' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Spec error should error2' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testSuiteStarted name='Spec error'location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error2_spec.rb:4'] NORMAL
---1--##teamcity[testSuiteStarted name='Spec error'location='file:##BASE_DIR##/test/testData/plugins/rakeRunner/app_rspec/spec/statistics/error/error1_spec.rb:4'] NORMAL
---2--##teamcity[testSuiteFinished name='Spec error'] NORMAL
+--2--##teamcity[testSuiteStarted name='Spec error' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--2--##teamcity[testSuiteFinished name='Spec error' timestamp='##TIME##'] NORMAL
 
 
 --1--3 examples, 3 failures, 0 passed NORMAL
 --1--Finished in ##TIME##
---1--##teamcity[message='RuntimeError: Command
---1--##teamcity[message='Rake aborted!', type='error'] NORMAL
+--1--##teamcity[message text='RuntimeError: Command
+--1--##teamcity[message text='Rake aborted!' status='ERROR' timestamp='##TIME##'] NORMAL

@@ -55,7 +55,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
     if (myShouldTranslateMessages) {
       return myServerCreator.getSingletonService(ServerMessagesTranslator.class).translateMessages(result, runningBuild);
     }
-    return result; 
+    return result;
   }
 
   protected File getTestDataPath(final String buildFileName) {
@@ -88,20 +88,20 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
 
 
   protected void initAndDoTest(final String task_full_name,
-                              final boolean shouldPass,
-                              final String testDataApp) throws Throwable {
+                               final boolean shouldPass,
+                               final String testDataApp) throws Throwable {
     initAndDoTest(task_full_name, "", shouldPass, testDataApp);
   }
 
- protected void initAndDoRealTest(final String task_full_name,
-                              final boolean shouldPass,
-                              final String testDataApp) throws Throwable {
+  protected void initAndDoRealTest(final String task_full_name,
+                                   final boolean shouldPass,
+                                   final String testDataApp) throws Throwable {
     initAndDoTest(task_full_name, "_real", shouldPass, testDataApp);
   }
 
   protected void doTestWithoutLogCheck(final String task_full_name,
-                                      final boolean shouldPass,
-                                      final String testDataApp) throws Throwable {
+                                       final boolean shouldPass,
+                                       final String testDataApp) throws Throwable {
     initAndDoTest(task_full_name, null, shouldPass, testDataApp);
   }
 

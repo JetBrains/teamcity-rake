@@ -20,9 +20,6 @@ import java.io.IOException;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_TIME;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_STACK_TRACE;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_LOCATION_URL;
 import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
 
@@ -30,8 +27,8 @@ import org.testng.annotations.BeforeMethod;
  * @author Roman Chernyatchik
  */
 @Test(groups = {"all","slow"})
-public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
-  public TestUnitMessagesTest(String s) {
+public class TestUnitBuildLogTest extends AbstractRakeRunnerTest {
+  public TestUnitBuildLogTest(String s) {
     super(s);
   }
 
@@ -46,50 +43,27 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    myShouldTranslateMessages = false;
+    myShouldTranslateMessages = true;
+  }
+
+  public void testTestPassed()  throws Throwable {
+    doTestWithoutLogCheck("stat:passed", true, "app_testunit");
+    assertTestsCount(4, 0, 0);
+  }
+
+  public void testTestFailed()  throws Throwable {
+    doTestWithoutLogCheck("stat:failed", false, "app_testunit");
+    assertTestsCount(0, 4, 0);
+  }
+
+  public void testTestError()  throws Throwable {
+    doTestWithoutLogCheck("stat:error", false, "app_testunit");
+    assertTestsCount(0, 2, 0);
   }
 
   public void testTestsOutput() throws Throwable {
     setPartialMessagesChecker();
 
     initAndDoTest("tests:test_output", false, "app_testunit");
-  }
-
-  public void testTestGeneral() throws Throwable {
-    setPartialMessagesChecker();
-    
-    initAndDoTest("stat:general", true, "app_testunit");
-  }
-
-  public void testTestPassed()  throws Throwable {
-    setPartialMessagesChecker();
-    initAndDoTest("stat:passed", true, "app_testunit");
-  }
-
-  public void testTestFailed()  throws Throwable {
-    setPartialMessagesChecker();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
-
-    initAndDoTest("stat:failed", false, "app_testunit");
-  }
-
-  public void testTestError()  throws Throwable {
-    setPartialMessagesChecker();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
-
-    initAndDoTest("stat:error", false, "app_testunit");
-  }
-
-  public void testTestCompileError()  throws Throwable {
-    setPartialMessagesChecker();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
-    
-    initAndDoTest("stat:compile_error", false, "app_testunit");
-  }
-
-  public void testLocationUrl()  throws Throwable {
-    setPartialMessagesChecker();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE);
-    initAndDoTest("stat:passed", "_location", true, "app_testunit");
   }
 }

@@ -23,6 +23,6 @@
 --1--teardown:$stderr<<msg3 WARNING
 --1--teardown:STDERR<<msg4 WARNING
 
---1--##teamcity[testStarted name='OutputTest.test_error' captureStandartOutput='true' location='ruby_qn://OutputTest.test_error'] NORMAL
---1--##teamcity[testStarted name='OutputTest.test_fail' captureStandartOutput='true' location='ruby_qn://OutputTest.test_fail'] NORMAL
---1--##teamcity[testStarted name='OutputTest.test_pass' captureStandartOutput='true' location='ruby_qn://OutputTest.test_pass'] NORMAL
+--1--##teamcity[testStarted name='OutputTest.test_error' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='OutputTest.test_fail' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='OutputTest.test_pass' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
