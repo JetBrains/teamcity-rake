@@ -1,0 +1,25 @@
+--1--Execute stat:general $TARGET_BLOCK$ ERROR
+--1-- Starting.. (6 tests) NORMAL
+
+--1-- ErrorTest $TEST_SUITE$ FAILURE
+--1--  This context should contain failed test. (ErrorTest) $TEST_BLOCK$ FAILURE
+--1--   ZeroDivisionError: divided by 0 FAILURE
+--2--   ##STACK_TRACE## FAILURE
+
+--1-- FailedTest $TEST_SUITE$ FAILURE
+--1--  This context should contain failed test. (FailedTest) $TEST_BLOCK$ FAILURE
+--1--   <1> expected but was
+--1--   <2>. FAILURE
+--2--   ##STACK_TRACE## FAILURE
+
+--1-- Pass1Test $TEST_SUITE$ NORMAL
+--1--  Other context should also contains passing test. (Pass1Test) $TEST_BLOCK$ NORMAL
+--1--  This context should contain passing test 1. (Pass1Test) $TEST_BLOCK$ NORMAL
+--1--  This context should contain passing test 2. (Pass1Test) $TEST_BLOCK$ NORMAL
+--1-- Pass2Test $TEST_SUITE$ NORMAL
+
+--1--  This context should contain passing test 3. (Pass2Test) $TEST_BLOCK$ NORMAL
+
+--1-- 6 tests, 5 assertions, 1 failures, 1 errors NORMAL
+--1-- Test suite finished: ##TIME## NORMAL
+--1--Rake aborted! ERROR
