@@ -1,0 +1,24 @@
+--1--Execute stat:general $TARGET_BLOCK$ ERROR
+--1-- Starting.. (7 tests) NORMAL
+--1-- This context $TEST_SUITE$ FAILURE
+--1--  contain pending test $TEST_BLOCK$ NORMAL
+--1--   Test ignored: This context.contain pending test NORMAL
+
+--1--  contain error test $TEST_BLOCK$ FAILURE
+--1--   ZeroDivisionError: divided by 0 FAILURE
+--2--   ##STACK_TRACE## FAILURE
+
+--1--  contain failed test $TEST_BLOCK$ FAILURE
+--1--   <2> expected but was
+--1--   <1>. FAILURE
+--2--   ##STACK_TRACE## FAILURE
+
+--1--  contain passing test 1 $TEST_BLOCK$ NORMAL
+--1--  contain passing test 2 $TEST_BLOCK$ NORMAL
+--1--  contain passing test 3 $TEST_BLOCK$ NORMAL
+
+--1-- Other context $TEST_SUITE$ NORMAL
+--1--  also contains passing test $TEST_BLOCK$ NORMAL
+--1-- 7 tests, 5 assertions, 1 failures, 1 errors NORMAL
+--1-- Test suite finished: ##TIME## NORMAL
+--1-- Rake aborted! ERROR
