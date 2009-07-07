@@ -45,6 +45,7 @@ public class ShouldaMessagesTest extends AbstractRakeRunnerTest {
     // enable shoulda
     SupportedTestFramework.SHOULDA.activate(runParameters);
   }
+
   public void testLocation()  throws Throwable {
     //TODO implement test location for shoulda!
     setPartialMessagesChecker();
