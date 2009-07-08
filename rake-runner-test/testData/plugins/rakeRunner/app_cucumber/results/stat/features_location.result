@@ -1,0 +1,3 @@
+##teamcity[testSuiteStarted name='Feature: Several error steps' location='file:##BASE_DIR##/svnrepo/rake-runner/rake-runner-test/testData/plugins/rakeRunner/app_cucumber/features/error.feature:1' timestamp='##TIME##'] NORMAL
+##teamcity[testSuiteStarted name='Scenario: first group of error steps' location='file:##BASE_DIR##/svnrepo/rake-runner/rake-runner-test/testData/plugins/rakeRunner/app_cucumber/features/error.feature:6' timestamp='##TIME##'] NORMAL
+##teamcity[testStarted name='Then should be error' captureStandardOutput='true' location='file:##BASE_DIR##/svnrepo/rake-runner/rake-runner-test/testData/plugins/rakeRunner/app_cucumber/features/step_definitions/my_steps.rb:16' timestamp='##TIME##'] NORMAL

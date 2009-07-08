@@ -1,0 +1,60 @@
+--1--Execute stat:features $TARGET_BLOCK$ ERROR
+
+--1-- Feature: Several failed steps $TEST_SUITE$ FAILURE
+--1--  Scenario: group with failed steps $TEST_SUITE$ FAILURE
+--1--   When I do something wrong $TEST_BLOCK$ NORMAL
+--1--   Then should fail $TEST_BLOCK$ FAILURE
+--1--    Spec::Expectations::ExpectationNotMetError: expected: 2,
+--1--         got: 1 (using ==)
+--3--    ##STACK_TRACE## FAILURE
+
+--1-- Feature: Several passed steps $TEST_SUITE$ NORMAL
+--1--  Scenario: first group of passed steps $TEST_SUITE$ NORMAL
+--6--   Then should pass $TEST_BLOCK$ NORMAL
+
+--1--  Scenario: second group of passed steps $TEST_SUITE$ NORMAL
+--6--   Then should pass $TEST_BLOCK$ NORMAL
+
+--1-- Feature: Several pending steps $TEST_SUITE$ NORMAL
+--1--  Scenario: first group of pending steps $TEST_SUITE$ NORMAL
+--1--   Then should be pending $TEST_BLOCK$ NORMAL
+--1--    Test ignored: Then should be pending NORMAL
+
+--1-- Feature: Several error steps $TEST_SUITE$ FAILURE
+--1--  Scenario: first group of error steps $TEST_SUITE$ FAILURE
+--1--   Then should be error $TEST_BLOCK$ FAILURE
+--1--    ZeroDivisionError: divided by 0 FAILURE
+--3--    ##STACK_TRACE## FAILURE
+
+--1-- Feature: Several skipped steps $TEST_SUITE$ FAILURE
+--1--   Scenario: first group of skipped steps $TEST_SUITE$ FAILURE
+--1--    When we have undefined step definition $TEST_BLOCK$ FAILURE
+--1--     [Test Output]
+
+--1--    You can implement step definitions for undefined steps with these snippets:
+--3--    ##STACK_TRACE## FAILURE
+
+--1--   Then next steps should be skipped $TEST_BLOCK$ NORMAL
+--1--    Test ignored: Then next steps should be skipped NORMAL
+
+--1-- Feature: Several steps with background $TEST_SUITE$ NORMAL
+--1--  Scenario: first group with several steps $TEST_SUITE$ NORMAL
+--2--   Given background $TEST_BLOCK$ NORMAL
+--6--   Then should pass $TEST_BLOCK$ NORMAL
+--1--  Scenario: second group with several steps $TEST_SUITE$ NORMAL
+--2--   Given background $TEST_BLOCK$ NORMAL
+--6--   Then should pass $TEST_BLOCK$ NORMAL
+
+--1-- Feature: Several passed examples $TEST_SUITE$ NORMAL
+--1--  Scenario Outline: passed tests examples $TEST_SUITE$ NORMAL
+--1--   Then should <smth>                    # features/step_definitions/my_steps.rb:4 NORMAL
+--1--   Examples:  $TEST_SUITE$ NORMAL
+--1--    Scenario: Line: 11 $TEST_SUITE$ NORMAL
+--6--     Then should pass $TEST_BLOCK$ NORMAL
+--1--    Scenario: Line: 12 $TEST_SUITE$ NORMAL
+--6--     Then should pass $TEST_BLOCK$ NORMAL
+
+--1-- 10 scenarios (2 failed, 1 undefined, 1 pending, 6 passed) NORMAL
+--1-- 14 steps (2 failed, 1 skipped, 1 undefined, 1 pending, 9 passed) NORMAL
+
+--1-- Rake aborted! ERROR

@@ -47,7 +47,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
   private final Set<File> myFilesToDelete = new HashSet<File>();
   private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'teamcity/spec/runner/formatter/teamcity/formatter'";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
-  private final String CUCUMBER_RUNNERR_OPTIONS_FORMATTER = "--format Teamcity::Cucumber::Formatter";
+  private final String CUCUMBER_RUNNER_INIT_OPTIONS = "--format Teamcity::Cucumber::Formatter --expand";
 
   @NonNls
   public String getType() {
@@ -216,9 +216,9 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     //attach Cucumber formatter only if cucumber reporter enabled
     if (SupportedTestFramework.CUCUMBER.isActivated(runParams)) {
       //TODO use additional options when cucumber will support it!
-      //cmd.addParameter(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + CUCUMBER_RUNNERR_OPTIONS_FORMATTER);
+      //cmd.addParameter(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + CUCUMBER_RUNNER_INIT_OPTIONS);
 
-      final String cucumberRunnerInitString = CUCUMBER_RUNNERR_OPTIONS_FORMATTER;
+      final String cucumberRunnerInitString = CUCUMBER_RUNNER_INIT_OPTIONS;
       String cucumberOpts = runParams.get(SERVER_UI_RAKE_CUCUMBER_OPTS_PROPERTY);
       if (TextUtil.isEmpty(cucumberOpts)) {
         cucumberOpts = cucumberRunnerInitString;
