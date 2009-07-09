@@ -19,7 +19,7 @@
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
 <div class="parameter">
-  Rakefile file:
+  Rakefile:
   <c:choose>
     <c:when test="${empty propertiesBean.properties['use-custom-build-file']}">
       <props:displayValue name="build-file-path" emptyValue="not specified"/>

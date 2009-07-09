@@ -29,7 +29,7 @@
       </c:set>
       <props:radioButtonProperty name="use-custom-build-file" value="" id="custom1"
                                  checked="${empty propertiesBean.properties['use-custom-build-file']}" onclick="${onclick}"/>
-      <label for="custom1">Path to a Rakefile file:</label>
+      <label for="custom1">Path to a Rakefile:</label>
     </th>
     <td>
       <props:textProperty name="build-file-path" style="width:30em;" maxlength="256"/>
