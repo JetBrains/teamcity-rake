@@ -40,6 +40,8 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    super.appendRunnerSpecificRunParameters(runParameters);
+    
     setWorkingDir(runParameters, "app1");
   }
 

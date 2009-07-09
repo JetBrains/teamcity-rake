@@ -41,6 +41,8 @@ public class CucumberMessagesTest extends AbstractRakeRunnerTest {
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    super.appendRunnerSpecificRunParameters(runParameters);
+
     setWorkingDir(runParameters, "app_cucumber");
     // enable cucumber
     SupportedTestFramework.CUCUMBER.activate(runParameters);

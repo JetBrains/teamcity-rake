@@ -19,11 +19,9 @@ package jetbrains.slow.plugins.rakerunner;
 import java.io.IOException;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
-import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
-import org.jetbrains.annotations.Nullable;
+import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
@@ -42,6 +40,8 @@ public class RakeBuildScriptBuildLogTest extends AbstractRakeRunnerTest {
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    super.appendRunnerSpecificRunParameters(runParameters);
+    
     setWorkingDir(runParameters, "app1");
   }
 

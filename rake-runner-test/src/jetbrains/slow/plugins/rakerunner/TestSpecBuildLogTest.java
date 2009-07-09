@@ -41,6 +41,8 @@ public class TestSpecBuildLogTest extends AbstractRakeRunnerTest {
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    super.appendRunnerSpecificRunParameters(runParameters);
+
     setWorkingDir(runParameters, "app_testspec");
     // enable test-spec
     SupportedTestFramework.TEST_SPEC.activate(runParameters);

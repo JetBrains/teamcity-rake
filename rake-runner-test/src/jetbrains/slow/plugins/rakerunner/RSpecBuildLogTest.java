@@ -20,9 +20,8 @@ import java.io.IOException;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
-import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
@@ -41,6 +40,8 @@ public class RSpecBuildLogTest extends AbstractRakeRunnerTest {
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    super.appendRunnerSpecificRunParameters(runParameters);
+
     setWorkingDir(runParameters, "app_rspec");
     // enable rspec
     SupportedTestFramework.RSPEC.activate(runParameters);

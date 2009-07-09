@@ -36,6 +36,8 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    super.appendRunnerSpecificRunParameters(runParameters);
+
     setWorkingDir(runParameters, "app_testunit");
 
     // enable Test::Unit

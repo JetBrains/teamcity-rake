@@ -41,6 +41,8 @@ public class RSpecMessagesTest extends AbstractRakeRunnerTest {
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    super.appendRunnerSpecificRunParameters(runParameters);
+
     setWorkingDir(runParameters, "app_rspec");
     // enable rspec
     SupportedTestFramework.RSPEC.activate(runParameters);

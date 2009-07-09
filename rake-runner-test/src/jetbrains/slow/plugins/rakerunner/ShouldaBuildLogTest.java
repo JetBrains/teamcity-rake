@@ -41,6 +41,8 @@ public class ShouldaBuildLogTest extends AbstractRakeRunnerTest {
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    super.appendRunnerSpecificRunParameters(runParameters);
+    
     setWorkingDir(runParameters, "app_shoulda");
     // enable shoulda
     SupportedTestFramework.SHOULDA.activate(runParameters);

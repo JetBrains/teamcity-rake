@@ -17,9 +17,11 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.BuildRunner;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
@@ -37,6 +39,8 @@ import org.testng.annotations.BeforeMethod;
  * @author Roman Chernyatchik
  */
 public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
+  private static final String INTERPRETER_PATH_PROPERTY = "rake-runner.ruby.interpreter.path";
+
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
   protected boolean myShouldTranslateMessages = false;
 
@@ -49,6 +53,20 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
   protected void setUp() throws Exception {
     super.setUp();
     setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
+  }
+
+  @Override
+  protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
+    // set ruby interpreter path
+    setInterpreterPath(runParameters);
+  }
+
+  protected void setInterpreterPath(final Map<String, String> runParameters) {
+    final String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
+    if (interpreterPath != null) {
+      runParameters.put(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER,
+                        interpreterPath);
+    }
   }
 
   protected List<BuildMessage1> translateMessages(final ArrayList<BuildMessage1> result, final RunningBuildImpl runningBuild) {
