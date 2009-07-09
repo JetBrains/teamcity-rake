@@ -16,18 +16,16 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import java.util.HashMap;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import junit.framework.TestCase;
-import java.util.HashMap;
+import org.testng.annotations.Test;
 
 /**
- * Created by IntelliJ IDEA.
- * User: romeo
- * Date: Jul 3, 2009
- * Time: 5:01:17 PM
- * To change this template use File | Settings | File Templates.
+ * @author Roman Chernyatchik
  */
+@Test(groups = {"all","slow"})
 public class SupportedTestFrameworkTest extends TestCase {
   
   public void testFrameworksCount() {
