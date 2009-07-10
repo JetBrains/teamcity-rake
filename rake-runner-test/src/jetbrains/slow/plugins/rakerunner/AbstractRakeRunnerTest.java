@@ -21,11 +21,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.BuildRunner;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
+import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
 import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.ServerMessagesTranslator;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
@@ -64,11 +64,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
 
   protected void setInterpreterPath(final Map<String, String> runParameters) {
     final String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
-    final Properties properties = System.getProperties();
-    for (Object property : properties.keySet()) {
-      System.out.println("Sys. property: " + property.toString());
-    }
-    if (interpreterPath != null) {
+    if (!TextUtil.isEmpty(interpreterPath)) {
       runParameters.put(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER,
                         interpreterPath);
     }
