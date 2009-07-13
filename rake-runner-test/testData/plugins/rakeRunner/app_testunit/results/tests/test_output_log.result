@@ -13,7 +13,7 @@
 --1--   RuntimeError:  FAILURE
 --2--   ##STACK_TRACE## FAILURE
 
---1--  test_pass $TEST_BLOCK$ NORMAL
+--1--  test_pass $TEST_BLOCK$
 --1--   test:$stdout<<msg1
 --1--   test:STDOUT<<msg2 NORMAL
 
