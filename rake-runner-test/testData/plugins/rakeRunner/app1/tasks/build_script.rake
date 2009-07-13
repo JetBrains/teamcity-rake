@@ -126,7 +126,6 @@ namespace :build_script do
   task :task_args do |t, args|
     project_list = ["rake", "msbuild"]
     # rake shold be >= 0.8.7
-    p `rake --version`
     args.with_defaults(:projects => project_list)
     args.projects.each do |p|
       puts "Project: #{p}"
