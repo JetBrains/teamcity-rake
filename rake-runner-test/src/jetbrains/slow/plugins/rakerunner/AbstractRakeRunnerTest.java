@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.BuildRunner;
@@ -35,6 +36,7 @@ import jetbrains.slow.RunnerTestBase;
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 import org.jetbrains.annotations.Nullable;
 import org.testng.annotations.BeforeMethod;
+import com.intellij.openapi.util.SystemInfo;
 
 /**
  * @author Roman Chernyatchik
@@ -164,6 +166,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
       //private final Pattern ERROR_DETAILS_VALUE_PATTERN = Pattern.compile(" errorDetails=" + VALUE_PATTERN);
       //private final Pattern MESSAGE_TEXT_PATTERN = Pattern.compile("message text=" + VALUE_PATTERN);
       //private final Pattern LOCATION_PATTERN = Pattern.compile("location=" + VALUE_PATTERN);
+      private final Pattern VFS_FILE_PROTOCOL_PATTERN_WIN = Pattern.compile("file://");
 
       @Override
       public void assertMessagesEquals(final File file,
@@ -171,6 +174,9 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
 
         //final String patchedActual =  mockMessageText(mockErrorDetails(mockTimeStamp(actual)));
         String patchedActual =  actual;
+        if (SystemInfo.isWindows) {
+          patchedActual = VFS_FILE_PROTOCOL_PATTERN_WIN.matcher(actual).replaceAll("file:");
+        }
 
         //for (MockingOptions option : myCheckerMockOptions) {
         //  switch (option) {
