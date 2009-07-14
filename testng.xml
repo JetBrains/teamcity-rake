@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="RakeRunner Suite">
-  <test name="RakeRunner Tests">
+  <test name="RakeRunner Tests : ${ruby_interpreter}">
     <classes>
       <class name="jetbrains.slow.plugins.rakerunner.RakeBuildScriptMessagesTest"/>
       <class name="jetbrains.slow.plugins.rakerunner.RakeBuildScriptBuildLogTest"/>
