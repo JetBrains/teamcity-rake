@@ -17,5 +17,5 @@
 --1--##teamcity[testFinished name='Passed2Test.test_pass2' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testSuiteFinished name='Passed2Test' timestamp='##TIME##'] NORMAL
 
---1--4 tests, 3 assertions, 0 failures, 0 errors NORMAL
+--1--4 tests, 3 assertions, 0 failures, 0 errors
 --1--Test suite finished: ##TIME## NORMAL

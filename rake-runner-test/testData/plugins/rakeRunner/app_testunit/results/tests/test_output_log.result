@@ -17,12 +17,12 @@
 --1--   test:$stdout<<msg1
 --1--   test:STDOUT<<msg2 NORMAL
 
---1-- SetupOutputTest $TEST_SUITE$ NORMAL
---2--  test_fake $TEST_BLOCK$ NORMAL
+--1-- SetupOutputTest $TEST_SUITE$
+--2--  test_fake $TEST_BLOCK$
 --1--   setup:$stdout<<msg1
 --1--   setup:STDOUT<<msg2 NORMAL
 
---1-- TeardownOutputTest $TEST_SUITE$ NORMAL
---2--  test_fake $TEST_BLOCK$ NORMAL
+--1-- TeardownOutputTest $TEST_SUITE$
+--2--  test_fake $TEST_BLOCK$
 --1--   teardown:$stdout<<msg1
 --1--   teardown:STDOUT<<msg2 NORMAL

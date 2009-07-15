@@ -21,7 +21,7 @@
 --1--##teamcity[testFinished name='Failed2Test.test_failed2' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testSuiteFinished name='Failed2Test' timestamp='##TIME##'] NORMAL
 
---1--4 tests, 2 assertions, 2 failures, 2 errors NORMAL
+--1--4 tests, 2 assertions, 2 failures, 2 errors
 --1--Test suite finished: ##TIME## NORMAL
 
 --1--Rake aborted
