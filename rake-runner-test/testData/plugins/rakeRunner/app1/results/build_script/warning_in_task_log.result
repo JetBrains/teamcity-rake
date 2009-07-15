@@ -1,1 +1,1 @@
---1--./tasks/build_script.rake:97: warning: already initialized constant MY_CONST WARNING
+--1--tasks/build_script.rake:97: warning: already initialized constant MY_CONST WARNING
