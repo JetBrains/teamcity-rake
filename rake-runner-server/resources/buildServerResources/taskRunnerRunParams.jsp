@@ -19,6 +19,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 
+<style type="text/css">
+  .rake_reporter {
+  padding-top: 3px;
+  }
+  .rake_reporter_options {
+    padding-top: 2px;
+    padding-left: 17px;
+  }
+</style>
+
 <l:settingsGroup title="Rake Parameters">
   <tr>
     <th>
@@ -91,70 +101,52 @@
 
 <l:settingsGroup title="Tests Reporting">
   <tr>
+    <th>
+      <label>Attached reporters:</label>
+    </th>
+
+    <td>
       <%-- Test Unit --%>
-    <th>
-      <label>Test::Unit</label>
-    </th>
-    <td>
-      <props:checkboxProperty name="ui.rakeRunner.frameworks.testunit.enabled"/>
-      <label for="ui.rakeRunner.frameworks.testunit.enabled">Enabled</label>
-    </td>
-    <td/>
-  </tr>
-  <tr>
+      <div class="rake_reporter">
+        <props:checkboxProperty name="ui.rakeRunner.frameworks.testunit.enabled"/>
+        <label for="ui.rakeRunner.frameworks.testunit.enabled">Test::Unit</label>
+      </div>
+
       <%-- Test-Spec --%>
-    <th>
-      <label>Test-Spec</label>
-    </th>
-    <td>
-      <props:checkboxProperty name="ui.rakeRunner.frameworks.testspec.enabled"/>
-      <label for="ui.rakeRunner.frameworks.testspec.enabled">Enabled</label>
-    </td>
-    <td/>
-  </tr>
+      <div class="rake_reporter">
+        <props:checkboxProperty name="ui.rakeRunner.frameworks.testspec.enabled"/>
+        <label for="ui.rakeRunner.frameworks.testspec.enabled">Test-Spec</label>
+      </div>
 
       <%-- Shoulda --%>
-    <th>
-      <label>Shoulda</label>
-    </th>
-    <td>
-      <props:checkboxProperty name="ui.rakeRunner.frameworks.shoulda.enabled"/>
-      <label for="ui.rakeRunner.frameworks.shoulda.enabled">Enabled</label>
-    </td>
-    <td/>
-  </tr>
+      <div class="rake_reporter">
+        <props:checkboxProperty name="ui.rakeRunner.frameworks.shoulda.enabled"/>
+        <label for="ui.rakeRunner.frameworks.shoulda.enabled">Shoulda</label>
+      </div>
 
-  <tr>
       <%-- RSpec --%>
-    <th>
-      <label>RSpec</label>
-    </th>
-    <td>
-      <props:checkboxProperty name="ui.rakeRunner.frameworks.rspec.enabled"/>
-      <label for="ui.rakeRunner.frameworks.rspec.enabled">Enabled</label>
-      <br/>
-      <br/>
-      <props:textProperty name="ui.rakeRunner.rspec.specoptions" style="width:30em;" maxlength="256"/>
-      <span class="smallNote">
-        Rake will be invoked with a "SPEC_OPTS={internal options}
-        <span style="font-weight: bold;">{user options}</span>".
-      </span>
-    </td>
-  <tr>
+      <div class="rake_reporter">
+        <props:checkboxProperty name="ui.rakeRunner.frameworks.rspec.enabled"/>
+        <label for="ui.rakeRunner.frameworks.rspec.enabled">RSpec</label>
+        <div class="rake_reporter_options">
+        <props:textProperty name="ui.rakeRunner.rspec.specoptions" style="width:30em;" maxlength="256"/>
+        <span class="smallNote">Rake will be invoked with a "SPEC_OPTS={internal options}
+          <span style="font-weight: bold;">{user options}</span>".
+        </span>
+        </div>
+      </div>
+
       <%-- Cucumber --%>
-    <th>
-      <label>Cucumber</label>
-    </th>
-    <td>
-      <props:checkboxProperty name="ui.rakeRunner.frameworks.cucumber.enabled"/>
-      <label for="ui.rakeRunner.frameworks.cucumber.enabled">Enabled</label>
-      <br/>
-      <br/>
-      <props:textProperty name="ui.rakeRunner.cucumber.options" style="width:30em;" maxlength="256"/>
-          <span class="smallNote">
-            Rake will be invoked with a "CUCUMBER_OPTS={internal options}
+      <div class="rake_reporter">
+        <props:checkboxProperty name="ui.rakeRunner.frameworks.cucumber.enabled"/>
+        <label for="ui.rakeRunner.frameworks.cucumber.enabled">Cucumber</label>
+        <div class="rake_reporter_options">
+          <props:textProperty name="ui.rakeRunner.cucumber.options" style="width:30em;" maxlength="256"/>
+          <span class="smallNote">Rake will be invoked with a "CUCUMBER_OPTS={internal options}
             <span style="font-weight: bold;">{user options}</span>".
           </span>
+        </div>
+      </div>
     </td>
   </tr>
 </l:settingsGroup>

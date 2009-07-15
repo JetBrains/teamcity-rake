@@ -51,47 +51,30 @@
 </div>
 
 <div class="parameter">
-    Tests Reporting:
-    <div class="nestedParameter">
-        <ul style="list-style: circle; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
-          <li>
-            Test::Unit:
-            <div class="parameter">
-              <div class="nestedParameter">
-                <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
-                  <li>Enabled: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.testunit.enabled"/></strong></li>
-                  <li>Tests options(TESTOPTS): <strong><props:displayValue name="ui.rakeRunner.test.unit.options" emptyValue="not specified"/></strong></li>
-                </ul>
-              </div>
-            </div>
-          </li>
+  Attached reporters:
+  <div class="nestedParameter">
+  <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
+    <li>Test::Unit: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.testunit.enabled"/></strong></li>
+    <li>Test-Spec: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.testspec.enabled"/></strong></li>
+    <li>Shoulda: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.shoulda.enabled"/></strong></li>
 
-          <li>Test-Spec: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.testspec.enabled"/></strong></li>
-          <li>Shoulda: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.shoulda.enabled"/></strong></li>
+    <li>
+      RSpec: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.rspec.enabled"/></strong>
+      <div class="parameter">
+        <div class="nestedParameter">
+          RSpec options(SPEC_OPTS): <strong><props:displayValue name="ui.rakeRunner.rspec.specoptions" emptyValue="not specified"/></strong>
+        </div>
+      </div>
+    </li>
 
-          <li>
-            RSpec:
-            <div class="parameter">
-              <div class="nestedParameter">
-                <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
-                  <li>Enabled:<strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.rspec.enabled"/></strong></li>
-                  <li>RSpec options(SPEC_OPTS): <strong><props:displayValue name="ui.rakeRunner.rspec.specoptions" emptyValue="not specified"/></strong></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-
-          <li>
-            Cucumber:
-            <div class="parameter">
-              <div class="nestedParameter">
-                <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
-                  <li>Enabled:<strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.cucumber.enabled"/></strong></li>
-                  <li>Cucumber options(CUCUMBER_OPTS): <strong><props:displayValue name="ui.rakeRunner.cucumber.options" emptyValue="not specified"/></strong></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-      </ul>
-    </div>
+    <li>
+      Cucumber: <strong><props:displayCheckboxValue name="ui.rakeRunner.frameworks.cucumber.enabled"/></strong>
+      <div class="parameter">
+        <div class="nestedParameter">
+          Cucumber options(CUCUMBER_OPTS): <strong><props:displayValue name="ui.rakeRunner.cucumber.options" emptyValue="not specified"/></strong>
+        </div>
+      </div>
+    </li>
+  </ul>
+  </div>
 </div>
