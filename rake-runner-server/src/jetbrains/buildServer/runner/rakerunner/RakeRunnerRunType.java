@@ -49,9 +49,13 @@ public class RakeRunnerRunType extends RunType {
 
   public Map<String, String> getDefaultRunnerProperties() {
     final Map<String, String> map = new HashMap<String, String>();
+
     final String trueStr = Boolean.TRUE.toString();
 
-    // You can setup default properties here
+    // by default let's enable : Test::Unit, RSpec, Cucumber
+    map.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY, trueStr);
+    map.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY, trueStr);
+    map.put(RakeRunnerConstants.SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY, trueStr);
 
     return map;
   }
