@@ -20,6 +20,7 @@ import java.util.HashMap;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import junit.framework.TestCase;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -27,7 +28,18 @@ import org.testng.annotations.Test;
  */
 @Test(groups = {"all","slow"})
 public class SupportedTestFrameworkTest extends TestCase {
-  
+  private HashMap<String,String> myDefaultParams;
+
+  @Override
+  @BeforeMethod
+  protected void setUp() throws Exception {
+    super.setUp();
+
+    myDefaultParams = new HashMap<String, String>();
+    myDefaultParams.put(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY,
+                        RakeRunnerConstants.CURRENT_CONFIG_VERSION);
+  }
+
   public void testFrameworksCount() {
     assertEquals(5, SupportedTestFramework.values().length);
   }
@@ -41,120 +53,105 @@ public class SupportedTestFrameworkTest extends TestCase {
   }
 
   public void testIsActivated_SmthEnabled() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
-
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    assertTrue(SupportedTestFramework.isAnyFrameworkActivated(runParams));
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    assertTrue(SupportedTestFramework.isAnyFrameworkActivated(myDefaultParams));
   }
 
   public void testIsActivated_SmthDisabled() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
-
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
-                  Boolean.FALSE.toString());
-    assertFalse(SupportedTestFramework.isAnyFrameworkActivated(runParams));
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
+                        Boolean.FALSE.toString());
+    assertFalse(SupportedTestFramework.isAnyFrameworkActivated(myDefaultParams));
   }
 
   public void testIsActivated_Empty() {
-    assertFalse(SupportedTestFramework.isAnyFrameworkActivated(new HashMap<String, String>()));
+    assertFalse(SupportedTestFramework.isAnyFrameworkActivated(myDefaultParams));
+  }
+
+  public void testIsActivated_OldRakeRunner() {
+    assertTrue(SupportedTestFramework.TEST_UNIT.isActivated(new HashMap<String, String>()));
+    assertTrue(SupportedTestFramework.RSPEC.isActivated(new HashMap<String, String>()));
+
+    assertFalse(SupportedTestFramework.TEST_SPEC.isActivated(new HashMap<String, String>()));
+    assertFalse(SupportedTestFramework.SHOULDA.isActivated(new HashMap<String, String>()));
+    assertFalse(SupportedTestFramework.CUCUMBER.isActivated(new HashMap<String, String>()));
   }
 
   public void testIsTestUnitActivated_TestUnit() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
-
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    assertTrue(SupportedTestFramework.isTestUnitBasedFrameworksActivated(runParams));
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    assertTrue(SupportedTestFramework.isTestUnitBasedFrameworksActivated(myDefaultParams));
   }
 
   public void testIsTestUnitActivated_TestUnitAndSomeBdd() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
-
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    assertTrue(SupportedTestFramework.isTestUnitBasedFrameworksActivated(runParams));
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    assertTrue(SupportedTestFramework.isTestUnitBasedFrameworksActivated(myDefaultParams));
   }
 
   public void testIsTestUnitActivated_TestSpec() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
-
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTSPEC_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    assertTrue(SupportedTestFramework.isTestUnitBasedFrameworksActivated(runParams));
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTSPEC_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    assertTrue(SupportedTestFramework.isTestUnitBasedFrameworksActivated(myDefaultParams));
   }
 
   public void testIsTestUnitActivated_Shoulda() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
-
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_SHOULDA_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    assertTrue(SupportedTestFramework.isTestUnitBasedFrameworksActivated(runParams));
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_SHOULDA_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    assertTrue(SupportedTestFramework.isTestUnitBasedFrameworksActivated(myDefaultParams));
   }
 
   public void testIsTestUnitActivated_RSpecCucumber() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
-
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    assertFalse(SupportedTestFramework.isTestUnitBasedFrameworksActivated(runParams));
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    assertFalse(SupportedTestFramework.isTestUnitBasedFrameworksActivated(myDefaultParams));
   }
   public void testIsActivated() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTSPEC_ENABLED_PROPERTY,
+                        Boolean.FALSE.toString());
 
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTSPEC_ENABLED_PROPERTY,
-                  Boolean.FALSE.toString());
+    assertTrue(SupportedTestFramework.RSPEC.isActivated(myDefaultParams));
+    assertTrue(SupportedTestFramework.CUCUMBER.isActivated(myDefaultParams));
+    assertTrue(SupportedTestFramework.TEST_UNIT.isActivated(myDefaultParams));
 
-    assertTrue(SupportedTestFramework.RSPEC.isActivated(runParams));
-    assertTrue(SupportedTestFramework.CUCUMBER.isActivated(runParams));
-    assertTrue(SupportedTestFramework.TEST_UNIT.isActivated(runParams));
-
-    assertFalse(SupportedTestFramework.TEST_SPEC.isActivated(runParams));
-    assertFalse(SupportedTestFramework.SHOULDA.isActivated(runParams));
+    assertFalse(SupportedTestFramework.TEST_SPEC.isActivated(myDefaultParams));
+    assertFalse(SupportedTestFramework.SHOULDA.isActivated(myDefaultParams));
   }
 
   public void testGetActivatedFrameworksConfig_Empty() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
-
-    assertEquals("", SupportedTestFramework.getActivatedFrameworksConfig(runParams));
+    assertEquals("", SupportedTestFramework.getActivatedFrameworksConfig(myDefaultParams));
   }
 
   public void testGetActivatedFrameworksConfig_OneFramework() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
 
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-
-    assertEquals(":rspec ", SupportedTestFramework.getActivatedFrameworksConfig(runParams));
+    assertEquals(":rspec ", SupportedTestFramework.getActivatedFrameworksConfig(myDefaultParams));
   }
 
   public void testGetActivatedFrameworksConfig_SeveralFrameworks() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
+                        Boolean.TRUE.toString());
 
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
-                  Boolean.TRUE.toString());
-
-    assertEquals(":test_unit :rspec ", SupportedTestFramework.getActivatedFrameworksConfig(runParams));
+    assertEquals(":test_unit :rspec ", SupportedTestFramework.getActivatedFrameworksConfig(myDefaultParams));
   }
 
   public void testGetActivatedFrameworksConfig_DisabledFramework() {
-    final HashMap<String, String> runParams = new HashMap<String, String>();
+    myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
+                        Boolean.FALSE.toString());
 
-    runParams.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY,
-                  Boolean.FALSE.toString());
-
-    assertEquals("", SupportedTestFramework.getActivatedFrameworksConfig(runParams));
+    assertEquals("", SupportedTestFramework.getActivatedFrameworksConfig(myDefaultParams));
   }
 }

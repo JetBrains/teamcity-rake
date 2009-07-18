@@ -62,6 +62,9 @@ public class RakeRunnerRunType extends RunType {
     map.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY, trueStr);
     map.put(RakeRunnerConstants.SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY, trueStr);
 
+    // configuration version
+    map.put(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY,
+            RakeRunnerConstants.CURRENT_CONFIG_VERSION);
     return map;
   }
 

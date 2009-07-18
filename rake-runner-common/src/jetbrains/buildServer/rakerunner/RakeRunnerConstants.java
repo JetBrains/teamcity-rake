@@ -22,7 +22,8 @@ import org.jetbrains.annotations.NonNls;
  * @author Roman Chernyatchik
  */
 public interface RakeRunnerConstants {
-  @NonNls public String RUNNER_TYPE = "rake-runner";
+  @NonNls String CURRENT_CONFIG_VERSION = "2";
+  @NonNls String RUNNER_TYPE = "rake-runner";
   @NonNls String RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME = "rake-runner-server.jar";
   @NonNls String AGENT_BUNDLE_JAR = "rake-runner-agent.jar";
 
@@ -68,7 +69,9 @@ public interface RakeRunnerConstants {
   @NonNls String SERVER_UI_RAKE_CUCUMBER_OPTS_PROPERTY = "ui.rakeRunner.cucumber.options";
   @NonNls String RAKE_CUCUMBER_OPTS_PARAM_NAME = "CUCUMBER_OPTS";
 
-// Agent properties:
+  @NonNls String SERVER_CONFIGURATION_VERSION_PROPERTY = "ui.rakeRunner.config.version";
+
+  // Agent properties:
   // Custom rake tasks runner script
   @NonNls String CUSTOM_RAKERUNNER_SCRIPT = "system.teamcity.rake.runner.custom.runner";
 
