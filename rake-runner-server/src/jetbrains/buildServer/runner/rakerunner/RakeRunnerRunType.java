@@ -23,7 +23,7 @@ import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
-import jetbrains.buildServer.serverSide.SBuildType;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Roman Chernyatchik
@@ -34,19 +34,24 @@ public class RakeRunnerRunType extends RunType {
     runTypeRegistry.registerRunType(this);
   }
 
+  @Override
+  @Nullable
   public PropertiesProcessor getRunnerPropertiesProcessor() {
     // Do nothing
     return null;
   }
 
+  @Override
   public String getEditRunnerParamsJspFilePath() {
     return "taskRunnerRunParams.jsp";
   }
 
+  @Override
   public String getViewRunnerParamsJspFilePath() {
     return "viewTaskRunnerRunParams.jsp";
   }
 
+  @Override
   public Map<String, String> getDefaultRunnerProperties() {
     final Map<String, String> map = new HashMap<String, String>();
 
@@ -60,18 +65,17 @@ public class RakeRunnerRunType extends RunType {
     return map;
   }
 
-  public boolean isCheckoutTypeSupported(final SBuildType.CheckoutType checkoutType) {
-    return true;
-  }
-
+  @Override
   public String getDescription() {
     return RakeRunnerBundle.RUNNER_DESCRIPTION;
   }
 
+  @Override
   public String getDisplayName() {
     return RakeRunnerBundle.RUNNER_DISPLAY_NAME;
   }
 
+  @Override
   public String getType() {
     return RakeRunnerConstants.RUNNER_TYPE;
   }
