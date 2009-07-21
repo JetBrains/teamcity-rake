@@ -62,6 +62,11 @@ public abstract class AbstractRakeRunnerTest extends RunnerTestBase {
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
     // set ruby interpreter path
     setInterpreterPath(runParameters);
+
+    // configuration version
+    runParameters.put(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY,
+                      RakeRunnerConstants.CURRENT_CONFIG_VERSION);
+
   }
 
   protected void setInterpreterPath(final Map<String, String> runParameters) {
