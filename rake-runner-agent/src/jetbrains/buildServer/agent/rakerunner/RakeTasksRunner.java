@@ -65,6 +65,9 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
                                   @NotNull final Map<String, String> buildParams)
       throws IOException, RunBuildException {
 
+    // apply options converter
+    SupportedTestFramework.convertOptionsIfNecessary(runParams);
+
     // runParams - all server-ui options
     // buildParams - system properties (system.*), environment vars (env.*)
 

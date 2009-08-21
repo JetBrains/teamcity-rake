@@ -48,12 +48,25 @@ public enum SupportedTestFramework {
     return myFrameworkUIProperty;
   }
 
-  public boolean isActivated(final Map<String, String> runParams) {
-    if (runParams.get(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY) == null) {
+  public static void convertOptionsIfNecessary(final Map<String, String> runParams) {
+    final String versionString = runParams.get(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY);
+
+    int version;
+    try {
+      version = versionString != null ? Integer.parseInt(versionString) : 0;
+    } catch (NumberFormatException ex) {
+      version = 0;
+    }
+
+    if (version < 2) {
       // support for old version of rake-runner plugin
       // let's think that Test::Unit and RSpec frameworks are activated
-      return this == TEST_UNIT || this == RSPEC;
+      TEST_UNIT.activate(runParams);
+      RSPEC.activate(runParams);
     }
+  }
+
+  public boolean isActivated(final Map<String, String> runParams) {
     return ConfigurationParamsUtil.isParameterEnabled(runParams, getFrameworkUIProperty());
   }
   public void activate(final Map<String, String> runParams) {

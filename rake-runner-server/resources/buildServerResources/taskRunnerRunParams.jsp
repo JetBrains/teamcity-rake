@@ -29,6 +29,9 @@
   }
 </style>
 
+<%--Default initial settings format version--%>
+<props:hiddenProperty name="ui.rakeRunner.config.version"/>
+
 <l:settingsGroup title="Rake Parameters">
   <tr>
     <th>

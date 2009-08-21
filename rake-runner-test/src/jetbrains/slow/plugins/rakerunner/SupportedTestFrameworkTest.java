@@ -68,15 +68,6 @@ public class SupportedTestFrameworkTest extends TestCase {
     assertFalse(SupportedTestFramework.isAnyFrameworkActivated(myDefaultParams));
   }
 
-  public void testIsActivated_OldRakeRunner() {
-    assertTrue(SupportedTestFramework.TEST_UNIT.isActivated(new HashMap<String, String>()));
-    assertTrue(SupportedTestFramework.RSPEC.isActivated(new HashMap<String, String>()));
-
-    assertFalse(SupportedTestFramework.TEST_SPEC.isActivated(new HashMap<String, String>()));
-    assertFalse(SupportedTestFramework.SHOULDA.isActivated(new HashMap<String, String>()));
-    assertFalse(SupportedTestFramework.CUCUMBER.isActivated(new HashMap<String, String>()));
-  }
-
   public void testIsTestUnitActivated_TestUnit() {
     myDefaultParams.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY,
                         Boolean.TRUE.toString());
@@ -153,5 +144,22 @@ public class SupportedTestFrameworkTest extends TestCase {
                         Boolean.FALSE.toString());
 
     assertEquals("", SupportedTestFramework.getActivatedFrameworksConfig(myDefaultParams));
+  }
+
+  public void testConvertOptionsIfNecessary_LatestVersion() {
+    SupportedTestFramework.convertOptionsIfNecessary(myDefaultParams);
+    assertFalse(SupportedTestFramework.isAnyFrameworkActivated(myDefaultParams));
+  }
+
+  public void testConvertOptionsIfNecessary_NoVersion() {
+    final HashMap<String, String> params = new HashMap<String, String>();
+    SupportedTestFramework.convertOptionsIfNecessary(params);
+    assertEquals(":test_unit :rspec ", SupportedTestFramework.getActivatedFrameworksConfig(params));
+  }
+
+  public void testConvertOptionsIfNecessary_Version1() {
+    final HashMap<String, String> params = new HashMap<String, String>();
+    SupportedTestFramework.convertOptionsIfNecessary(params);
+    assertEquals(":test_unit :rspec ", SupportedTestFramework.getActivatedFrameworksConfig(params));
   }
 }
