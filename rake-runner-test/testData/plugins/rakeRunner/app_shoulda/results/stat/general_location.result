@@ -1,2 +1,2 @@
 ##teamcity[testSuiteStarted name='ErrorTest' location='ruby_qn://ErrorTest' timestamp='##TIME##'] NORMAL
-##teamcity[testStarted name='This context should contain failed test. (ErrorTest)' captureStandardOutput='true' location='ruby_qn://This context should contain failed test. (ErrorTest)' timestamp='##TIME##'] NORMAL
+##teamcity[testStarted name='ErrorTest.This context should contain failed test' captureStandardOutput='true' location='ruby_qn://ErrorTest.This context should contain failed test' timestamp='##TIME##'] NORMAL
