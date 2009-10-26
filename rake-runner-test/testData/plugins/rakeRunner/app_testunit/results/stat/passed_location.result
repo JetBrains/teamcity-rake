@@ -1,3 +1,3 @@
---1--##teamcity[testSuiteStarted name='Passed1Test' location='ruby_qn://Passed1Test' timestamp='##TIME##'] NORMAL
---1--##teamcity[testStarted name='Passed1Test.test_pass1' captureStandardOutput='true' location='ruby_qn://Passed1Test.test_pass1' timestamp='##TIME##'] NORMAL
---1--##teamcity[testStarted name='Passed1Test.test_pass12' captureStandardOutput='true' location='ruby_qn://Passed1Test.test_pass12' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testSuiteStarted name='Passed1Test' locationHint='ruby_qn://Passed1Test' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Passed1Test.test_pass1' captureStandardOutput='true' locationHint='ruby_qn://Passed1Test.test_pass1' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Passed1Test.test_pass12' captureStandardOutput='true' locationHint='ruby_qn://Passed1Test.test_pass12' timestamp='##TIME##'] NORMAL

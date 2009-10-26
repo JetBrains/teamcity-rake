@@ -1,7 +1,7 @@
 --0--##teamcity[testCount count='1' timestamp='##TIME##'] NORMAL
 --1--##teamcity[progressMessage 'Starting.. (1 tests)'] NORMAL
 
---1--##teamcity[testStarted name='PassedTest.test_pass' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='PassedTest.test_pass' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='PassedTest.test_pass' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 --1--1 tests, 1 assertions, 0 failures, 0 errors
 --1--Test suite finished: ##TIME## NORMAL

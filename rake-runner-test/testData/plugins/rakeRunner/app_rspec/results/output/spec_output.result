@@ -23,7 +23,7 @@
 --3--spec:after $stderr
 --3--spec:after STDERR WARNING
 
---1--##teamcity[testStarted name='Output should pass' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testStarted name='Output should fail' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testStarted name='Output should error' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Output should pass' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Output should fail' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Output should error' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
 

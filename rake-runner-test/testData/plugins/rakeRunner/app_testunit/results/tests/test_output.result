@@ -23,6 +23,6 @@
 --1--teardown:$stderr<<msg3 WARNING
 --1--teardown:STDERR<<msg4 WARNING
 
---1--##teamcity[testStarted name='OutputTest.test_error' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testStarted name='OutputTest.test_fail' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testStarted name='OutputTest.test_pass' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='OutputTest.test_error' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='OutputTest.test_fail' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='OutputTest.test_pass' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL

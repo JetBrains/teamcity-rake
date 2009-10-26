@@ -1,16 +1,16 @@
 --1--##teamcity[progressMessage 'Starting.. (3 examples)'] NORMAL
 --0--##teamcity[testCount count='3' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testStarted name='Spec passed should passed11' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Spec passed should passed11' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Spec passed should passed11' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testStarted name='Spec passed should passed12' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Spec passed should passed12' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Spec passed should passed12' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testStarted name='Spec passed should passed2' captureStandardOutput='true' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Spec passed should passed2' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Spec passed should passed2' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
---2--##teamcity[testSuiteStarted name='Spec passed' location='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--2--##teamcity[testSuiteStarted name='Spec passed' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
 --2--##teamcity[testSuiteFinished name='Spec passed' timestamp='##TIME##'] NORMAL
 
 --1--3 examples, 0 failures, 3 passed NORMAL

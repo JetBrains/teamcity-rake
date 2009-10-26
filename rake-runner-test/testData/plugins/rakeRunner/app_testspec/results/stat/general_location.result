@@ -1,2 +1,2 @@
-##teamcity[testSuiteStarted name='This context' location='ruby_qn://This context' timestamp='##TIME##'] NORMAL
-##teamcity[testStarted name='This context.contain pending test' captureStandardOutput='true' location='ruby_qn://This context.contain pending test' timestamp='##TIME##'] NORMAL
+##teamcity[testSuiteStarted name='This context' locationHint='ruby_qn://This context' timestamp='##TIME##'] NORMAL
+##teamcity[testStarted name='This context.contain pending test' captureStandardOutput='true' locationHint='ruby_qn://This context.contain pending test' timestamp='##TIME##'] NORMAL
