@@ -3,7 +3,7 @@
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
       <configuration>
-        <fileset id="fileset1" name="My Fileset" removed="false">
+        <fileset id="fileset1" name="rake-runner-server" removed="false">
           <file>file://$MODULE_DIR$/resources/META-INF/build-server-plugin-rakerunner.xml</file>
         </fileset>
       </configuration>
@@ -13,6 +13,7 @@
         <webroots>
           <root url="file://$MODULE_DIR$/resources/buildServerResources" relative="/plugins/rake-runner" />
         </webroots>
+        <context-artifact name="rake-runner-server-internal:rake-runner-server exploded" />
       </configuration>
     </facet>
   </component>
