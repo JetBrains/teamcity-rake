@@ -2,7 +2,7 @@
 <project name="rake-runner" default="all">
   
   
-  <!--<property file="rake-runner.properties"/>-->
+  <property file="rake-runner.properties"/>
   <!-- Uncomment the following property if no tests compilation is needed -->
   <!-- 
   <property name="skip.tests" value="true"/>
@@ -21,15 +21,13 @@
     <exclude name="**/rcs/**"/>
     <exclude name="**/.DS_Store/**"/>
     <exclude name="**/.svn/**"/>
-    <exclude name="**/.sbas/**"/>
-    <exclude name="**/.IJI.*/**"/>
-    <exclude name="**/vssver.scc/**"/>
-    <exclude name="**/vssver2.scc/**"/>
     <exclude name="**/.pyc/**"/>
     <exclude name="**/.pyo/**"/>
     <exclude name="**/*.pyc/**"/>
     <exclude name="**/*.pyo/**"/>
     <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
   </patternset>
   <patternset id="library.patterns">
     <include name="*.zip"/>
@@ -51,6 +49,7 @@
     <include name="**/?*.tld"/>
     <include name="**/?*.rb"/>
   </patternset>
+  
   
   <!-- Project Libraries -->
   
@@ -98,12 +97,12 @@
     <pathelement location="${basedir}/lib/teamcity/server/xmlrpc-2.0.1.jar"/>
   </path>
   
-  <path id="library.xstream-1.2.1.jar.classpath">
-    <pathelement location="${basedir}/lib/teamcity/server/xstream-1.2.1.jar"/>
+  <path id="library.xstream-1.3.1.jar.classpath">
+    <pathelement location="${basedir}/lib/teamcity/server/xstream-1.3.1.jar"/>
   </path>
   
   
-  <!-- Global Libraries -->
+  <!-- Application Server Libraries -->
   
   <!-- Modules -->
   
@@ -111,6 +110,7 @@
   <!-- Module rake-runner-common -->
   
   <dirname property="module.rake-runner-common.basedir" file="${ant.file}"/>
+  
   
   
   <property name="compiler.args.rake-runner-common" value="${compiler.args}"/>
@@ -131,7 +131,7 @@
     <path refid="library.agent-api.jar.classpath"/>
     <path refid="library.util.jar.classpath"/>
     <path refid="library.server-api.jar.classpath"/>
-    <path refid="library.xstream-1.2.1.jar.classpath"/>
+    <path refid="library.xstream-1.3.1.jar.classpath"/>
   </path>
   
   <path id="rake-runner-common.runtime.module.classpath">
@@ -145,7 +145,7 @@
     <path refid="library.agent-api.jar.classpath"/>
     <path refid="library.util.jar.classpath"/>
     <path refid="library.server-api.jar.classpath"/>
-    <path refid="library.xstream-1.2.1.jar.classpath"/>
+    <path refid="library.xstream-1.3.1.jar.classpath"/>
   </path>
   
   
@@ -197,6 +197,7 @@
   <dirname property="module.rake-runner-root.basedir" file="${ant.file}"/>
   
   
+  
   <property name="compiler.args.rake-runner-root" value="${compiler.args}"/>
   
   <property name="rake-runner-root.output.dir" value="${module.rake-runner-root.basedir}/out/production/rake-runner-root"/>
@@ -206,8 +207,7 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
-  <path id="rake-runner-root.module.classpath">
-  </path>
+  <path id="rake-runner-root.module.classpath"/>
   
   <path id="rake-runner-root.runtime.module.classpath">
     <pathelement location="${rake-runner-root.output.dir}"/>
@@ -241,6 +241,7 @@
   <dirname property="module.rake-runner-agent.basedir" file="${ant.file}"/>
   
   
+  
   <property name="compiler.args.rake-runner-agent" value="${compiler.args}"/>
   
   <property name="rake-runner-agent.output.dir" value="${module.rake-runner-agent.basedir}/out/production/rake-runner-agent"/>
@@ -261,7 +262,7 @@
     <path refid="library.agent-api.jar.classpath"/>
     <path refid="library.util.jar.classpath"/>
     <path refid="library.server-api.jar.classpath"/>
-    <path refid="library.xstream-1.2.1.jar.classpath"/>
+    <path refid="library.xstream-1.3.1.jar.classpath"/>
     <path refid="library.agent.jar.classpath"/>
     <path refid="library.server-logging.jar.classpath"/>
     <path refid="library.runtime-util.jar.classpath"/>
@@ -270,7 +271,8 @@
   <path id="rake-runner-agent.runtime.module.classpath">
     <pathelement location="${rake-runner-agent.output.dir}"/>
     <pathelement location="${rake-runner-agent.testoutput.dir}"/>
-    <path refid="rake-runner-common.runtime.module.classpath"/>
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <pathelement location="${rake-runner-common.testoutput.dir}"/>
     <path refid="library.annotations.jar.classpath"/>
     <path refid="library.common-api.jar.classpath"/>
     <path refid="library.xmlrpc-2.0.1.jar.classpath"/>
@@ -279,7 +281,7 @@
     <path refid="library.agent-api.jar.classpath"/>
     <path refid="library.util.jar.classpath"/>
     <path refid="library.server-api.jar.classpath"/>
-    <path refid="library.xstream-1.2.1.jar.classpath"/>
+    <path refid="library.xstream-1.3.1.jar.classpath"/>
     <path refid="library.agent.jar.classpath"/>
     <path refid="library.server-logging.jar.classpath"/>
     <path refid="library.runtime-util.jar.classpath"/>
@@ -339,6 +341,7 @@
   <dirname property="module.rake-runner-server.basedir" file="${ant.file}"/>
   
   
+  
   <property name="compiler.args.rake-runner-server" value="${compiler.args}"/>
   
   <property name="rake-runner-server.output.dir" value="${module.rake-runner-server.basedir}/out/production/rake-runner-server"/>
@@ -359,13 +362,14 @@
     <path refid="library.agent-api.jar.classpath"/>
     <path refid="library.util.jar.classpath"/>
     <path refid="library.server-api.jar.classpath"/>
-    <path refid="library.xstream-1.2.1.jar.classpath"/>
+    <path refid="library.xstream-1.3.1.jar.classpath"/>
   </path>
   
   <path id="rake-runner-server.runtime.module.classpath">
     <pathelement location="${rake-runner-server.output.dir}"/>
     <pathelement location="${rake-runner-server.testoutput.dir}"/>
-    <path refid="rake-runner-common.runtime.module.classpath"/>
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <pathelement location="${rake-runner-common.testoutput.dir}"/>
     <path refid="library.annotations.jar.classpath"/>
     <path refid="library.common-api.jar.classpath"/>
     <path refid="library.xmlrpc-2.0.1.jar.classpath"/>
@@ -374,7 +378,7 @@
     <path refid="library.agent-api.jar.classpath"/>
     <path refid="library.util.jar.classpath"/>
     <path refid="library.server-api.jar.classpath"/>
-    <path refid="library.xstream-1.2.1.jar.classpath"/>
+    <path refid="library.xstream-1.3.1.jar.classpath"/>
   </path>
   
   
@@ -425,9 +429,12 @@
     <delete dir="${rake-runner-server.testoutput.dir}"/>
   </target>
   
+  
   <!-- Module rake-runner-test -->
   
   <dirname property="module.rake-runner-test.basedir" file="${ant.file}"/>
+  
+  
   
   <property name="compiler.args.rake-runner-test" value="${compiler.args}"/>
   
@@ -450,9 +457,24 @@
   <path id="rake-runner-test.runtime.module.classpath">
     <pathelement location="${rake-runner-test.output.dir}"/>
     <pathelement location="${rake-runner-test.testoutput.dir}"/>
-    <path refid="rake-runner-agent.runtime.module.classpath"/>
-    <path refid="rake-runner-common.runtime.module.classpath"/>
-    <path refid="rake-runner-server.runtime.module.classpath"/>
+    <pathelement location="${rake-runner-agent.output.dir}"/>
+    <pathelement location="${rake-runner-agent.testoutput.dir}"/>
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <pathelement location="${rake-runner-common.testoutput.dir}"/>
+    <path refid="library.annotations.jar.classpath"/>
+    <path refid="library.common-api.jar.classpath"/>
+    <path refid="library.xmlrpc-2.0.1.jar.classpath"/>
+    <path refid="library.openapi.jar.classpath"/>
+    <path refid="library.log4j-1.2.12.jar.classpath"/>
+    <path refid="library.agent-api.jar.classpath"/>
+    <path refid="library.util.jar.classpath"/>
+    <path refid="library.server-api.jar.classpath"/>
+    <path refid="library.xstream-1.3.1.jar.classpath"/>
+    <path refid="library.agent.jar.classpath"/>
+    <path refid="library.server-logging.jar.classpath"/>
+    <path refid="library.runtime-util.jar.classpath"/>
+    <pathelement location="${rake-runner-server.output.dir}"/>
+    <pathelement location="${rake-runner-server.testoutput.dir}"/>
   </path>
   
   
@@ -482,5 +504,35 @@
   
   <target name="clean" depends="clean.module.rake-runner-common, clean.module.rake-runner-root, clean.module.rake-runner-agent, clean.module.rake-runner-server, clean.module.rake-runner-test" description="cleanup all"/>
   
-  <target name="all" depends="init, clean, compile.module.rake-runner-common, compile.module.rake-runner-root, compile.module.rake-runner-agent, compile.module.rake-runner-test" description="build all"/>
+  <target name="build.modules" depends="init, clean, compile.module.rake-runner-common, compile.module.rake-runner-root, compile.module.rake-runner-agent, compile.module.rake-runner-server, compile.module.rake-runner-test" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="artifact.rake-runner-server:web_exploded" depends="init.artifacts" description="Build &apos;rake-runner-server:Web exploded&apos; artifact">
+    <property name="artifact.temp.output.rake-runner-server:web_exploded" value="${artifacts.temp.dir}/rake_runner_server_Web_exploded"/>
+    <mkdir dir="${artifact.temp.output.rake-runner-server:web_exploded}"/>
+    <mkdir dir="${artifact.temp.output.rake-runner-server:web_exploded}/plugins"/>
+    <mkdir dir="${artifact.temp.output.rake-runner-server:web_exploded}/plugins/rake-runner"/>
+    <copy todir="${artifact.temp.output.rake-runner-server:web_exploded}/plugins/rake-runner">
+      <fileset dir="${basedir}/rake-runner-server/resources/buildServerResources"/>
+    </copy>
+    <mkdir dir="${artifact.temp.output.rake-runner-server:web_exploded}/WEB-INF"/>
+    <copy file="${basedir}/rake-runner-server/web/WEB-INF/web.xml" tofile="${artifact.temp.output.rake-runner-server:web_exploded}/WEB-INF/web.xml"/>
+    <mkdir dir="${artifact.temp.output.rake-runner-server:web_exploded}/WEB-INF"/>
+    <mkdir dir="${artifact.temp.output.rake-runner-server:web_exploded}/WEB-INF/classes"/>
+    <copy todir="${artifact.temp.output.rake-runner-server:web_exploded}/WEB-INF/classes">
+      <fileset dir="${rake-runner-server.output.dir}"/>
+    </copy>
+  </target>
+  
+  <target name="build.all.artifacts" description="Build all artifacts">
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
 </project>
