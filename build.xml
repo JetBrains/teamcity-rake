@@ -1,19 +1,78 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="rakerunner-teamcity" default="build_project">
-    <!--plugin name-->
+<project name="rakerunner-teamcity">
+
+  <property file="rake-runner.properties"/>
+
+  <property name="plugin.name" value="rake-runner"/>
+
+  <import file="rake-runner.xml"/>
+  <import file="teamcity-common.xml"/>
+
+  <target name="package" depends="define.version">
+    <package.teamcity.plugin name="${plugin.name}"
+                             server.output="${rake-runner-server.output.dir}"
+                             agent.output="${rake-runner-agent.output.dir}"
+                             common.output="${rake-runner-common.output.dir}"
+                             agent.lib.dir="${basedir}/lib/agent"
+                             agent.lib.includes="**/*"
+                             plugin.descriptor.file="${basedir}/teamcity-plugin.xml"
+                             plugin.version="${plugin.version}"/>
+  </target>
+
+  <target name="define.version" depends="define.version.if.under.teamcity">
+    <tstamp>
+      <format property="current.time" pattern="yyyyMMddHHmm"/>
+    </tstamp>
+    <property name="plugin.version" value="SNAPSHOT-${current.time}"/>
+  </target>
+
+  <target name="define.version.if.under.teamcity" if="build.number">
+    <property name="plugin.version" value="${build.number}"/>
+  </target>
+
+  <target name="dist" depends="check.teamcitydistribution,all,package"/>
+
+<!--
+  <taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${basedir}/lib/testng-jdk15.jar"/>
+
+  <path id="tests_classpath">
+    <path refid="rake-runner-test.runtime.module.classpath"/>
+  </path>
+
+  <target name="run-tests" depends="clean, init, compile.module.rake-runner-test.production">
+    <property name="suspend" value="n"/>
+
+    <testng haltonfailure="no" failureProperty="failure_found" listener="org.testng.reporters.TestHTMLReporter"
+            outputdir="${basedir}/test-output" classpathref="tests_classpath" dumpcommand="true" workingDir="${basedir}">
+
+      <jvmarg value="-ea"/>
+      &lt;!&ndash;<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=${suspend},address=5555"/>&ndash;&gt;
+
+      <sysproperty key="java.awt.headless" value="true"/>
+
+      <xmlfileset dir="${basedir}/mercurial-tests/src">
+        <include name="testng.xml"/>
+      </xmlfileset>
+    </testng>
+  </target>
+-->
+
+  <!--
+
+    &lt;!&ndash;plugin name&ndash;&gt;
     <property name="plugin" value="rake-runner"/>
     <property name="build.vcs.number.1" value="local"/>
 
-    <!--Dist libraries -->
+    &lt;!&ndash;Dist libraries &ndash;&gt;
     <property name="teamcity.dist" value="../../dist"/>
     <property name="rakerunner.libs" value="lib"/>
     <property name="rakerunner.libs.dist" value="${rakerunner.libs}/dist"/>
     <property name="rakerunner.ruby.src" value="${rakerunner.libs}/rake-runner-ruby"/>
 
-    <!--For external buildserver-->
+    &lt;!&ndash;For external buildserver&ndash;&gt;
     <property name="dist" value="${basedir}/dist"/>
 
-<!--for TC build script-->
+&lt;!&ndash;for TC build script&ndash;&gt;
     <target name="dist">
       <mkdir dir="${rakerunner.ruby.src}"/>
       <ant antfile="build-common.xml" target="dist">
@@ -22,35 +81,35 @@
         <property name="dist" value="${dist}"/>
       </ant>
 
-  <!--PATCH: Add ruby files, set version -->
-      <!-- Remove existing plugin bundle -->
+  &lt;!&ndash;PATCH: Add ruby files, set version &ndash;&gt;
+      &lt;!&ndash; Remove existing plugin bundle &ndash;&gt;
       <delete file="${dist}/${plugin}-plugin.zip"/>
-      <!-- Recreate plugin bundle from unpacked directory -->
-      <!--agent  -->
+      &lt;!&ndash; Recreate plugin bundle from unpacked directory &ndash;&gt;
+      &lt;!&ndash;agent  &ndash;&gt;
       <ant antfile="build-common.xml" target="layout agent plugin bundle">
         <property name="plugin" value="${plugin}"/>
         <property name="dist" value="${dist}"/>
       </ant>
-      <!-- Pack rb cd ./files to agent part of runner -->
+      &lt;!&ndash; Pack rb cd ./files to agent part of runner &ndash;&gt;
       <zip destfile="${dist}/${plugin}-agent.zip" update="true">
         <zipfileset dir="${rakerunner.ruby.src}" prefix="${plugin}/lib/rb" />
       </zip>
-      <!--whole zip -->
+      &lt;!&ndash;whole zip &ndash;&gt;
       <ant antfile="build-common.xml" target="layout whole plugin bundle">
         <property name="plugin" value="${plugin}"/>
         <property name="dist" value="${dist}"/>
       </ant>
-      <!--Delete temp file  -->
+      &lt;!&ndash;Delete temp file  &ndash;&gt;
       <delete file="${dist}/${plugin}-agent.zip"/>
 
-      <!--Set build and vcs version  -->
+      &lt;!&ndash;Set build and vcs version  &ndash;&gt;
       <copy file="teamcity-plugin.xml" tofile="${dist}/teamcity-plugin.xml" />
       <replace file="${dist}/teamcity-plugin.xml" token="REVISION" value="${build.vcs.number.1}"/>  
       <zip destfile="${dist}/${plugin}-plugin.zip" update="true">
         <zipfileset file="${dist}/teamcity-plugin.xml"/>
       </zip>
 
-      <!-- Sources zip -->
+      &lt;!&ndash; Sources zip &ndash;&gt;
       <zip destfile="${dist}/${plugin}-src.zip" update="true">
         <zipfileset dir="${rakerunner.ruby.src}" prefix="${rakerunner.ruby.src}"/>
         <zipfileset file="${dist}/teamcity-plugin.xml"/>
@@ -58,7 +117,7 @@
       <delete file="${dist}/teamcity-plugin.xml"/>
     </target>
 
-<!-- Update jar from TeamCity distributive-->
+&lt;!&ndash; Update jar from TeamCity distributive&ndash;&gt;
     <target name="update-jars-from-dist">
       <ant antfile="build-common.xml" target="update-jars-from-dist">
         <property name="plugin" value="${plugin}"/>
@@ -67,7 +126,7 @@
       </ant>
     </target>
 
-<!-- Rake runner ruby part -->
+&lt;!&ndash; Rake runner ruby part &ndash;&gt;
     <target name="unpack rake-runner-ruby-src.zip">
         <delete dir="${rakerunner.ruby.src}"/>
         <unzip dest="${rakerunner.ruby.src}">
@@ -79,16 +138,16 @@
 
     <target name="pack-rake-runner-ruby-src.zip">
         <mkdir dir="${rakerunner.libs.dist}"/>
-        <!-- Bundle -->
+        &lt;!&ndash; Bundle &ndash;&gt;
         <zip destfile="${rakerunner.libs.dist}/rake-runner-ruby-src.zip">
-            <!-- Ruby sources -->
+            &lt;!&ndash; Ruby sources &ndash;&gt;
             <zipfileset dir="${rakerunner.ruby.src}"/>
         </zip>
     </target>
 
-<!-- Unpacker for TeamCity libaries -->
+&lt;!&ndash; Unpacker for TeamCity libaries &ndash;&gt;
     <target name="unpack TeamCity-*.tar.gz">
-        <!-- Extract TeamCity -->
+        &lt;!&ndash; Extract TeamCity &ndash;&gt;
         <delete dir="${teamcity.dist}"/>
         <untar compression="gzip" dest="${rakerunner.libs}">
             <fileset dir=".">
@@ -97,12 +156,13 @@
         </untar>
     </target>
 
-<!--Build task for external buildserver  -->
+&lt;!&ndash;Build task for external buildserver  &ndash;&gt;
   <target name="build.artifacts" depends="unpack TeamCity-*.tar.gz,unpack rake-runner-ruby-src.zip, dist">
     <copy  file="${rakerunner.libs.dist}/rake-runner-ruby-src.zip" todir="${dist}"/>
   </target>
 
-<!--Build task for rake-runner project  -->
+&lt;!&ndash;Build task for rake-runner project  &ndash;&gt;
   <target name="build_project" depends="unpack TeamCity-*.tar.gz,dist"/>
+-->
 
 </project>
