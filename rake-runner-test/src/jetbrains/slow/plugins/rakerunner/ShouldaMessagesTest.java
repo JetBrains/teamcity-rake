@@ -16,27 +16,26 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import java.io.IOException;
-import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
-import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.util.Map;
+
+import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_STACK_TRACE;
+import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_TIME;
 
 /**
  * @author Roman Chernyatchik
  */
 @Test(groups = {"all","slow"})
 public class ShouldaMessagesTest extends AbstractRakeRunnerTest {
-  public ShouldaMessagesTest(String s) {
-    super(s);
-  }
-
   @BeforeMethod
   @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  protected void setUp1() throws Throwable {
+    super.setUp1();
     myShouldTranslateMessages = false;
   }
 

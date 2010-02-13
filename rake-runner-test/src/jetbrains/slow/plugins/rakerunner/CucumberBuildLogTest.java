@@ -20,26 +20,24 @@ import java.io.IOException;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
-import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 
 /**
  * @author Roman Chernyatchik
  */
 @Test(groups = {"all","slow"})
 public class CucumberBuildLogTest extends AbstractRakeRunnerTest {
-  public CucumberBuildLogTest(String s) {
-    super(s);
-  }
-
   @BeforeMethod
   @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  protected void setUp1() throws Throwable {
+    super.setUp1();
     myShouldTranslateMessages = true;
   }
 
+  @Override
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
     super.appendRunnerSpecificRunParameters(runParameters);
 

@@ -8,6 +8,45 @@
     <orderEntry type="module" module-name="rake-runner-agent" />
     <orderEntry type="module" module-name="rake-runner-common" />
     <orderEntry type="module" module-name="rake-runner-server" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/test-core.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/testng-jdk15.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/junit-3.8.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/spring-mock.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="TeamCity-common" level="project" />
+    <orderEntry type="library" name="TeamCity-agentAPI" level="project" />
+    <orderEntry type="library" name="TeamCity-serverAPI" level="project" />
   </component>
   <component name="RModuleSettingsStorage">
     <RMODULE_SETTINGS_STORAGE_ID NAME="NUMBER" VALUE="0" />

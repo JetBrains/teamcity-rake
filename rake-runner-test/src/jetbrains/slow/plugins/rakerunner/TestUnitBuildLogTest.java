@@ -28,10 +28,6 @@ import org.testng.annotations.BeforeMethod;
  */
 @Test(groups = {"all","slow"})
 public class TestUnitBuildLogTest extends AbstractRakeRunnerTest {
-  public TestUnitBuildLogTest(String s) {
-    super(s);
-  }
-
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
     super.appendRunnerSpecificRunParameters(runParameters);
 
@@ -43,8 +39,8 @@ public class TestUnitBuildLogTest extends AbstractRakeRunnerTest {
 
   @BeforeMethod
   @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  protected void setUp1() throws Throwable {
+    super.setUp1();
     myShouldTranslateMessages = true;
   }
 

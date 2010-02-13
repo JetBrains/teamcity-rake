@@ -29,14 +29,10 @@ import org.testng.annotations.BeforeMethod;
  */
 @Test(groups = {"all","slow"})
 public class TestSpecBuildLogTest extends AbstractRakeRunnerTest {
-  public TestSpecBuildLogTest(String s) {
-    super(s);
-  }
-
   @BeforeMethod
   @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  protected void setUp1() throws Throwable {
+    super.setUp1();
     myShouldTranslateMessages = true;
   }
 

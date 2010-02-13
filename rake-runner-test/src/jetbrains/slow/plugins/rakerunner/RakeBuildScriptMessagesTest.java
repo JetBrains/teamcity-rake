@@ -16,26 +16,24 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import jetbrains.buildServer.RunBuildException;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import java.io.IOException;
 import java.util.Map;
-import jetbrains.buildServer.RunBuildException;
+
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
-import org.testng.annotations.Test;
-import org.testng.annotations.BeforeMethod;
 
 /**
  * @author Roman Chernyatchik
  */
 @Test(groups = {"all","slow"})
 public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
-  public RakeBuildScriptMessagesTest(String s) {
-    super(s);
-  }
-
   @BeforeMethod
   @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  protected void setUp1() throws Throwable {
+    super.setUp1();
     myShouldTranslateMessages = false;
   }
 

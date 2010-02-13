@@ -16,8 +16,6 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.agent.AgentBuildParameters;
-
 /**
  * Created by IntelliJ IDEA.
  * User: romeo
@@ -44,14 +42,15 @@ public enum MockingOptions {
     return myOptionName;
   }
 
-  public static void addToBuildParams(final MockingOptions[] options,
-                                      final AgentBuildParameters buildParameters) {
+  public static String getEnvVarName() {
+    return TEAMCITY_RAKERUNNER_DEBUG_OPTIONS_ENV;
+  }
+
+  public static String getEnvVarValue(final MockingOptions[] options) {
     final StringBuilder buff = new StringBuilder();
     for (MockingOptions option : options) {
       buff.append(option.getOptionName()).append(' ');
     }
-    buildParameters.addBuildEnvironmnentVariable(TEAMCITY_RAKERUNNER_DEBUG_OPTIONS_ENV,
-                                                 buff.toString());
+    return buff.toString();
   }
-
 }

@@ -16,25 +16,21 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import java.io.IOException;
-import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_TIME;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_STACK_TRACE;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_LOCATION_URL;
-import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.util.Map;
+
+import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 
 /**
  * @author Roman Chernyatchik
  */
 @Test(groups = {"all","slow"})
 public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
-  public TestUnitMessagesTest(String s) {
-    super(s);
-  }
-
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
     super.appendRunnerSpecificRunParameters(runParameters);
 
@@ -46,8 +42,8 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
 
   @BeforeMethod
   @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  protected void setUp1() throws Throwable {
+    super.setUp1();
     myShouldTranslateMessages = false;
   }
 
