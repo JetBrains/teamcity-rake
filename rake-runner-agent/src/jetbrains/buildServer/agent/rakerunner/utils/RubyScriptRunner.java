@@ -18,21 +18,23 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.*;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
-import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
 import com.intellij.openapi.vfs.CharsetToolkit;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
-import org.apache.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
 
 /**
  * @author Roman.Chernyatchik
  */
 public class RubyScriptRunner {
-  private static final Logger LOG = Logger.getLogger(RubyScriptRunner.class.getName());
+  private static final Logger LOG = Logger.getInstance(RubyScriptRunner.class.getName());
 
   /**
    * Returns out after scriptSource run.
@@ -73,7 +75,7 @@ public class RubyScriptRunner {
         scriptFile.delete();
       }
     }
-    LOG.assertLog(result != null, "Output can't be null here!");
+
     //noinspection ConstantConditions
     return result;
   }

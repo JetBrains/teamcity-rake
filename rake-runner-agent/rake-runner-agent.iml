@@ -26,19 +26,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="rake-runner-common" />
-    <orderEntry type="library" name="annotations.jar" level="project" />
-    <orderEntry type="library" name="common-api.jar" level="project" />
-    <orderEntry type="library" name="xmlrpc-2.0.1.jar" level="project" />
-    <orderEntry type="library" name="openapi.jar" level="project" />
-    <orderEntry type="library" name="log4j-1.2.12.jar" level="project" />
-    <orderEntry type="library" name="agent-api.jar" level="project" />
-    <orderEntry type="library" name="util.jar" level="project" />
-    <orderEntry type="library" name="server-api.jar" level="project" />
-    <orderEntry type="library" name="xstream-1.3.1.jar" level="project" />
-    <orderEntry type="library" name="agent.jar" level="project" />
-    <orderEntry type="library" name="server-logging.jar" level="project" />
-    <orderEntry type="library" name="runtime-util.jar" level="project" />
     <orderEntry type="library" name="JRuby SDK 1.1.3 (ruby 1.8.6) facet library" level="application" />
+    <orderEntry type="library" name="TeamCity-agentAPI" level="project" />
+    <orderEntry type="library" name="TeamCity-common" level="project" />
   </component>
   <component name="RModuleSettingsStorage">
     <RMODULE_SETTINGS_STORAGE_ID NAME="NUMBER" VALUE="0" />

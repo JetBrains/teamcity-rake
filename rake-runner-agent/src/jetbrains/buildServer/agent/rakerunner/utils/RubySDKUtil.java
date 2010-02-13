@@ -16,14 +16,16 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
-import java.io.File;
-import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
+import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.util.Map;
+
+import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 
 /**
  * @author Roman.Chernyatchik
@@ -40,7 +42,7 @@ public class RubySDKUtil {
   @NotNull
   public static String getSDKTestUnitAutoRunnerScriptPath(@NotNull final Map<String, String> runParameters,
                                                           @NotNull final Map<String, String> buildParameters)
-      throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
+      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     return findSdkScript(runParameters, buildParameters, AUTORUNNER_SCRIPT_PATH);
   }
@@ -48,14 +50,14 @@ public class RubySDKUtil {
   @NotNull
   public static String getSDKTestUnitTestRunnerMediatorScriptPath(@NotNull final Map<String, String> runParameters,
                                                                   @NotNull final Map<String, String> buildParameters)
-      throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
+      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     return findSdkScript(runParameters, buildParameters, TESTRUNNERMEDIATOR_SCRIPT_PATH);
   }
 
   private static RubyScriptRunner.Output executeScriptFromSource(@NotNull final Map<String, String> runParameters,
                                                        @NotNull final Map<String, String> buildParameters, String scriptSource)
-      throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
+      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     final String rubyExecutable =
         ConfigurationParamsUtil.getRubyInterpreterPath(runParameters, buildParameters);
@@ -69,12 +71,12 @@ public class RubySDKUtil {
    * @param buildParameters Build params
    * @param scriptPath Path of given script
    * @return Full path of given script
-   * @throws RakeTasksRunner.MyBuildFailureException If script will not be found
+   * @throws jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService.MyBuildFailureException If script will not be found
    * @throws RunBuildException Other error
    */
   private static String findSdkScript(final Map<String, String> runParameters,
                                       final Map<String, String> buildParameters,
-                                      final String scriptPath) throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
+                                      final String scriptPath) throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
     //TODO unit-test gem of ruby1.9 support
     final String scriptSource = GET_LOAD_PATH_SCRIPT;
     final RubyScriptRunner.Output result = executeScriptFromSource(runParameters, buildParameters, scriptSource);
@@ -88,19 +90,19 @@ public class RubySDKUtil {
 
     // file wasn't found
     if (!TextUtil.isEmpty(result.getStderr())) {
-      throw new RakeTasksRunner.MyBuildFailureException(result.getStdout() + "\n" + result.getStderr(),
+      throw new RakeTasksBuildService.MyBuildFailureException(result.getStdout() + "\n" + result.getStderr(),
                                                         RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
     }
 
     for (String path : loadPaths) {
       if (path.contains("JAVA_HOME")) {
-        throw new RakeTasksRunner.MyBuildFailureException(result.getStdout(),
+        throw new RakeTasksBuildService.MyBuildFailureException(result.getStdout(),
                                                           RakeRunnerBundle.RUNNER_ERROR_TITLE_JRUBY_PROBLEMS_IN_CONF_ON_AGENT);
       }
     }
 
     // Error
     final String msg = "File '" + scriptPath + "' wasn't found in $LOAD_PATH of Ruby SDK with interpreter: '" + ConfigurationParamsUtil.getRubyInterpreterPath(runParameters, buildParameters) + "'";
-    throw new RakeTasksRunner.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+    throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
   }
 }

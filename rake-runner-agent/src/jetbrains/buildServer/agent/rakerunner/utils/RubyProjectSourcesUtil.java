@@ -18,11 +18,12 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.PathUtil;
-import java.io.File;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 /**
  * @author Roman.Chernyatchik
@@ -50,7 +51,7 @@ public class RubyProjectSourcesUtil {
           + RUBY_SOURCES_SUBDIR);
     } else {
       // debug mode
-      rubySourcesDir = new File(jarPath + File.separatorChar + "../../lib/rake-runner-ruby");
+      rubySourcesDir = new File("svnrepo/rake-runner/lib/rb");
     }
 
     try {

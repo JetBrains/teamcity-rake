@@ -16,54 +16,40 @@
 
 package jetbrains.buildServer.agent.rakerunner;
 
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.execution.process.ProcessOutputTypes;
-import com.intellij.openapi.util.Key;
 import com.intellij.util.containers.HashMap;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
-import jetbrains.buildServer.agent.runner.GenericProgramRunner;
+import jetbrains.buildServer.agent.runner.CommandLineBuildService;
+import jetbrains.buildServer.agent.runner.ProgramCommandLine;
+import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
-import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.util.*;
+
+import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
 
 /**
  * @author Roman.Chernyatchik
  */
-public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerConstants {
+public class RakeTasksBuildService extends CommandLineBuildService implements RakeRunnerConstants {
   private final Set<File> myFilesToDelete = new HashSet<File>();
   private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'teamcity/spec/runner/formatter/teamcity/formatter'";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
   private final String CUCUMBER_RUNNER_INIT_OPTIONS = "--format Teamcity::Cucumber::Formatter --expand";
 
-  @NonNls
-  public String getType() {
-    return RakeRunnerConstants.RUNNER_TYPE;
-  }
 
-  public boolean canRun(final BuildAgentConfiguration agentConfiguration) {
-      return true;
-  }
-
+  @NotNull
   @Override
-  protected void buildCommandLine(@NotNull final GeneralCommandLine cmd,
-                                  @NotNull final File soourcesRootDir,
-                                  @NotNull final Map<String, String> runParams,
-                                  @NotNull final Map<String, String> buildParams)
-      throws IOException, RunBuildException {
+  public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
+    List<String> arguments = new ArrayList<String>();
+    Map<String, String> runParams = new HashMap<String, String>(getBuild().getRunnerParameters());
+    Map<String, String> buildParams = new HashMap<String, String>(getBuild().getBuildParameters().getAllParameters());
 
     // apply options converter
     SupportedTestFramework.convertOptionsIfNecessary(runParams);
@@ -72,11 +58,12 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     // buildParams - system properties (system.*), environment vars (env.*)
 
     final boolean inDebugMode = ConfigurationParamsUtil.isParameterEnabled(buildParams, DEBUG_PROPERTY);
+    final HashMap<String, String> envMap = new HashMap<String, String>();
+    String exePath;
 
     final File buildFile = getBuildFile(runParams);
+
     try {
-// Special rake runner Environment properties
-      final HashMap<String, String> envMap = new HashMap<String, String>();
 
       // SDK patch
       addTestRunnerPatchFiles(runParams, buildParams, envMap);
@@ -96,12 +83,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
         envMap.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
       }
 
-      cmd.setEnvParams(envMap);
-
-// CommandLine options
-
-      // Ruby interpreter
-      cmd.setExePath(ConfigurationParamsUtil.getRubyInterpreterPath(runParams, buildParams));
+      exePath = ConfigurationParamsUtil.getRubyInterpreterPath(runParams, buildParams);
 
       // Rake runner script
       final String rakeRunnerPath;
@@ -114,83 +96,50 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
         rakeRunnerPath = RubyProjectSourcesUtil.getRakeRunnerPath();
       }
 
-      cmd.addParameter(rakeRunnerPath);
+      arguments.add(rakeRunnerPath);
 
       // Rake options
       // Custom Rakefile if specified
       if (buildFile != null) {
-        cmd.addParameter(RAKE_CMDLINE_OPTIONS_RAKEFILE);
-        cmd.addParameter(buildFile.getAbsolutePath());
+        arguments.add(RAKE_CMDLINE_OPTIONS_RAKEFILE);
+        arguments.add(buildFile.getAbsolutePath());
       }
 
       // Other arguments
       final String otherArgsString = runParams.get(SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY);
       if (!TextUtil.isEmptyOrWhitespaced(otherArgsString)) {
-        addCmdlineArguments(cmd, otherArgsString);
+        addCmdlineArguments(arguments, otherArgsString);
       }
 
       // Tasks names
       final String tasks_names = runParams.get(SERVER_UI_RAKE_TASKS_PROPERTY);
       if (!PropertiesUtil.isEmptyOrNull(tasks_names)) {
-        addCmdlineArguments(cmd, tasks_names);
+        addCmdlineArguments(arguments, tasks_names);
       }
 
       // rspec
-      attachRSpecFormatterIfNeeded(cmd, runParams);
+      attachRSpecFormatterIfNeeded(arguments, runParams);
 
       // cucumber
-      attachCucumberFormatterIfNeeded(cmd, runParams);
+      attachCucumberFormatterIfNeeded(arguments, runParams);
 
       if (inDebugMode) {
-        getBuildLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + cmd.getCommandLineString());
+        getLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + exePath + " " + arguments.toString());
       }
+
+      if (inDebugMode) {
+        getLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + getBuild().getWorkingDirectory() + "]");
+      }
+
+      return new SimpleProgramCommandLine(envMap, getBuild().getWorkingDirectory().getAbsolutePath(), exePath, arguments);
     } catch (MyBuildFailureException e) {
-      failRakeTaskBuild(e);
-    }
-
-    if (inDebugMode) {
-      getBuildLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + soourcesRootDir.getCanonicalPath() + "]");
-    }
-  }
-
-  protected void failRakeTaskBuild(@NotNull final MyBuildFailureException e) throws RunBuildException {
-    getBuildLogger().buildFailureDescription(e.getTitle());
-
-    throw new RunBuildException(e.getMessage());
-  }
-
-  @Override
-  protected boolean shouldDumpOutputLinesOnError() {
-    return false;
-  }
-
-  @Override
-  protected void onOutput(final String lineWithoutLF, final Key lastOutputKey) {
-    super.onOutput(lineWithoutLF, lastOutputKey);
-    final String s = StringUtil.stripNewLine(lineWithoutLF);
-
-    if (lastOutputKey == ProcessOutputTypes.STDERR) {
-      getBuildLogger().warning(s);
-    }
-    else {
-      getBuildLogger().message(s);
+      getLogger().buildFailureDescription(e.getTitle());
+      throw new RunBuildException(e.getMessage());
     }
   }
 
   @Override
-  protected void processWillBeTerminated(final Map<String, String> runParameters,
-                                         final ProcessEvent processEvent,
-                                         final boolean b) {
-    getBuildLogger().flush();
-    super.processWillBeTerminated(runParameters, processEvent, b);
-  }
-
-  @Override
-  protected void processTerminated(final RunEnvironment runEnvironment,
-                                   final boolean isFailed) {
-    getBuildLogger().flush();
-    super.processTerminated(runEnvironment, isFailed);
-
+  public void afterProcessFinished() {
     // Remove tmp files
     for (File file : myFilesToDelete) {
       jetbrains.buildServer.util.FileUtil.delete(file);
@@ -198,7 +147,7 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
     myFilesToDelete.clear();
   }
 
-  private void attachRSpecFormatterIfNeeded(final GeneralCommandLine cmd,
+  private void attachRSpecFormatterIfNeeded(final List<String> argsList,
                                             final Map<String, String> runParams) {
     //attach RSpec formatter only if spec reporter enabled
     if (SupportedTestFramework.RSPEC.isActivated(runParams)) {
@@ -210,11 +159,11 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
         specOpts = specOpts.trim() + " " + specRunnerInitString;
       }
 
-      cmd.addParameter(RAKE_RSPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
+      argsList.add(RAKE_RSPEC_OPTS_PARAM_NAME + "=" + specOpts.trim());
     }
   }
 
-  private void attachCucumberFormatterIfNeeded(final GeneralCommandLine cmd,
+  private void attachCucumberFormatterIfNeeded(final List<String> arguments,
                                                final Map<String, String> runParams) {
     //attach Cucumber formatter only if cucumber reporter enabled
     if (SupportedTestFramework.CUCUMBER.isActivated(runParams)) {
@@ -229,13 +178,13 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
         cucumberOpts = cucumberOpts.trim() + " " + cucumberRunnerInitString;
       }
 
-      cmd.addParameter(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + cucumberOpts.trim());
+      arguments.add(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + cucumberOpts.trim());
     }
   }
 
   private void addTestRunnerPatchFiles(final Map<String, String> runParams,
                                        final Map<String, String> buildParams,
-                                       final HashMap<String, String> envMap)
+                                       final Map<String, String> envMap)
       throws MyBuildFailureException, RunBuildException {
 
 
@@ -268,15 +217,15 @@ public class RakeTasksRunner extends GenericProgramRunner implements RakeRunnerC
                OSUtil.appendToRUBYLIBEnvVariable(buff.toString()));
   }
 
-  private void addCmdlineArguments(@NotNull final GeneralCommandLine cmdLine, @NotNull final String argsString) {
+  private void addCmdlineArguments(@NotNull final List<String> argsList, @NotNull final String argsString) {
     final List<String> stringList = StringUtil.splitHonorQuotes(argsString, ' ');
     for (String arg : stringList) {
-      cmdLine.addParameter(TextUtil.stripDoubleQuoteAroundValue(arg));
+      argsList.add(TextUtil.stripDoubleQuoteAroundValue(arg));
     }
   }
 
   @Nullable
-  private File getBuildFile(Map<String, String> runParameters) throws IOException, RunBuildException {
+  private File getBuildFile(Map<String, String> runParameters) throws RunBuildException {
     final File buildFile;
     if (BuildFileRunnerUtil.isCustomBuildFileUsed(runParameters)) {
       buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);

@@ -16,14 +16,16 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import java.io.File;
-import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.rakerunner.RakeTasksRunner;
-import static jetbrains.buildServer.rakerunner.RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT;
+import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.PropertiesUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.util.Map;
+
+import static jetbrains.buildServer.rakerunner.RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT;
 
 /**
  * @author Roman.Chernyatchik
@@ -33,7 +35,7 @@ public class ConfigurationParamsUtil implements RakeRunnerConstants {
   @NotNull
   public static String getRubyInterpreterPath(final Map<String, String> runParameters,
                                               final Map<String, String> buildParameters)
-      throws RakeTasksRunner.MyBuildFailureException, RunBuildException {
+      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     final String rubyInterpreterPath;
 
@@ -47,7 +49,7 @@ public class ConfigurationParamsUtil implements RakeRunnerConstants {
         rubyInterpreterPath = path;
       } else {
         final String msg = "Unable to find Ruby interpreter in PATH.";
-        throw new RakeTasksRunner.MyBuildFailureException(msg, RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+        throw new RakeTasksBuildService.MyBuildFailureException(msg, RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
       }
     } else {
       // get from UI
@@ -62,17 +64,16 @@ public class ConfigurationParamsUtil implements RakeRunnerConstants {
         return rubyInterpreterPath;
       }
       final String msg = "Ruby interpreter '" + rubyInterpreterPath + "' doesn't exist or isn't a file.";
-      throw new RakeTasksRunner.MyBuildFailureException(msg, RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+      throw new RakeTasksBuildService.MyBuildFailureException(msg, RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
     } catch (SecurityException e) {
       //unknown error
       throw new RunBuildException(e.getMessage(), e);
     }
   }
 
-  public static boolean isParameterEnabled(final Map<String, String> runParameters,
-                                           final String key) {
-    return runParameters.containsKey(key)
-        && runParameters.get(key).equals(Boolean.TRUE.toString());
+  public static boolean isParameterEnabled(final Map<String, String> params, final String key) {
+    return params.containsKey(key)
+        && params.get(key).equals(Boolean.TRUE.toString());
   }
 
   public static boolean isTraceStagesOptionEnabled(final Map<String, String> runParams) {
