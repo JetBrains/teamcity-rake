@@ -1,0 +1,13 @@
+<ivysettings>
+  <property name='ivy.checksums' value=''/>
+  <caches defaultCacheDir="${teamcity.build.tempDir}/.ivy/cache" checkUpToDate="true"/>
+  <resolvers>
+    <url name='teamcity-rep' alwaysCheckExactRevision='yes' checkmodified="true">
+      <ivy pattern='http://buildserver.labs.intellij.net/httpAuth/repository/download/[module]/[revision]/teamcity-ivy.xml' />
+      <artifact pattern='http://buildserver.labs.intellij.net/httpAuth/repository/download/[module]/[revision]/[artifact](.[ext])' />
+    </url>
+  </resolvers>
+  <modules>
+    <module organisation="org" name='bt.*' resolver='teamcity-rep' />
+  </modules>
+</ivysettings>
