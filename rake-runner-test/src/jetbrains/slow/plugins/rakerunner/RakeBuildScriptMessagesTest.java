@@ -34,7 +34,6 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
-    myShouldTranslateMessages = false;
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {

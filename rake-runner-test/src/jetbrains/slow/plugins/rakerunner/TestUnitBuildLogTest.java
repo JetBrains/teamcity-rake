@@ -41,7 +41,7 @@ public class TestUnitBuildLogTest extends AbstractRakeRunnerTest {
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
-    myShouldTranslateMessages = true;
+    setMessagesTranslationEnabled(true);
   }
 
   public void testTestPassed()  throws Throwable {

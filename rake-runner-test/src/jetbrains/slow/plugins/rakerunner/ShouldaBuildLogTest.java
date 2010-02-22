@@ -20,9 +20,10 @@ import java.io.IOException;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
-import org.testng.annotations.Test;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 
 /**
  * @author Roman Chernyatchik
@@ -34,7 +35,7 @@ public class ShouldaBuildLogTest extends AbstractRakeRunnerTest {
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
-    myShouldTranslateMessages = true;
+    setMessagesTranslationEnabled(true);
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {

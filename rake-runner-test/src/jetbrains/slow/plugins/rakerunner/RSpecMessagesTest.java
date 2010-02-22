@@ -35,7 +35,6 @@ public class RSpecMessagesTest extends AbstractRakeRunnerTest {
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
-    myShouldTranslateMessages = false;
   }
 
   @Override

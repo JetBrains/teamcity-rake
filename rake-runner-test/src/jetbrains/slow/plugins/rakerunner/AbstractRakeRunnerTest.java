@@ -43,7 +43,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   private static final String INTERPRETER_PATH_PROPERTY = "rake-runner.ruby.interpreter.path";
 
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
-  protected boolean myShouldTranslateMessages = false;
+  private boolean myShouldTranslateMessages = false;
 
   @Override
   @NotNull
@@ -56,7 +56,12 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   protected void setUp1() throws Throwable {
     super.setUp1();
     setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
-    myFixture.getSingletonService(ServerMessagesTranslator.class).setTranslationEnabled(myShouldTranslateMessages);
+    setMessagesTranslationEnabled(false);
+  }
+
+  protected void setMessagesTranslationEnabled(boolean enabled) {
+    myFixture.getSingletonService(ServerMessagesTranslator.class).setTranslationEnabled(enabled);
+    myShouldTranslateMessages = enabled;
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {

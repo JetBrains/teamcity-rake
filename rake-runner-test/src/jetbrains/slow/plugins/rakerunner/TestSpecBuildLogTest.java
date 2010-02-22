@@ -33,7 +33,7 @@ public class TestSpecBuildLogTest extends AbstractRakeRunnerTest {
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
-    myShouldTranslateMessages = true;
+    setMessagesTranslationEnabled(true);
   }
 
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {

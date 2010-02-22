@@ -44,7 +44,6 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
-    myShouldTranslateMessages = false;
   }
 
   public void testTestsOutput() throws Throwable {
