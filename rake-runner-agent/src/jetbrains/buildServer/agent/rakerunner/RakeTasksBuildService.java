@@ -125,13 +125,8 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
 
       if (inDebugMode) {
         getLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + exePath + " " + arguments.toString());
-      }
-
-      if (inDebugMode) {
         getLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + getBuild().getWorkingDirectory() + "]");
       }
-
-      getLogger().message("Environment: " + envMap);
 
       return new SimpleProgramCommandLine(envMap, getBuild().getWorkingDirectory().getAbsolutePath(), exePath, arguments);
     } catch (MyBuildFailureException e) {
