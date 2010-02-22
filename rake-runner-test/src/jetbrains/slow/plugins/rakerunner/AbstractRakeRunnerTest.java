@@ -77,20 +77,12 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     }
   }
 
-  /*
   @Override
-  protected List<BuildMessage1> translateMessages(final ArrayList<BuildMessage1> result, final RunningBuildImpl runningBuild) {
-    if (myShouldTranslateMessages) {
-      return myFixture.getSingletonService(ServerMessagesTranslator.class).translateMessages(result, runningBuild);
-    }
-    return result;
-  }
-  */
-
   protected File getTestDataPath(final String buildFileName) {
     return new File("svnrepo/rake-runner/rake-runner-test/testData/" + getTestDataSuffixPath() + buildFileName);
   }
 
+  @Override
   protected String getTestDataSuffixPath() {
     return "plugins/rakeRunner/";
   }

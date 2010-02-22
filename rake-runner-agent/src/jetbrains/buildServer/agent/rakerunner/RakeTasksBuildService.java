@@ -58,7 +58,7 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
     // buildParams - system properties (system.*), environment vars (env.*)
 
     final boolean inDebugMode = ConfigurationParamsUtil.isParameterEnabled(buildParams, DEBUG_PROPERTY);
-    final HashMap<String, String> envMap = new HashMap<String, String>();
+    final HashMap<String, String> envMap = new HashMap<String, String>(getBuild().getBuildParameters().getEnvironmentVariables());
     String exePath;
 
     final File buildFile = getBuildFile(runParams);
@@ -130,6 +130,8 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
       if (inDebugMode) {
         getLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + getBuild().getWorkingDirectory() + "]");
       }
+
+      getLogger().message("Environment: " + envMap);
 
       return new SimpleProgramCommandLine(envMap, getBuild().getWorkingDirectory().getAbsolutePath(), exePath, arguments);
     } catch (MyBuildFailureException e) {

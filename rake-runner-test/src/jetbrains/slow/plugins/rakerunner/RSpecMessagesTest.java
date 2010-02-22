@@ -38,6 +38,7 @@ public class RSpecMessagesTest extends AbstractRakeRunnerTest {
     myShouldTranslateMessages = false;
   }
 
+  @Override
   protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
     super.appendRunnerSpecificRunParameters(runParameters);
 
