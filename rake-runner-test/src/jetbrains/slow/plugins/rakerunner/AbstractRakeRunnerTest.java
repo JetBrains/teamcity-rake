@@ -18,15 +18,15 @@ package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Pattern;
-import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
+import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
 import jetbrains.buildServer.messages.ServerMessagesTranslator;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.ShortStatistics;
+import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.slow.PartialBuildMessagesChecker;
 import jetbrains.slow.RunnerTest2Base;
 import org.jetbrains.annotations.NotNull;
@@ -57,6 +57,11 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     super.setUp1();
     setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
     setMessagesTranslationEnabled(false);
+
+    // set ruby interpreter path
+    setInterpreterPath();
+
+    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY, RakeRunnerConstants.CURRENT_CONFIG_VERSION));
   }
 
   protected void setMessagesTranslationEnabled(boolean enabled) {
@@ -64,21 +69,10 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     myShouldTranslateMessages = enabled;
   }
 
-  protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
-    // set ruby interpreter path
-    setInterpreterPath(runParameters);
-
-    // configuration version
-    runParameters.put(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY,
-                      RakeRunnerConstants.CURRENT_CONFIG_VERSION);
-
-  }
-
-  protected void setInterpreterPath(final Map<String, String> runParameters) {
+  private void setInterpreterPath() {
     final String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
     if (!TextUtil.isEmpty(interpreterPath)) {
-      runParameters.put(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER,
-                        interpreterPath);
+      getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER, interpreterPath));
     }
   }
 
@@ -222,5 +216,9 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
       System.out.println("aIgnored = " + aIgnored);
       throw new RuntimeException(e);
     }
+  }
+
+  protected void activateTestFramework(@NotNull SupportedTestFramework framework) {
+    getBuildType().addRunParameter(new SimpleParameter(framework.getFrameworkUIProperty(), "true"));
   }
 }

@@ -16,13 +16,9 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import java.io.IOException;
-import java.util.Map;
 
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 
@@ -31,19 +27,11 @@ import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
  */
 @Test(groups = {"all","slow"})
 public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
-  protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
-    super.appendRunnerSpecificRunParameters(runParameters);
-
-    setWorkingDir(runParameters, "app_testunit");
-
-    // enable Test::Unit
-    SupportedTestFramework.TEST_UNIT.activate(runParameters);
-  }
-
   @BeforeMethod
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
+    activateTestFramework(SupportedTestFramework.TEST_UNIT);
   }
 
   public void testTestsOutput() throws Throwable {

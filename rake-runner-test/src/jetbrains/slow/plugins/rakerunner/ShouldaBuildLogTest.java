@@ -16,9 +16,6 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import java.io.IOException;
-import java.util.Map;
-import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -36,14 +33,7 @@ public class ShouldaBuildLogTest extends AbstractRakeRunnerTest {
   protected void setUp1() throws Throwable {
     super.setUp1();
     setMessagesTranslationEnabled(true);
-  }
-
-  protected void appendRunnerSpecificRunParameters(Map<String, String> runParameters) throws IOException, RunBuildException {
-    super.appendRunnerSpecificRunParameters(runParameters);
-    
-    setWorkingDir(runParameters, "app_shoulda");
-    // enable shoulda
-    SupportedTestFramework.SHOULDA.activate(runParameters);
+    activateTestFramework(SupportedTestFramework.SHOULDA);
   }
 
   public void testGeneral()  throws Throwable {
