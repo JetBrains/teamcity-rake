@@ -17,9 +17,9 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import java.util.HashMap;
+import jetbrains.buildServer.BaseTestCase;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
-import junit.framework.TestCase;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
  * @author Roman Chernyatchik
  */
 @Test(groups = {"all","slow"})
-public class SupportedTestFrameworkTest extends TestCase {
+public class SupportedTestFrameworkTest extends BaseTestCase {
   private HashMap<String,String> myDefaultParams;
 
   @Override
