@@ -28,6 +28,7 @@
     <exclude name="**/.git/**"/>
     <exclude name="**/*.hprof/**"/>
     <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
   </patternset>
   <patternset id="library.patterns">
     <include name="*.zip"/>
@@ -48,6 +49,9 @@
     <include name="**/?*.dtd"/>
     <include name="**/?*.tld"/>
     <include name="**/?*.rb"/>
+    <include name="**/?*.jsp"/>
+    <include name="**/?*.css"/>
+    <include name="**/?*.tag"/>
   </patternset>
   
   

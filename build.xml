@@ -8,7 +8,7 @@
   <import file="rake-runner.xml"/>
   <import file="teamcity-common.xml"/>
 
-  <target name="package" depends="define.version">
+  <target name="package" depends="define.version, all">
 
     <delete dir="${basedir}/dist" failonerror="false"/>
 

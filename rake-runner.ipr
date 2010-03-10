@@ -61,6 +61,9 @@
       <entry name="?*.dtd" />
       <entry name="?*.tld" />
       <entry name="?*.rb" />
+      <entry name="?*.jsp" />
+      <entry name="?*.css" />
+      <entry name="?*.tag" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>
