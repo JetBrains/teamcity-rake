@@ -24,8 +24,7 @@ import org.jetbrains.annotations.NonNls;
 public interface RakeRunnerConstants {
   @NonNls String CURRENT_CONFIG_VERSION = "2";
   @NonNls String RUNNER_TYPE = "rake-runner";
-  @NonNls String RAKE_RUNNER_SERVER_PLUGIN_FILE_NAME = "rake-runner-server.jar";
-  @NonNls String AGENT_BUNDLE_JAR = "rake-runner-agent.jar";
+  @NonNls String AGENT_BUNDLE_JAR = "rake-runner.jar";
 
 // Server properties
 
