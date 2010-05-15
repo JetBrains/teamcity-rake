@@ -20,6 +20,7 @@
     <orderEntry type="module" module-name="agent" />
     <orderEntry type="module" module-name="server" />
     <orderEntry type="module" module-name="xml-rpc-wrapper" />
+    <orderEntry type="module" module-name="test-api" />
   </component>
   <component name="RModuleSettingsStorage">
     <RMODULE_SETTINGS_STORAGE_ID NAME="NUMBER" VALUE="0" />
