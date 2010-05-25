@@ -140,7 +140,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   }
 
   protected void setMockingOptions(final MockingOptions... options) {
-    setBuildEnvironmentParameter(getEnvVarName(), getEnvVarValue(options));
+    setBuildEnvironmentVariable(getEnvVarName(), getEnvVarValue(options));
   }
 
   protected void setPartialMessagesChecker() {
