@@ -22,6 +22,7 @@ import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.agent.runner.CommandLineBuildService;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
+import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
@@ -42,8 +43,6 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
   private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'teamcity/spec/runner/formatter/teamcity/formatter'";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
   private final String CUCUMBER_RUNNER_INIT_OPTIONS = "--format Teamcity::Cucumber::Formatter --expand";
-
-  private static final String RAKE_ERROR_TYPE = "RAKE_ERROR";
 
   @NotNull
   @Override
@@ -131,7 +130,7 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
 
       return new SimpleProgramCommandLine(envMap, getBuild().getWorkingDirectory().getAbsolutePath(), exePath, arguments);
     } catch (MyBuildFailureException e) {
-      getLogger().error(RAKE_ERROR_TYPE, e.getTitle());
+      getLogger().error(ErrorData.RAKE_ERROR_TYPE, e.getTitle());
       throw new RunBuildException(e.getMessage());
     }
   }
