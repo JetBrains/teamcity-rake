@@ -1,3 +1,3 @@
---1--RuntimeError: Don't know how to build task 'compile_error:some_task'
+--1--SyntaxError: ./tasks/compile_error.rake:26: syntax error, unexpected $undefined
 --1--##STACK_TRACE## ERROR
 --1--Rake aborted! ERROR
