@@ -23,6 +23,6 @@ require "rake"
 ########################################
 namespace :compile_error do
   task :some_task do
-    $
+    zz
   end
 end

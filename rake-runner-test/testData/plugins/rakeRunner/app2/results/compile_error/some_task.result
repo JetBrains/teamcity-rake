@@ -1,2 +1,4 @@
---1--##teamcity[message text='SyntaxError: ./tasks/compile_error.rake:26: syntax error, unexpected $undefined' status='ERROR' errorDetails='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
+ --1--##teamcity[blockOpened name='Execute compile_error:some_task' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
+ --1--##teamcity[message text='NameError: undefined local variable or method `zz|' for main:Object' status='ERROR' errorDetails='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
+ --1--##teamcity[blockClosed name='Execute compile_error:some_task' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
 --1--##teamcity[message text='Rake aborted!' status='ERROR' timestamp='##TIME##'] NORMAL
