@@ -130,7 +130,7 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
 
       return new SimpleProgramCommandLine(envMap, getBuild().getWorkingDirectory().getAbsolutePath(), exePath, arguments);
     } catch (MyBuildFailureException e) {
-      getLogger().error(ErrorData.RAKE_ERROR_TYPE, e.getTitle());
+      getLogger().error(ErrorData.RAKE_ERROR_TYPE, e.getTitle(), e);
       throw new RunBuildException(e.getMessage());
     }
   }
