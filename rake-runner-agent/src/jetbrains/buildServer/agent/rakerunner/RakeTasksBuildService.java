@@ -43,6 +43,7 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
   private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'teamcity/spec/runner/formatter/teamcity/formatter'";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
   private final String CUCUMBER_RUNNER_INIT_OPTIONS = "--format Teamcity::Cucumber::Formatter --expand";
+  private static final String RAKE_ERROR_TYPE = "RAKE_ERROR";
 
   @NotNull
   @Override
@@ -130,7 +131,7 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
 
       return new SimpleProgramCommandLine(envMap, getBuild().getWorkingDirectory().getAbsolutePath(), exePath, arguments);
     } catch (MyBuildFailureException e) {
-      getLogger().error(ErrorData.RAKE_ERROR_TYPE, e.getTitle(), e);
+      getLogger().error(RAKE_ERROR_TYPE, e.getTitle(), e);
       throw new RunBuildException(e.getMessage());
     }
   }
