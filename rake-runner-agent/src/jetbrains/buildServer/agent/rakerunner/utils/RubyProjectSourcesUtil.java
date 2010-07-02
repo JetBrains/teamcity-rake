@@ -51,7 +51,7 @@ public class RubyProjectSourcesUtil {
           + RUBY_SOURCES_SUBDIR);
     } else {
       // debug mode
-      rubySourcesDir = new File("svnrepo/rake-runner/lib/agent/rb");
+      rubySourcesDir = new File("svnrepo/rake-runner/lib/rb");
     }
 
     try {
