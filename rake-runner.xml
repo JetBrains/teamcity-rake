@@ -29,6 +29,8 @@
     <exclude name="**/*.hprof/**"/>
     <exclude name="**/_svn/**"/>
     <exclude name="**/.hg/**"/>
+    <exclude name="**/.sbas/**"/>
+    <exclude name="**/.IJI.*/**"/>
   </patternset>
   <patternset id="library.patterns">
     <include name="*.zip"/>
@@ -94,7 +96,17 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
+  <path id="rake-runner-common.module.production.classpath">
+    <path refid="library.teamcity-common.classpath"/>
+  </path>
+  
+  <path id="rake-runner-common.runtime.production.module.classpath">
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <path refid="library.teamcity-common.classpath"/>
+  </path>
+  
   <path id="rake-runner-common.module.classpath">
+    <pathelement location="${rake-runner-common.output.dir}"/>
     <path refid="library.teamcity-common.classpath"/>
   </path>
   
@@ -127,7 +139,7 @@
     <javac destdir="${rake-runner-common.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.rake-runner-common}"/>
       <bootclasspath refid="rake-runner-common.module.bootclasspath"/>
-      <classpath refid="rake-runner-common.module.classpath"/>
+      <classpath refid="rake-runner-common.module.production.classpath"/>
       <src refid="rake-runner-common.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.rake-runner-common"/>
     </javac>
@@ -163,7 +175,15 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
-  <path id="rake-runner-root.module.classpath"/>
+  <path id="rake-runner-root.module.production.classpath"/>
+  
+  <path id="rake-runner-root.runtime.production.module.classpath">
+    <pathelement location="${rake-runner-root.output.dir}"/>
+  </path>
+  
+  <path id="rake-runner-root.module.classpath">
+    <pathelement location="${rake-runner-root.output.dir}"/>
+  </path>
   
   <path id="rake-runner-root.runtime.module.classpath">
     <pathelement location="${rake-runner-root.output.dir}"/>
@@ -207,7 +227,21 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
+  <path id="rake-runner-agent.module.production.classpath">
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <path refid="library.teamcity-agentapi.classpath"/>
+    <path refid="library.teamcity-common.classpath"/>
+  </path>
+  
+  <path id="rake-runner-agent.runtime.production.module.classpath">
+    <pathelement location="${rake-runner-agent.output.dir}"/>
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <path refid="library.teamcity-common.classpath"/>
+    <path refid="library.teamcity-agentapi.classpath"/>
+  </path>
+  
   <path id="rake-runner-agent.module.classpath">
+    <pathelement location="${rake-runner-agent.output.dir}"/>
     <pathelement location="${rake-runner-common.output.dir}"/>
     <pathelement location="${rake-runner-common.testoutput.dir}"/>
     <path refid="library.teamcity-agentapi.classpath"/>
@@ -247,7 +281,7 @@
     <javac destdir="${rake-runner-agent.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.rake-runner-agent}"/>
       <bootclasspath refid="rake-runner-agent.module.bootclasspath"/>
-      <classpath refid="rake-runner-agent.module.classpath"/>
+      <classpath refid="rake-runner-agent.module.production.classpath"/>
       <src refid="rake-runner-agent.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.rake-runner-agent"/>
     </javac>
@@ -287,7 +321,21 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
+  <path id="rake-runner-server.module.production.classpath">
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <path refid="library.teamcity-serverapi.classpath"/>
+    <path refid="library.teamcity-common.classpath"/>
+  </path>
+  
+  <path id="rake-runner-server.runtime.production.module.classpath">
+    <pathelement location="${rake-runner-server.output.dir}"/>
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <path refid="library.teamcity-common.classpath"/>
+    <path refid="library.teamcity-serverapi.classpath"/>
+  </path>
+  
   <path id="rake-runner-server.module.classpath">
+    <pathelement location="${rake-runner-server.output.dir}"/>
     <pathelement location="${rake-runner-common.output.dir}"/>
     <pathelement location="${rake-runner-common.testoutput.dir}"/>
     <path refid="library.teamcity-serverapi.classpath"/>
@@ -327,7 +375,7 @@
     <javac destdir="${rake-runner-server.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.rake-runner-server}"/>
       <bootclasspath refid="rake-runner-server.module.bootclasspath"/>
-      <classpath refid="rake-runner-server.module.classpath"/>
+      <classpath refid="rake-runner-server.module.production.classpath"/>
       <src refid="rake-runner-server.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.rake-runner-server"/>
     </javac>
@@ -367,7 +415,35 @@
     <!-- Paths to be included in compilation bootclasspath -->
   </path>
   
+  <path id="rake-runner-test.module.production.classpath">
+    <pathelement location="${rake-runner-agent.output.dir}"/>
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <pathelement location="${rake-runner-server.output.dir}"/>
+    <pathelement location="${basedir}/rake-runner-test/lib/test-core.jar"/>
+    <pathelement location="${basedir}/rake-runner-test/lib/testng-jdk15.jar"/>
+    <pathelement location="${basedir}/rake-runner-test/lib/junit-3.8.2.jar"/>
+    <pathelement location="${basedir}/rake-runner-test/lib/spring-mock.jar"/>
+    <path refid="library.teamcity-common.classpath"/>
+    <path refid="library.teamcity-agentapi.classpath"/>
+    <path refid="library.teamcity-serverapi.classpath"/>
+  </path>
+  
+  <path id="rake-runner-test.runtime.production.module.classpath">
+    <pathelement location="${rake-runner-test.output.dir}"/>
+    <pathelement location="${rake-runner-agent.output.dir}"/>
+    <pathelement location="${rake-runner-common.output.dir}"/>
+    <path refid="library.teamcity-common.classpath"/>
+    <path refid="library.teamcity-agentapi.classpath"/>
+    <pathelement location="${rake-runner-server.output.dir}"/>
+    <path refid="library.teamcity-serverapi.classpath"/>
+    <pathelement location="${basedir}/rake-runner-test/lib/test-core.jar"/>
+    <pathelement location="${basedir}/rake-runner-test/lib/testng-jdk15.jar"/>
+    <pathelement location="${basedir}/rake-runner-test/lib/junit-3.8.2.jar"/>
+    <pathelement location="${basedir}/rake-runner-test/lib/spring-mock.jar"/>
+  </path>
+  
   <path id="rake-runner-test.module.classpath">
+    <pathelement location="${rake-runner-test.output.dir}"/>
     <pathelement location="${rake-runner-agent.output.dir}"/>
     <pathelement location="${rake-runner-agent.testoutput.dir}"/>
     <pathelement location="${rake-runner-common.output.dir}"/>

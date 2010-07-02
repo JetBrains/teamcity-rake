@@ -11,15 +11,24 @@
   <target name="package" depends="define.version, all">
 
     <delete dir="${basedir}/dist" failonerror="false"/>
+    <mkdir dir="${basedir}/dist"/>
+    <mkdir dir="${basedir}/dist/agentlibs/lib/rb"/>
+
+    <copy todir="${basedir}/dist/agentlibs/lib/rb">
+      <fileset dir="${basedir}/lib/rb" includes="**" />
+    </copy>
 
     <package.teamcity.plugin name="${plugin.name}"
                              server.output="${rake-runner-server.output.dir}"
                              agent.output="${rake-runner-agent.output.dir}"
                              common.output="${rake-runner-common.output.dir}"
-                             agent.lib.dir="${basedir}/lib/agent"
-                             agent.lib.includes="**/*"
                              plugin.descriptor.file="${basedir}/teamcity-plugin.xml"
-                             plugin.version="${plugin.version}"/>
+                             plugin.version="${plugin.version}">
+
+      <agent-additional-files>
+        <fileset dir="${basedir}/dist/agentlibs" includes="**" />
+      </agent-additional-files>
+    </package.teamcity.plugin>
   </target>
 
   <target name="define.version" depends="define.version.if.under.teamcity">
@@ -60,7 +69,7 @@
   <target name="fetch-artifacts">
     <delete dir="${artifacts.dir}"/>
     <mkdir dir="${artifacts.dir}"/>
-    <mkdir dir="${basedir}/lib/agent/rb"/>
+    <mkdir dir="${basedir}/lib/rb"/>
 
     <ivy:configure file="${basedir}/ivyconf.xml"
                    host="buildserver.labs.intellij.net"
@@ -71,7 +80,7 @@
     <ivy:resolve file="ivy.xml" haltonfailure="true"/>
     <ivy:retrieve pattern="${artifacts.dir}/[artifact].[ext]"/>
 
-    <unzip src="${artifacts.dir}/rake-runner-ruby-src.zip" dest="${basedir}/lib/agent/rb"/>
+    <unzip src="${artifacts.dir}/rake-runner-ruby-src.zip" dest="${basedir}/lib/rb"/>
   </target>
 
 
