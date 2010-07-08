@@ -23,6 +23,7 @@ import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -78,6 +79,7 @@ public class RakeRunnerRunType extends RunType {
     return RakeRunnerBundle.RUNNER_DISPLAY_NAME;
   }
 
+  @NotNull
   @Override
   public String getType() {
     return RakeRunnerConstants.RUNNER_TYPE;
