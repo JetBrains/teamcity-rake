@@ -55,7 +55,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
+    setMockingOptions(FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
     setMessagesTranslationEnabled(false);
 
     // set ruby interpreter path
@@ -220,5 +220,12 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
 
   protected void activateTestFramework(@NotNull SupportedTestFramework framework) {
     getBuildType().addRunParameter(new SimpleParameter(framework.getFrameworkUIProperty(), "true"));
+  }
+
+  @Override
+  protected String doRunnerSpecificReplacement(final String expected) {
+    String msg = expected.replaceAll("[0-9]{4}-[0-9]{2}-[0-9]{2}('T'|T)[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}[+\\-]{1}[0-9]+", "##TIME##");
+    msg = msg.replaceAll("duration='[0-9]+'", "duration='##DURATION##'");
+    return msg;
   }
 }

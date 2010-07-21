@@ -20,8 +20,6 @@ import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
-
 /**
  * @author Roman Chernyatchik
  */
@@ -38,7 +36,6 @@ public class ShouldaBuildLogTest extends AbstractRakeRunnerTest {
 
   public void testGeneral()  throws Throwable {
     setPartialMessagesChecker();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
 
     initAndDoRealTest("stat:general", false, "app_shoulda");
   }

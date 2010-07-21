@@ -20,9 +20,6 @@ import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_STACK_TRACE;
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.FAKE_TIME;
-
 /**
  * @author Roman Chernyatchik
  */
@@ -39,7 +36,7 @@ public class ShouldaMessagesTest extends AbstractRakeRunnerTest {
     //TODO implement test location for shoulda!
     setPartialMessagesChecker();
 
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE);
+    setMockingOptions();
     initAndDoTest("stat:general", "_location", false, "app_shoulda");
   }
 }

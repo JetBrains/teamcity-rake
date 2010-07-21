@@ -20,8 +20,6 @@ import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
-
 /**
  * @author Roman Chernyatchik
  */
@@ -31,6 +29,7 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
+    setMessagesTranslationEnabled(false);
     activateTestFramework(SupportedTestFramework.TEST_UNIT);
   }
 
@@ -53,28 +52,25 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
 
   public void testTestFailed()  throws Throwable {
     setPartialMessagesChecker();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
 
     initAndDoTest("stat:failed", false, "app_testunit");
   }
 
   public void testTestError()  throws Throwable {
     setPartialMessagesChecker();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
-
+    
     initAndDoTest("stat:error", false, "app_testunit");
   }
 
   public void testTestCompileError()  throws Throwable {
     setPartialMessagesChecker();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
-    
+
     initAndDoTest("stat:compile_error", false, "app_testunit");
   }
 
   public void testLocationUrl()  throws Throwable {
     setPartialMessagesChecker();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE);
+    setMockingOptions();
     initAndDoTest("stat:passed", "_location", true, "app_testunit");
   }
 }

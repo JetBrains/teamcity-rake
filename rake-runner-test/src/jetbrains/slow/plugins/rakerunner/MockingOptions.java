@@ -24,7 +24,6 @@ package jetbrains.slow.plugins.rakerunner;
  * To change this template use File | Settings | File Templates.
  */
 public enum MockingOptions {
-  FAKE_TIME(":fake_time"),
   FAKE_STACK_TRACE(":fake_stacktrace"),
   FAKE_ERROR_MSG(":fake_error_msg"),
   FAKE_LOCATION_URL(":fake_location_url");

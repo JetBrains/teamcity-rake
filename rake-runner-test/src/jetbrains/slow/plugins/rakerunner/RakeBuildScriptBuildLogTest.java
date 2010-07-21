@@ -19,8 +19,6 @@ package jetbrains.slow.plugins.rakerunner;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
-
 /**
  * @author Roman Chernyatchik
  */
@@ -61,7 +59,6 @@ public class RakeBuildScriptBuildLogTest extends AbstractRakeRunnerTest {
   public void testBuildScript_exception_in_embedded_task_trace_real() throws Throwable {
     setPartialMessagesChecker();
     rakeUI_EnableTraceOption();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
 
     initAndDoTest("build_script:exception_in_embedded_task", "_trace", false, "app1");
   }
@@ -75,7 +72,6 @@ public class RakeBuildScriptBuildLogTest extends AbstractRakeRunnerTest {
   public void testBuildScript_compile_error_task() throws Throwable {
     setPartialMessagesChecker();
 
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
     initAndDoTest("compile_error:some_task", false, "app2");
   }
 
@@ -89,14 +85,12 @@ public class RakeBuildScriptBuildLogTest extends AbstractRakeRunnerTest {
   public void testBuildScript_cmd_failed_real() throws Throwable {
     setPartialMessagesChecker();
     rakeUI_EnableTraceOption();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
     initAndDoRealTest("build_script:cmd_failed", false, "app1");
   }
 
   public void testBuildScript_depends_on_cmd_failed_real() throws Throwable {
     setPartialMessagesChecker();
     rakeUI_EnableTraceOption();
-    setMockingOptions(FAKE_TIME, FAKE_STACK_TRACE, FAKE_LOCATION_URL);
     initAndDoRealTest("build_script:depends_on_cmd_failed", false, "app1");
   }
 }
