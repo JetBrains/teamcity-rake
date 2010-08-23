@@ -17,12 +17,13 @@
 package jetbrains.buildServer.agent.rakerunner;
 
 import com.intellij.util.containers.HashMap;
+import java.io.File;
+import java.util.*;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
-import jetbrains.buildServer.agent.runner.CommandLineBuildService;
+import jetbrains.buildServer.agent.runner.BuildServiceAdapter;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
-import jetbrains.buildServer.messages.ErrorData;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
@@ -30,15 +31,12 @@ import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.util.*;
-
 import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
 
 /**
  * @author Roman.Chernyatchik
  */
-public class RakeTasksBuildService extends CommandLineBuildService implements RakeRunnerConstants {
+public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRunnerConstants {
   private final Set<File> myFilesToDelete = new HashSet<File>();
   private final String RSPEC_RUNNER_OPTIONS_REQUIRE = "--require 'teamcity/spec/runner/formatter/teamcity/formatter'";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER = "--format Spec::Runner::Formatter::TeamcityFormatter:matrix";
@@ -49,8 +47,8 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
     List<String> arguments = new ArrayList<String>();
-    Map<String, String> runParams = new HashMap<String, String>(getBuild().getRunnerParameters());
-    Map<String, String> buildParams = new HashMap<String, String>(getBuild().getBuildParameters().getAllParameters());
+    Map<String, String> runParams = new HashMap<String, String>(getRunnerParameters());
+    Map<String, String> buildParams = new HashMap<String, String>(getBuildParameters().getAllParameters());
 
     // apply options converter
     SupportedTestFramework.convertOptionsIfNecessary(runParams);
@@ -59,7 +57,7 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
     // buildParams - system properties (system.*), environment vars (env.*)
 
     final boolean inDebugMode = ConfigurationParamsUtil.isParameterEnabled(buildParams, DEBUG_PROPERTY);
-    final HashMap<String, String> envMap = new HashMap<String, String>(getBuild().getBuildParameters().getEnvironmentVariables());
+    final HashMap<String, String> envMap = new HashMap<String, String>(getBuildParameters().getEnvironmentVariables());
     String exePath;
 
     final File buildFile = getBuildFile(runParams);
@@ -126,10 +124,10 @@ public class RakeTasksBuildService extends CommandLineBuildService implements Ra
 
       if (inDebugMode) {
         getLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n" + exePath + " " + arguments.toString());
-        getLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + getBuild().getWorkingDirectory() + "]");
+        getLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + getWorkingDirectory() + "]");
       }
 
-      return new SimpleProgramCommandLine(envMap, getBuild().getWorkingDirectory().getAbsolutePath(), exePath, arguments);
+      return new SimpleProgramCommandLine(envMap, getWorkingDirectory().getAbsolutePath(), exePath, arguments);
     } catch (MyBuildFailureException e) {
       getLogger().error(RAKE_ERROR_TYPE, e.getTitle(), e);
       throw new RunBuildException(e.getMessage());
