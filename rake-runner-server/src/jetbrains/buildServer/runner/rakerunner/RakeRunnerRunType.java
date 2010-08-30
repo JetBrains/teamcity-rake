@@ -23,6 +23,7 @@ import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,5 +84,20 @@ public class RakeRunnerRunType extends RunType {
   @Override
   public String getType() {
     return RakeRunnerConstants.RUNNER_TYPE;
+  }
+
+  @NotNull
+  @Override
+  public String getShortDescription(@NotNull final Map<String, String> runnerParams) {
+    StringBuilder result = new StringBuilder();
+    if (runnerParams.get("use-custom-build-file") != null) {
+      result.append("Rake file: custom");
+    } else {
+      result.append("Rake file path: ").append(StringUtil.emptyIfNull(runnerParams.get("build-file-path")));
+    }
+    result.append("\n");
+    final String tasks = runnerParams.get(RakeRunnerConstants.SERVER_UI_RAKE_TASKS_PROPERTY);
+    result.append("Rake tasks: ").append(StringUtil.isEmpty(tasks) ? "default" : tasks);
+    return result.toString();
   }
 }
