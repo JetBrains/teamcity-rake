@@ -129,7 +129,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       return new SimpleProgramCommandLine(envMap, getWorkingDirectory().getAbsolutePath(), exePath, arguments);
     } catch (MyBuildFailureException e) {
-      getLogger().error(RAKE_ERROR_TYPE, e.getTitle(), e);
+      getLogger().internalError(RAKE_ERROR_TYPE, e.getTitle(), e);
       throw new RunBuildException(e.getMessage());
     }
   }
