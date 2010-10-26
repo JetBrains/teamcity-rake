@@ -79,19 +79,6 @@
   
   
   <!-- Application Server Libraries -->
-  <!-- Register Custom Compiler Taskdefs -->
-  <property name="javac2.home" value="${idea.home}/lib"/>
-  <path id="javac2.classpath">
-    <pathelement location="${javac2.home}/javac2.jar"/>
-    <pathelement location="${javac2.home}/jdom.jar"/>
-    <pathelement location="${javac2.home}/asm.jar"/>
-    <pathelement location="${javac2.home}/asm-commons.jar"/>
-    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
-  </path>
-  <target name="register.custom.compilers">
-    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
-    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
-  </target>
   
   <!-- Modules -->
   
@@ -149,15 +136,15 @@
   
   <target name="compile.module.rake-runner-common" depends="compile.module.rake-runner-common.production,compile.module.rake-runner-common.tests" description="Compile module rake-runner-common"/>
   
-  <target name="compile.module.rake-runner-common.production" depends="register.custom.compilers" description="Compile module rake-runner-common; production classes">
+  <target name="compile.module.rake-runner-common.production" description="Compile module rake-runner-common; production classes">
     <mkdir dir="${rake-runner-common.output.dir}"/>
-    <javac2 destdir="${rake-runner-common.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+    <javac destdir="${rake-runner-common.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.rake-runner-common}"/>
       <bootclasspath refid="rake-runner-common.module.bootclasspath"/>
       <classpath refid="rake-runner-common.module.production.classpath"/>
       <src refid="rake-runner-common.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.rake-runner-common"/>
-    </javac2>
+    </javac>
     
     <copy todir="${rake-runner-common.output.dir}">
       <fileset dir="${module.rake-runner-common.basedir}/rake-runner-common/src">
@@ -167,7 +154,7 @@
     </copy>
   </target>
   
-  <target name="compile.module.rake-runner-common.tests" depends="register.custom.compilers,compile.module.rake-runner-common.production" description="compile module rake-runner-common; test classes" unless="skip.tests"/>
+  <target name="compile.module.rake-runner-common.tests" depends="compile.module.rake-runner-common.production" description="compile module rake-runner-common; test classes" unless="skip.tests"/>
   
   <target name="clean.module.rake-runner-common" description="cleanup module">
     <delete dir="${rake-runner-common.output.dir}"/>
@@ -217,9 +204,9 @@
   
   <target name="compile.module.rake-runner-root" depends="compile.module.rake-runner-root.production,compile.module.rake-runner-root.tests" description="Compile module rake-runner-root"/>
   
-  <target name="compile.module.rake-runner-root.production" depends="register.custom.compilers" description="Compile module rake-runner-root; production classes"/>
+  <target name="compile.module.rake-runner-root.production" description="Compile module rake-runner-root; production classes"/>
   
-  <target name="compile.module.rake-runner-root.tests" depends="register.custom.compilers,compile.module.rake-runner-root.production" description="compile module rake-runner-root; test classes" unless="skip.tests"/>
+  <target name="compile.module.rake-runner-root.tests" depends="compile.module.rake-runner-root.production" description="compile module rake-runner-root; test classes" unless="skip.tests"/>
   
   <target name="clean.module.rake-runner-root" description="cleanup module">
     <delete dir="${rake-runner-root.output.dir}"/>
@@ -291,15 +278,15 @@
   
   <target name="compile.module.rake-runner-agent" depends="compile.module.rake-runner-agent.production,compile.module.rake-runner-agent.tests" description="Compile module rake-runner-agent"/>
   
-  <target name="compile.module.rake-runner-agent.production" depends="register.custom.compilers,compile.module.rake-runner-common" description="Compile module rake-runner-agent; production classes">
+  <target name="compile.module.rake-runner-agent.production" depends="compile.module.rake-runner-common" description="Compile module rake-runner-agent; production classes">
     <mkdir dir="${rake-runner-agent.output.dir}"/>
-    <javac2 destdir="${rake-runner-agent.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+    <javac destdir="${rake-runner-agent.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.rake-runner-agent}"/>
       <bootclasspath refid="rake-runner-agent.module.bootclasspath"/>
       <classpath refid="rake-runner-agent.module.production.classpath"/>
       <src refid="rake-runner-agent.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.rake-runner-agent"/>
-    </javac2>
+    </javac>
     
     <copy todir="${rake-runner-agent.output.dir}">
       <fileset dir="${module.rake-runner-agent.basedir}/rake-runner-agent/resources">
@@ -313,7 +300,7 @@
     </copy>
   </target>
   
-  <target name="compile.module.rake-runner-agent.tests" depends="register.custom.compilers,compile.module.rake-runner-agent.production" description="compile module rake-runner-agent; test classes" unless="skip.tests"/>
+  <target name="compile.module.rake-runner-agent.tests" depends="compile.module.rake-runner-agent.production" description="compile module rake-runner-agent; test classes" unless="skip.tests"/>
   
   <target name="clean.module.rake-runner-agent" description="cleanup module">
     <delete dir="${rake-runner-agent.output.dir}"/>
@@ -385,15 +372,15 @@
   
   <target name="compile.module.rake-runner-server" depends="compile.module.rake-runner-server.production,compile.module.rake-runner-server.tests" description="Compile module rake-runner-server"/>
   
-  <target name="compile.module.rake-runner-server.production" depends="register.custom.compilers,compile.module.rake-runner-common" description="Compile module rake-runner-server; production classes">
+  <target name="compile.module.rake-runner-server.production" depends="compile.module.rake-runner-common" description="Compile module rake-runner-server; production classes">
     <mkdir dir="${rake-runner-server.output.dir}"/>
-    <javac2 destdir="${rake-runner-server.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+    <javac destdir="${rake-runner-server.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.rake-runner-server}"/>
       <bootclasspath refid="rake-runner-server.module.bootclasspath"/>
       <classpath refid="rake-runner-server.module.production.classpath"/>
       <src refid="rake-runner-server.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.rake-runner-server"/>
-    </javac2>
+    </javac>
     
     <copy todir="${rake-runner-server.output.dir}">
       <fileset dir="${module.rake-runner-server.basedir}/rake-runner-server/resources">
@@ -407,7 +394,7 @@
     </copy>
   </target>
   
-  <target name="compile.module.rake-runner-server.tests" depends="register.custom.compilers,compile.module.rake-runner-server.production" description="compile module rake-runner-server; test classes" unless="skip.tests"/>
+  <target name="compile.module.rake-runner-server.tests" depends="compile.module.rake-runner-server.production" description="compile module rake-runner-server; test classes" unless="skip.tests"/>
   
   <target name="clean.module.rake-runner-server" description="cleanup module">
     <delete dir="${rake-runner-server.output.dir}"/>
@@ -504,9 +491,9 @@
   
   <target name="compile.module.rake-runner-test" depends="compile.module.rake-runner-test.production,compile.module.rake-runner-test.tests" description="Compile module rake-runner-test"/>
   
-  <target name="compile.module.rake-runner-test.production" depends="register.custom.compilers,compile.module.rake-runner-agent,compile.module.rake-runner-common,compile.module.rake-runner-server" description="Compile module rake-runner-test; production classes"/>
+  <target name="compile.module.rake-runner-test.production" depends="compile.module.rake-runner-agent,compile.module.rake-runner-common,compile.module.rake-runner-server" description="Compile module rake-runner-test; production classes"/>
   
-  <target name="compile.module.rake-runner-test.tests" depends="register.custom.compilers,compile.module.rake-runner-test.production" description="compile module rake-runner-test; test classes" unless="skip.tests"/>
+  <target name="compile.module.rake-runner-test.tests" depends="compile.module.rake-runner-test.production" description="compile module rake-runner-test; test classes" unless="skip.tests"/>
   
   <target name="clean.module.rake-runner-test" description="cleanup module">
     <delete dir="${rake-runner-test.output.dir}"/>
