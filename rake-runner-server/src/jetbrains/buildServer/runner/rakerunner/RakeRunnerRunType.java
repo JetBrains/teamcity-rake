@@ -88,15 +88,15 @@ public class RakeRunnerRunType extends RunType {
 
   @NotNull
   @Override
-  public String getShortDescription(@NotNull final Map<String, String> runnerParams) {
+  public String describeParameters(@NotNull final Map<String, String> parameters) {
     StringBuilder result = new StringBuilder();
-    if (runnerParams.get("use-custom-build-file") != null) {
+    if (parameters.get("use-custom-build-file") != null) {
       result.append("Rake file: custom");
     } else {
-      result.append("Rake file path: ").append(StringUtil.emptyIfNull(runnerParams.get("build-file-path")));
+      result.append("Rake file path: ").append(StringUtil.emptyIfNull(parameters.get("build-file-path")));
     }
     result.append("\n");
-    final String tasks = runnerParams.get(RakeRunnerConstants.SERVER_UI_RAKE_TASKS_PROPERTY);
+    final String tasks = parameters.get(RakeRunnerConstants.SERVER_UI_RAKE_TASKS_PROPERTY);
     result.append("Rake tasks: ").append(StringUtil.isEmpty(tasks) ? "default" : tasks);
     return result.toString();
   }
