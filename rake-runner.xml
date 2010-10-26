@@ -61,7 +61,6 @@
   
   <path id="library.teamcity-agentapi.classpath">
     <pathelement location="${path.variable.teamcitydistribution}/devPackage/agent-api.jar"/>
-    <pathelement location="${path.variable.teamcitydistribution}/devPackage/runtime-util.jar"/>
   </path>
   
   <path id="library.teamcity-common.classpath">
