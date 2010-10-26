@@ -15,7 +15,6 @@
         <sourceRoots>
           <root url="file://$MODULE_DIR$/src" />
         </sourceRoots>
-        <context-artifact name="rake-runner-server:Web exploded" />
       </configuration>
     </facet>
   </component>
