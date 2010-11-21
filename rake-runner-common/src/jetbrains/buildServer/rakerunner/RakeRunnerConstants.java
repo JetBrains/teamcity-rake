@@ -46,9 +46,6 @@ public interface RakeRunnerConstants {
   @NonNls String SERVER_UI_RUBY_INTERPRETER = "ui.rakeRunner.ruby.interpreter";
   @NonNls String SERVER_UI_RUBY_RVM_GEMSET_NAME = "ui.rakeRunner.ruby.rvm.gemset";
 
-  // Enable rake output capturer
-  @NonNls String SERVER_UI_RAKE_OUTPUT_CAPTURER_ENABLED = "ui.rakeRunner.rake.output.capturer.enabled";
-
   // Test Frameworks
 
   // Test::Unit
@@ -72,7 +69,7 @@ public interface RakeRunnerConstants {
 
   @NonNls String SERVER_CONFIGURATION_VERSION_PROPERTY = "ui.rakeRunner.config.version";
 
-  // Agent properties:
+// Agent properties:
   // Custom rake tasks runner script
   @NonNls String CUSTOM_RAKERUNNER_SCRIPT = "system.teamcity.rake.runner.custom.runner";
 
