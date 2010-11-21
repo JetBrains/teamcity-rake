@@ -22,11 +22,11 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
 import jetbrains.buildServer.messages.ServerMessagesTranslator;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.ShortStatistics;
 import jetbrains.buildServer.serverSide.SimpleParameter;
+import jetbrains.buildServer.util.StringUtil;
 import jetbrains.slow.PartialBuildMessagesChecker;
 import jetbrains.slow.RunnerTest2Base;
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +71,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
 
   private void setInterpreterPath() {
     final String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
-    if (!TextUtil.isEmpty(interpreterPath)) {
+    if (!StringUtil.isEmpty(interpreterPath)) {
       getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER, interpreterPath));
     }
   }

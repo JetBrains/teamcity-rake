@@ -98,7 +98,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       // Rake runner script
       final String rakeRunnerPath;
       final String customRakeRunnerScript = buildParams.get(CUSTOM_RAKERUNNER_SCRIPT);
-      if (!TextUtil.isEmpty(customRakeRunnerScript)) {
+      if (!StringUtil.isEmpty(customRakeRunnerScript)) {
         // use custom runner
         rakeRunnerPath = customRakeRunnerScript;
       } else {
@@ -188,7 +188,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       final StringBuilder buff = new StringBuilder();
 
       final String userSpecOpts = runParams.get(SERVER_UI_RAKE_RSPEC_OPTS_PROPERTY);
-      if (!TextUtil.isEmpty(userSpecOpts)) {
+      if (!StringUtil.isEmpty(userSpecOpts)) {
         buff.append(userSpecOpts.trim()).append(' ');
       }
       buff.append(RSPEC_RUNNER_OPTIONS_REQUIRE_KEY).append(' ');
@@ -218,7 +218,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       //cmd.addParameter(RAKE_CUCUMBER_OPTS_PARAM_NAME + "=" + CUCUMBER_RUNNER_INIT_OPTIONS);
 
       final String userCucumberOpts = runParams.get(SERVER_UI_RAKE_CUCUMBER_OPTS_PROPERTY);
-      if (!TextUtil.isEmpty(userCucumberOpts)) {
+      if (!StringUtil.isEmpty(userCucumberOpts)) {
         buff.append(userCucumberOpts.trim()).append(' ');
       }
       buff.append(CUCUMBER_RUNNER_OPTIONS_EXPAND_KEY).append(' ');

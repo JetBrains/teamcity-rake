@@ -44,10 +44,6 @@ public class TextUtil {
     return result.toString();
   }
 
-  public static boolean isEmpty(final @Nullable String s) {
-    return s == null || s.length() == 0;
-  }
-
   public static boolean isEmptyOrWhitespaced(final @Nullable String s) {
     return s == null || s.trim().length() == 0;
   }

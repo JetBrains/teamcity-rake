@@ -23,6 +23,7 @@ import java.util.StringTokenizer;
 import jetbrains.buildServer.agent.Constants;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,7 +58,7 @@ public class OSUtil {
     final String rubyLibVal = System.getenv(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE);
 
     final String pathValue;
-    if (TextUtil.isEmpty(rubyLibVal)) {
+    if (StringUtil.isEmpty(rubyLibVal)) {
       pathValue = toSystemDependentName(additionalPath);
     } else {
       pathValue = rubyLibVal + File.pathSeparatorChar + toSystemDependentName(additionalPath);

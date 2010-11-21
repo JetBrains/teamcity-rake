@@ -23,6 +23,7 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
+import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.VersionComparatorUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -81,7 +82,7 @@ public class RubySDKUtil {
     String testUnitGemPath = null;
 
     final String customTestUnitGemVersionProperty = buildParameters.get(TEST_UNIT_GEM_VERSION_PROPERTY);
-    final String customTestUnitGemVersion = !TextUtil.isEmpty(customTestUnitGemVersionProperty)
+    final String customTestUnitGemVersion = !StringUtil.isEmpty(customTestUnitGemVersionProperty)
                                             ? customTestUnitGemVersionProperty.trim()
                                             : null ;
 
@@ -189,7 +190,7 @@ public class RubySDKUtil {
   private static void failIfWithErrors(final RubyScriptRunner.Output result)
     throws RakeTasksBuildService.MyBuildFailureException {
     // script wasn't found in LOAD_PATH:
-    if (!TextUtil.isEmpty(result.getStderr())) {
+    if (!StringUtil.isEmpty(result.getStderr())) {
       throw new RakeTasksBuildService.MyBuildFailureException(result.getStdout() + "\n" + result.getStderr(),
                                                               RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
     }
