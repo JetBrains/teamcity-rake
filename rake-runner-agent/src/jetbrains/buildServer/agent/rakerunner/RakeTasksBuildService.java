@@ -96,7 +96,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       }
 
       // Rake runner script
-      // TODO - rake gem version via system properties
       final String rakeRunnerPath;
       final String customRakeRunnerScript = buildParams.get(CUSTOM_RAKERUNNER_SCRIPT);
       if (!TextUtil.isEmpty(customRakeRunnerScript)) {
@@ -106,8 +105,10 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
         // default one
         rakeRunnerPath = RubyProjectSourcesUtil.getRakeRunnerPath();
       }
-
       arguments.add(rakeRunnerPath);
+
+      // Rake gem version
+      addGemVersionAttribute(arguments, RAKE_GEM_VERSION_PROPERTY, buildParams);
 
       // Rake options
       // Custom Rakefile if specified
@@ -152,6 +153,21 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     } catch (MyBuildFailureException e) {
       getLogger().internalError(RAKE_ERROR_TYPE, e.getTitle(), e);
       throw new RunBuildException(e.getMessage());
+    }
+  }
+
+  /**
+   * Specify gem version attribute if property is set
+   * @param arguments Cmdline arguments
+   * @param gemVersionProperty Property name
+   * @param buildParams  Build params
+   */
+  private void addGemVersionAttribute(final List<String> arguments,
+                                      final String gemVersionProperty,
+                                      final Map<String, String> buildParams) {
+    final String rakeGemVersion = buildParams.get(gemVersionProperty);
+    if (!StringUtil.isEmpty(rakeGemVersion)) {
+      arguments.add("_" + rakeGemVersion + "_");
     }
   }
 
