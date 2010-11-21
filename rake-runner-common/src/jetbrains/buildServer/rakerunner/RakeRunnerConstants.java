@@ -35,9 +35,6 @@ public interface RakeRunnerConstants {
   // task name
   @NonNls String SERVER_UI_RAKE_TASKS_PROPERTY = "ui.rakeRunner.rake.tasks.names";
 
-  @NonNls String RAKE_MODE_KEY = "TEAMCITY_RAKE_RUNNER_MODE";
-  @NonNls String RAKE_MODE_BUILDSERVER = "buildserver";
-
   // trace/invoke
   @NonNls String SERVER_UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED = "ui.rakeRunner.rake.trace.invoke.exec.stages.enabled";
   @NonNls String RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY = "TEAMCITY_RAKE_TRACE";

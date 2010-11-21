@@ -89,10 +89,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       // TODO bundler support
 
-      // set runner mode to "buildserver" mode
-      // TODO #3 deprecated, use some other TC specific env variable
-      runnerEnvParams.put(RAKE_MODE_KEY, RAKE_MODE_BUILDSERVER);
-
       // track invoke/execute stages
       // TODO - stages are not visible !!!!
       if (ConfigurationParamsUtil.isTraceStagesOptionEnabled(runParams)) {
