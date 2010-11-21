@@ -78,8 +78,9 @@ public interface RakeRunnerConstants {
   @NonNls String DEBUG_PROPERTY = "system.teamcity.rake.runner.debug.mode";
 
   // Forced gem version:
-  @NonNls String TEST_UNIT_GEM_VERSION_PROPERTY = "system.teamcity.rake.runner.gem.testunit.version";
   @NonNls String RAKE_GEM_VERSION_PROPERTY = "system.teamcity.rake.runner.gem.rake.version";
+  @NonNls String TEST_UNIT_GEM_VERSION_PROPERTY = "system.teamcity.rake.runner.gem.testunit.version";
+  @NonNls String TEST_UNIT_USE_BUILTIN_VERSION_PARAM = "built-in";
 
   // SDK hack
   @NonNls String RUBYLIB_ENVIRONMENT_VARIABLE = "RUBYLIB";

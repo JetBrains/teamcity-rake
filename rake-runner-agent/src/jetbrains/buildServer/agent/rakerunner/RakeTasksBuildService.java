@@ -129,9 +129,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
         addCmdlineArguments(arguments, tasks_names);
       }
 
-      // test-unit based
-      // TODO - test-unit gem version via system properties (use TEST_UNIT_GEM_VERSION_PROPERTY)
-
       // rspec
       attachRSpecFormatterIfNeeded(runParams, runnerEnvParams);
 
@@ -151,6 +148,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
                                           sdk.getInterpreterPath(),
                                           arguments);
     } catch (MyBuildFailureException e) {
+      // TODO [pasha] is internal error required here?
       getLogger().internalError(RAKE_ERROR_TYPE, e.getTitle(), e);
       throw new RunBuildException(e.getMessage());
     }

@@ -23,6 +23,7 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.VersionComparatorUtil;
 import org.jetbrains.annotations.NonNls;
@@ -87,74 +88,93 @@ public class RubySDKUtil {
                                             : null ;
 
     // TODO: special value for test-unit gem version : [sdk] - force to use framework bundled in sdk
+    // if option is "built-in" let's use built-in Test::Unit in Ruby 1.8.x sdk
+    // else use custom gem version
+    final boolean forceUseBuiltInTestUnit = RakeRunnerConstants.TEST_UNIT_USE_BUILTIN_VERSION_PARAM.equals(customTestUnitGemVersion);
+    if (!forceUseBuiltInTestUnit) {
 
-    // look for "test-unit" gems in gem paths
-    for (String gemPath : sdk.getGemPaths()) {
-      if (customTestUnitGemVersion != null && testUnitGemPath != null) {
-        // test-unit gem was found in previous gems path
-        break;
-      }
-
-      final String gemsFolderPath = toSystemIndependentName(gemPath + File.separatorChar + "gems");
-
-      // gem path file may not exist
-      if (!FileUtil.checkIfDirExists(gemsFolderPath)) {
-        continue;
-      }
-
-      // collect test-unit gems
-      final File gemsFolder = new File(gemsFolderPath);
-      final File[] testUnitGems = gemsFolder.listFiles(new FileFilter() {
-        public boolean accept(final File file) {
-          // accept only test-unit gems
-          return file.getName().startsWith(TEST_UNIT_GEM_SUFFIX) && file.isDirectory();
+      // look for "test-unit" gems in gem paths
+      for (String gemPath : sdk.getGemPaths()) {
+        if (customTestUnitGemVersion != null && testUnitGemPath != null) {
+          // test-unit gem was found in previous gems path
+          break;
         }
-      });
 
-      // find gem with highest version
-      for (File gem : testUnitGems) {
-        final String dirtyVersion = gem.getName().substring(TEST_UNIT_GEM_SUFFIX.length());
-        final Matcher matcher = VERSION_PATTERN.matcher(dirtyVersion);
+        final String gemsFolderPath = toSystemIndependentName(gemPath + File.separatorChar + "gems");
 
-        final String version;
-        if (!matcher.find()) {
-          final String msg = "Cannot determine gem version: " + TEST_UNIT_GEM_SUFFIX + testUnitGemVersion
+        // gem path file may not exist
+        if (!FileUtil.checkIfDirExists(gemsFolderPath)) {
+          continue;
+        }
+
+        // collect test-unit gems
+        final File gemsFolder = new File(gemsFolderPath);
+        final File[] testUnitGems = gemsFolder.listFiles(new FileFilter() {
+          public boolean accept(final File file) {
+            // accept only test-unit gems
+            return file.getName().startsWith(TEST_UNIT_GEM_SUFFIX) && file.isDirectory();
+          }
+        });
+
+        // find gem with highest version
+        for (File gem : testUnitGems) {
+          final String dirtyVersion = gem.getName().substring(TEST_UNIT_GEM_SUFFIX.length());
+          final Matcher matcher = VERSION_PATTERN.matcher(dirtyVersion);
+
+          final String version;
+          if (!matcher.find()) {
+            final String msg = "Cannot determine gem version: " + TEST_UNIT_GEM_SUFFIX + testUnitGemVersion
+                               + "'(" + testUnitGemPath + ") gem. Please submit a feature request.";
+            throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+          }
+          version = matcher.group();
+
+          if (customTestUnitGemVersion != null) {
+            // custom version
+            if (version.equals(customTestUnitGemVersion)) {
+              testUnitGemVersion = version;
+              testUnitGemPath = gem.getPath();
+              break;
+            }
+          } else {
+            // determine latest version
+            if (testUnitGemVersion == null || VersionComparatorUtil.compare(testUnitGemVersion, version) < 0) {
+              testUnitGemVersion = version;
+              testUnitGemPath = gem.getPath();
+            }
+          }
+        }
+      }
+
+      if (testUnitGemPath != null) {
+        final String fullScriptPath = testUnitGemPath + File.separatorChar + "lib" + File.separatorChar + scriptPath;
+        if (FileUtil.checkIfExists(fullScriptPath)) {
+          return fullScriptPath;
+        } else {
+
+          // Error: Script wasn't found in test-unit gem
+          final String msg = "Rake runner isn't compatible with your'" + TEST_UNIT_GEM_SUFFIX + testUnitGemVersion
                              + "'(" + testUnitGemPath + ") gem. Please submit a feature request.";
           throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
         }
-        version = matcher.group();
 
+      } else {
+        // test-unit gem not found
         if (customTestUnitGemVersion != null) {
-          // custom version
-          if (version.equals(customTestUnitGemVersion)) {
-            testUnitGemVersion = version;
-            testUnitGemPath = gem.getPath();
-            break;
-          }
-        } else {
-          // determine latest version
-          if (testUnitGemVersion == null || VersionComparatorUtil.compare(testUnitGemVersion, version) < 0) {
-            testUnitGemVersion = version;
-            testUnitGemPath = gem.getPath();
-          }
+          // not "built-in", but something specifed
+          final String msg = "test-unit gem with version '"
+                             + customTestUnitGemVersion
+                             + "' wasn't found in Gem paths of Ruby SDK with interpreter: '"
+                             + sdk.getPresentableName()
+                             + "'.\n"
+                             + "Gem paths:\n"
+                             + sdk.getGemPathsFetchLog().getStdout();
+          throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
         }
       }
     }
 
-    if (testUnitGemPath != null) {
-      final String fullScriptPath = testUnitGemPath + File.separatorChar + "lib" + File.separatorChar + scriptPath;
-      if (FileUtil.checkIfExists(fullScriptPath)) {
-        return fullScriptPath;
-      } else {
-
-        // Error: Script wasn't found in test-unit gem
-        final String msg = "Rake runner isn't compatible with your'" + TEST_UNIT_GEM_SUFFIX + testUnitGemVersion
-                           + "'(" + testUnitGemPath + ") gem. Please submit a feature request.";
-        throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
-      }
-
-    }
-
+    // find test-unit in load path
     final String[] loadPaths = sdk.getLoadPath();
     for (String path : loadPaths) {
       final String fullScriptPath = toSystemIndependentName(path + File.separatorChar + scriptPath);
@@ -172,10 +192,12 @@ public class RubySDKUtil {
 
     // General error message
     final boolean isRuby19 = sdk.isRuby19();
-    final String msg = "File '" + scriptPath
+    final String msg = (forceUseBuiltInTestUnit? "You asked TC to use built-in Test::Unit test framework, but file '"
+                                               : "File '")
+                       + scriptPath
                        + "' wasn't found in Gem paths and in $LOAD_PATH of Ruby SDK with interpreter: '"
                        + sdk.getPresentableName()
-                       + "'\n"
+                       + "'.\n"
                        + (isRuby19 ? "Rake runner detected that your are using Ruby 1.9. So please install 'test-unit' gem because simplified Test::Unit framework, which is bundled in Ruby 1.9, doesn't support pluggable test reporters.\n" : "")
                        + "\n"
                        + "Gem paths:\n"
