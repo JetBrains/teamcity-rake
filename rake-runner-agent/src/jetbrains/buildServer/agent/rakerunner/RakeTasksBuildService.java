@@ -182,7 +182,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
   private void attachRSpecFormatterIfNeeded(final Map<String, String> runParams,
                                             final Map<String, String> env) {
-    // TODO - rspec gem version via system properties
 
     //attach RSpec formatter only if spec reporter enabled
     if (SupportedTestFramework.RSPEC.isActivated(runParams)) {
@@ -210,8 +209,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   private void attachCucumberFormatterIfNeeded(
     final Map<String, String> runParams,
     final Map<String, String> env) {
-
-    // TODO - cucumber gem version via system properties
 
     //attach Cucumber formatter only if cucumber reporter enabled
     if (SupportedTestFramework.CUCUMBER.isActivated(runParams)) {
