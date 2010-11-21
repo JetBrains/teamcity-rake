@@ -46,12 +46,18 @@ public class RubyProjectSourcesUtil {
 
     final File rubySourcesDir;
     if (jarPath != null && jarPath.endsWith(RakeRunnerConstants.AGENT_BUNDLE_JAR)) {
-      // compiled mode
+      // production files
       rubySourcesDir = new File(jarPath.substring(0, jarPath.length() - RakeRunnerConstants.AGENT_BUNDLE_JAR.length())
           + RUBY_SOURCES_SUBDIR);
     } else {
       // debug mode
-      rubySourcesDir = new File("svnrepo/rake-runner/lib/rb");
+      if (jarPath != null && jarPath.endsWith(".jar")) {
+        // e.g. using Build Agent run configuration
+        rubySourcesDir = new File(jarPath.substring(0, jarPath.lastIndexOf('/') + 1) + "rb");
+      } else {
+        // some old code, not sure that it is needed
+        rubySourcesDir = new File("svnrepo/rake-runner/lib/rb");
+      }
     }
 
     try {

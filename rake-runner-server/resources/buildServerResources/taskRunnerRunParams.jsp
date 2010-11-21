@@ -30,7 +30,8 @@
 </style>
 
 <%--Default initial settings format version--%>
-<props:hiddenProperty name="ui.rakeRunner.config.version"/>
+<%-- [NB] Config version should be synchronized with RakeRunnerConstants --%>
+<props:hiddenProperty name="ui.rakeRunner.config.version" value="2" />
 
 <l:settingsGroup title="Rake Parameters">
   <tr>
@@ -87,7 +88,13 @@
   <tr>
     <th><label for="ui.rakeRunner.ruby.interpreter">Ruby interpreter path: </label></th>
     <td><props:textProperty name="ui.rakeRunner.ruby.interpreter" style="width:30em;" maxlength="256"/>
-      <span class="smallNote">If not specified the interpreter will be searched in the PATH.</span>
+      <span class="smallNote">If not specified the interpreter will be searched in the PATH environment variable.</span>
+    </td>
+  </tr>
+  <tr>
+    <th><label for="ui.rakeRunner.ruby.rvm.gemset">RVM gemset name: </label></th>
+    <td><props:textProperty name="ui.rakeRunner.ruby.rvm.gemset" style="width:30em;" maxlength="256"/>
+      <span class="smallNote">If not specifed the default gemset will be used. This value will be ignored if interpreter isn't RVM based.</span>
     </td>
   </tr>
   <tr>

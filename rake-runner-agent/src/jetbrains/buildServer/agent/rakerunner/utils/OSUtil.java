@@ -23,9 +23,10 @@ import java.util.StringTokenizer;
 import jetbrains.buildServer.agent.Constants;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
-import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
 
 /**
  * @author Roman.Chernyatchik
@@ -66,7 +67,11 @@ public class OSUtil {
   }
 
   public static String getPATHEnvVariable(@NotNull final Map<String, String> buildParameters) {
-    return buildParameters.get(Constants.ENV_PREFIX + ENVIRONMENT_PATH_VARIABLE_NAME);
+    return buildParameters.get(Constants.ENV_PREFIX + getPATHEnvVariableKey());
+  }
+
+  public static String getPATHEnvVariableKey() {
+    return ENVIRONMENT_PATH_VARIABLE_NAME;
   }
 
   @Nullable
@@ -118,5 +123,11 @@ public class OSUtil {
     } else {
       throw new RuntimeException(RakeRunnerBundle.MSG_OS_NOT_SUPPORTED);
     }
+  }
+
+  @Nullable
+  public static String getUserHomeFolder() {
+    final String home = System.getProperty("user.home");
+    return FileUtil.checkIfDirExists(home) ? home : null;
   }
 }

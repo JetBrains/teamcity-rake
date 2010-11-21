@@ -21,12 +21,16 @@ import com.intellij.execution.process.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.CharsetToolkit;
+import java.util.HashMap;
+import java.util.Map;
+import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
+import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
 
@@ -46,10 +50,11 @@ public class RubyScriptRunner {
    * @return Out object
    */
   @NotNull
-  public static Output runScriptFromSource(@NotNull final String rubyExe,
+  public static Output runScriptFromSource(@NotNull final RubySdk sdk,
                                            @NotNull final String[] rubyArgs,
                                            @NotNull final String scriptSource,
-                                           @NotNull final String[] scriptArgs) {
+                                           @NotNull final String[] scriptArgs,
+                                           @Nullable final Map<String, String> buildConfEnvironment) {
     Output result = null;
     File scriptFile = null;
     try {
@@ -61,13 +66,17 @@ public class RubyScriptRunner {
 
       //Args
       final String[] args = new String[2 + rubyArgs.length + scriptArgs.length];
-      args[0] = rubyExe;
+      args[0] = sdk.getInterpreterPath();
       System.arraycopy(rubyArgs, 0, args, 1, rubyArgs.length);
       args[rubyArgs.length + 1] = scriptFile.getPath();
       System.arraycopy(scriptArgs, 0, args, rubyArgs.length + 2, scriptArgs.length);
 
+      // Env
+      final HashMap<String, String> processEnv = new HashMap<String, String>(buildConfEnvironment);
+      RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, processEnv);
+
       //Result
-      result = RubyScriptRunner.runInPath(null, args);
+      result = RubyScriptRunner.runInPath(null, processEnv, args);
     } catch (Exception e) {
       LOG.error(e.getMessage(), e);
     } finally {
@@ -89,11 +98,12 @@ public class RubyScriptRunner {
    */
   @NotNull
   public static Output runInPath(@Nullable final String workingDir,
+                                 @Nullable final Map<String, String> environment,
                                  @NotNull final String... command) {
 // executing
     final StringBuilder out = new StringBuilder();
     final StringBuilder err = new StringBuilder();
-    Process process = createProcess(workingDir, command);
+    Process process = createProcess(workingDir, environment, command);
     ProcessHandler osProcessHandler = new OSProcessHandler(process, TextUtil.concat(command)) {
       private final Charset DEFAULT_SYSTEM_CHARSET = CharsetToolkit.getDefaultSystemCharset();
 
@@ -116,7 +126,9 @@ public class RubyScriptRunner {
    * @return add
    */
   @Nullable
-  public static Process createProcess(@Nullable final String workingDir, @NotNull final String... command) {
+  public static Process createProcess(@Nullable final String workingDir,
+                                      @Nullable final Map<String, String> environment,
+                                      @NotNull final String... command) {
     Process process = null;
 
     final String[] arguments;
@@ -127,7 +139,7 @@ public class RubyScriptRunner {
       arguments = new String[0];
     }
 
-    final GeneralCommandLine cmdLine = createAndSetupCmdLine(workingDir, command[0], arguments);
+    final GeneralCommandLine cmdLine = createAndSetupCmdLine(workingDir, environment, command[0], arguments);
     try {
       process = cmdLine.createProcess();
     } catch (Exception e) {
@@ -145,6 +157,7 @@ public class RubyScriptRunner {
    * @return process builder
    */
   public static GeneralCommandLine createAndSetupCmdLine(@Nullable final String workingDir,
+                                                         @Nullable final Map<String, String> environment,
                                                          @NotNull final String executablePath,
                                                          @NotNull final String... arguments) {
     final GeneralCommandLine cmdLine = new GeneralCommandLine();
@@ -154,6 +167,11 @@ public class RubyScriptRunner {
       cmdLine.setWorkDirectory(toSystemDependentName(workingDir));
     }
     cmdLine.addParameters(arguments);
+
+    // set env params
+    final Map<String, String> envParams = new HashMap<String, String>();
+    envParams.putAll(environment);
+    cmdLine.setEnvParams(envParams);
 
     return cmdLine;
   }

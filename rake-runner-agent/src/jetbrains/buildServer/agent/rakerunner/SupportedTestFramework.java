@@ -60,7 +60,7 @@ public enum SupportedTestFramework {
 
     if (version < 2) {
       // support for old version of rake-runner plugin
-      // let's think that Test::Unit and RSpec frameworks are activated
+      // let's think that Test::Unit and RSpec frameworks are need to be activated
       TEST_UNIT.activate(runParams);
       RSPEC.activate(runParams);
     }

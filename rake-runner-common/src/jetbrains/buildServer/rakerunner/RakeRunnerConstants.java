@@ -22,7 +22,11 @@ import org.jetbrains.annotations.NonNls;
  * @author Roman Chernyatchik
  */
 public interface RakeRunnerConstants {
+  // After updating config verson please also update settings converter (in RakeRunnerRunType)
+  // and update config verson in settings edit ui (taskRunnerRunParams.jsp). Last one is needed for correct conversion
+  // if user copied old-style build configuration and then updated some settings in it.
   @NonNls String CURRENT_CONFIG_VERSION = "2";
+
   @NonNls String RUNNER_TYPE = "rake-runner";
   @NonNls String AGENT_BUNDLE_JAR = "rake-runner.jar";
 
@@ -43,6 +47,7 @@ public interface RakeRunnerConstants {
 
   // Explicit Ruby interpreter lpath
   @NonNls String SERVER_UI_RUBY_INTERPRETER = "ui.rakeRunner.ruby.interpreter";
+  @NonNls String SERVER_UI_RUBY_RVM_GEMSET_NAME = "ui.rakeRunner.ruby.rvm.gemset";
 
   // Enable rake output capturer
   @NonNls String SERVER_UI_RAKE_OUTPUT_CAPTURER_ENABLED = "ui.rakeRunner.rake.output.capturer.enabled";
@@ -77,6 +82,9 @@ public interface RakeRunnerConstants {
 
   // Teamcity Rake Runner Debug and logs
   @NonNls String DEBUG_PROPERTY = "system.teamcity.rake.runner.debug.mode";
+
+  // Test-Unit gem version if not latest is reuiqred
+  @NonNls String TEST_UNIT_GEM_VERSION_PROPERTY = "system.teamcity.rake.runner.gem.testunit.version";
 
   // SDK hack
   @NonNls String RUBYLIB_ENVIRONMENT_VARIABLE = "RUBYLIB";
