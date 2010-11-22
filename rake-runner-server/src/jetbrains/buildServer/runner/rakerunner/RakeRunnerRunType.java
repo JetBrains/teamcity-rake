@@ -96,8 +96,17 @@ public class RakeRunnerRunType extends RunType {
       result.append("Rake file path: ").append(StringUtil.emptyIfNull(parameters.get("build-file-path")));
     }
     result.append("\n");
+
     final String tasks = parameters.get(RakeRunnerConstants.SERVER_UI_RAKE_TASKS_PROPERTY);
     result.append("Rake tasks: ").append(StringUtil.isEmpty(tasks) ? "default" : tasks);
+    result.append("\n");
+
+    final String rubyInterpreter = parameters.get(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER);
+    result.append("Ruby interpreter: ").append(StringUtil.isEmpty(rubyInterpreter) ? "default" : rubyInterpreter);
+    final String gemset = parameters.get(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME);
+    if (!StringUtil.isEmpty(gemset)) {
+      result.append("@").append(gemset);
+    }
     return result.toString();
   }
 }
