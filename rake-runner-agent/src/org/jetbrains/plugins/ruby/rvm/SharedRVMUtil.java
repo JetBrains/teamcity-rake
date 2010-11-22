@@ -16,11 +16,10 @@ import java.util.*;
  */
 class SharedRVMUtil {
   public interface Constants {
-    String RVM_FOLDER_NAME = ".rvm";
+    String LOCAL_RVM_HOME_FOLDER_NAME = ".rvm";
     String RVM_GEMS_FOLDER_NAME = "gems";
-    String RVM_RUBIES_GEMS_FOLDER = RVM_FOLDER_NAME + "/" + RVM_GEMS_FOLDER_NAME;
     String RVM_RUBIES_FOLDER_NAME = "rubies";
-    String RVM_RUBIES_INSTALLATION_FOLDER = RVM_FOLDER_NAME + "/" + RVM_RUBIES_FOLDER_NAME;
+    String RVM_BIN_FOLDER_RELATIVE_PATH = "/bin";
     String DEFAULT_GEMSET_SEPARATOR = "@";
     String RVM_GEMSET_SEPARATOR_ENVVAR = "rvm_gemset_separator";
     String GLOBAL_GEMSET_NAME = "global";
@@ -83,7 +82,14 @@ class SharedRVMUtil {
   }
 
   public static boolean isRVMInterpreter(@NotNull final String executablePath) {
-    return SystemInfo.isUnix && executablePath.contains(Constants.RVM_RUBIES_INSTALLATION_FOLDER);
+    if (!SystemInfo.isUnix) {
+      return false;
+    }
+    final String rvmHomePath = RVMPathsSettings.getInstance().getRvmHomePath();
+    if (rvmHomePath == null) {
+      return false;
+    }
+    return executablePath.startsWith(rvmHomePath + "/" + Constants.RVM_RUBIES_FOLDER_NAME);
   }
 
   public static String getGemsetSeparator() {
@@ -112,7 +118,7 @@ class SharedRVMUtil {
     // 2. after invoking rvm command with illegal arguments rvm creates tons of garbage
     // for such not existing sdks and gemsets
     // e.g. "ruby-1.9.1@projecta/" instead of "/ruby-1.9.1-p378@projecta/"
-    // such rake ruby sdks will not be registered in ~/.rvm/rubyies
+    // such rake ruby sdks will not be registered in ~/.rvm/rubies
     //
     // so let's do initial spam-check:
     if (!isRVMDistCondition.value(distName)) {
@@ -122,7 +128,7 @@ class SharedRVMUtil {
 
     // 3. add gem to table. We won't ignore "global" gempath just to allow user install gems in
     // "shared" gem path from RubyMine
-    rubyDist2Gemset.putGemset(gemset, distName);
+    rubyDist2Gemset.putGemset(gemset != null && gemset.length() > 0 ? gemset : null, distName);
   }
 
   public static boolean areGemsetsEqual(@Nullable final String gemset1,
@@ -289,8 +295,8 @@ class SharedRVMUtil {
       }
 
       // :~/.rvm/bin
-      final String rvmHome = executablePath.substring(0, executablePath.indexOf(Constants.RVM_RUBIES_INSTALLATION_FOLDER));
-      patchedPath.append(pathSeparator).append(rvmHome).append(".rvm/bin");
+      final String rvmHome = executablePath.substring(0, executablePath.indexOf("/" + Constants.RVM_RUBIES_FOLDER_NAME + "/"));
+      patchedPath.append(pathSeparator).append(rvmHome).append(Constants.RVM_BIN_FOLDER_RELATIVE_PATH);
 
       // add old $PATH
       final String currentPath = envParams.get(pathEnvVarName);
@@ -311,15 +317,15 @@ class SharedRVMUtil {
     if (defaultEnv != null) {
       // if not null than allowed to be overridden
 
-      // check weither useDefinedEnvs contains default value or not.
+      // check whether useDefinedEnvs contains default value or not.
       final String userValue = userDefinedEnvVars.get(envVariable);
-      final String defautlValue = defaultEnv.get(envVariable);
+      final String defaultValue = defaultEnv.get(envVariable);
       if (userValue == null) {
         // both need to be null
-        return defautlValue == null;
+        return defaultValue == null;
       } else {
         // both need to be equal
-        return userValue.equals(defautlValue);
+        return userValue.equals(defaultValue);
       }
     }
     return false;
@@ -370,15 +376,24 @@ class SharedRVMUtil {
 
   @Nullable
   public static Pair<String, String> getRVMGemsRootAndDistName(@NotNull final String executablePath) throws IllegalArgumentException {
-    final String[] paths = executablePath.split(Constants.RVM_RUBIES_INSTALLATION_FOLDER + "/", 2);
-    // should be 2 parts
-    if (paths.length != 2) {
+    final String rvmHomePath = RVMPathsSettings.getInstance().getRvmHomePath();
+    if (rvmHomePath == null) {
       return null;
     }
-    // ~/.rvm/
-    final String rvmHome = paths[0] + ".rvm/";
 
-    final String interpreterRelativePath = paths[1];
+    // rvm home, e.g. ~/.rvm/  or /usr/local/rvm
+    final String rvmHome = rvmHomePath + "/";
+    final String rvmInterpretersFolderPath = rvmHome + Constants.RVM_RUBIES_FOLDER_NAME + "/";
+    if (!executablePath.startsWith(rvmInterpretersFolderPath)) {
+      return null;
+    }
+
+    final String interpreterRelativePath = executablePath.startsWith(rvmInterpretersFolderPath)
+                                           ? executablePath.substring(rvmInterpretersFolderPath.length())
+                                           : null;
+    if (interpreterRelativePath == null) {
+      return null;
+    }
 
     // first folder in relative path will be interpreter distributive name
     final String rubyDistName = interpreterRelativePath.substring(0, interpreterRelativePath.indexOf("/"));
@@ -408,7 +423,7 @@ class SharedRVMUtil {
                           final String distName) {
       List<String> gemsets = myRubyDist2Gemset.get(distName);
       if (gemsets == null) {
-        gemsets = new ArrayList(1);
+        gemsets = new ArrayList<String>(1);
         myRubyDist2Gemset.put(distName, gemsets);
       }
       // put gemset

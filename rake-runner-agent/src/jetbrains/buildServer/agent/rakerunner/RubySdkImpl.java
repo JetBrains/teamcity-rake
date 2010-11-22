@@ -16,6 +16,7 @@
 
 package jetbrains.buildServer.agent.rakerunner;
 
+import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.util.*;
 import jetbrains.buildServer.RunBuildException;
@@ -25,6 +26,7 @@ import jetbrains.buildServer.util.PropertiesUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
 import static jetbrains.buildServer.rakerunner.RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT;
@@ -86,6 +88,11 @@ public class RubySdkImpl implements RubySdk {
                                           final Map<String, String> buildParameters,
                                           final Map<String, String> buildConfEnvironment)
     throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+
+    // Init RVM if is possible
+    if (!SystemInfo.isWindows) {
+      RVMPathsSettings.getInstanceEx().initialize(buildParameters);
+    }
 
     // create
     final RubySdkImpl sdk = createSdkImpl(runParameters, buildParameters);
@@ -243,6 +250,8 @@ public class RubySdkImpl implements RubySdk {
     }
 
     throwInterpratatorDoesntExistError(uiRubyInterpreterSetting);
+
+    // cannot happen
     return null;
   }
 

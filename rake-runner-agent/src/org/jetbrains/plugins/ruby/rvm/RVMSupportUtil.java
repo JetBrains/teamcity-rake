@@ -30,8 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static jetbrains.buildServer.rakerunner.RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT;
-import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_GEMS_FOLDER;
-import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_INSTALLATION_FOLDER;
+import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.*;
 
 /**
  * @author Roman.Chernyatchik
@@ -46,18 +45,19 @@ public class RVMSupportUtil {
   @NotNull
   public static SharedRVMUtil.RubyDistToGemsetTable getInterpreterDistName2GemSetsTable() {
     if (SystemInfo.isUnix) {
-      final String homeDirPath = OSUtil.getUserHomeFolder();
-      if (homeDirPath != null) {
-        return getInterpreterDistName2GemSetsTable(homeDirPath);
+
+      final String rvmHomeDirPath = RVMPathsSettings.getInstance().getRvmHomePath();
+      if (rvmHomeDirPath != null) {
+        return getInterpreterDistName2GemSetsTable(rvmHomeDirPath);
       }
     }
     return SharedRVMUtil.RubyDistToGemsetTable.emptyTable();
   }
 
   @NotNull
-  private static SharedRVMUtil.RubyDistToGemsetTable getInterpreterDistName2GemSetsTable(@NotNull final String userHomeDirPath) {
-    final String rubyGemsFolderPath = userHomeDirPath + File.separatorChar + RVM_RUBIES_GEMS_FOLDER;
-    final String rubySdksRootPath = userHomeDirPath + File.separatorChar + RVM_RUBIES_INSTALLATION_FOLDER;
+  private static SharedRVMUtil.RubyDistToGemsetTable getInterpreterDistName2GemSetsTable(@NotNull final String rvmHomeDirPath) {
+    final String rubyGemsFolderPath = rvmHomeDirPath + File.separatorChar + RVM_GEMS_FOLDER_NAME;
+    final String rubySdksRootPath = rvmHomeDirPath + File.separatorChar + RVM_RUBIES_FOLDER_NAME;
 
     if (!FileUtil.checkIfDirExists(rubyGemsFolderPath) || !FileUtil.checkIfDirExists(rubySdksRootPath)) {
       return SharedRVMUtil.RubyDistToGemsetTable.emptyTable();
@@ -152,16 +152,15 @@ public class RVMSupportUtil {
   }
 
   @NotNull
-  public static String suggestInterpretatorPath(@NotNull final String distName) throws RakeTasksBuildService.MyBuildFailureException {
-    final String userHomePath = OSUtil.getUserHomeFolder();
-    if (userHomePath == null) {
-      final String msg = "User home directory doesn't exist.";
-      throw new RakeTasksBuildService.MyBuildFailureException(msg, RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+  public static String suggestInterpretatorPath(@NotNull final String distName) {
+    final String rvmHomePath = RVMPathsSettings.getInstance().getRvmHomePath();
+    if (rvmHomePath == null) {
+      throw new IllegalArgumentException("RVM home cannot be unkown here.");
     }
 
     // rvm defines "ruby" symlink for all ruby interpreters
-    return userHomePath
-           + File.separator + RVM_RUBIES_INSTALLATION_FOLDER
+    return rvmHomePath
+           + File.separator + RVM_RUBIES_FOLDER_NAME
            + File.separator + distName
            + File.separator + "bin"
            + File.separator + "ruby";

@@ -73,7 +73,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       final RubySdk sdk = RubySdkImpl.createAndSetupSdk(runParams, buildParams, buildEnvVars);
 
       // Patch env for RVM
-      // TODO - system wide rvm support
       RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
 
       // SDK patch
