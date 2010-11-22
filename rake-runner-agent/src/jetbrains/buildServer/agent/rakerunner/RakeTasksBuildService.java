@@ -43,7 +43,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   private final String RSPEC_RUNNER_OPTIONS_FORMATTER_PATH = "teamcity/spec/runner/formatter/teamcity/formatter";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER_KEY = "--format";
   private final String RSPEC_RUNNERR_OPTIONS_FORMATTER_CLASS = "Spec::Runner::Formatter::TeamcityFormatter";
-  private static final String RAKE_ERROR_TYPE = "RAKE_ERROR";
 
   private final String CUCUMBER_RUNNER_OPTIONS_EXPAND_KEY = "--expand";
   private final String CUCUMBER_RUNNER_OPTIONS_FORMAT_KEY = "--format";
@@ -148,8 +147,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
                                           sdk.getInterpreterPath(),
                                           arguments);
     } catch (MyBuildFailureException e) {
-      // TODO [pasha] is internal error required here?
-      getLogger().internalError(RAKE_ERROR_TYPE, e.getTitle(), e);
       throw new RunBuildException(e.getMessage());
     }
   }
