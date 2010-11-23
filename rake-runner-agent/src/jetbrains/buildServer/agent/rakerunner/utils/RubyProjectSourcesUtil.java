@@ -39,6 +39,7 @@ public class RubyProjectSourcesUtil {
   private static final String PATCH_FOLDER_COMMON = PATCH_FOLDER + "common";
   private static final String PATCH_FOLDER_TESTUNIT = PATCH_FOLDER + "testunit";
   private static final String RUBY_SOURCES_RAKE_RUNNER = File.separatorChar + "runner"+ File.separatorChar + "rakerunner.rb";
+  @NonNls public static final String TUNIT_LOADPATH_PATH_SCRIPT = "test/unit/ui/teamcity/loadpath_patch.rb";
 
   @NotNull
   private static String getRootPath() throws RunBuildException {

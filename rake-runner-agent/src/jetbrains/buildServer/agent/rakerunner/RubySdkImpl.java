@@ -18,7 +18,7 @@ package jetbrains.buildServer.agent.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
-import java.util.*;
+import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
@@ -37,6 +37,7 @@ import static jetbrains.buildServer.rakerunner.RakeRunnerBundle.RUNNER_ERROR_TIT
 public class RubySdkImpl implements RubySdk {
   private static final String GET_GEM_PATHS_SCRIPT =  "require 'rubygems'; puts Gem.path";
   private static final String RUBY_VERSION_SCRIPT = "print RUBY_VERSION";
+  private static final String RUBY_PLATFORM_SCRIPT = "print RUBY_PLATFORM";
   @NonNls
   public static final String GET_LOAD_PATH_SCRIPT =  "puts $LOAD_PATH";
   private static final String RUBY19_DISABLE_GEMS_OPTION = "--disable-gems";
@@ -46,6 +47,7 @@ public class RubySdkImpl implements RubySdk {
   private final String myGemsetName;
   private String[] myGemPaths;
   private boolean myIsRuby19;
+  private boolean myIsJRuby;
   private RubyScriptRunner.Output myGemPathsLog;
   private RubyScriptRunner.Output myLoadPathsLog;
   private String[] myLoadPaths;
@@ -64,9 +66,12 @@ public class RubySdkImpl implements RubySdk {
     return myGemPaths;
   }
 
-  @NotNull
   public boolean isRuby19() {
     return myIsRuby19;
+  }
+
+  public boolean isJRuby() {
+    return myIsJRuby;
   }
 
   @NotNull
@@ -84,6 +89,7 @@ public class RubySdkImpl implements RubySdk {
     return myLoadPaths;
   }
 
+  @NotNull
   public static RubySdk createAndSetupSdk(final Map<String, String> runParameters,
                                           final Map<String, String> buildParameters,
                                           final Map<String, String> buildConfEnvironment)
@@ -102,6 +108,9 @@ public class RubySdkImpl implements RubySdk {
     // language level
     final boolean isRuby19 = isRuby19Interpreter(sdk, buildConfEnvironment);
     sdk.myIsRuby19 = isRuby19;
+
+    final boolean isJRuby = isJRubyInterpreter(sdk, buildConfEnvironment);
+    sdk.myIsJRuby = isJRuby;
 
     // gem paths
     final RubyScriptRunner.Output gemPathsResult = RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment,
@@ -283,6 +292,22 @@ public class RubySdkImpl implements RubySdk {
       isRuby19 = true;
     }
     return isRuby19;
+  }
+
+  private static boolean isJRubyInterpreter(@NotNull final RubySdk sdk,
+                                             final Map<String, String> buildConfEnvironment) {
+    final String interpPath = com.intellij.openapi.util.io.FileUtil.toSystemIndependentName(sdk.getInterpreterPath());
+    if (interpPath.endsWith("/jruby")) {
+      return true;
+    }
+    boolean isJRuby = false;
+    final RubyScriptRunner.Output rubyVersionResult =
+      RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment, RUBY_PLATFORM_SCRIPT);
+    final String stdOut = rubyVersionResult.getStdout();
+    if (stdOut != null && stdOut.contains("java")) {
+      isJRuby = true;
+    }
+    return isJRuby;
   }
 
   private static RubyScriptRunner.Output getLoadPaths(@NotNull final RubySdk sdk,

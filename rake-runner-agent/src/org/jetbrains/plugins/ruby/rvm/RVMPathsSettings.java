@@ -23,6 +23,7 @@ import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.Constants;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
+import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,11 +73,7 @@ public class RVMPathsSettings extends SharedRVMPathsSettings {
         throw new RakeTasksBuildService.MyBuildFailureException("Cannot find rvm home directory: " + rvmPath,
                                                                 RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
       }
-      try {
-        myRVMHomePath = rvmHome.getCanonicalPath();
-      } catch (Exception e) {
-        throw new RunBuildException(e.getMessage(), e);
-      }
+      myRVMHomePath = FileUtil.getCanonicalPath(rvmHome);
       return;
     }
 
@@ -88,11 +85,7 @@ public class RVMPathsSettings extends SharedRVMPathsSettings {
     }
     final File localRvmHomeFolder = new File(homeFolder + File.separatorChar + SharedRVMUtil.Constants.LOCAL_RVM_HOME_FOLDER_NAME);
     if (localRvmHomeFolder.exists()) {
-      try {
-        myRVMHomePath = localRvmHomeFolder.getCanonicalPath();
-      } catch (Exception e) {
-        throw new RunBuildException(e.getMessage(), e);
-      }
+      myRVMHomePath = FileUtil.getCanonicalPath(localRvmHomeFolder);
     }
   }
 

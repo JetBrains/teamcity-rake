@@ -39,6 +39,7 @@ public interface RubySdk {
   String[] getGemPaths();
 
   boolean isRuby19();
+  boolean isJRuby();
 
   @NotNull
   RubyScriptRunner.Output getGemPathsFetchLog();

@@ -27,6 +27,7 @@ import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
 
 /**
@@ -54,17 +55,68 @@ public class OSUtil {
   private static String JRUBY_EXE_WIN_BAT = "jruby.bat";
   private static String JRUBY_EXE_UNIX = "jruby";
 
-  public static String appendToRUBYLIBEnvVariable(@NotNull final String additionalPath) {
-    final String rubyLibVal = System.getenv(RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE);
+  public static void appendToRUBYLIBEnvVariable(@NotNull final String additionalPath,
+                                                @NotNull final Map<String, String> envMap) {
 
-    final String pathValue;
-    if (StringUtil.isEmpty(rubyLibVal)) {
-      pathValue = toSystemDependentName(additionalPath);
-    } else {
-      pathValue = rubyLibVal + File.pathSeparatorChar + toSystemDependentName(additionalPath);
+    // Seems RUBY interpeter expects system independent ruby separators even on Windows machines
+    mergeWithEnvVariable(true,
+                         additionalPath,
+                         File.pathSeparator,
+                         RakeRunnerConstants.RUBYLIB_ENVIRONMENT_VARIABLE, envMap,
+                         false, true);
+  }
+
+  public static void prependToRUBYOPTEnvVariable(@NotNull final String additionalArgs,
+                                                 @NotNull final Map<String, String> initialEnvValuesMap) {
+
+    // Seems RUBY interpeter expects system independent ruby separators even on Windows machines
+    mergeWithEnvVariable(false,
+                         additionalArgs,
+                         " ",
+                         RakeRunnerConstants.RUBYOPT_ENVIRONMENT_VARIABLE, initialEnvValuesMap,
+                         false, true);
+  }
+
+  public static void prependToPATHEnvVariable(@NotNull final String additionalPath,
+                                              @NotNull final Map<String, String> initialEnvValuesMap) {
+
+    mergeWithEnvVariable(false,
+                         additionalPath,
+                         File.pathSeparator,
+                         getPATHEnvVariableKey(), initialEnvValuesMap,
+                         true, false);
+  }
+
+  private static void mergeWithEnvVariable(final boolean append,
+                                           final String additionalValue,
+                                           final String separator,
+                                           final String variableName,
+                                           final Map<String, String> envMap,
+                                           final boolean convertToSystemDependent,
+                                           final boolean convertToSystemInDependent) {
+    if (convertToSystemDependent && convertToSystemInDependent) {
+      throw new IllegalArgumentException("Convert to system dependent and independent cant be both true.");
     }
 
-    return pathValue;
+    final String oldValue = envMap.get(variableName);
+
+    final String mergedValue;
+    if (StringUtil.isEmpty(oldValue)) {
+      mergedValue = additionalValue;
+    } else {
+      mergedValue = append ? oldValue + separator + additionalValue
+                         : additionalValue + separator + oldValue;
+    }
+
+    String newValue = mergedValue;
+    if (convertToSystemDependent) {
+      newValue = toSystemDependentName(mergedValue);
+    }
+
+    if (convertToSystemInDependent) {
+      newValue = toSystemIndependentName(mergedValue);
+    }
+    envMap.put(variableName, newValue);
   }
 
   public static String getPATHEnvVariable(@NotNull final Map<String, String> buildParameters) {

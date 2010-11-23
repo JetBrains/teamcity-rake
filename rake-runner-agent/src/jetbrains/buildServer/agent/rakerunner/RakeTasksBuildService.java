@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
+import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil.getCanonicalPath;
 import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
 
 /**
@@ -69,6 +70,8 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     final File buildFile = getBuildFile(runParams);
 
     try {
+      final String checkoutDirPath = getCanonicalPath(getCheckoutDirectory());
+
       // Interpreter
       final RubySdk sdk = RubySdkImpl.createAndSetupSdk(runParams, buildParams, buildEnvVars);
 
@@ -76,16 +79,14 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
 
       // SDK patch
-      addTestRunnerPatchFiles(sdk, runParams, buildParams, runnerEnvParams);
+      addTestRunnerPatchFiles(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
 
       // attached frameworks info
       if (SupportedTestFramework.isAnyFrameworkActivated(runParams)) {
         runnerEnvParams.put(RAKERUNNER_USED_FRAMEWORKS_KEY,
-                   SupportedTestFramework.getActivatedFrameworksConfig(runParams));
+                            SupportedTestFramework.getActivatedFrameworksConfig(runParams));
 
       }
-
-      // TODO bundler support
 
       // track invoke/execute stages
       // TODO - stages are not visible !!!!
@@ -133,6 +134,9 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       // cucumber
       attachCucumberFormatterIfNeeded(runParams, runnerEnvParams);
 
+      // Bunlde exec emulation:
+      BundlerUtil.enableBundleExecEmulationIfNeeded(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+
       if (inDebugMode) {
         getLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n"
                             + sdk.getPresentableName()
@@ -141,6 +145,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
         getLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + getWorkingDirectory() + "]");
       }
 
+      // Result:
       return new SimpleProgramCommandLine(runnerEnvParams,
                                           getWorkingDirectory().getAbsolutePath(),
                                           sdk.getInterpreterPath(),
@@ -230,9 +235,10 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   }
 
   private void addTestRunnerPatchFiles(@NotNull final RubySdk sdk,
-                                       final Map<String, String> runParams,
-                                       final Map<String, String> buildParams,
-                                       final Map<String, String> runnerEnvParams)
+                                       @NotNull final Map<String, String> runParams,
+                                       @NotNull final Map<String, String> buildParams,
+                                       @NotNull final Map<String, String> runnerEnvParams,
+                                       @NotNull final String checkoutDirPath)
       throws MyBuildFailureException, RunBuildException {
 
 
@@ -244,13 +250,20 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     // Enable Test::Unit patch for : test::unit, test::spec and shoulda frameworks
     if (SupportedTestFramework.isTestUnitBasedFrameworksActivated(runParams)) {
       buff.append(File.pathSeparatorChar);
-      buff.append(RubyProjectSourcesUtil.getLoadPath_PatchRoot_TestUnit());
+
+      final String testUnitPatchRoot = RubyProjectSourcesUtil.getLoadPath_PatchRoot_TestUnit();
+      buff.append(testUnitPatchRoot);
+
+      // for bundler support
+      if (BundlerUtil.isBundleExecEmulationEnabled(runParams)) {
+        runnerEnvParams.put(TEAMCITY_TESTUNIT_REPORTER_PATCH_LOCATION, testUnitPatchRoot);
+      }
 
       // due to patching loadpath we replace original autorunner but it is used buy our tests runner
       runnerEnvParams.put(ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
-                 RubySDKUtil.getSDKTestUnitAutoRunnerScriptPath(sdk, buildParams));
+                          TestUnitUtil.getSDKTestUnitAutoRunnerScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
       runnerEnvParams.put(ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY,
-                 RubySDKUtil.getSDKTestUnitTestRunnerMediatorScriptPath(sdk, buildParams));
+                          TestUnitUtil.getSDKTestUnitTestRunnerMediatorScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
     }
 
     // for bdd frameworks
@@ -261,8 +274,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     }
 
     // patch loadpath
-    runnerEnvParams.put(RUBYLIB_ENVIRONMENT_VARIABLE,
-               OSUtil.appendToRUBYLIBEnvVariable(buff.toString()));
+    OSUtil.appendToRUBYLIBEnvVariable(buff.toString(), runnerEnvParams);
   }
 
   private void addCmdlineArguments(@NotNull final List<String> argsList, @NotNull final String argsString) {

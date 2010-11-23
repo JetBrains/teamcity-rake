@@ -46,6 +46,10 @@ public interface RakeRunnerConstants {
   @NonNls String SERVER_UI_RUBY_INTERPRETER = "ui.rakeRunner.ruby.interpreter";
   @NonNls String SERVER_UI_RUBY_RVM_GEMSET_NAME = "ui.rakeRunner.ruby.rvm.gemset";
 
+  // Bundler
+  @NonNls String SERVER_UI_BUNDLE_EXEC_PROPERTY = "ui.rakeRunner.bunlder.exec.enabled";
+
+
   // Test Frameworks
 
   // Test::Unit
@@ -73,19 +77,25 @@ public interface RakeRunnerConstants {
   // Custom rake tasks runner script
   @NonNls String CUSTOM_RAKERUNNER_SCRIPT = "system.teamcity.rake.runner.custom.runner";
 
-
   // Teamcity Rake Runner Debug and logs
   @NonNls String DEBUG_PROPERTY = "system.teamcity.rake.runner.debug.mode";
 
   // Forced gem version:
   @NonNls String RAKE_GEM_VERSION_PROPERTY = "system.teamcity.rake.runner.gem.rake.version";
   @NonNls String TEST_UNIT_GEM_VERSION_PROPERTY = "system.teamcity.rake.runner.gem.testunit.version";
+  @NonNls String BUNDLER_GEM_VERSION_PROPERTY = "system.teamcity.rake.runner.gem.bundler.version";
   @NonNls String TEST_UNIT_USE_BUILTIN_VERSION_PARAM = "built-in";
 
   // SDK hack
   @NonNls String RUBYLIB_ENVIRONMENT_VARIABLE = "RUBYLIB";
+  @NonNls String RUBYOPT_ENVIRONMENT_VARIABLE = "RUBYOPT";
   @NonNls String ORIGINAL_SDK_AUTORUNNER_PATH_KEY = "TEAMCIY_RAKE_TU_AUTORUNNER_PATH";
   @NonNls String ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY = "TEAMCITY_RAKE_TU_TESTRUNNERMADIATOR_PATH";
+  @NonNls String TEAMCITY_TESTUNIT_REPORTER_PATCH_LOCATION = "RUBYMINE_TESTUNIT_REPORTER";
+
+  // Bundler
+  @NonNls String CUSTOM_GEMFILE_RELATIVE_PATH = "system.teamcity.rake.runner.custom.gemfile";
+  @NonNls String CUSTOM_BUNDLE_FOLDER_PATH = "system.teamcity.rake.runner.custom.bundle.path";
 
   // Rake
   @NonNls String RAKE_CMDLINE_OPTIONS_RAKEFILE = "--rakefile";

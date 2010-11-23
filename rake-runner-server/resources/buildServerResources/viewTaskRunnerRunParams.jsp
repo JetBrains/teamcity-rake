@@ -46,7 +46,8 @@
       <ul style="list-style: none; padding-left: 0; margin-left: 0; margin-top: 0.1em; margin-bottom: 0.1em;">
           <li>Ruby interpreter path: <strong><props:displayValue name="ui.rakeRunner.ruby.interpreter" emptyValue="will be searched in the PATH environment variable"/></strong></li>
           <li>RVM gemset name: <strong><props:displayValue name="ui.rakeRunner.ruby.rvm.gemset" emptyValue="not specified"/></strong></li>
-          <li>Track invoke/execute stages<strong><props:displayCheckboxValue name="ui.rakeRunner.rake.trace.invoke.exec.stages.enabled"/></strong></li>
+          <li>Bundler: bundle exec: <strong><props:displayCheckboxValue name="ui.rakeRunner.bunlder.exec.enabled"/></strong></li>
+          <li>Track invoke/execute stages: <strong><props:displayCheckboxValue name="ui.rakeRunner.rake.trace.invoke.exec.stages.enabled"/></strong></li>
       </ul>
     </div>
 </div>

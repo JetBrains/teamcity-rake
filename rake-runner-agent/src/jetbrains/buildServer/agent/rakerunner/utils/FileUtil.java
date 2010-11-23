@@ -17,6 +17,8 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import java.io.File;
+import java.io.IOException;
+import jetbrains.buildServer.RunBuildException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -38,5 +40,15 @@ public class FileUtil {
    */
   public static boolean checkIfExists(@NotNull final String path) {
     return new File(path).exists();
+  }
+
+  public static String getCanonicalPath(final File file) throws RunBuildException {
+    final String binFolderCanonicalPath;
+    try {
+      binFolderCanonicalPath = file.getCanonicalPath();
+    } catch (IOException e) {
+      throw new RunBuildException(e.getMessage(), e);
+    }
+    return binFolderCanonicalPath;
   }
 }
