@@ -105,7 +105,7 @@
     <td>
       <props:checkboxProperty name="ui.rakeRunner.bunlder.exec.enabled"/>
       <label for="ui.rakeRunner.bunlder.exec.enabled">bundle exec</label>
-      <span class="smallNote">If your project uses <span style="font-weight: bold;">Bundler</span> gem requirements manager this option will allow you to launch rake tasks using 'bundle exec' command.</span>
+      <span class="smallNote">If your project uses <strong>Bundler</strong> gem requirements manager, this option will allow you to launch rake tasks using 'bundle exec' command.</span>
     </td>
   </tr>
   <tr>
