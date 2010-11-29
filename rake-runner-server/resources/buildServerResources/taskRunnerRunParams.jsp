@@ -84,19 +84,78 @@
   </tr>
 </l:settingsGroup>
 
+<l:settingsGroup title="Ruby Interpreter">
+  <tr>
+    <th>
+      <props:radioButtonProperty name="ui.rakeRunner.ruby.use.mode" value="default" id="ui.rakeRunner.ruby.use.mode:default"/>
+      <label for="ui.rakeRunner.ruby.use.mode:default">Use default Ruby:</label>
+    </th>
+    <td>
+    <span class="smallNote">E.g. Ruby interpreter provided by  <span style="font-weight: bold;">Ruby Environment Configurator</span> build feature. If build feature isn't configured the interpreter will be searched in the <span
+        style="font-weight: bold;">PATH</span> environment variable.</span>
+    </td>
+  </tr>
+  <tr>
+    <th style="width:33%">
+      <c:set var="onclick">
+        if (this.checked) {
+          $('ui.rakeRunner.ruby.interpreter.path').focus();
+        }
+      </c:set>
+      <props:radioButtonProperty name="ui.rakeRunner.ruby.use.mode" value="path" id="ui.rakeRunner.ruby.use.mode:path" onclick="${onclick}"/>
+      <label for="ui.rakeRunner.ruby.use.mode:path">Ruby interpreter path:</label>
+    </th>
+    <td>
+      <props:textProperty name="ui.rakeRunner.ruby.interpreter.path" style="width:30em;" maxlength="256"/>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <c:set var="onclick">
+        if (this.checked) {
+          $('ui.rakeRunner.ruby.rvm.sdk.name').focus();
+        }
+      </c:set>
+      <props:radioButtonProperty name="ui.rakeRunner.ruby.use.mode" value="rvm" id="ui.rakeRunner.ruby.use.mode:rvm" onclick="${onclick}"/>
+      <label for="ui.rakeRunner.ruby.use.mode:rvm">RVM interpreter:</label>
+    </th>
+    <td>
+      <style type="text/css">
+        .rvm_options {
+          padding-top: 3px;
+        }
+        <%----%>
+        .rvm_options_editor {
+          padding-top: 2px;
+        }
+      </style>
+      <div class="rvm_options">
+        Interpreter name:
+        <div class="rvm_options_editor">
+          <props:textProperty name="ui.rakeRunner.ruby.rvm.sdk.name" style="width:30em;" maxlength="256"/>
+          <span class="smallNote">E.g.: <span style="font-weight: bold;">ruby-1.8.7-p249</span>, <span style="font-weight: bold;">jruby-1.4.0</span> or <span
+              style="font-weight: bold;">system</span></span>
+          <script type="text/javascript">
+            if ($('ui.rakeRunner.ruby.use.mode:path').checked) {
+              $('ui.rakeRunner.ruby.interpreter.path').focus();
+            }
+            if ($('ui.rakeRunner.ruby.use.mode:rvm').checked) {
+              $('ui.rakeRunner.ruby.rvm.sdk.name').focus();
+            }
+          </script>
+        </div>
+      </div>
+      <div class="rvm_options">
+        Gemset:
+        <div class="rvm_options_editor">
+          <props:textProperty name="ui.rakeRunner.ruby.rvm.gemset.name" style="width:30em;" maxlength="256"/>
+          <span class="smallNote">If not specifed the default gemset will be used.</span>
+        </div>
+      </div>
+    </td>
+  </tr>
+</l:settingsGroup>
 <l:settingsGroup title="Launching Parameters">
-  <tr>
-    <th><label for="ui.rakeRunner.ruby.interpreter">Ruby interpreter path: </label></th>
-    <td><props:textProperty name="ui.rakeRunner.ruby.interpreter" style="width:30em;" maxlength="256"/>
-      <span class="smallNote">If not specified the interpreter will be searched in the PATH environment variable.</span>
-    </td>
-  </tr>
-  <tr>
-    <th><label for="ui.rakeRunner.ruby.rvm.gemset">RVM gemset name: </label></th>
-    <td><props:textProperty name="ui.rakeRunner.ruby.rvm.gemset" style="width:30em;" maxlength="256"/>
-      <span class="smallNote">If not specifed the default gemset will be used. This value will be ignored if interpreter isn't RVM based.</span>
-    </td>
-  </tr>
   <tr>
   <tr>
     <th>

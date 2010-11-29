@@ -17,18 +17,22 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
+import jetbrains.buildServer.agent.rakerunner.RubyLightweightSdk;
 import jetbrains.buildServer.agent.rakerunner.RubySdk;
-import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
+import jetbrains.buildServer.agent.rakerunner.utils.impl.RubySdkImpl;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.VersionComparatorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 
@@ -38,6 +42,7 @@ import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 public class RubySDKUtil {
 
   private static final Pattern VERSION_PATTERN = Pattern.compile("([0-9]+(\\.[0-9A-z]+)*)");
+  public static final String GET_GEM_PATHS_SCRIPT =  "require 'rubygems'; puts Gem.path";
 
 
   @NotNull
@@ -78,14 +83,14 @@ public class RubySDKUtil {
       for (File gem : candidateGems) {
         final String dirtyVersion = gem.getName().substring(gemNamePrefix.length());
         // TODO: will not work with bundler git gems!
-        // TODO at the moment not critical for test-unit and bundler in real life
+        // at the moment not critical for test-unit and bundler in real life
         final Matcher matcher = VERSION_PATTERN.matcher(dirtyVersion);
 
         final String version;
         if (!matcher.find()) {
           final String msg = "Cannot determine gem version: " + gemNamePrefix + dirtyVersion
                              + "'(" + gemPath + ") gem. Please submit a feature request.";
-          throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+          throw new RakeTasksBuildService.MyBuildFailureException(msg);
         }
         version = matcher.group();
 
@@ -123,13 +128,11 @@ public class RubySDKUtil {
     throws RakeTasksBuildService.MyBuildFailureException {
     // script wasn't found in LOAD_PATH:
     if (!StringUtil.isEmpty(result.getStderr())) {
-      throw new RakeTasksBuildService.MyBuildFailureException(result.getStdout() + "\n" + result.getStderr(),
-                                                              RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+      throw new RakeTasksBuildService.MyBuildFailureException(result.getStdout() + "\n" + result.getStderr());
     }
 
     if (result.getStdout().contains("JAVA_HOME")) {
-      throw new RakeTasksBuildService.MyBuildFailureException(result.getStdout(),
-                                                              RakeRunnerBundle.RUNNER_ERROR_TITLE_JRUBY_PROBLEMS_IN_CONF_ON_AGENT);
+      throw new RakeTasksBuildService.MyBuildFailureException(result.getStdout());
     }
   }
 
@@ -139,5 +142,52 @@ public class RubySDKUtil {
                                                                  final String... rubyArgs) {
 
     return RubyScriptRunner.runScriptFromSource(sdk, rubyArgs, scriptSource, new String[0], buildConfEnvironment);
+  }
+
+  @NotNull
+  public static RubyLightweightSdk createAndSetupLightweightSdk(final Map<String, String> runParameters,
+                                                                final Map<String, String> buildParameters)
+    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+
+    // Init RVM if is possible
+    if (!SystemInfo.isWindows) {
+      RVMPathsSettings.getInstanceEx().initialize(buildParameters);
+    }
+
+    // create
+    return InternalRubySdkUtil.createLightWeightSdk(runParameters, buildParameters);
+  }
+
+  @NotNull
+  public static RubySdk createAndSetupSdk(final Map<String, String> runParameters,
+                                          final Map<String, String> buildParameters,
+                                          final Map<String, String> buildConfEnvironment)
+    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+
+    // Init RVM if is possible
+    if (!SystemInfo.isWindows) {
+      RVMPathsSettings.getInstanceEx().initialize(buildParameters);
+    }
+
+    // create
+    // TODO: bundler gem paths!
+    final RubySdkImpl sdk = new RubySdkImpl(InternalRubySdkUtil.createLightWeightSdk(runParameters, buildParameters));
+
+// initialize:
+
+    // language level
+    sdk.setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(sdk, buildConfEnvironment));
+
+    // ruby / jruby
+    sdk.setIsJRuby(InternalRubySdkUtil.isJRubyInterpreter(sdk, buildConfEnvironment));
+
+    // gem paths
+    sdk.setGemPathsLog(executeScriptFromSource(sdk, buildConfEnvironment, GET_GEM_PATHS_SCRIPT));
+
+    // load path
+    sdk.setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(sdk, buildConfEnvironment,
+                                                         InternalRubySdkUtil.isRuby19Interpreter(sdk, buildConfEnvironment)));
+
+    return sdk;
   }
 }

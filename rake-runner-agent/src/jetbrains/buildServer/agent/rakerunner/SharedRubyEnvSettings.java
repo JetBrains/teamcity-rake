@@ -16,25 +16,16 @@
 
 package jetbrains.buildServer.agent.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author Roman.Chernyatchik
  */
-public interface RubySdk extends RubyLightweightSdk {
-  @NotNull
-  String[] getGemPaths();
+public interface SharedRubyEnvSettings {
+  @NonNls String SHARED_RUBY_PARAMS_ARE_SET = "teamcity.ruby.shared.params.are.set";
+  @NonNls String SHARED_RUBY_PARAMS_ARE_APPLIED = "teamcity.ruby.shared.params.are.applied";
+  @NonNls String SHARED_RUBY_INTERPRETER_PATH = "teamcity.ruby.shared.interpreter.path";
+  @NonNls String SHARED_RUBY_RVM_SDK_NAME = "teamcity.ruby.shared.rvm.sdk.name";
+  @NonNls String SHARED_RUBY_RVM_GEMSET_NAME = "teamcity.ruby.shared.rvm.gemset";
 
-  boolean isRuby19();
-  boolean isJRuby();
-
-  @NotNull
-  RubyScriptRunner.Output getGemPathsFetchLog();
-
-  @NotNull
-  RubyScriptRunner.Output getLoadPathsFetchLog();
-
-  @NotNull
-  String[] getLoadPath();
 }

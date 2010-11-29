@@ -21,16 +21,15 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.util.*;
-import java.util.HashSet;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
-import jetbrains.buildServer.agent.rakerunner.RubySdk;
+import jetbrains.buildServer.agent.rakerunner.RubyLightweightSdk;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static jetbrains.buildServer.rakerunner.RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT;
-import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.*;
+import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_GEMS_FOLDER_NAME;
+import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_FOLDER_NAME;
 
 /**
  * @author Roman.Chernyatchik
@@ -145,8 +144,7 @@ public class RVMSupportUtil {
       gemsRootAndDistName = SharedRVMUtil.getRVMGemsRootAndDistName(rubyInterpreterPath);
     } catch (IllegalArgumentException e) {
       // dist wasn't determined
-      throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage(),
-                                                              RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+      throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage());
     }
     return gemsRootAndDistName;
   }
@@ -173,7 +171,8 @@ public class RVMSupportUtil {
                                                      rvmGemset, table);
   }
 
-  public static void patchEnvForRVMIfNecessary(@NotNull final RubySdk sdk, final Map<String, String> envParams)
+  public static void patchEnvForRVMIfNecessary(@NotNull final RubyLightweightSdk sdk,
+                                               final Map<String, String> envParams)
     throws RakeTasksBuildService.MyBuildFailureException {
 
     if (!sdk.isRVMSdk()) {
@@ -196,8 +195,7 @@ public class RVMSupportUtil {
                                    OSUtil.getPATHEnvVariableKey(),
                                    System.getenv());  // system env. vars
     } catch (IllegalArgumentException e) {
-      throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage(),
-                                                              RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+      throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage());
     }
   }
 

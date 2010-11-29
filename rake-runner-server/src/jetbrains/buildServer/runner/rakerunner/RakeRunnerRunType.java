@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
@@ -67,6 +68,9 @@ public class RakeRunnerRunType extends RunType {
     // configuration version
     map.put(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY,
             RakeRunnerConstants.CURRENT_CONFIG_VERSION);
+
+    // select ruby interpreter path mode by default:
+    RakeRunnerUtils.setConfigMode(RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH, map);
     return map;
   }
 
@@ -101,11 +105,24 @@ public class RakeRunnerRunType extends RunType {
     result.append("Rake tasks: ").append(StringUtil.isEmpty(tasks) ? "default" : tasks);
     result.append("\n");
 
-    final String rubyInterpreter = parameters.get(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER);
-    result.append("Ruby interpreter: ").append(StringUtil.isEmpty(rubyInterpreter) ? "default" : rubyInterpreter);
-    final String gemset = parameters.get(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME);
-    if (!StringUtil.isEmpty(gemset)) {
-      result.append("@").append(gemset);
+    switch (RakeRunnerUtils.getRubyInterpreterConfigMode(parameters)) {
+      case DEFAULT:
+        result.append("Default Ruby interpreter");
+        break;
+      case INTERPRETER_PATH:
+        final String rubyInterpreterPath = RakeRunnerUtils.getRubySdkPath(parameters);
+        result.append("Ruby interpreter: ").append(rubyInterpreterPath);
+        break;
+      case RVM:
+        final String rvmSdkName = RakeRunnerUtils.getRVMSdkName(parameters);
+
+        result.append("RVM interpreter: ").append(rvmSdkName != null ? rvmSdkName
+                                                                     : RakeRunnerBundle.DEFAULT_RVM_SDK);
+        final String gemset = RakeRunnerUtils.getRVMGemsetName(parameters);
+        if (gemset != null) {
+          result.append('@').append(gemset);
+        }
+        break;
     }
     return result.toString();
   }

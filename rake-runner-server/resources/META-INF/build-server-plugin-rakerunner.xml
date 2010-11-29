@@ -20,5 +20,5 @@
 <beans default-autowire="constructor">
 
   <bean id="rakeRunnerRunType" class="jetbrains.buildServer.runner.rakerunner.RakeRunnerRunType"/>
-
+  <bean class="jetbrains.buildServer.feature.RubyEnvConfiguratorBuildFeature"/>
 </beans>

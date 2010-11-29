@@ -16,25 +16,21 @@
 
 package jetbrains.buildServer.agent.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Roman.Chernyatchik
  */
-public interface RubySdk extends RubyLightweightSdk {
+public interface RubyLightweightSdk {
   @NotNull
-  String[] getGemPaths();
+  String getInterpreterPath();
 
-  boolean isRuby19();
-  boolean isJRuby();
+  boolean isRVMSdk();
 
-  @NotNull
-  RubyScriptRunner.Output getGemPathsFetchLog();
-
-  @NotNull
-  RubyScriptRunner.Output getLoadPathsFetchLog();
+  @Nullable
+  String getRvmGemsetName();
 
   @NotNull
-  String[] getLoadPath();
+  String getPresentableName();
 }

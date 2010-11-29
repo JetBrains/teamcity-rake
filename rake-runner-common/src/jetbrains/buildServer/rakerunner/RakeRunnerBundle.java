@@ -17,16 +17,16 @@
 package jetbrains.buildServer.rakerunner;
 
 /**
- * Created by IntelliJ IDEA.
- * 
  * @author Roman.Chernyatchik
  */
 
 public interface RakeRunnerBundle {
-    public String RUNNER_DESCRIPTION = "Runner for executing Rake tasks, Test::Unit and RSpec tests";
-    public String RUNNER_DISPLAY_NAME = "Rake";
+  String DEFAULT_RVM_SDK = "system";
 
-    public String RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT = "Failed to run Rake..";
-    public String RUNNER_ERROR_TITLE_JRUBY_PROBLEMS_IN_CONF_ON_AGENT = "Failed to run JRuby..";
-    String MSG_OS_NOT_SUPPORTED = "OS isn't supported!";
+  String RUNNER_DESCRIPTION = "Runner for executing Rake tasks, Test::Unit and RSpec tests";
+  String RUNNER_DISPLAY_NAME = "Rake";
+
+  String RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT = "Failed to run Rake..";
+  String RUNNER_ERROR_TITLE_JRUBY_PROBLEMS_IN_CONF_ON_AGENT = "Failed to run JRuby..";
+  String MSG_OS_NOT_SUPPORTED = "OS isn't supported!";
 }

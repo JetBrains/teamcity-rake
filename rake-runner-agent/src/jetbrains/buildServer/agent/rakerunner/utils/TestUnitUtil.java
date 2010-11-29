@@ -22,7 +22,6 @@ import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.RubySdk;
-import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -113,7 +112,7 @@ public class TestUnitUtil {
           // Error: Script wasn't found in test-unit gem
           final String msg = "Rake runner isn't compatible with your'" + TEST_UNIT_GEM_NAME + "-" + testUnitGemVersion
                              + "'(" + testUnitGemPath + ") gem. Please submit a feature request.";
-          throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+          throw new RakeTasksBuildService.MyBuildFailureException(msg);
         }
 
       } else {
@@ -127,7 +126,7 @@ public class TestUnitUtil {
                              + "'.\n"
                              + "Gem paths:\n"
                              + (bundlerGemRoot == null ? sdk.getGemPathsFetchLog().getStdout() : bundlerGemRoot);
-          throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+          throw new RakeTasksBuildService.MyBuildFailureException(msg);
         }
       }
     }
@@ -164,6 +163,6 @@ public class TestUnitUtil {
                        + "\n"
                        + "$LOAD_PATH:\n"
                        + loadPathsLog.getStdout();
-    throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+    throw new RakeTasksBuildService.MyBuildFailureException(msg);
   }
 }

@@ -43,8 +43,10 @@ public interface RakeRunnerConstants {
   @NonNls String SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY = "ui.rakeRunner.additional.rake.cmd.params";
 
   // Explicit Ruby interpreter lpath
-  @NonNls String SERVER_UI_RUBY_INTERPRETER = "ui.rakeRunner.ruby.interpreter";
-  @NonNls String SERVER_UI_RUBY_RVM_GEMSET_NAME = "ui.rakeRunner.ruby.rvm.gemset";
+  @NonNls String SERVER_UI_RUBY_INTERPRETER_PATH = "ui.rakeRunner.ruby.interpreter.path";
+  @NonNls String SERVER_UI_RUBY_RVM_GEMSET_NAME = "ui.rakeRunner.ruby.rvm.gemset.name";
+  @NonNls String SERVER_UI_RUBY_RVM_SDK_NAME = "ui.rakeRunner.ruby.rvm.sdk.name";
+  @NonNls String SERVER_UI_RUBY_USAGE_MODE = "ui.rakeRunner.ruby.use.mode";
 
   // Bundler
   @NonNls String SERVER_UI_BUNDLE_EXEC_PROPERTY = "ui.rakeRunner.bunlder.exec.enabled";

@@ -19,4 +19,5 @@
 
 <beans default-autowire="constructor">
   <bean id="rakeBuildServiceFactory" class="jetbrains.buildServer.agent.rakerunner.RakeRunnerCommandLineServiceFactory"/>
+  <bean id="rubyRuntimeContextFeature" class="jetbrains.buildServer.agent.feature.RubyEnvConfiguratorService"/>
 </beans>

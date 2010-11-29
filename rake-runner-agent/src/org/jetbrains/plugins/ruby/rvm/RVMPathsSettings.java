@@ -28,8 +28,6 @@ import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static jetbrains.buildServer.rakerunner.RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT;
-
 /**
  * @author Roman.Chernyatchik
  */
@@ -70,8 +68,7 @@ public class RVMPathsSettings extends SharedRVMPathsSettings {
     if (rvmPath != null) {
       final File rvmHome = new File(rvmPath);
       if (!rvmHome.exists()) {
-        throw new RakeTasksBuildService.MyBuildFailureException("Cannot find rvm home directory: " + rvmPath,
-                                                                RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+        throw new RakeTasksBuildService.MyBuildFailureException("Cannot find rvm home directory: " + rvmPath);
       }
       myRVMHomePath = FileUtil.getCanonicalPath(rvmHome);
       return;
@@ -80,8 +77,7 @@ public class RVMPathsSettings extends SharedRVMPathsSettings {
     // Local RVM installation
     final String homeFolder = OSUtil.getUserHomeFolder();
     if (homeFolder == null) {
-      throw new RakeTasksBuildService.MyBuildFailureException("Cannot find user home directory: " + System.getProperty("user.home"),
-                                                              RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+      throw new RakeTasksBuildService.MyBuildFailureException("Cannot find user home directory: " + System.getProperty("user.home"));
     }
     final File localRvmHomeFolder = new File(homeFolder + File.separatorChar + SharedRVMUtil.Constants.LOCAL_RVM_HOME_FOLDER_NAME);
     if (localRvmHomeFolder.exists()) {

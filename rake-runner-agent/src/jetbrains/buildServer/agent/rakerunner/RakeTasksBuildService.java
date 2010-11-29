@@ -25,6 +25,7 @@ import jetbrains.buildServer.agent.runner.BuildServiceAdapter;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
@@ -63,22 +64,30 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     // runParams - all server-ui options
     // buildParams - system properties (system.*), environment vars (env.*)
 
-    final boolean inDebugMode = ConfigurationParamsUtil.isParameterEnabled(buildParams, DEBUG_PROPERTY);
     final Map<String, String> buildEnvVars = getBuildParameters().getEnvironmentVariables();
     final Map<String, String> runnerEnvParams = new HashMap<String, String>(buildEnvVars);
 
     final File buildFile = getBuildFile(runParams);
 
+    final RakeRunnerUtils.RubyConfigMode interpreterConfigMode = RakeRunnerUtils.getRubyInterpreterConfigMode(runParams);
+    final boolean rubyEnvAlreadyConfigured = Boolean.valueOf(runParams.get(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET));
+
+
     try {
+      // configure params in terms of "shared params"
+      configureRunnerParams(interpreterConfigMode, rubyEnvAlreadyConfigured, runParams);
+
       final String checkoutDirPath = getCanonicalPath(getCheckoutDirectory());
 
       // Interpreter
-      final RubySdk sdk = RubySdkImpl.createAndSetupSdk(runParams, buildParams, buildEnvVars);
+      final RubySdk sdk = RubySDKUtil.createAndSetupSdk(runParams, buildParams, buildEnvVars);
 
-      // Patch env for RVM
-      RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+      if (interpreterConfigMode != RakeRunnerUtils.RubyConfigMode.DEFAULT || !rubyEnvAlreadyConfigured) {
+        // Patch env for RVM
+        RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+      }
 
-      // SDK patch
+      // loadpath patch for test runners
       addTestRunnerPatchFiles(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
 
       // attached frameworks info
@@ -89,7 +98,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       }
 
       // track invoke/execute stages
-      // TODO - stages are not visible !!!!
       if (ConfigurationParamsUtil.isTraceStagesOptionEnabled(runParams)) {
         runnerEnvParams.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
       }
@@ -137,14 +145,6 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       // Bunlde exec emulation:
       BundlerUtil.enableBundleExecEmulationIfNeeded(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
 
-      if (inDebugMode) {
-        getLogger().message("\n{RAKE RUNNER DEBUG}: CommandLine : \n"
-                            + sdk.getPresentableName()
-                            + " "
-                            + arguments.toString());
-        getLogger().message("\n{RAKE RUNNER DEBUG}: Working Directory: [" + getWorkingDirectory() + "]");
-      }
-
       // Result:
       return new SimpleProgramCommandLine(runnerEnvParams,
                                           getWorkingDirectory().getAbsolutePath(),
@@ -152,6 +152,47 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
                                           arguments);
     } catch (MyBuildFailureException e) {
       throw new RunBuildException(e.getMessage());
+    }
+  }
+
+  private void configureRunnerParams(@NotNull final RakeRunnerUtils.RubyConfigMode interpreterConfigMode,
+                                     final boolean rubyEnvAlreadyConfigured,
+                                     final Map<String, String> runParams) throws MyBuildFailureException {
+    switch (interpreterConfigMode) {
+      case DEFAULT:
+        if (rubyEnvAlreadyConfigured) {
+          // check that params were applied
+          if (!Boolean.valueOf(runParams.get(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_APPLIED))) {
+            throw new MyBuildFailureException(
+              "Ruby interpeter is configured outside Rake build runner but configuration settings weren't applied. No sense to launch rake.");
+          }
+        } else {
+          // if shared params are not defined - use default system interpreter
+          runParams.put(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET, Boolean.TRUE.toString());
+          runParams.put(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH, "");
+        }
+        break;
+      case INTERPRETER_PATH:
+        final String rubySdkPath = RakeRunnerUtils.getRubySdkPath(runParams);
+
+        if (StringUtil.isEmpty(rubySdkPath)) {
+          throw new MyBuildFailureException("Ruby interpeter path isn't specified.");
+        }
+        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET, Boolean.TRUE.toString());
+        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH,
+                      rubySdkPath);
+        break;
+      case RVM:
+        final String rvmSdkName = RakeRunnerUtils.getRVMSdkName(runParams);
+
+        if (StringUtil.isEmpty(rvmSdkName)) {
+          throw new MyBuildFailureException("RVM Ruby interpeter name isn't specified.");
+        }
+
+        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET, Boolean.TRUE.toString());
+        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_RVM_SDK_NAME, rvmSdkName);
+        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_RVM_GEMSET_NAME, RakeRunnerUtils.getRVMGemsetName(runParams));
+        break;
     }
   }
 
@@ -303,22 +344,8 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   }
 
   public static class MyBuildFailureException extends Exception {
-    private final String msg;
-    private final String title;
-
-    public MyBuildFailureException(@NotNull final String msg,
-                                   @NotNull final String title) {
-      this.msg = msg;
-      this.title = title;
-    }
-
-    @Override
-    public String getMessage() {
-      return msg;
-    }
-
-    public String getTitle() {
-      return title;
+    public MyBuildFailureException(@NotNull final String msg) {
+      super(msg);
     }
   }
 

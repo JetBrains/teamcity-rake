@@ -27,7 +27,6 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -180,7 +179,7 @@ public class BundlerUtil {
       if (bundlerGemsRoot == null) {
         // cannot find:
         final String msg = "Custom bundle folder wasn't found. You set it to '" + customBundleFolderPath + "'.";
-        throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+        throw new RakeTasksBuildService.MyBuildFailureException(msg);
       }
     }
     return bundlerGemsRoot;
@@ -242,7 +241,7 @@ public class BundlerUtil {
         return gemfilePath;
       }
       final String msg = "Gemfile wasn't found. You specified path to file '"+ gemfilePath + "'.";
-      throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+      throw new RakeTasksBuildService.MyBuildFailureException(msg);
     } else {
       // default one
       final String[] gemFileNames = new String[] {"Gemfile", "GemFile", "gemfile"};
@@ -254,7 +253,7 @@ public class BundlerUtil {
       }
       final String msg = "Cannot find Gemfile in checkout directory : '"+ checkoutDirPath
                          + "'. If Gemfile is located in other directory please specify Gemfile relative path using system propery: " + CUSTOM_GEMFILE_RELATIVE_PATH;
-      throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+      throw new RakeTasksBuildService.MyBuildFailureException(msg);
     }
   }
 
@@ -299,7 +298,7 @@ public class BundlerUtil {
   private static void checkIfFolderExist(final File folder) throws RakeTasksBuildService.MyBuildFailureException {
     if (!folder.exists()) {
       final String msg = "Unsupported bundler gem version: Cannot find '" + folder.getPath() + "'.";
-      throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+      throw new RakeTasksBuildService.MyBuildFailureException(msg);
     }
   }
 
@@ -333,7 +332,7 @@ public class BundlerUtil {
       } else {
         // Error: bundler gem home directory wasn't found
         final String msg = "Expected bundler gem installation directory doesn't exist: '"+ bundlerGemPath + "'.";
-        throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+        throw new RakeTasksBuildService.MyBuildFailureException(msg);
       }
     } else {
       // bundler gem not found
@@ -346,7 +345,7 @@ public class BundlerUtil {
                            + "'.\n"
                            + "Gem paths:\n"
                            + sdk.getGemPathsFetchLog().getStdout();
-        throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+        throw new RakeTasksBuildService.MyBuildFailureException(msg);
       } else {
         // any version
         final String msg = "If you wan't to use bundler please install it at first. The gem wasn't found in Gem paths of Ruby SDK with interpreter: '"
@@ -354,7 +353,7 @@ public class BundlerUtil {
                            + "'.\n"
                            + "Gem paths:\n"
                            + sdk.getGemPathsFetchLog().getStdout();
-        throw new RakeTasksBuildService.MyBuildFailureException(msg, RakeRunnerBundle.RUNNER_ERROR_TITLE_PROBLEMS_IN_CONF_ON_AGENT);
+        throw new RakeTasksBuildService.MyBuildFailureException(msg);
       }
     }
   }
