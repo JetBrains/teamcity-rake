@@ -60,6 +60,7 @@
   <!-- Project Libraries -->
   
   <path id="library.teamcity-agentapi.classpath">
+    <pathelement location="${path.variable.teamcitydistribution}/buildAgent/lib/agent.jar"/>
     <pathelement location="${path.variable.teamcitydistribution}/devPackage/agent-api.jar"/>
   </path>
   

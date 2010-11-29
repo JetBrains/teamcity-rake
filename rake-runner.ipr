@@ -838,6 +838,7 @@
     <library name="TeamCity-agentAPI">
       <CLASSES>
         <root url="jar://$TeamCityDistribution$/devPackage/agent-api.jar!/" />
+        <root url="jar://$TeamCityDistribution$/buildAgent/lib/agent.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
