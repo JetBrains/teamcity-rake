@@ -19,16 +19,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 
-<style type="text/css">
-  .rake_reporter {
-  padding-top: 3px;
-  }
-  .rake_reporter_options {
-    padding-top: 2px;
-    padding-left: 17px;
-  }
-</style>
-
 <%--Default initial settings format version--%>
 <%-- [NB] Config version should be synchronized with RakeRunnerConstants --%>
 <props:hiddenProperty name="ui.rakeRunner.config.version" value="2" />
@@ -96,7 +86,7 @@
     </td>
   </tr>
   <tr>
-    <th style="width:33%">
+    <th>
       <c:set var="onclick">
         if (this.checked) {
           $('ui.rakeRunner.ruby.interpreter.path').focus();
@@ -186,6 +176,17 @@
     </th>
 
     <td>
+      <style type="text/css">
+        .rake_reporter {
+          padding-top: 3px;
+        }
+
+        .rake_reporter_options {
+          padding-top: 2px;
+          padding-left: 17px;
+        }
+      </style>
+
       <%-- Test Unit --%>
       <div class="rake_reporter">
         <props:checkboxProperty name="ui.rakeRunner.frameworks.testunit.enabled"/>
