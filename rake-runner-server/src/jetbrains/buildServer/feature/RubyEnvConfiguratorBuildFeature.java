@@ -44,7 +44,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
   @NotNull
   @Override
   public String getDisplayName() {
-    return "Ruby Environment Configurator";
+    return "Ruby environment configurator";
   }
 
   @Override
