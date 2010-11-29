@@ -97,7 +97,19 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
           passRubyParamsToRunner(context, configParameters);
 
           // validate params:
-          validateConfiguratorParams(configParameters);
+          if (RubyEnvConfiguratorUtil.shouldFailBuildIfNoSdkFound(configParameters)) {
+            // canStart() validation will report validation error
+            // let's suppress erros here  (otherwise it will be reported twice)
+            try {
+              validateConfiguratorParams(configParameters);
+            } catch (RakeTasksBuildService.MyBuildFailureException e) {
+              // Do nothing
+            }
+            return;
+          } else {
+            validateConfiguratorParams(configParameters);
+          }
+
 
           // Create sdk & save patched env variables to runnerEnvParams
           final RubyLightweightSdk sdk = createSdk(context);
