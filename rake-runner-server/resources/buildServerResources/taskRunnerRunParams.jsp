@@ -125,14 +125,6 @@
           <props:textProperty name="ui.rakeRunner.ruby.rvm.sdk.name" style="width:30em;" maxlength="256"/>
           <span class="smallNote">E.g.: <span style="font-weight: bold;">ruby-1.8.7-p249</span>, <span style="font-weight: bold;">jruby-1.4.0</span> or <span
               style="font-weight: bold;">system</span></span>
-          <script type="text/javascript">
-            if ($('ui.rakeRunner.ruby.use.mode:path').checked) {
-              $('ui.rakeRunner.ruby.interpreter.path').focus();
-            }
-            if ($('ui.rakeRunner.ruby.use.mode:rvm').checked) {
-              $('ui.rakeRunner.ruby.rvm.sdk.name').focus();
-            }
-          </script>
         </div>
       </div>
       <div class="rvm_options">
