@@ -79,12 +79,22 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       final String checkoutDirPath = getCanonicalPath(getCheckoutDirectory());
 
-      // Interpreter
+      // Sdk
       final RubySdk sdk = RubySDKUtil.createAndSetupSdk(runParams, buildParams, buildEnvVars);
 
-      if (interpreterConfigMode != RakeRunnerUtils.RubyConfigMode.DEFAULT || !rubyEnvAlreadyConfigured) {
-        // Patch env for RVM
-        RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+
+      if (!(interpreterConfigMode == RakeRunnerUtils.RubyConfigMode.DEFAULT && rubyEnvAlreadyConfigured)) {
+        // 1. default, but build feature wasn't configured
+        // 2. rvm or interpreter path
+
+        if (sdk.isRVMSdk()) {
+          // Patch env for RVM
+          RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+        } else {
+          if (interpreterConfigMode == RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH) {
+            RubySDKUtil.patchEnvForNonRVMSdk(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+          }
+        }
       }
 
       // loadpath patch for test runners

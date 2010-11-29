@@ -20,6 +20,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -189,5 +190,50 @@ public class RubySDKUtil {
                                                          InternalRubySdkUtil.isRuby19Interpreter(sdk, buildConfEnvironment)));
 
     return sdk;
+  }
+
+  public static void patchEnvForNonRVMSdk(final RubySdk sdk,
+                                          final Map<String, String> runParams,
+                                          final Map<String, String> buildParams,
+                                          final Map<String, String> runnerEnvParams,
+                                          @Nullable final String checkoutDirPath)
+    throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
+
+    if (sdk.isRVMSdk()) {
+      // do nothing
+      return;
+    }
+
+    // Better to add sdk & gemsets bin folders to PATH. If bundler emulation is enabled
+    // and bundler overrides gem paths - these alternative paths should be used
+
+    final StringBuilder patchedPath = new StringBuilder();
+
+    // sdk bin folder
+    final String interpreterPath = sdk.getInterpreterPath();
+    final File sdkBinFolder = new File(interpreterPath).getParentFile();
+    if (sdkBinFolder != null) {
+      try {
+        patchedPath.append(jetbrains.buildServer.util.FileUtil.toSystemDependentName(sdkBinFolder.getCanonicalPath()));
+      } catch (IOException e) {
+        throw new RunBuildException(e);
+      }
+    }
+
+    // gempath bin folders
+    // use bundler gems root if it is defined! (i.e. we use bundle exec emulation with custom gem paths)
+    final String bundlerGemRoot = BundlerUtil.determineGemsRootsAccordingToBundlerSettings(sdk,
+                                                                                           runParams, buildParams,
+                                                                                           runnerEnvParams,
+                                                                                           checkoutDirPath);
+    final String[] gemPaths = bundlerGemRoot == null ? sdk.getGemPaths() : new String[]{bundlerGemRoot};
+    // add to path
+    for (String gemPath : gemPaths) {
+      final String binFolderPath = jetbrains.buildServer.util.FileUtil.toSystemDependentName(gemPath + "/bin");
+      patchedPath.append(File.pathSeparatorChar).append(binFolderPath);
+    }
+
+    // add old $PATH
+    OSUtil.prependToPATHEnvVariable(patchedPath.toString(), runnerEnvParams);
   }
 }

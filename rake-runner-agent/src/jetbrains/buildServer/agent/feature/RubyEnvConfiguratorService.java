@@ -17,13 +17,17 @@
 package jetbrains.buildServer.agent.feature;
 
 import com.intellij.util.containers.HashMap;
+import java.io.File;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentLifeCycleAdapter;
 import jetbrains.buildServer.agent.AgentLifeCycleListener;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.BuildRunnerPrecondition;
-import jetbrains.buildServer.agent.rakerunner.*;
+import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
+import jetbrains.buildServer.agent.rakerunner.RubyLightweightSdk;
+import jetbrains.buildServer.agent.rakerunner.RubySdk;
+import jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorUtil;
 import jetbrains.buildServer.util.EventDispatcher;
@@ -39,6 +43,11 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
 
   public void canStart(@NotNull final BuildRunnerContext context) throws RunBuildException {
     final Map<String, String> configParameters = context.getBuild().getSharedConfigParameters();
+
+    // check if is enabled
+    if (!RubyEnvConfiguratorUtil.isRubyEnvConfiguratorEnabled(configParameters)) {
+      return;
+    }
 
     if (!RubyEnvConfiguratorUtil.shouldFailBuildIfNoSdkFound(configParameters)) {
       return;
@@ -91,7 +100,23 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
           validateConfiguratorParams(configParameters);
 
           // Create sdk & save patched env variables to runnerEnvParams
-          RVMSupportUtil.patchEnvForRVMIfNecessary(createSdk(context), runnerEnvParams);
+          final RubyLightweightSdk sdk = createSdk(context);
+          if (sdk.isRVMSdk()) {
+            // rvm sdk
+            RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+          } else {
+            // not rvm sdk
+            final Map<String, String> runParams = context.getRunnerParameters();
+            final Map<String, String> buildParams = context.getBuildParameters().getAllParameters();
+            final Map<String, String> buildEnvVars = context.getBuildParameters().getEnvironmentVariables();
+
+            final RubySdk heavySdk = RubySDKUtil.createAndSetupSdk(runParams, buildParams, buildEnvVars);
+
+            // TODO[romeo]: better to take it from some other place. Fortunatelly it's a quite rare usecase.
+            final File checkoutDirectoryOfSomeStep = context.getBuild().getCheckoutDirectory();
+            RubySDKUtil.patchEnvForNonRVMSdk(heavySdk, runParams, buildParams, runnerEnvParams,
+                                             checkoutDirectoryOfSomeStep != null ? checkoutDirectoryOfSomeStep.getCanonicalPath() : null);
+          }
 
           // apply updated env variables to context:
           for (Map.Entry<String, String> keyAndValue : runnerEnvParams.entrySet()) {
@@ -103,7 +128,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
 
         } catch (RakeTasksBuildService.MyBuildFailureException e) {
           context.getBuild().getBuildLogger().internalError(RUBY_CONFIGURATOR_ERROR_TYPE, e.getMessage(), null);
-        } catch (RunBuildException e) {
+        } catch (Exception e) {
           context.getBuild().getBuildLogger().internalError(RUBY_CONFIGURATOR_ERROR_TYPE, e.getMessage(), e);
         }
       }

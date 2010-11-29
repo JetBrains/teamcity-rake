@@ -117,7 +117,7 @@ public class BundlerUtil {
                                                                     @NotNull final Map<String, String> runParams,
                                                                     final Map<String, String> buildParams,
                                                                     final Map<String, String> runnerEnvParams,
-                                                                    final String checkoutDirPath)
+                                                                    @Nullable final String checkoutDirPath)
     throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
     if (!isBundleExecEmulationEnabled(runParams)) {
@@ -128,6 +128,9 @@ public class BundlerUtil {
     if (!StringUtil.isEmpty(customBundleFolderPath)) {
       return getCustomBundlerGemsRoot(sdk, checkoutDirPath, customBundleFolderPath);
     } else {
+      if (checkoutDirPath == null) {
+        return null;
+      }
       // lets ignore default user-home based .bundler, seems it isn't used on run-time
       final String gemfilePath = determineGemfilePath(buildParams, runnerEnvParams, checkoutDirPath);
       return getBundlerGemsDirFromConfig(sdk, gemfilePath);
@@ -169,10 +172,14 @@ public class BundlerUtil {
     }
   }
 
-  private static String getCustomBundlerGemsRoot(final RubySdk sdk, final String checkoutDirPath, final String customBundleFolderPath)
+  private static String getCustomBundlerGemsRoot(final RubySdk sdk,
+                                                 @Nullable final String checkoutDirPath,
+                                                 final String customBundleFolderPath)
     throws RakeTasksBuildService.MyBuildFailureException {
 
-    String bundlerGemsRoot = findGemFolderForSdk(sdk, checkoutDirPath + File.separator + customBundleFolderPath);
+    String bundlerGemsRoot = checkoutDirPath != null
+                             ? findGemFolderForSdk(sdk, checkoutDirPath + File.separator + customBundleFolderPath)
+                             : null;
     if (bundlerGemsRoot == null) {
       // as full path:
       bundlerGemsRoot = findGemFolderForSdk(sdk, customBundleFolderPath);
