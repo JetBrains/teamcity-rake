@@ -116,14 +116,10 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
 
     } catch (RakeTasksBuildService.MyBuildFailureException e) {
       // only show error msg, it is user-friendly
-      logInternalError(e.getMessage(), null, context);
+      context.getBuild().getBuildLogger().error(e.getMessage());
     } catch (Exception e) {
-      logInternalError(e.getMessage(), e, context);
+      context.getBuild().getBuildLogger().internalError(RUBY_CONFIGURATOR_ERROR_TYPE, e.getMessage(), e);
     }
-  }
-
-  private void logInternalError(final String message, final Throwable throwable, final BuildRunnerContext context) {
-    context.getBuild().getBuildLogger().internalError(RUBY_CONFIGURATOR_ERROR_TYPE, message, throwable);
   }
 
   private void validateConfiguratorParams(final Map<String, String> configParameters) throws RakeTasksBuildService.MyBuildFailureException {
