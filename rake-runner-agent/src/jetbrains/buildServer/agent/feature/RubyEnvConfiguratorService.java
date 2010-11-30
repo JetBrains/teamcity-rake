@@ -76,7 +76,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
   }
 
   private void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
-                                      @NotNull final RubyLightweightSdk sdk) {
+                                      @NotNull final RubyLightweightSdk sdk) throws RunBuildException {
 
     // editable env variables
     final Map<String, String> runnerEnvParams = new HashMap<String, String>(context.getBuildParameters().getEnvironmentVariables());
@@ -116,9 +116,9 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
 
     } catch (RakeTasksBuildService.MyBuildFailureException e) {
       // only show error msg, it is user-friendly
-      context.getBuild().getBuildLogger().error(e.getMessage());
+      throw new RunBuildException(e.getMessage());
     } catch (Exception e) {
-      context.getBuild().getBuildLogger().internalError(RUBY_CONFIGURATOR_ERROR_TYPE, e.getMessage(), e);
+      throw new RunBuildException(e);
     }
   }
 
