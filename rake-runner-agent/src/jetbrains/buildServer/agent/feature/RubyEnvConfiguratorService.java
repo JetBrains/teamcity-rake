@@ -87,11 +87,16 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
       RVMSupportUtil.inspectCurrentEnvironment(runnerEnvParams, sdk, context.getBuild().getBuildLogger());
 
       // Save patched env variables to runnerEnvParams
-      if (sdk.isRVMSdk()) {
-        // rvm sdk
+      if (sdk.isRvmSdk() && !sdk.isSystemRvm()) {
+        // true rvm sdk
         RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
       } else {
-        // not rvm sdk
+        if (sdk.isSystemRvm()) {
+          // fake rvm
+          RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+        }
+
+        // fake or non-rvm sdk
         final Map<String, String> runParams = context.getRunnerParameters();
         final Map<String, String> buildParams = context.getBuildParameters().getAllParameters();
         final Map<String, String> buildEnvVars = context.getBuildParameters().getEnvironmentVariables();
@@ -103,7 +108,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         final File checkoutDirectory = context.getBuild().getCheckoutDirectory();
         final String checkoutDirPath = checkoutDirectory != null ? checkoutDirectory.getCanonicalPath()
                                                                  : null;
-        RubySDKUtil.patchEnvForNonRVMSdk(heavySdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+        RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(heavySdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
       }
 
       // apply updated env variables to context:

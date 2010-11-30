@@ -27,14 +27,17 @@ import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 public class RubyLightweightSdkImpl implements RubyLightweightSdk {
   private final String myInterpreterPath;
   private final boolean myIsRvmSdk;
+  private final boolean myIsSystemRvm;
   private final String myGemsetName;
 
   public RubyLightweightSdkImpl(@NotNull final String interpreterPath,
                                    final boolean isRvmSdk,
+                                   final boolean isSystemRvm,
                                    final String gemsetName) {
 
     myInterpreterPath = interpreterPath;
     myIsRvmSdk = isRvmSdk;
+    myIsSystemRvm = isSystemRvm;
     myGemsetName = gemsetName;
   }
 
@@ -44,7 +47,7 @@ public class RubyLightweightSdkImpl implements RubyLightweightSdk {
     return myInterpreterPath;
   }
 
-  public boolean isRVMSdk() {
+  public boolean isRvmSdk() {
     return myIsRvmSdk;
   }
 
@@ -55,7 +58,7 @@ public class RubyLightweightSdkImpl implements RubyLightweightSdk {
 
   @NotNull
   public String getPresentableName() {
-    if (isRVMSdk()) {
+    if (isRvmSdk()) {
       final String gemsetName = getRvmGemsetName();
       return myInterpreterPath + (gemsetName != null ? "[" + RVMSupportUtil.getGemsetSeparator() + gemsetName + "]" : "");
     } else {
@@ -63,4 +66,7 @@ public class RubyLightweightSdkImpl implements RubyLightweightSdk {
     }
   }
 
+  public boolean isSystemRvm() {
+    return myIsSystemRvm;
+  }
 }

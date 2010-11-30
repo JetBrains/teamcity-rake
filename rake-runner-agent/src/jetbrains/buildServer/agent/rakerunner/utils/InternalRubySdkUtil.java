@@ -66,14 +66,22 @@ public class InternalRubySdkUtil {
 
     // Check if interpreter is RVM based
     if (!RVMSupportUtil.isRVMInterpreter(rubyInterpreterPath)) {
-      // not RVM
-      return new RubyLightweightSdkImpl(rubyInterpreterPath, false, null);
+      // 2 options are possible: non-rvm sdk or "rvm use system"
+      @Nullable final String rvmSdkName = runParameters.get(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH) != null
+                                          ? null
+                                          : runParameters.get(SharedRubyEnvSettings.SHARED_RUBY_RVM_SDK_NAME);
+      if (RVMSupportUtil.isSystemRuby(rvmSdkName)) {
+        // fake RVM
+        return new RubyLightweightSdkImpl(rubyInterpreterPath, true, true, null);
+      } else {
+        // not RVM
+        return new RubyLightweightSdkImpl(rubyInterpreterPath, false, false, null);
+      }
     }
 
     // RVM - determine gemset
     final String rvmGemset = determineGemset(rubyInterpreterPath, runParameters);
-
-    return new RubyLightweightSdkImpl(rubyInterpreterPath, true, rvmGemset);
+    return new RubyLightweightSdkImpl(rubyInterpreterPath, true, false, rvmGemset);
   }
 
   @NotNull
@@ -151,6 +159,7 @@ public class InternalRubySdkUtil {
     throw new RakeTasksBuildService.MyBuildFailureException(msg);
   }
 
+  @Nullable
   static String determineGemset(@NotNull final String rubyInterpreterPath,
                                 final Map<String, String> runParameters)
     throws RakeTasksBuildService.MyBuildFailureException {

@@ -90,12 +90,18 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
         // (if defaults were set by smb else we cannot check them)
         RVMSupportUtil.inspectCurrentEnvironment(runnerEnvParams, sdk, getBuild().getBuildLogger());
 
-        if (sdk.isRVMSdk()) {
+        if (sdk.isRvmSdk()) {
           // Patch env for RVM
           RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+
+          if (sdk.isSystemRvm()) {
+            // Also Patch path for fake RVM
+            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+          }
         } else {
           if (interpreterConfigMode == RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH) {
-            RubySDKUtil.patchEnvForNonRVMSdk(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+            // non-rvm sdk
+            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
           }
         }
       }
@@ -156,6 +162,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       attachCucumberFormatterIfNeeded(runParams, runnerEnvParams);
 
       // Bunlde exec emulation:
+      // (do not do it befor RVM Env patch!!!!!!)
       BundlerUtil.enableBundleExecEmulationIfNeeded(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
 
       // Result:

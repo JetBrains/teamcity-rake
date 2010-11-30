@@ -176,18 +176,20 @@ public class RVMSupportUtil {
                                                final Map<String, String> envParams)
     throws RakeTasksBuildService.MyBuildFailureException {
 
-    if (!sdk.isRVMSdk()) {
+    if (!sdk.isRvmSdk()) {
       // do nothing
       return;
     }
 
     // patch
-    final LinkedHashSet<String> gemRootsPaths =
-      SharedRVMUtil.determineGemRootsPaths(sdk.getInterpreterPath(), sdk.getRvmGemsetName(), false);
+    final LinkedHashSet<String> gemRootsPaths = sdk.isSystemRvm()
+                                                ? new LinkedHashSet<String>()
+                                                : SharedRVMUtil.determineGemRootsPaths(sdk.getInterpreterPath(), sdk.getRvmGemsetName(), false);
 
     try {
       SharedRVMUtil.patchEnvForRVM(sdk.getInterpreterPath(),
                                    sdk.getRvmGemsetName(),
+                                   sdk.isSystemRvm(),
                                    gemRootsPaths,
                                    envParams,
                                    envParams, // system + buildAgent.config + build properties env. vars
@@ -209,22 +211,16 @@ public class RVMSupportUtil {
                                                @NotNull final BuildProgressLogger logger) {
     // Diagnostic check:
 
-    if (sdk.isRVMSdk()) {
+    if (sdk.isRvmSdk()) {
       // rvm sdk
 
       // RVM support can ovveride only "default" process values. Build env vars and agent env. vars
       // wont be overriden. Thus lets check which potentially dangerous environment variables
       // won't be overriden and inform user about them
-      final String[] variablesToCheck = new String[]{
-        SharedRVMUtil.Constants.GEM_PATH,
-        SharedRVMUtil.Constants.GEM_HOME,
-        SharedRVMUtil.Constants.BUNDLE_PATH,
-        SharedRVMUtil.Constants.RVM_GEMSET
-      };
 
       // do check
       final Map<String, String> defaultEnvs = getDefaultEnvVarsForRvmEnvPatcher();
-      for (String envVarName : variablesToCheck) {
+      for (String envVarName : SharedRVMUtil.Constants.SYSTEM_RVM_ENVVARS_TO_RESET) {
         if (!SharedRVMUtil.canOverride(envVarName, envParams, defaultEnvs)) {
           final String value = envParams.get(envVarName);
           // info msg - most likely user understand what he is doing.
@@ -248,7 +244,8 @@ public class RVMSupportUtil {
         if (envParams.containsKey(envVarName)) {
           final String value = envParams.get(envVarName);
           // warning - most likely user doesn't understand what he is doing.
-          logger.warning("Environment variable '" + envVarName + "' has predefined value '" + value + "'. It may affect runtime build behaviour because TeamCity Ruby support wont override it.");
+          logger.warning("Environment variable '" + envVarName + "' has predefined value '" + value +
+                         "'. It may affect runtime build behaviour because TeamCity Ruby support wont override it.");
         }
       }
     }
@@ -258,7 +255,7 @@ public class RVMSupportUtil {
     return SharedRVMUtil.getGemsetSeparator();
   }
 
-  public static boolean isSystemRuby(final String rvmInterpreterName) {
+  public static boolean isSystemRuby(@Nullable final String rvmInterpreterName) {
     return RVM_SYSTEM_INTERPRETER.equals(rvmInterpreterName);
   }
 }

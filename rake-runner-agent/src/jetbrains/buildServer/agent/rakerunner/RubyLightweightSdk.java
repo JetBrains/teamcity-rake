@@ -26,11 +26,13 @@ public interface RubyLightweightSdk {
   @NotNull
   String getInterpreterPath();
 
-  boolean isRVMSdk();
+  boolean isRvmSdk();
 
   @Nullable
   String getRvmGemsetName();
 
   @NotNull
   String getPresentableName();
+
+  boolean isSystemRvm();
 }

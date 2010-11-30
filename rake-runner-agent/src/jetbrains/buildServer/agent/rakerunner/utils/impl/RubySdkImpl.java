@@ -36,7 +36,8 @@ public class RubySdkImpl extends RubyLightweightSdkImpl implements RubySdk {
 
   public RubySdkImpl(@NotNull final RubyLightweightSdk sdk) {
     super(sdk.getInterpreterPath(),
-          sdk.isRVMSdk(),
+          sdk.isRvmSdk(),
+          sdk.isSystemRvm(),
           sdk.getRvmGemsetName());
   }
 

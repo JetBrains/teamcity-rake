@@ -192,14 +192,14 @@ public class RubySDKUtil {
     return sdk;
   }
 
-  public static void patchEnvForNonRVMSdk(final RubySdk sdk,
-                                          final Map<String, String> runParams,
-                                          final Map<String, String> buildParams,
-                                          final Map<String, String> runnerEnvParams,
-                                          @Nullable final String checkoutDirPath)
+  public static void patchPathEnvForNonRvmOrSystemRvmSdk(final RubySdk sdk,
+                                                         final Map<String, String> runParams,
+                                                         final Map<String, String> buildParams,
+                                                         final Map<String, String> runnerEnvParams,
+                                                         @Nullable final String checkoutDirPath)
     throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
-    if (sdk.isRVMSdk()) {
+    if (sdk.isRvmSdk() && !sdk.isSystemRvm()) {
       // do nothing
       return;
     }

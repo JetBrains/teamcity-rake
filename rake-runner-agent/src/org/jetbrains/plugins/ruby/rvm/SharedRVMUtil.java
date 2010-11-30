@@ -30,6 +30,14 @@ class SharedRVMUtil {
     String GEMS_ROOT_RELATIVE_PATH = "/gems";
     String RVM_RUBY_STRING = "rvm_ruby_string";
     String RVM_GEMSET = "gemset";
+
+    String[] SYSTEM_RVM_ENVVARS_TO_RESET = new String[] {
+      SharedRVMUtil.Constants.GEM_HOME,
+      SharedRVMUtil.Constants.GEM_PATH,
+      SharedRVMUtil.Constants.BUNDLE_PATH,
+      SharedRVMUtil.Constants.MY_RUBY_HOME,
+      SharedRVMUtil.Constants.RVM_GEMSET
+    };
   }
 
   private SharedRVMUtil() {
@@ -155,20 +163,21 @@ class SharedRVMUtil {
 
   /**
    *
+   *
    * @param executablePath
    * @param gemSetName
+   * @param isSystemRvm
    * @param gemsRootsPaths
    * @param envParams
    * @param userDefinedEnvVars
    * @param globalGempathIgnored
    * @param pathSeparator
    * @param pathEnvVarName
-   * @param overrideDefaultEnvVars
-   * @param defaultEnvVars If specified then userDefinedEnvVars with default values can be overridden
-   * @throws IllegalArgumentException
+   * @param defaultEnvVars If specified then userDefinedEnvVars with default values can be overridden        @throws IllegalArgumentException
    */
   public static void patchEnvForRVM(@NotNull final String executablePath,
                                     @Nullable final String gemSetName,
+                                    final boolean isSystemRvm,
                                     @NotNull final Collection<String> gemsRootsPaths,
                                     @NotNull final Map<String, String> envParams,
                                     @NotNull final Map<String, String> userDefinedEnvVars,
@@ -206,6 +215,22 @@ class SharedRVMUtil {
     // * ~/.rvmrc
     // * [project]/.rvmrc
     //
+
+    if (isSystemRvm) {
+      // We need to reset variables:
+      //    GEM_HOME:     ""
+      //    GEM_PATH:     ""
+      //    BUNDLE_PATH:  ""
+      //    MY_RUBY_HOME: ""
+      //    IRBRC:        ""
+      //    gemset:       ""
+      for (String envVarName : Constants.SYSTEM_RVM_ENVVARS_TO_RESET) {
+        if (canOverride(envVarName, userDefinedEnvVars, defaultEnvVars)) {
+          envParams.remove(envVarName);
+        }
+      }
+      return;
+    }
 
     if (gemsRootsPaths.size() > 2) {
       throw new IllegalArgumentException("Not more than 2 gems roots are expected here, but was:\n" + gemsRootsPaths.toString());
