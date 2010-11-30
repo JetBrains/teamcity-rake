@@ -31,7 +31,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
   private final String myEditUrl;
 
   public RubyEnvConfiguratorBuildFeature(@NotNull final PluginDescriptor descriptor) {
-    myEditUrl = descriptor.getPluginResourcesPath("rubyRuntimeContextParams.jsp");
+    myEditUrl = descriptor.getPluginResourcesPath("rubyEnvConvfiguratorParams.jsp");
   }
 
 
