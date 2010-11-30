@@ -141,7 +141,7 @@ public class BundlerUtil {
                                                          final Map<String, String> buildParams,
                                                          final Map<String, String> runnerEnvParams,
                                                          final String checkoutDirPath,
-                                                         final String gemfilePath)
+                                                         @NotNull final String gemfilePath)
     throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
     String bundlerGemsRoot = null;
@@ -193,8 +193,8 @@ public class BundlerUtil {
   }
 
   private static String getBundlerGemsDirFromConfig(final RubySdk sdk,
-                                                    final String gemfilePath) throws RunBuildException {
-    final String gemfileParentFoler = gemfilePath.substring(0, gemfilePath.lastIndexOf("/"));
+                                                    @NotNull final String gemfilePath) throws RunBuildException {
+    final String gemfileParentFoler = new File(gemfilePath).getParent();
     final String configPath = gemfileParentFoler + File.separator + ".bundle" + File.separator + "config";
 
     // file separators aren't important here
