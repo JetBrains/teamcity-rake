@@ -307,9 +307,9 @@ class SharedRVMUtil {
     }
   }
 
-  private static boolean canOverride(@NotNull final String envVariable,
-                                     @NotNull final Map<String, String> userDefinedEnvVars,
-                                     @Nullable final Map<String, String> defaultEnv) {
+  public static boolean canOverride(@NotNull final String envVariable,
+                                    @NotNull final Map<String, String> userDefinedEnvVars,
+                                    @Nullable final Map<String, String> defaultEnv) {
     if (!userDefinedEnvVars.containsKey(envVariable)) {
       return true;
     }

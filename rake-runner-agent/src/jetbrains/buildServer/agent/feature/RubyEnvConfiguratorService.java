@@ -20,8 +20,6 @@ import com.intellij.util.containers.HashMap;
 import java.io.File;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.AgentLifeCycleAdapter;
-import jetbrains.buildServer.agent.AgentLifeCycleListener;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.BuildRunnerPrecondition;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
@@ -30,7 +28,6 @@ import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorUtil;
-import jetbrains.buildServer.util.EventDispatcher;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
@@ -49,20 +46,84 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
       return;
     }
 
-    if (!RubyEnvConfiguratorUtil.shouldFailBuildIfNoSdkFound(configParameters)) {
-      return;
-    }
+    final boolean shouldFailBuildIfNoSdkFound = RubyEnvConfiguratorUtil.shouldFailBuildIfNoSdkFound(configParameters);
 
+    // Configure runner parameters
+    passRubyParamsToRunner(context, configParameters);
+
+    final RubyLightweightSdk sdk;
+
+    // validate params:
     try {
-      // validate params:
       validateConfiguratorParams(configParameters);
 
       // try to create sdk, it will validate paths
-      createSdk(context);
+      sdk = createSdk(context);
 
     } catch (RakeTasksBuildService.MyBuildFailureException e) {
-      throw new RunBuildException(e.getMessage());
+      if (shouldFailBuildIfNoSdkFound) {
+        // fail build
+        throw new RunBuildException(e.getMessage());
+      }
+
+      // else just show warning and quit:
+      logInternalError(e.getMessage(), null, context);
+      return;
     }
+
+    // validation has passed. let's path environment
+    patchRunnerEnvironment(context, sdk);
+  }
+
+  private void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
+                                      @NotNull final RubyLightweightSdk sdk) {
+
+    // editable env variables
+    final Map<String, String> runnerEnvParams = new HashMap<String, String>(context.getBuildParameters().getEnvironmentVariables());
+
+    try {
+
+      // Inspect env, warn about any problems
+      RVMSupportUtil.inspectCurrentEnvironment(runnerEnvParams, sdk, context.getBuild().getBuildLogger());
+
+      // Save patched env variables to runnerEnvParams
+      if (sdk.isRVMSdk()) {
+        // rvm sdk
+        RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+      } else {
+        // not rvm sdk
+        final Map<String, String> runParams = context.getRunnerParameters();
+        final Map<String, String> buildParams = context.getBuildParameters().getAllParameters();
+        final Map<String, String> buildEnvVars = context.getBuildParameters().getEnvironmentVariables();
+
+        final RubySdk heavySdk = RubySDKUtil.createAndSetupSdk(runParams, buildParams, buildEnvVars);
+
+        // if checkout dir isn't ok for bundler path here, user may specify it using system property
+        // see RakeRunnerConstants.CUSTOM_BUNDLE_FOLDER_PATH.
+        final File checkoutDirectory = context.getBuild().getCheckoutDirectory();
+        final String checkoutDirPath = checkoutDirectory != null ? checkoutDirectory.getCanonicalPath()
+                                                                 : null;
+        RubySDKUtil.patchEnvForNonRVMSdk(heavySdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+      }
+
+      // apply updated env variables to context:
+      for (Map.Entry<String, String> keyAndValue : runnerEnvParams.entrySet()) {
+        context.addEnvironmentVariable(keyAndValue.getKey(), keyAndValue.getValue());
+      }
+
+      // succes, mark that shared params were succesfully applied
+      context.addRunnerParameter(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_APPLIED, Boolean.TRUE.toString());
+
+    } catch (RakeTasksBuildService.MyBuildFailureException e) {
+      // only show error msg, it is user-friendly
+      logInternalError(e.getMessage(), null, context);
+    } catch (Exception e) {
+      logInternalError(e.getMessage(), e, context);
+    }
+  }
+
+  private void logInternalError(final String message, final Throwable throwable, final BuildRunnerContext context) {
+    context.getBuild().getBuildLogger().internalError(RUBY_CONFIGURATOR_ERROR_TYPE, message, throwable);
   }
 
   private void validateConfiguratorParams(final Map<String, String> configParameters) throws RakeTasksBuildService.MyBuildFailureException {
@@ -74,77 +135,6 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         throw new RakeTasksBuildService.MyBuildFailureException("RVM interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'.");
       }
     }
-  }
-
-  public RubyEnvConfiguratorService(final EventDispatcher<AgentLifeCycleListener> dispatcher) {
-    dispatcher.addListener(new AgentLifeCycleAdapter() {
-      @Override
-      public void beforeRunnerStart(@NotNull final BuildRunnerContext context) {
-        super.beforeRunnerStart(context);
-
-        final Map<String, String> configParameters = context.getBuild().getSharedConfigParameters();
-
-        // check if is enabled
-        if (!RubyEnvConfiguratorUtil.isRubyEnvConfiguratorEnabled(configParameters)) {
-          return;
-        }
-
-        // editable env variables
-        final Map<String, String> runnerEnvParams = new HashMap<String, String>(context.getBuildParameters().getEnvironmentVariables());
-
-        try {
-          // Configure runner parameters
-          passRubyParamsToRunner(context, configParameters);
-
-          // validate params:
-          if (RubyEnvConfiguratorUtil.shouldFailBuildIfNoSdkFound(configParameters)) {
-            // canStart() validation will report validation error
-            // let's suppress erros here  (otherwise it will be reported twice)
-            try {
-              validateConfiguratorParams(configParameters);
-            } catch (RakeTasksBuildService.MyBuildFailureException e) {
-              // Do nothing
-            }
-            return;
-          } else {
-            validateConfiguratorParams(configParameters);
-          }
-
-
-          // Create sdk & save patched env variables to runnerEnvParams
-          final RubyLightweightSdk sdk = createSdk(context);
-          if (sdk.isRVMSdk()) {
-            // rvm sdk
-            RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
-          } else {
-            // not rvm sdk
-            final Map<String, String> runParams = context.getRunnerParameters();
-            final Map<String, String> buildParams = context.getBuildParameters().getAllParameters();
-            final Map<String, String> buildEnvVars = context.getBuildParameters().getEnvironmentVariables();
-
-            final RubySdk heavySdk = RubySDKUtil.createAndSetupSdk(runParams, buildParams, buildEnvVars);
-
-            // TODO[romeo]: better to take it from some other place. Fortunatelly it's a quite rare usecase.
-            final File checkoutDirectoryOfSomeStep = context.getBuild().getCheckoutDirectory();
-            RubySDKUtil.patchEnvForNonRVMSdk(heavySdk, runParams, buildParams, runnerEnvParams,
-                                             checkoutDirectoryOfSomeStep != null ? checkoutDirectoryOfSomeStep.getCanonicalPath() : null);
-          }
-
-          // apply updated env variables to context:
-          for (Map.Entry<String, String> keyAndValue : runnerEnvParams.entrySet()) {
-            context.addEnvironmentVariable(keyAndValue.getKey(), keyAndValue.getValue());
-          }
-
-          // succes!!!
-          context.addRunnerParameter(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_APPLIED, Boolean.TRUE.toString());
-
-        } catch (RakeTasksBuildService.MyBuildFailureException e) {
-          context.getBuild().getBuildLogger().internalError(RUBY_CONFIGURATOR_ERROR_TYPE, e.getMessage(), null);
-        } catch (Exception e) {
-          context.getBuild().getBuildLogger().internalError(RUBY_CONFIGURATOR_ERROR_TYPE, e.getMessage(), e);
-        }
-      }
-    });
   }
 
   @NotNull

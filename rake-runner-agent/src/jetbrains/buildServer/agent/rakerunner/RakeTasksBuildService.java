@@ -82,10 +82,13 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       // Sdk
       final RubySdk sdk = RubySDKUtil.createAndSetupSdk(runParams, buildParams, buildEnvVars);
 
-
       if (!(interpreterConfigMode == RakeRunnerUtils.RubyConfigMode.DEFAULT && rubyEnvAlreadyConfigured)) {
         // 1. default, but build feature wasn't configured
         // 2. rvm or interpreter path
+
+        // Inspect env, warn about any problems
+        // (if defaults were set by smb else we cannot check them)
+        RVMSupportUtil.inspectCurrentEnvironment(runnerEnvParams, sdk, getBuild().getBuildLogger());
 
         if (sdk.isRVMSdk()) {
           // Patch env for RVM

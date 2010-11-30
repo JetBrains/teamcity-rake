@@ -21,6 +21,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.util.*;
+import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.RubyLightweightSdk;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
@@ -193,9 +194,63 @@ public class RVMSupportUtil {
                                    false,
                                    File.pathSeparatorChar,
                                    OSUtil.getPATHEnvVariableKey(),
-                                   System.getenv());  // system env. vars
+                                   getDefaultEnvVarsForRvmEnvPatcher());  // system env. vars
     } catch (IllegalArgumentException e) {
       throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage());
+    }
+  }
+
+  private static Map<String, String> getDefaultEnvVarsForRvmEnvPatcher() {
+    return System.getenv();
+  }
+
+  public static void inspectCurrentEnvironment(final Map<String, String> envParams,
+                                               final RubyLightweightSdk sdk,
+                                               @NotNull final BuildProgressLogger logger) {
+    // Diagnostic check:
+
+    if (sdk.isRVMSdk()) {
+      // rvm sdk
+
+      // RVM support can ovveride only "default" process values. Build env vars and agent env. vars
+      // wont be overriden. Thus lets check which potentially dangerous environment variables
+      // won't be overriden and inform user about them
+      final String[] variablesToCheck = new String[]{
+        SharedRVMUtil.Constants.GEM_PATH,
+        SharedRVMUtil.Constants.GEM_HOME,
+        SharedRVMUtil.Constants.BUNDLE_PATH,
+        SharedRVMUtil.Constants.RVM_GEMSET
+      };
+
+      // do check
+      final Map<String, String> defaultEnvs = getDefaultEnvVarsForRvmEnvPatcher();
+      for (String envVarName : variablesToCheck) {
+        if (!SharedRVMUtil.canOverride(envVarName, envParams, defaultEnvs)) {
+          final String value = envParams.get(envVarName);
+          // info msg - most likely user understand what he is doing.
+          logger.message("Environment variable '" + envVarName + "' has predefined value '" + value + "'. It may affect runtime build behaviour because TeamCity RVM support wont override it.");
+        }
+      }
+    } else {
+      // non-rvm sdk
+
+      // TC patches only PATH env variable for non-rvm sdks,
+      // thus following env variables are potentially dangerous.
+      // (e.g. user launched TC agent from rvm-enabled console)
+      final String[] variablesToCheck = new String[]{
+        SharedRVMUtil.Constants.GEM_PATH,
+        SharedRVMUtil.Constants.GEM_HOME,
+        SharedRVMUtil.Constants.BUNDLE_PATH,
+      };
+
+      // do check
+      for (String envVarName : variablesToCheck) {
+        if (envParams.containsKey(envVarName)) {
+          final String value = envParams.get(envVarName);
+          // warning - most likely user doesn't understand what he is doing.
+          logger.warning("Environment variable '" + envVarName + "' has predefined value '" + value + "'. It may affect runtime build behaviour because TeamCity Ruby support wont override it.");
+        }
+      }
     }
   }
 
