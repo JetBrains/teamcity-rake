@@ -20,8 +20,7 @@
 
 <tr>
   <td colspan="2">
-    <em>Configures Ruby environment for build steps.</em>
-    <%-- TODO: help file <bs:help file="Adding+Ruby Environment Configurator+as+a+Build+Feature"/> --%>
+    <em>Configures Ruby environment for build steps.</em><bs:help file="Adding+Ruby+Environment+Configurator"/>
   </td>
 </tr>
 <tr>
