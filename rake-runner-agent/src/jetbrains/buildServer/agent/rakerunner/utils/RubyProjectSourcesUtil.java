@@ -18,12 +18,10 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.PathUtil;
+import java.io.File;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 /**
  * @author Roman.Chernyatchik
@@ -46,19 +44,12 @@ public class RubyProjectSourcesUtil {
     final String jarPath = PathUtil.getJarPathForClass(RubyProjectSourcesUtil.class);
 
     final File rubySourcesDir;
-    if (jarPath != null && jarPath.endsWith(RakeRunnerConstants.AGENT_BUNDLE_JAR)) {
-      // production files
-      rubySourcesDir = new File(jarPath.substring(0, jarPath.length() - RakeRunnerConstants.AGENT_BUNDLE_JAR.length())
-          + RUBY_SOURCES_SUBDIR);
+    if (jarPath != null && jarPath.endsWith(".jar")) {
+      File jarFile = new File(jarPath);
+      rubySourcesDir = new File(jarFile.getParentFile(), RUBY_SOURCES_SUBDIR);
     } else {
-      // debug mode
-      if (jarPath != null && jarPath.endsWith(".jar")) {
-        // e.g. using Build Agent run configuration
-        rubySourcesDir = new File(jarPath.substring(0, jarPath.lastIndexOf('/') + 1) + "rb");
-      } else {
-        // some old code, not sure that it is needed
-        rubySourcesDir = new File("svnrepo/rake-runner/lib/rb");
-      }
+      // some old code, not sure that it is needed
+      rubySourcesDir = new File("svnrepo/rake-runner/lib/rb");
     }
 
     try {
