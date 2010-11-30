@@ -67,7 +67,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
       }
 
       // else just show warning and quit:
-      logInternalError(e.getMessage(), null, context);
+      context.getBuild().getBuildLogger().error(e.getMessage());
       return;
     }
 
