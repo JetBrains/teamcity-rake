@@ -88,12 +88,3 @@
   <props:checkboxProperty name="ui.ruby.configurator.fail.build.if.interpreter.not.found"/>
   <label for="ui.ruby.configurator.fail.build.if.interpreter.not.found">Fail build if Ruby interpreter wasn't found</label>
 </td>
-<script type="text/javascript">
-  (function($) {
-    $(document).ready(function() {
-      BS.AvailableParams.attachPopups('settingsId=${buildForm.settingsId}');
-    });
-  }(jQuery));
-</script>
-
-
