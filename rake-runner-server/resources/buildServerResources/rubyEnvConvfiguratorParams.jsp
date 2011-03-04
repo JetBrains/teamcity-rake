@@ -35,7 +35,7 @@
     <label for="ui.ruby.configurator.use.rvm:path">Ruby interpreter path:</label>
   </th>
   <td>
-    <props:textProperty name="ui.ruby.configurator.ruby.interpreter.path" style="width:25em;" maxlength="256"/>
+    <props:textProperty name="ui.ruby.configurator.ruby.interpreter.path" style="width:25em;" maxlength="256" className="buildTypeParams"/>
     <span class="smallNote">If not specified the interpreter will be searched in the <span style="font-weight: bold;">PATH</span> environment variable.</span>
   </td>
 </tr>
@@ -62,7 +62,7 @@
     <div class="rvm_options">
       Interpreter name:
       <div class="rvm_options_editor">
-        <props:textProperty name="ui.ruby.configurator.rvm.sdk.name" style="width:25em;" maxlength="256"/>
+        <props:textProperty name="ui.ruby.configurator.rvm.sdk.name" style="width:25em;" maxlength="256" className="buildTypeParams"/>
         <span class="smallNote">E.g.: <span style="font-weight: bold;">ruby-1.8.7-p249</span>, <span
             style="font-weight: bold;">jruby-1.4.0</span> or <span style="font-weight: bold;">system</span></span>
       </div>
@@ -78,7 +78,7 @@
     <div class="rvm_options">
       Gemset:
       <div class="rvm_options_editor">
-        <props:textProperty name="ui.ruby.configurator.rvm.gemset.name" style="width:25em;" maxlength="256"/>
+        <props:textProperty name="ui.ruby.configurator.rvm.gemset.name" style="width:25em;" maxlength="256" className="buildTypeParams"/>
         <span class="smallNote">If not specifed the default gemset will be used.</span>
       </div>
     </div>
@@ -88,5 +88,12 @@
   <props:checkboxProperty name="ui.ruby.configurator.fail.build.if.interpreter.not.found"/>
   <label for="ui.ruby.configurator.fail.build.if.interpreter.not.found">Fail build if Ruby interpreter wasn't found</label>
 </td>
+<script type="text/javascript">
+  (function($) {
+    $(document).ready(function() {
+      BS.AvailableParams.attachPopups('settingsId=${buildForm.settingsId}');
+    });
+  }(jQuery));
+</script>
 
 
