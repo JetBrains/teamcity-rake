@@ -28,6 +28,7 @@ import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorUtil;
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
@@ -39,6 +40,8 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
   private static final String RUBY_CONFIGURATOR_ERROR_TYPE = "RUBY_CONFIGURATOR_ERROR";
 
   public void canStart(@NotNull final BuildRunnerContext context) throws RunBuildException {
+    if (!context.getRunType().equals(RakeRunnerConstants.RUNNER_TYPE)) return;
+
     final Map<String, String> configParameters = context.getBuild().getSharedConfigParameters();
 
     // check if is enabled
