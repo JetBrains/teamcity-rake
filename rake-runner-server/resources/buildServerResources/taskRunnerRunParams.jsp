@@ -36,7 +36,7 @@
       <label for="custom1">Path to a Rakefile:</label>
     </th>
     <td>
-      <props:textProperty name="build-file-path" style="width:30em;" maxlength="256"/>
+      <props:textProperty name="build-file-path"  className="longField" maxlength="256"/>
       <span class="error" id="error_build-file-path"></span>
       <span class="smallNote">Enter Rakefile path if you don't want to use a default one. Specified path should be relative to the checkout directory.</span>
     </td>
@@ -55,20 +55,20 @@
       <label for="custom2">Rakefile content:</label>
     </th>
     <td>
-      <props:multilineProperty expanded="${propertiesBean.properties['use-custom-build-file'] == true}" name="build-file" rows="10" cols="58" linkTitle="Type the Rakefile content" onkeydown="$('custom2').checked = true;"/>
+      <props:multilineProperty expanded="${propertiesBean.properties['use-custom-build-file'] == true}" name="build-file" rows="10" cols="58" linkTitle="Type the Rakefile content" onkeydown="$('custom2').checked = true;"  className="longField"/>
       <span class="error" id="error_build-file"></span>
     </td>
   </tr>
   <forms:workingDirectory />
   <tr>
     <th><label for="ui.rakeRunner.rake.tasks.names">Rake tasks: </label></th>
-    <td><props:textProperty name="ui.rakeRunner.rake.tasks.names" style="width:30em;" maxlength="256"/>
+    <td><props:textProperty name="ui.rakeRunner.rake.tasks.names"  className="longField" maxlength="256"/>
       <span class="smallNote">Enter tasks names separated by space character if you don't want to use 'default' task.<br/>E.g. 'test:functionals' or 'mytask:test mytask:test2'.</span>
     </td>
   </tr>
   <tr>
     <th><label for="ui.rakeRunner.additional.rake.cmd.params">Additional Rake command line parameters: </label></th>
-    <td><props:textProperty name="ui.rakeRunner.additional.rake.cmd.params" style="width:30em;" maxlength="256"/>
+    <td><props:textProperty name="ui.rakeRunner.additional.rake.cmd.params"  className="longField" maxlength="256"/>
       <span class="smallNote">If isn't empty these parameters will be added to 'rake' command line.</span>
     </td>
   </tr>
@@ -96,7 +96,7 @@
       <label for="ui.rakeRunner.ruby.use.mode:path">Ruby interpreter path:</label>
     </th>
     <td>
-      <props:textProperty name="ui.rakeRunner.ruby.interpreter.path" style="width:30em;" maxlength="256"/>
+      <props:textProperty name="ui.rakeRunner.ruby.interpreter.path"  className="longField" maxlength="256"/>
     </td>
   </tr>
   <tr>
@@ -122,7 +122,7 @@
       <div class="rvm_options">
         Interpreter name:
         <div class="rvm_options_editor">
-          <props:textProperty name="ui.rakeRunner.ruby.rvm.sdk.name" style="width:30em;" maxlength="256"/>
+          <props:textProperty name="ui.rakeRunner.ruby.rvm.sdk.name"  className="longField" maxlength="256"/>
           <span class="smallNote">E.g.: <span style="font-weight: bold;">ruby-1.8.7-p249</span>, <span style="font-weight: bold;">jruby-1.4.0</span> or <span
               style="font-weight: bold;">system</span></span>
         </div>
@@ -130,7 +130,7 @@
       <div class="rvm_options">
         Gemset:
         <div class="rvm_options_editor">
-          <props:textProperty name="ui.rakeRunner.ruby.rvm.gemset.name" style="width:30em;" maxlength="256"/>
+          <props:textProperty name="ui.rakeRunner.ruby.rvm.gemset.name"  className="longField" maxlength="256"/>
           <span class="smallNote">If not specifed the default gemset will be used.</span>
         </div>
       </div>
@@ -202,7 +202,7 @@
         <props:checkboxProperty name="ui.rakeRunner.frameworks.rspec.enabled"/>
         <label for="ui.rakeRunner.frameworks.rspec.enabled">RSpec</label>
         <div class="rake_reporter_options">
-        <props:textProperty name="ui.rakeRunner.rspec.specoptions" style="width:30em;" maxlength="256"/>
+        <props:textProperty name="ui.rakeRunner.rspec.specoptions"  className="longField" maxlength="256"/>
         <span class="smallNote">Rake will be invoked with a "SPEC_OPTS={internal options}
           <span style="font-weight: bold;">{user options}</span>".
         </span>
@@ -214,7 +214,7 @@
         <props:checkboxProperty name="ui.rakeRunner.frameworks.cucumber.enabled"/>
         <label for="ui.rakeRunner.frameworks.cucumber.enabled">Cucumber</label>
         <div class="rake_reporter_options">
-          <props:textProperty name="ui.rakeRunner.cucumber.options" style="width:30em;" maxlength="256"/>
+          <props:textProperty name="ui.rakeRunner.cucumber.options"  className="longField" maxlength="256"/>
           <span class="smallNote">Rake will be invoked with a "CUCUMBER_OPTS={internal options}
             <span style="font-weight: bold;">{user options}</span>".
           </span>
