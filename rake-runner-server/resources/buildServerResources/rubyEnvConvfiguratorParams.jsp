@@ -20,7 +20,7 @@
 
 <tr>
   <td colspan="2">
-    <em>Configures Ruby environment for build steps.</em><bs:help file="Adding+Ruby+Environment+Configurator"/>
+    <em>Configures Ruby environment for build steps.</em><bs:help file="Ruby+Environment+Configurator"/>
   </td>
 </tr>
 <tr>
