@@ -80,7 +80,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
 
   @Override
   protected File getTestDataPath(final String buildFileName) {
-    return new File("svnrepo/rake-runner/rake-runner-test/testData/" + getTestDataSuffixPath() + buildFileName);
+    return RakeRunnerTestUtil.getTestDataItemPath(getTestDataSuffixPath() + buildFileName);
   }
 
   @Override

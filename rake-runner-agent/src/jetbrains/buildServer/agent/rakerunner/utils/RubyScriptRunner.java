@@ -21,15 +21,14 @@ import com.intellij.execution.process.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.CharsetToolkit;
+import java.io.File;
+import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.PrintStream;
-import java.nio.charset.Charset;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
@@ -104,17 +103,18 @@ public class RubyScriptRunner {
     final StringBuilder out = new StringBuilder();
     final StringBuilder err = new StringBuilder();
     Process process = createProcess(workingDir, environment, command);
-    ProcessHandler osProcessHandler = new OSProcessHandler(process, TextUtil.concat(command)) {
-      private final Charset DEFAULT_SYSTEM_CHARSET = CharsetToolkit.getDefaultSystemCharset();
+    if (process != null) {
+      ProcessHandler osProcessHandler = new OSProcessHandler(process, TextUtil.concat(command)) {
+        private final Charset DEFAULT_SYSTEM_CHARSET = CharsetToolkit.getDefaultSystemCharset();
 
-      public Charset getCharset() {
-        return DEFAULT_SYSTEM_CHARSET;
-      }
-    };
-    osProcessHandler.addProcessListener(new OutputListener(out, err));
-    osProcessHandler.startNotify();
-    osProcessHandler.waitFor();
-
+        public Charset getCharset() {
+          return DEFAULT_SYSTEM_CHARSET;
+        }
+      };
+      osProcessHandler.addProcessListener(new OutputListener(out, err));
+      osProcessHandler.startNotify();
+      osProcessHandler.waitFor();
+    }
     return new Output(out.toString(), err.toString());
   }
 
@@ -143,9 +143,19 @@ public class RubyScriptRunner {
     try {
       process = cmdLine.createProcess();
     } catch (Exception e) {
-      LOG.error(e.getMessage(), e);
+      if (!isUnitTest()) {
+        LOG.error(e.getMessage(), e);
+      } else {
+        LOG.warn(e.getMessage(), e);
+      }
     }
     return process;
+  }
+
+  private static boolean isUnitTest() {
+    //This is jetbrains.buildServer.log.LogInitializer.isUnitTest():
+    //this class is shared with RubyMine sources, let's avoaid adding TC dependency here
+    return "yes".equals(System.getProperty("jetbrains.unit.test"));
   }
 
   /**

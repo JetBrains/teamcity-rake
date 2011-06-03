@@ -34,7 +34,6 @@ import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
  * @author Roman.Chernyatchik
  */
 public class OSUtil {
-
   public static String INDEPENDENT_PATH_SEPARATOR = "/";
 
   private static String ENVIRONMENT_PATH_VARIABLE_NAME;

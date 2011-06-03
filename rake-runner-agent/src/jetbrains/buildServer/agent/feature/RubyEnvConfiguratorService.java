@@ -28,7 +28,6 @@ import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorUtil;
-import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
@@ -40,8 +39,6 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
   private static final String RUBY_CONFIGURATOR_ERROR_TYPE = "RUBY_CONFIGURATOR_ERROR";
 
   public void canStart(@NotNull final BuildRunnerContext context) throws RunBuildException {
-    if (!context.getRunType().equals(RakeRunnerConstants.RUNNER_TYPE)) return;
-
     final Map<String, String> configParameters = context.getBuild().getSharedConfigParameters();
 
     // check if is enabled
@@ -78,8 +75,8 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
     patchRunnerEnvironment(context, sdk);
   }
 
-  private void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
-                                      @NotNull final RubyLightweightSdk sdk) throws RunBuildException {
+  protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
+                                        @NotNull final RubyLightweightSdk sdk) throws RunBuildException {
 
     // editable env variables
     final Map<String, String> runnerEnvParams = new HashMap<String, String>(context.getBuildParameters().getEnvironmentVariables());
@@ -131,7 +128,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
   }
 
   private void validateConfiguratorParams(final Map<String, String> configParameters) throws RakeTasksBuildService.MyBuildFailureException {
-    if (!RubyEnvConfiguratorUtil.isRVMEnabled(configParameters)) {
+    if (RubyEnvConfiguratorUtil.isRVMEnabled(configParameters)) {
       // sdk name
       final String sdkName = RubyEnvConfiguratorUtil.getRVMSdkName(configParameters);
 
@@ -152,11 +149,6 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
   private void passRubyParamsToRunner(final BuildRunnerContext context, final Map<String, String> configParameters) {
     context.addRunnerParameter(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET, Boolean.TRUE.toString());
     if (RubyEnvConfiguratorUtil.isRVMEnabled(configParameters)) {
-      // ruby path
-      final String rubySdkPath = RubyEnvConfiguratorUtil.getRubySdkPath(configParameters);
-      context.addRunnerParameter(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH,
-                                 rubySdkPath != null ? rubySdkPath : "");
-    } else {
       // sdk name
       final String sdkName = RubyEnvConfiguratorUtil.getRVMSdkName(configParameters);
       context.addRunnerParameter(SharedRubyEnvSettings.SHARED_RUBY_RVM_SDK_NAME,
@@ -165,6 +157,11 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
       final String gemsetName = RubyEnvConfiguratorUtil.getRVMGemsetName(configParameters);
       context.addRunnerParameter(SharedRubyEnvSettings.SHARED_RUBY_RVM_GEMSET_NAME,
                                  gemsetName != null ? gemsetName : "");
+    } else {
+      // ruby path
+      final String rubySdkPath = RubyEnvConfiguratorUtil.getRubySdkPath(configParameters);
+      context.addRunnerParameter(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH,
+                                 rubySdkPath != null ? rubySdkPath : "");
     }
   }
 }

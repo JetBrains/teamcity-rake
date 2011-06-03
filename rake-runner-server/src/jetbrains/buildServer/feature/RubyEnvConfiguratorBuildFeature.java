@@ -89,9 +89,6 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
   public String describeParameters(@NotNull final Map<String, String> params) {
     StringBuilder result = new StringBuilder();
     if (RubyEnvConfiguratorUtil.isRVMEnabled(params)) {
-      final String sdkPath = RubyEnvConfiguratorUtil.getRubySdkPath(params);
-      result.append("Interpreter path: ").append(sdkPath != null ? sdkPath : "default");
-    } else {
       final String rvmSdkName = RubyEnvConfiguratorUtil.getRVMSdkName(params);
 
       result.append("RVM interpreter: ").append(rvmSdkName != null ? rvmSdkName
@@ -100,6 +97,9 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
       if (gemset != null) {
         result.append('@').append(gemset);
       }
+    } else {
+      final String sdkPath = RubyEnvConfiguratorUtil.getRubySdkPath(params);
+      result.append("Interpreter path: ").append(sdkPath != null ? sdkPath : "default");
     }
     if (RubyEnvConfiguratorUtil.shouldFailBuildIfNoSdkFound(params)) {
       result.append("\n").append("Fail build if Ruby interpreter wasn't found.");
