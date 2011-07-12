@@ -26,6 +26,9 @@
   <component name="BuildJarProjectSettings">
     <option name="BUILD_JARS_ON_MAKE" value="false" />
   </component>
+  <component name="ClearCaseSharedConfig">
+    <option name="myUseUcmModel" value="true" />
+  </component>
   <component name="CodeStyleProjectProfileManger">
     <option name="PROJECT_PROFILE" />
     <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
@@ -57,143 +60,33 @@
     <module2copyright />
     <LanguageOptions name="CSS">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
     <LanguageOptions name="GSP">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
     <LanguageOptions name="Groovy">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
     <LanguageOptions name="HTML">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
     <LanguageOptions name="JAVA">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
     <LanguageOptions name="JSP">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
     <LanguageOptions name="JSPX">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
     <LanguageOptions name="JavaScript">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
     <LanguageOptions name="Properties">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
     <LanguageOptions name="XML">
       <option name="fileTypeOverride" value="1" />
-      <option name="relativeBefore" value="true" />
-      <option name="addBlankAfter" value="true" />
-      <option name="fileLocation" value="1" />
-      <option name="block" value="true" />
-      <option name="separateBefore" value="false" />
-      <option name="separateAfter" value="false" />
-      <option name="prefixLines" value="true" />
-      <option name="lenBefore" value="80" />
-      <option name="lenAfter" value="80" />
-      <option name="box" value="false" />
-      <option name="filler" value=" " />
     </LanguageOptions>
   </component>
   <component name="DependenciesAnalyzeManager">
@@ -219,76 +112,8 @@
   </component>
   <component name="FacetAutodetectingManager">
     <autodetection-disabled>
-      <facet-type id="web">
-        <modules>
-          <module name="server">
-            <files>
-              <file url="file://$PROJECT_DIR$/server/web/WEB-INF/web.xml" />
-            </files>
-          </module>
-        </modules>
-      </facet-type>
-      <facet-type id="Spring">
-        <modules>
-          <module name="server">
-            <files>
-              <file url="file://$PROJECT_DIR$/server/src/META-INF/build-server-plugin-rakerunner.xml" />
-            </files>
-          </module>
-        </modules>
-      </facet-type>
       <facet-type id="JRUBY">
         <modules>
-          <module name="rakerunner">
-            <files>
-              <file url="file://$PROJECT_DIR$/rakerunner/Rakefile" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/rake_exceptions.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/rakerunner_consts.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/runner_common.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/logger_util.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/runner_utils.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/send_messages_util.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/service_message_factory.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/std_capture_helper.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/string_ext.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/url_formatter.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/test/unit/autorunner.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/test/unit/ui/teamcity/testrunner.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/test/unit/ui/teamcity/testrunner_events.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/test/unit/ui/testrunnermediator.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/ext/output_ext.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/rake_ext.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/rakerunner.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/runner_settings.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/specs_in_folder_runner.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/tunit_class_runner.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/tunit_in_folder_runner.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/src/sm_factory_provider_loader.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test/event_queue/event_queue_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test/ext/rake_ext_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test/ext/string_ext_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test/logger_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test/teamcity_testrunner/message_factory_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test/teamcity_testrunner/message_factory_xml_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test/teamcity_testrunner/runner_utils_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test/test_helper.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/Rakefile" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/spec/common/enclosed_behaviours_spec.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/spec/common/fail_sample_spec.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/spec/common/pass_sample_spec.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/spec/common/pending_sample_spec.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/tasks/simple_scenario.rake" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/tasks/spec.rake" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/tasks/test.rake" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/tasks/tmp.rake" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/namespace_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/t1_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/t2_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/t3_test.rb" />
-              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/compilation_errors/compilation_error_test.rb" />
-            </files>
-          </module>
           <module name="rake-runner-agent">
             <files>
               <file url="file://$PROJECT_DIR$/agent/classes/rb/patch/teamcity/rake_exceptions.rb" />
@@ -359,6 +184,32 @@
               <file url="file://$PROJECT_DIR$/rake-runner-agent/src/rb/sm_factory_provider_loader.rb" />
             </files>
           </module>
+          <module name="rake-runner-root">
+            <files>
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/rake_exceptions.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/rakerunner_consts.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/runner_common.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/logger_util.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/runner_utils.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/service_message_factory.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/std_capture_helper.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/string_ext.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/url_formatter.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/test/unit/autorunner.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/test/unit/ui/teamcity/testrunner.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/test/unit/ui/teamcity/testrunner_events.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/test/unit/ui/testrunnermediator.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/ext/output_ext.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/rake_ext.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/rakerunner.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/runner_settings.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/specs_in_folder_runner.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/tunit_class_runner.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/tunit_in_folder_runner.rb" />
+              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/sm_factory_provider_loader.rb" />
+            </files>
+          </module>
           <module name="rake-runner-test">
             <files>
               <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app1/Rakefile" />
@@ -394,30 +245,72 @@
               <file url="file://$PROJECT_DIR$/test/testData/plugins/rakeRunner/app_testunit/tests/statistics/passed/passed2_test.rb" />
             </files>
           </module>
-          <module name="rake-runner-root">
+          <module name="rakerunner">
             <files>
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/rake_exceptions.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/rakerunner_consts.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/runner_common.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/logger_util.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/runner_utils.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/service_message_factory.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/std_capture_helper.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/string_ext.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/teamcity/utils/url_formatter.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/test/unit/autorunner.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/test/unit/ui/teamcity/testrunner.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/test/unit/ui/teamcity/testrunner_events.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/patch/test/unit/ui/testrunnermediator.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/ext/output_ext.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/rake_ext.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/rakerunner.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/runner_settings.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/specs_in_folder_runner.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/tunit_class_runner.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/runner/tunit_in_folder_runner.rb" />
-              <file url="file://$PROJECT_DIR$/lib/rakeRunnerRuby/sm_factory_provider_loader.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/Rakefile" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/rake_exceptions.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/rakerunner_consts.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/runner_common.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/spec/runner/formatter/teamcity/formatter.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/logger_util.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/runner_utils.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/send_messages_util.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/service_message_factory.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/std_capture_helper.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/string_ext.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/teamcity/utils/url_formatter.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/test/unit/autorunner.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/test/unit/ui/teamcity/testrunner.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/test/unit/ui/teamcity/testrunner_events.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/patch/test/unit/ui/testrunnermediator.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/ext/output_ext.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/rake_ext.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/rakerunner.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/runner_settings.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/specs_in_folder_runner.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/tunit_class_runner.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/runner/tunit_in_folder_runner.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/src/sm_factory_provider_loader.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test/event_queue/event_queue_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test/ext/rake_ext_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test/ext/string_ext_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test/logger_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test/teamcity_testrunner/message_factory_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test/teamcity_testrunner/message_factory_xml_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test/teamcity_testrunner/runner_utils_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test/test_helper.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/Rakefile" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/spec/common/enclosed_behaviours_spec.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/spec/common/fail_sample_spec.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/spec/common/pass_sample_spec.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/spec/common/pending_sample_spec.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/tasks/simple_scenario.rake" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/tasks/spec.rake" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/tasks/test.rake" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/tasks/tmp.rake" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/namespace_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/t1_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/t2_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/common/t3_test.rb" />
+              <file url="file://$PROJECT_DIR$/rakerunner/test_data/unit/compilation_errors/compilation_error_test.rb" />
+            </files>
+          </module>
+        </modules>
+      </facet-type>
+      <facet-type id="Spring">
+        <modules>
+          <module name="server">
+            <files>
+              <file url="file://$PROJECT_DIR$/server/src/META-INF/build-server-plugin-rakerunner.xml" />
+            </files>
+          </module>
+        </modules>
+      </facet-type>
+      <facet-type id="web">
+        <modules>
+          <module name="server">
+            <files>
+              <file url="file://$PROJECT_DIR$/server/web/WEB-INF/web.xml" />
             </files>
           </module>
         </modules>

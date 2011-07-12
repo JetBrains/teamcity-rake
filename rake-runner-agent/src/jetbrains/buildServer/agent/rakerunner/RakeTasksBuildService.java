@@ -17,8 +17,6 @@
 package jetbrains.buildServer.agent.rakerunner;
 
 import com.intellij.util.containers.HashMap;
-import java.io.File;
-import java.util.*;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.agent.runner.BuildServiceAdapter;
@@ -32,6 +30,10 @@ import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
+import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
+
+import java.io.File;
+import java.util.*;
 
 import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil.getCanonicalPath;
 import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
@@ -144,9 +146,9 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       }
 
       // Other arguments
-      final String otherArgsString = runParams.get(SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY);
-      if (!TextUtil.isEmptyOrWhitespaced(otherArgsString)) {
-        addCmdlineArguments(arguments, otherArgsString);
+      final String userDefinedArgs = runParams.get(SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY);
+      if (!TextUtil.isEmptyOrWhitespaced(userDefinedArgs)) {
+        addCmdlineArguments(arguments, userDefinedArgs);
       }
 
       // Tasks names
@@ -339,10 +341,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   }
 
   private void addCmdlineArguments(@NotNull final List<String> argsList, @NotNull final String argsString) {
-    final List<String> stringList = StringUtil.splitHonorQuotes(argsString, ' ');
-    for (String arg : stringList) {
-      argsList.add(TextUtil.stripDoubleQuoteAroundValue(arg));
-    }
+    argsList.addAll(CommandLineArgumentsUtil.extractArguments(argsString));
   }
 
   @Nullable

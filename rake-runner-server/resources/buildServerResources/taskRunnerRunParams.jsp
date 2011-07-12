@@ -68,7 +68,7 @@
   </tr>
   <tr>
     <th><label for="ui.rakeRunner.additional.rake.cmd.params">Additional Rake command line parameters: </label></th>
-    <td><props:textProperty name="ui.rakeRunner.additional.rake.cmd.params"  className="longField" maxlength="256"/>
+    <td><props:textProperty name="ui.rakeRunner.additional.rake.cmd.params"  className="longField" expandable="true"/>
       <span class="smallNote">If isn't empty these parameters will be added to 'rake' command line.</span>
     </td>
   </tr>
