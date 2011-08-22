@@ -73,8 +73,6 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     final String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
     if (!StringUtil.isEmpty(interpreterPath)) {
       getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreterPath));
-
-      setBuildEnvironmentVariable("PATH", new File(interpreterPath).getParent() + File.separator + "%env.PATH%");
     }
   }
 
