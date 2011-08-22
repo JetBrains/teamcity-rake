@@ -71,10 +71,16 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   }
 
   private void setInterpreterPath() {
-    final String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
+    String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
     if (!StringUtil.isEmpty(interpreterPath)) {
+
+      if (!new File(interpreterPath).exists() && interpreterPath.indexOf("jruby-1.3.0") > 0) {
+        interpreterPath = interpreterPath.replace("jruby-1.3.0", "jruby-1.4.0");
+      }
+
       getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreterPath));
-      getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE, RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
+      getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
+                                                         RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
     }
   }
 
@@ -164,6 +170,8 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
         if (SystemInfo.isWindows) {
           patchedActual = VFS_FILE_PROTOCOL_PATTERN_WIN.matcher(actual).replaceAll("file:");
         }
+        patchedActual = patchedActual.replaceAll(" +", " ");
+        patchedActual = patchedActual.replace("RSpec", "Spec");
 
         //for (MockingOptions option : myCheckerMockOptions) {
         //  switch (option) {
