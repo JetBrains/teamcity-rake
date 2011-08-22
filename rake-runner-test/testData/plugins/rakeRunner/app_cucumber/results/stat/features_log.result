@@ -4,9 +4,7 @@
 --1--  Scenario: group with failed steps $TEST_SUITE$ FAILURE
 --1--   When I do something wrong $TEST_BLOCK$ NORMAL
 --1--   Then should fail $TEST_BLOCK$ FAILURE
---1--    Spec::Expectations::ExpectationNotMetError: expected: 2,
---1--         got: 1 (using ==)
---3--    ##STACK_TRACE## FAILURE
+--2--    ##STACK_TRACE## FAILURE
 
 --1-- Feature: Several passed steps $TEST_SUITE$ NORMAL
 --1--  Scenario: first group of passed steps $TEST_SUITE$ NORMAL
@@ -24,7 +22,7 @@
 --1--  Scenario: first group of error steps $TEST_SUITE$ FAILURE
 --1--   Then should be error $TEST_BLOCK$ FAILURE
 --1--    ZeroDivisionError: divided by 0 FAILURE
---3--    ##STACK_TRACE## FAILURE
+--2--    ##STACK_TRACE## FAILURE
 
 --1-- Feature: Several skipped steps $TEST_SUITE$ FAILURE
 --1--   Scenario: first group of skipped steps $TEST_SUITE$ FAILURE
@@ -32,7 +30,6 @@
 --1--     [Test Output]
 
 --1--    You can implement step definitions for undefined steps with these snippets:
---3--    ##STACK_TRACE## FAILURE
 
 --1--   Then next steps should be skipped $TEST_BLOCK$ NORMAL
 --1--    Test ignored: Then next steps should be skipped NORMAL

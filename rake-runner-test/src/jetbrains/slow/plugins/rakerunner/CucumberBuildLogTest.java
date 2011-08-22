@@ -41,6 +41,6 @@ public class CucumberBuildLogTest extends AbstractRakeRunnerTest {
   public void testCounts()  throws Throwable {
     doTestWithoutLogCheck("stat:features", false, "app_cucumber");
 
-    assertTestsCount(9, 3, 2);
+    assertTestsCount(9, 2, 3);
   }
 }
