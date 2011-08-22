@@ -173,7 +173,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
                                           sdk.getInterpreterPath(),
                                           arguments);
     } catch (MyBuildFailureException e) {
-      throw new RunBuildException(e.getMessage());
+      throw new RunBuildException(e.getMessage(), e);
     }
   }
 

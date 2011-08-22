@@ -24,6 +24,7 @@ import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.messages.ServerMessagesTranslator;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.serverSide.ShortStatistics;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.util.StringUtil;
@@ -73,6 +74,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     final String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
     if (!StringUtil.isEmpty(interpreterPath)) {
       getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreterPath));
+      getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE, RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
     }
   }
 
