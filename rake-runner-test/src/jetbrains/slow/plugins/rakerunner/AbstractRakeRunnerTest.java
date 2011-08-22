@@ -18,7 +18,9 @@ package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
@@ -45,6 +47,8 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
 
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
   private boolean myShouldTranslateMessages = false;
+
+  private static final Pattern ATTRIBUTE = Pattern.compile("\\w+ ?= ?'[^']*'");
 
   @Override
   @NotNull
@@ -96,12 +100,6 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
 
   protected void setTaskNames(final String task_names) {
     addRunParameter(RakeRunnerConstants.SERVER_UI_RAKE_TASKS_PROPERTY, task_names);
-  }
-
-  protected void setWorkingDir(final Map<String, String> runParameters,
-                               final String relativePath) {
-    runParameters.put(AgentRuntimeProperties.BUILD_WORKING_DIR,
-                      getTestDataPath(relativePath).getAbsolutePath());
   }
 
 
@@ -173,6 +171,8 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
         patchedActual = patchedActual.replaceAll(" +", " ");
         patchedActual = patchedActual.replace("RSpec", "Spec");
 
+        patchedActual = reorderAttributesOfServiceMessages(patchedActual);
+
         //for (MockingOptions option : myCheckerMockOptions) {
         //  switch (option) {
         //    case FAKE_ERROR_MSG:
@@ -208,6 +208,59 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
       //  return LOCATION_PATTERN.matcher(actual).replaceAll("location='$LOCATION$'");
       //}
     });
+  }
+
+  private String reorderAttributesOfServiceMessages(String patchedActual) {
+    final String[] lines = patchedActual.split("\n");
+    for (int i = 0; i < lines.length; i++) {
+      String line = lines[i];
+
+      if (line.indexOf("##teamcity[") != -1) {
+        // Fix order of attributes to match order of attributes in the test data.
+        // Just to avoid patching all the test data.
+        final Matcher matcher = ATTRIBUTE.matcher(line);
+        final ArrayList<String> foundAttrs = new ArrayList<String>();
+        String prefix = null;
+        String suffix = null;
+        while(matcher.find()) {
+          if (prefix == null) {
+            prefix = line.substring(0, matcher.start());
+          }
+          foundAttrs.add(matcher.group());
+          suffix = line.substring(matcher.end());
+        }
+
+        reorderAttributes(foundAttrs);
+
+        line = prefix + StringUtil.join(" ", foundAttrs) + suffix;
+        lines[i] = line.replaceAll(" = ", "=");
+      }
+    }
+    patchedActual = StringUtil.join("\n", lines);
+    return patchedActual;
+  }
+
+  private void reorderAttributes(final List<String> foundAttrs) {
+    final String[] sequence = {"name", "captureStandardOutput", "locationHint",
+    "text", "status", "errorDetails"
+    };
+    for (int i = 0; i < sequence.length; i++) {
+      String attrName = sequence[i];
+
+      for (int j = i; j < foundAttrs.size(); j ++) {
+        if (foundAttrs.get(j).startsWith(attrName)) {
+          swap(foundAttrs, i, j);
+          break;
+        }
+      }
+    }
+  }
+
+  private void swap(final List<String> foundAttrs, final int i, final int j) {
+    if (j == i) return;
+    String ival = foundAttrs.get(i);
+    foundAttrs.set(i, foundAttrs.get(j));
+    foundAttrs.set(j, ival);
   }
 
   protected void assertTestsCount(int succ, int failed, int ignored) {
