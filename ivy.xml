@@ -3,7 +3,7 @@
             xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
   <info organisation="Jetbrains" module="TeamCity"/>
   <dependencies>
-    <dependency org="org" name="bt1152" rev="latest.lastPinned">
+    <dependency org="org" name="bt1575" rev="latest.lastPinned">
       <include name="rake-runner-ruby-src" ext="zip" matcher="exactOrRegexp"/>
     </dependency>
   </dependencies>
