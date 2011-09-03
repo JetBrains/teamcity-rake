@@ -25,6 +25,7 @@ import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 import static jetbrains.buildServer.rakerunner.RakeRunnerConstants.TEST_UNIT_GEM_VERSION_PROPERTY;
@@ -38,6 +39,7 @@ public class TestUnitUtil {
   @NonNls
   public static final String TESTRUNNERMEDIATOR_SCRIPT_PATH = "test/unit/ui/testrunnermediator.rb";
   public static final String TEST_UNIT_GEM_NAME = "test-unit";
+  public static final String MINITEST_RUNNER_UNIT_SCRIPT_PATH = "minitest/unit.rb";
 
   @NotNull
   public static String getSDKTestUnitAutoRunnerScriptPath(@NotNull final RubySdk sdk,
@@ -60,6 +62,12 @@ public class TestUnitUtil {
 
     return findTestUnitScript(sdk, TESTRUNNERMEDIATOR_SCRIPT_PATH, runParams, buildParameters, runnerEnvParams, checkoutDirPath);
   }
+
+  @Nullable
+  public static String getRuby19SDKMiniTestRunnerScriptPath(@NotNull final RubySdk sdk) {
+    return findInSdkRoots(sdk, MINITEST_RUNNER_UNIT_SCRIPT_PATH);
+  }
+
 
   /**
    * Finds script with given relative path in test-unit gem or Test::Unit framework bundled in SDK
@@ -132,12 +140,9 @@ public class TestUnitUtil {
     }
 
     // find test-unit in load path
-    final String[] loadPaths = sdk.getLoadPath();
-    for (String path : loadPaths) {
-      final String fullScriptPath = toSystemIndependentName(path + File.separatorChar + scriptPath);
-      if (FileUtil.checkIfExists(fullScriptPath)) {
-        return fullScriptPath;
-      }
+    final String fullScriptPath = findInSdkRoots(sdk, scriptPath);
+    if (fullScriptPath != null) {
+      return fullScriptPath;
     }
 
     // If stderr isn't empty / JAVA_HOME error
@@ -164,5 +169,18 @@ public class TestUnitUtil {
                        + "$LOAD_PATH:\n"
                        + loadPathsLog.getStdout();
     throw new RakeTasksBuildService.MyBuildFailureException(msg);
+  }
+
+  @Nullable
+  private static String findInSdkRoots(@NotNull final RubySdk sdk,
+                                       @NotNull final String relativeScriptPath) {
+    final String[] loadPaths = sdk.getLoadPath();
+    for (String path : loadPaths) {
+      final String fullScriptPath = toSystemIndependentName(path + File.separatorChar + relativeScriptPath);
+      if (FileUtil.checkIfExists(fullScriptPath)) {
+        return fullScriptPath;
+      }
+    }
+    return null;
   }
 }

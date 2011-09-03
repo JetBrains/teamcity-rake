@@ -327,6 +327,13 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
                           TestUnitUtil.getSDKTestUnitAutoRunnerScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
       runnerEnvParams.put(ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY,
                           TestUnitUtil.getSDKTestUnitTestRunnerMediatorScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
+
+      // [optional] inform user if minitest framework detected
+      final String minitestPath =
+        TestUnitUtil.getRuby19SDKMiniTestRunnerScriptPath(sdk);
+      if (minitestPath != null) {
+        runnerEnvParams.put(ORIGINAL_SDK_19_MINITEST_UNIT_SCRIPT_PATH_KEY, minitestPath);
+      }
     }
 
     // for bdd frameworks
