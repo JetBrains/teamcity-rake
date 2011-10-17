@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.*;
 import jetbrains.buildServer.agent.feature.RubyEnvConfiguratorService;
-import jetbrains.buildServer.agent.impl.SpringContextPerAgentXml;
+import jetbrains.buildServer.agent.impl.SpringContextFixture;
 import jetbrains.buildServer.agent.rakerunner.RubyLightweightSdk;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorUtil;
 import jetbrains.buildServer.serverSide.*;
@@ -30,7 +30,7 @@ import static jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings.*;
  * @author Roman.Chernyatchik
  */
 @TestFor(testForClass = {RubyEnvConfiguratorService.class})
-@SpringContextPerAgentXml(configs = {"classpath*:/META-INF/build-agent-plugin-rakerunner.xml"})
+@SpringContextFixture(configs = {"classpath*:/META-INF/build-agent-plugin-rakerunner.xml"})
 public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTestCase {
   private final String RUN_TYPE = "mySomeRunner!";
 
