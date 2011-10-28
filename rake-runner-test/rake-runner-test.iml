@@ -48,8 +48,5 @@
     <orderEntry type="library" name="TeamCity-agentAPI" level="project" />
     <orderEntry type="library" name="TeamCity-serverAPI" level="project" />
   </component>
-  <component name="RModuleSettingsStorage">
-    <RMODULE_SETTINGS_STORAGE_ID NAME="NUMBER" VALUE="0" />
-  </component>
 </module>
 
