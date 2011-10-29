@@ -22,13 +22,14 @@ import org.testng.annotations.Test;
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all","slow"})
+@Test(groups = {"all", "slow"})
 public class RakeBuildScriptBuildLogTest extends AbstractRakeRunnerTest {
   @BeforeMethod
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
     setMessagesTranslationEnabled(true);
+    setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
   }
 
   public void testBuildScript_stdout() throws Throwable {
