@@ -16,6 +16,7 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
@@ -25,6 +26,14 @@ import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
  */
 @Test(groups = {"all","slow"})
 public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
+
+  @BeforeMethod
+  @Override
+  protected void setUp1() throws Throwable {
+    super.setUp1();
+    setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
+  }
+
   public void testBuildScript_stdout() throws Throwable {
     setPartialMessagesChecker();
 
@@ -54,7 +63,7 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
 
     initAndDoTest("build_script:std_err", true, "app1");
   }
-  
+
   public void testBuildScript_stderr2() throws Throwable {
     setPartialMessagesChecker();
 
@@ -88,6 +97,7 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
 
   public void testBuildScript_unexistent_task() throws Throwable {
     setPartialMessagesChecker();
+    setMockingOptions(FAKE_LOCATION_URL, FAKE_STACK_TRACE, FAKE_ERROR_MSG);
 
     initAndDoTest("build_script:unexistent_task", false, "app1");
   }
@@ -100,15 +110,18 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
 
   public void testBuildScript_unexistent_task_stacktrace() throws Throwable {
     setPartialMessagesChecker();
+    setMockingOptions(FAKE_LOCATION_URL, FAKE_STACK_TRACE, FAKE_ERROR_MSG);
 
     initAndDoTest("build_script:unexistent_task", "_stacktrace", false, "app1");
   }
 
   public void testBuildScript_exception_in_task() throws Throwable {
     setPartialMessagesChecker();
+    setMockingOptions(FAKE_LOCATION_URL, FAKE_STACK_TRACE, FAKE_ERROR_MSG);
 
     initAndDoTest("build_script:exception_in_task", false, "app1");
   }
+
   public void testBuildScript_exception_in_task_real() throws Throwable {
     setPartialMessagesChecker();
 
@@ -117,10 +130,12 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
 
   public void testBuildScript_exception_in_embedded_task() throws Throwable {
     setPartialMessagesChecker();
+    setMockingOptions(FAKE_LOCATION_URL, FAKE_STACK_TRACE, FAKE_ERROR_MSG);
 
     //TODO: by some reason containing block is missed...
     initAndDoTest("build_script:exception_in_embedded_task", false, "app1");
   }
+
   public void testBuildScript_exception_in_embedded_task_real() throws Throwable {
     setPartialMessagesChecker();
 
@@ -130,6 +145,7 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
   public void testBuildScript_exception_in_embedded_task_trace() throws Throwable {
     setPartialMessagesChecker();
     rakeUI_EnableTraceOption();
+    setMockingOptions(FAKE_LOCATION_URL, FAKE_STACK_TRACE, FAKE_ERROR_MSG);
 
     initAndDoTest("build_script:exception_in_embedded_task", "_trace", false, "app1");
   }
@@ -148,7 +164,7 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
 
   public void testBuildScript_compile_error_task() throws Throwable {
     setPartialMessagesChecker();
-    
+
     setMockingOptions(FAKE_STACK_TRACE, FAKE_LOCATION_URL);
     initAndDoTest("compile_error:some_task", false, "app2");
   }
@@ -175,9 +191,11 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
   public void testBuildScript_cmd_failed() throws Throwable {
     setPartialMessagesChecker();
     rakeUI_EnableTraceOption();
+    setMockingOptions(FAKE_LOCATION_URL, FAKE_STACK_TRACE, FAKE_ERROR_MSG);
 
     initAndDoTest("build_script:cmd_failed", false, "app1");
   }
+
   public void testBuildScript_cmd_failed_real() throws Throwable {
     setPartialMessagesChecker();
     rakeUI_EnableTraceOption();

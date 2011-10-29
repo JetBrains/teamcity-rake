@@ -35,6 +35,7 @@ public class TestSpecBuildLogTest extends AbstractRakeRunnerTest {
 
  public void testGeneral()  throws Throwable {
     setPartialMessagesChecker();
+    setMockingOptions(MockingOptions.FAKE_LOCATION_URL, MockingOptions.FAKE_STACK_TRACE);
 
     initAndDoRealTest("stat:general", false, "app_testspec");
   }
