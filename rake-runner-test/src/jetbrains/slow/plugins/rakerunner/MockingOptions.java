@@ -17,21 +17,18 @@
 package jetbrains.slow.plugins.rakerunner;
 
 /**
- * Created by IntelliJ IDEA.
- * User: romeo
- * Date: Jul 3, 2009
- * Time: 8:07:52 PM
- * To change this template use File | Settings | File Templates.
+ * @author Roman Chernyatchik
  */
 public enum MockingOptions {
   FAKE_STACK_TRACE(":fake_stacktrace"),
   FAKE_ERROR_MSG(":fake_error_msg"),
-  FAKE_LOCATION_URL(":fake_location_url");
+  FAKE_LOCATION_URL(":fake_location_url"),
+  FAKE_TIME(":fake_time");
 
   ////////////
   private static final String TEAMCITY_RAKERUNNER_DEBUG_OPTIONS_ENV = "TEAMCITY_RAKERUNNER_DEBUG_OPTIONS";
 
-  private String myOptionName;
+  private final String myOptionName;
 
   MockingOptions(final String optionName) {
     myOptionName = optionName;

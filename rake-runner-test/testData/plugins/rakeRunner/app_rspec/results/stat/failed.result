@@ -2,15 +2,15 @@
 --0--##teamcity[testCount count='3' timestamp='##TIME##'] NORMAL
 
 --1--##teamcity[testStarted name='Spec failed should failed11' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testFailed name='Spec failed should failed11' message='expected: false,|n     got: true (using ==)' details='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Spec failed should failed11' message='expected: false,|n got: true (using ==)' details='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Spec failed should failed11' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
 --1--##teamcity[testStarted name='Spec failed should failed12' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testFailed name='Spec failed should failed12' message='|nexpected 3|n     got 2|n|n(compared using eql?)|n' details='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Spec failed should failed12' message='|nexpected 3|n got 2|n|n(compared using eql?)|n' details='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Spec failed should failed12' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
 --1--##teamcity[testStarted name='Spec failed should failed2' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testFailed name='Spec failed should failed2' message='expected: false,|n     got: true (using ==)' details='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Spec failed should failed2' message='expected: false,|n got: true (using ==)' details='##STACK_TRACE##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Spec failed should failed2' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
 --1--3 examples, 3 failures, 0 passed NORMAL

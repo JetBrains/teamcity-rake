@@ -10,7 +10,7 @@
 --1--  test_fail $TEST_BLOCK$ FAILURE
 --1--   test:$stdout<<msg5
 --1--   test:STDOUT<<msg6 NORMAL
---1--   RuntimeError:  FAILURE
+--1--   RuntimeError: FAILURE
 --2--   ##STACK_TRACE## FAILURE
 
 --1--  test_pass $TEST_BLOCK$

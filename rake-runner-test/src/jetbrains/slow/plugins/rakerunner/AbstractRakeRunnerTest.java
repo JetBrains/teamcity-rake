@@ -17,11 +17,6 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import jetbrains.buildServer.PartialBuildMessagesChecker;
 import jetbrains.buildServer.RunnerTest2Base;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
@@ -37,6 +32,15 @@ import org.jetbrains.annotations.Nullable;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 
+import java.io.File;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import static jetbrains.buildServer.messages.serviceMessages.ServiceMessage.SERVICE_MESSAGE_START;
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 
 /**
@@ -48,7 +52,6 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
   private boolean myShouldTranslateMessages = false;
 
-  private static final Pattern ATTRIBUTE = Pattern.compile("\\w+ ?= ?'[^']*'");
 
   @Override
   @NotNull
@@ -149,6 +152,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     setBuildEnvironmentVariable(getEnvVarName(), getEnvVarValue(options));
   }
 
+  @Override
   protected void setPartialMessagesChecker() {
     setMessageChecker(new PartialBuildMessagesChecker() {
       //  (all except ' and |) or |' or |n or |r or || or |]
@@ -164,7 +168,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
                                        final String actual) throws Throwable {
 
         //final String patchedActual =  mockMessageText(mockErrorDetails(mockTimeStamp(actual)));
-        String patchedActual =  actual;
+        String patchedActual = actual;
         if (SystemInfo.isWindows) {
           patchedActual = VFS_FILE_PROTOCOL_PATTERN_WIN.matcher(actual).replaceAll("file:");
         }
@@ -210,53 +214,63 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     });
   }
 
-  private String reorderAttributesOfServiceMessages(String patchedActual) {
+  private static String reorderAttributesOfServiceMessages(String patchedActual) {
     final String[] lines = patchedActual.split("\n");
     for (int i = 0; i < lines.length; i++) {
       String line = lines[i];
 
-      if (line.indexOf("##teamcity[") != -1) {
+      final int serviceMessageStart = line.indexOf(SERVICE_MESSAGE_START);
+      if (serviceMessageStart != -1) {
         // Fix order of attributes to match order of attributes in the test data.
         // Just to avoid patching all the test data.
-        final Matcher matcher = ATTRIBUTE.matcher(line);
-        final ArrayList<String> foundAttrs = new ArrayList<String>();
-        String prefix = null;
-        String suffix = null;
-        while(matcher.find()) {
-          if (prefix == null) {
-            prefix = line.substring(0, matcher.start());
+
+        String text = line.substring(serviceMessageStart + SERVICE_MESSAGE_START.length());
+        String prefix = line.substring(0, serviceMessageStart + SERVICE_MESSAGE_START.length() + text.indexOf(" ") + 1);
+        text = text.substring(text.indexOf(" "), text.lastIndexOf(']')).trim();
+        if (text.startsWith("'")) {
+          // In case we have 'Single attribute message'
+          // do nothing
+        } else {
+          // In case we located at least one attribute ('Multiple attribute message')
+          try {
+            final Map<String, String> attributes = StringUtil.stringToProperties(text, StringUtil.STD_ESCAPER, false);
+            final ArrayList<String> keys = new ArrayList<String>(attributes.keySet());
+            reorderAttributes(keys);
+            final Map<String, String> orderedAttributes = new LinkedHashMap<String, String>();
+            for (String key : keys) {
+              orderedAttributes.put(key, attributes.get(key));
+            }
+            final String s = StringUtil.propertiesToString(orderedAttributes, StringUtil.STD_ESCAPER);
+
+            String newline = prefix + s + line.substring(line.lastIndexOf(']'));
+            lines[i] = newline;
+          } catch (ParseException e) {
+            throw new RuntimeException(e);
           }
-          foundAttrs.add(matcher.group());
-          suffix = line.substring(matcher.end());
         }
-
-        reorderAttributes(foundAttrs);
-
-        line = prefix + StringUtil.join(" ", foundAttrs) + suffix;
-        lines[i] = line.replaceAll(" = ", "=");
       }
     }
     patchedActual = StringUtil.join("\n", lines);
     return patchedActual;
   }
 
-  private void reorderAttributes(final List<String> foundAttrs) {
-    final String[] sequence = {"name", "captureStandardOutput", "locationHint",
-    "text", "status", "errorDetails"
+  private static void reorderAttributes(final List<String> foundAttrs) {
+    final String[] sequence = {"name", "captureStandardOutput", "locationHint", "message", "details", "error",
+        "text", "status", "errorDetails", "type", "duration", "timestamp"
     };
-    for (int i = 0; i < sequence.length; i++) {
-      String attrName = sequence[i];
-
-      for (int j = i; j < foundAttrs.size(); j ++) {
-        if (foundAttrs.get(j).startsWith(attrName)) {
-          swap(foundAttrs, i, j);
+    int ii = 0;
+    for (String attrName : sequence) {
+      for (int j = ii; j < foundAttrs.size(); j++) {
+        if (foundAttrs.get(j).equals(attrName)) {
+          swap(foundAttrs, ii, j);
+          ii++;
           break;
         }
       }
     }
   }
 
-  private void swap(final List<String> foundAttrs, final int i, final int j) {
+  private static void swap(final List<String> foundAttrs, final int i, final int j) {
     if (j == i) return;
     String ival = foundAttrs.get(i);
     foundAttrs.set(i, foundAttrs.get(j));
@@ -288,7 +302,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   @Override
   protected String doRunnerSpecificReplacement(final String expected) {
     String msg = expected.replaceAll("[0-9]{4}-[0-9]{2}-[0-9]{2}('T'|T)[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}[+\\-]{1}[0-9]+", "##TIME##");
-    msg = msg.replaceAll("duration='[0-9]+'", "duration='##DURATION##'");
+    msg = msg.replaceAll("duration ?= ?'[0-9]+'", "duration='##DURATION##'");
     return msg;
   }
 }

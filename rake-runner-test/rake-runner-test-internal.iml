@@ -23,8 +23,5 @@
     <orderEntry type="module" module-name="test-api" />
     <orderEntry type="module" module-name="server-test" />
   </component>
-  <component name="RModuleSettingsStorage">
-    <RMODULE_SETTINGS_STORAGE_ID NAME="NUMBER" VALUE="0" />
-  </component>
 </module>
 

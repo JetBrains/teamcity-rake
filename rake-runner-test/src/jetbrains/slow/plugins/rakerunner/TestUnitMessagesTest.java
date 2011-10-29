@@ -31,6 +31,7 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
     super.setUp1();
     setMessagesTranslationEnabled(false);
     activateTestFramework(SupportedTestFramework.TEST_UNIT);
+    setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
   }
 
   public void testTestsOutput() throws Throwable {
@@ -41,7 +42,7 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
 
   public void testTestGeneral() throws Throwable {
     setPartialMessagesChecker();
-    
+
     initAndDoTest("stat:general", true, "app_testunit");
   }
 
@@ -58,7 +59,7 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
 
   public void testTestError()  throws Throwable {
     setPartialMessagesChecker();
-    
+
     initAndDoTest("stat:error", false, "app_testunit");
   }
 
