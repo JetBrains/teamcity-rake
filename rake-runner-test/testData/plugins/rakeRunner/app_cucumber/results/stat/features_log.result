@@ -24,9 +24,9 @@
 --1--    ZeroDivisionError: divided by 0 FAILURE
 --2--    ##STACK_TRACE## FAILURE
 
---1-- Feature: Several skipped steps $TEST_SUITE$ FAILURE
---1--   Scenario: first group of skipped steps $TEST_SUITE$ FAILURE
---1--    When we have undefined step definition $TEST_BLOCK$ FAILURE
+--1-- Feature: Several skipped steps $TEST_SUITE$ NORMAL
+--1--   Scenario: first group of skipped steps $TEST_SUITE$ NORMAL
+--1--    When we have undefined step definition $TEST_BLOCK$ NORMAL
 --1--     [Test Output]
 
 --1--    You can implement step definitions for undefined steps with these snippets:
@@ -44,8 +44,8 @@
 
 --1-- Feature: Several passed examples $TEST_SUITE$ NORMAL
 --1--  Scenario Outline: passed tests examples $TEST_SUITE$ NORMAL
---1--   Then should <smth>                    # features/step_definitions/my_steps.rb:
---1--   Examples:  $TEST_SUITE$ NORMAL
+--1--   Then should <smth> # features/step_definitions/my_steps.rb:
+--1--   Examples: $TEST_SUITE$ NORMAL
 --1--    Scenario: Line: 11 $TEST_SUITE$ NORMAL
 --6--     Then should pass $TEST_BLOCK$ NORMAL
 --1--    Scenario: Line: 12 $TEST_SUITE$ NORMAL
