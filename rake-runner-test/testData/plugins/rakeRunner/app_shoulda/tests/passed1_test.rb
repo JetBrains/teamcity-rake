@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'rubygems'
-gem 'Shoulda'
+gem 'shoulda'
 require 'shoulda'
 
 class Pass1Test < Test::Unit::TestCase
