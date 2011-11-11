@@ -81,7 +81,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   }
 
   private void setInterpreterPath() {
-    String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
+    String interpreterPath = System.getProperty("rake-runner.testing.ruby.version");
     if (!StringUtil.isEmpty(interpreterPath)) {
 
       if (!new File(interpreterPath).exists() && interpreterPath.indexOf("jruby-1.3.0") > 0) {
