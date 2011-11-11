@@ -28,3 +28,4 @@ for i in `ls -d */`; do
     rm -rf vendor
     popd
 done
+

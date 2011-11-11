@@ -20,3 +20,4 @@ for i in `ls -d */`; do
     rvm --force gemset delete "$rrprefix$i"
     popd
 done
+
