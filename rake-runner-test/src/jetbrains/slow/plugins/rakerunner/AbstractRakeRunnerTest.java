@@ -66,9 +66,12 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     setMockingOptions(FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
     setMessagesTranslationEnabled(false);
 
-    // set ruby interpreter path
-    setInterpreterPath();
-
+    if (SystemInfo.isWindows) {
+      // set ruby interpreter path
+      setInterpreterPath();
+    } else if (SystemInfo.isLinux) {
+      setRVMConfiguration();
+    }
     getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY, RakeRunnerConstants.CURRENT_CONFIG_VERSION));
   }
 
@@ -89,6 +92,13 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
       getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
                                                          RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
     }
+  }
+
+  private void setRVMConfiguration() {
+    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME, "ruby-1.9.2-p290"));
+    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME, "all-trunk"));
+    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
+        RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
   }
 
   @Override
