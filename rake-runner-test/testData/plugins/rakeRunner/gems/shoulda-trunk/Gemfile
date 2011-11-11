@@ -1,4 +1,8 @@
 source "http://rubygems.org"
 gem "rake"
 
+if (RUBY_VERSION.to_f != 1.8) then
+  gem "test-unit"
+end
+
 gem "shoulda"

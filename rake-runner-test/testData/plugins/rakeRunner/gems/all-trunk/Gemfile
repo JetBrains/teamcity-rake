@@ -3,7 +3,11 @@ gem "rake"
 
 gem "cucumber"
 gem "rspec"
-gem "test-unit"
+
+if (RUBY_VERSION.to_f != 1.8) then
+  gem "test-unit"
+end
+
 gem "test-spec"
 gem "shoulda"
 

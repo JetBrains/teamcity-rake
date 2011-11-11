@@ -1,4 +1,7 @@
 source "http://rubygems.org"
 gem "rake"
 
-gem "test-unit"
+
+if (RUBY_VERSION.to_f != 1.8) then
+  gem "test-unit"
+end
