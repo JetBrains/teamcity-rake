@@ -30,6 +30,7 @@ public class CucumberMessagesTest extends AbstractRakeRunnerTest {
   protected void setUp1() throws Throwable {
     super.setUp1();
     activateTestFramework(SupportedTestFramework.CUCUMBER);
+    useRVMGemSet("cucumber-trunk");
   }
 
   public void testLocation()  throws Throwable {

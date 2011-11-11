@@ -31,6 +31,7 @@ public class TestSpecBuildLogTest extends AbstractRakeRunnerTest {
     super.setUp1();
     setMessagesTranslationEnabled(true);
     activateTestFramework(SupportedTestFramework.TEST_SPEC);
+    useRVMGemSet("test-spec-trunk");
   }
 
  public void testGeneral()  throws Throwable {

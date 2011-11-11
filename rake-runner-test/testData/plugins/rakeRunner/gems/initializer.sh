@@ -14,7 +14,7 @@ if [[ -z "$rrprefix" ]]; then
     rrprefix=""
 fi
 
-for i in `ls -d */`; do
+for i in `ls -d */ | grep -v vendor`; do
     pushd $i
 
     mkdir -p vendor/cache

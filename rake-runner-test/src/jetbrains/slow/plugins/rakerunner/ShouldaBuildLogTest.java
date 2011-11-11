@@ -32,6 +32,7 @@ public class ShouldaBuildLogTest extends AbstractRakeRunnerTest {
     super.setUp1();
     setMessagesTranslationEnabled(true);
     activateTestFramework(SupportedTestFramework.SHOULDA);
+    useRVMGemSet("shoulda-trunk");
   }
 
   public void testGeneral()  throws Throwable {

@@ -30,6 +30,7 @@ public class ShouldaMessagesTest extends AbstractRakeRunnerTest {
   protected void setUp1() throws Throwable {
     super.setUp1();
     activateTestFramework(SupportedTestFramework.SHOULDA);
+    useRVMGemSet("shoulda-trunk");
   }
 
   public void testLocation()  throws Throwable {

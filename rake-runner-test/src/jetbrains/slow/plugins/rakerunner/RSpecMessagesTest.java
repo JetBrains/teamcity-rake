@@ -31,6 +31,7 @@ public class RSpecMessagesTest extends AbstractRakeRunnerTest {
     super.setUp1();
     activateTestFramework(SupportedTestFramework.RSPEC);
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
+    useRVMGemSet("rspec-1");
   }
 
   public void testSpecOutput() throws Throwable {

@@ -31,6 +31,7 @@ public class TestUnitBuildLogTest extends AbstractRakeRunnerTest {
     super.setUp1();
     setMessagesTranslationEnabled(true);
     activateTestFramework(SupportedTestFramework.TEST_UNIT);
+    useRVMGemSet("test-unit-trunk");
   }
 
   public void testTestPassed()  throws Throwable {

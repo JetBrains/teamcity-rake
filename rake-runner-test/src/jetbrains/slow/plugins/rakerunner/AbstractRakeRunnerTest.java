@@ -81,7 +81,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   }
 
   private void setInterpreterPath() {
-    String interpreterPath = System.getProperty("rake-runner.testing.ruby.version");
+    String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
     if (!StringUtil.isEmpty(interpreterPath)) {
 
       if (!new File(interpreterPath).exists() && interpreterPath.indexOf("jruby-1.3.0") > 0) {
@@ -95,10 +95,18 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   }
 
   private void setRVMConfiguration() {
-    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME, "ruby-1.9.2-p290"));
-    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME, "all-trunk"));
     getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
         RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
+    useRVMRubySDK(System.getProperty("rake-runner.testing.ruby.version"));
+    useRVMGemSet("all-trunk");
+  }
+
+  protected void useRVMRubySDK(@NotNull String sdkname) {
+    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME, sdkname));
+  }
+
+  protected void useRVMGemSet(@NotNull String gemset) {
+    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME, gemset));
   }
 
   @Override

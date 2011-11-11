@@ -32,6 +32,7 @@ public class CucumberBuildLogTest extends AbstractRakeRunnerTest {
     setMessagesTranslationEnabled(true);
     activateTestFramework(SupportedTestFramework.CUCUMBER);
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
+    useRVMGemSet("cucumber-trunk");
   }
 
   public void testGeneral()  throws Throwable {

@@ -30,6 +30,7 @@ public class TestSpecMessagesTest extends AbstractRakeRunnerTest {
   protected void setUp1() throws Throwable {
     super.setUp1();
     activateTestFramework(SupportedTestFramework.TEST_SPEC);
+    useRVMGemSet("test-spec-trunk");
   }
 
   public void testLocation()  throws Throwable {

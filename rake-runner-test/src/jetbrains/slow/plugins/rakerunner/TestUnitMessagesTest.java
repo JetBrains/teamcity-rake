@@ -32,6 +32,7 @@ public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
     setMessagesTranslationEnabled(false);
     activateTestFramework(SupportedTestFramework.TEST_UNIT);
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
+    useRVMGemSet("test-unit-trunk");
   }
 
   public void testTestsOutput() throws Throwable {
