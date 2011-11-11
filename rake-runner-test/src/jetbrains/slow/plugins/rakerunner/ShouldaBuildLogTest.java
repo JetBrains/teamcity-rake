@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all","slow"})
+@Test(groups = {"all", "slow"})
 public class ShouldaBuildLogTest extends AbstractRakeRunnerTest {
 
   @BeforeMethod
@@ -32,16 +32,17 @@ public class ShouldaBuildLogTest extends AbstractRakeRunnerTest {
     super.setUp1();
     setMessagesTranslationEnabled(true);
     activateTestFramework(SupportedTestFramework.SHOULDA);
+    setMockingOptions(MockingOptions.FAKE_LOCATION_URL, MockingOptions.FAKE_STACK_TRACE);
     useRVMGemSet("shoulda-trunk");
   }
 
-  public void testGeneral()  throws Throwable {
+  public void testGeneral() throws Throwable {
     setPartialMessagesChecker();
 
     initAndDoRealTest("stat:general", false, "app_shoulda");
   }
 
-  public void testCounts()  throws Throwable {
+  public void testCounts() throws Throwable {
     doTestWithoutLogCheck("stat:general", false, "app_shoulda");
 
     assertTestsCount(4, 2, 0);
