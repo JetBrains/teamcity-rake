@@ -1,6 +1,8 @@
 #!/bin/bash
 
 echo "##teamcity[blockOpened name='Checking RVM executable']"
+source $HOME/.bash_profile # TODO: may be not needed, but withot this line some bugs occured
+
 if [[ -z `rvm` ]]; then
     # Try to use default .bash_profile
     if [[ -s "$HOME/.bash_profile" ]]; then
@@ -36,7 +38,7 @@ echo "##teamcity[blockOpened name='Deleting Gemsets']"
 for i in `ls -d */ | grep -v vendor`; do
     pushd $i
     echo "##teamcity[blockOpened name='Removing gemset |'$RR_RUBY_VERSION@$rrprefix$i|'']"
-    rvm use "$RUBY_VERSION"
+    rvm use "$RR_RUBY_VERSION"
     rvm --force gemset delete "$rrprefix$i"
     echo "##teamcity[blockClosed name='Removing gemset |'$RR_RUBY_VERSION@$rrprefix$i|'']"
     popd
