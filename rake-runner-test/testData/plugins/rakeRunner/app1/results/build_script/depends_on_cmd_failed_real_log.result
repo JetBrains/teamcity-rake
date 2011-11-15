@@ -1,4 +1,5 @@
---1--divided by 0 (ZeroDivisionError) WARNING
+--1--divided by 0
+--1--ZeroDivisionError
 --1--Invoke build_script:depends_on_cmd_failed $TARGET_BLOCK$ ERROR
 --1-- (first_time) NORMAL
 --1-- Execute build_script:cmd_failed $TARGET_BLOCK$ ERROR
