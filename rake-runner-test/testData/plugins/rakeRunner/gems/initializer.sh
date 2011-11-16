@@ -35,7 +35,7 @@ rvm use $RR_RUBY_VERSION@global
 gem install bundler
 
 if [[ -z "$rrprefix" ]]; then
-    rrprefix=""
+    rrprefix="TC-"
 fi
 echo "##teamcity[message text='Using \$rrprefix = |'$rrprefix|'' status='NORMAL']"
 

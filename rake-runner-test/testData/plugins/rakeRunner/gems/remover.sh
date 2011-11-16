@@ -30,7 +30,7 @@ if [[ -z "$RR_RUBY_VERSION" ]]; then
 fi
 
 if [[ -z "$rrprefix" ]]; then
-    rrprefix=""
+    rrprefix="TC-"
 fi
 echo "##teamcity[message text='Using \$rrprefix = |'$rrprefix|'' status='NORMAL']"
 
