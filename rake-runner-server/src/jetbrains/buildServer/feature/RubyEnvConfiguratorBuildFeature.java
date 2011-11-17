@@ -60,7 +60,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
 
     final String rubyEnvConfiguratorFeatureType = getType();
 
-    final Collection<SBuildFeatureDescriptor> buildFeatures = buildType.getBuildFeatures();
+    final Collection<SBuildFeatureDescriptor> buildFeatures = buildType.getResolvedSettings().getBuildFeatures();
     for (SBuildFeatureDescriptor bf : buildFeatures) {
       // if our type
       if (rubyEnvConfiguratorFeatureType.equals(bf.getType())) {
