@@ -76,6 +76,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   }
 
   protected void setMessagesTranslationEnabled(boolean enabled) {
+    //TODO: Do not use this to disable service messages translation
     myFixture.getSingletonService(ServerMessagesTranslator.class).setTranslationEnabled(enabled);
     myShouldTranslateMessages = enabled;
   }
