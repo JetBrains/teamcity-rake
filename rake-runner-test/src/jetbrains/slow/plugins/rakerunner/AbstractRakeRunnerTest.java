@@ -21,7 +21,7 @@ import jetbrains.buildServer.PartialBuildMessagesChecker;
 import jetbrains.buildServer.RunnerTest2Base;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import jetbrains.buildServer.messages.ServerMessagesTranslator;
+import jetbrains.buildServer.messages.BuildMessagesProcessor;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.serverSide.ShortStatistics;
@@ -77,7 +77,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
 
   protected void setMessagesTranslationEnabled(boolean enabled) {
     //TODO: Do not use this to disable service messages translation
-    myFixture.getSingletonService(ServerMessagesTranslator.class).setTranslationEnabled(enabled);
+    myFixture.getSingletonService(BuildMessagesProcessor.class).setTranslationEnabled(enabled);
     myShouldTranslateMessages = enabled;
   }
 
