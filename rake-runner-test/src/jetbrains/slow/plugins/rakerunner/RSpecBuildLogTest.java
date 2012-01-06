@@ -31,7 +31,7 @@ public class RSpecBuildLogTest extends AbstractRakeRunnerTest {
     super.setUp1();
     setMessagesTranslationEnabled(true);
     activateTestFramework(SupportedTestFramework.RSPEC);
-    useRVMGemSet("rspec-1");
+    useRVMGemSet("rspec-trunk");
   }
 
   public void testSpecPassed()  throws Throwable {

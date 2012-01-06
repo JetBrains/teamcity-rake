@@ -1,5 +1,5 @@
 # @author: Roman Chernyatchik
-require "spec"
+require "rspec"
 
 describe "Compilation" do
 

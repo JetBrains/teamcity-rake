@@ -1,10 +1,10 @@
 require "rake"
-require "spec/rake/spectask"
+require 'rspec/core/rake_task'
 
 ########################################
 namespace :output do
 
-  Spec::Rake::SpecTask.new(:spec_output) do |t|
-    t.spec_files = FileList['spec/output/**/*_spec.rb']
+  RSpec::Core::RakeTask.new(:spec_output) do |t|
+    t.pattern = 'spec/output/**/*_spec.rb'
   end
 end

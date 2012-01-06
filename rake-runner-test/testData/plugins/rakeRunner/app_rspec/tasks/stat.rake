@@ -1,30 +1,30 @@
 require "rake"
-require "spec/rake/spectask"
+require 'rspec/core/rake_task'
 
 ########################################
 namespace :stat do
 
-  Spec::Rake::SpecTask.new(:general) do |t|
-    t.spec_files = FileList['spec/statistics/general/**/*_spec.rb']
+  RSpec::Core::RakeTask.new(:general) do |t|
+    t.pattern = 'spec/statistics/general/**/*_spec.rb'
   end
 
-  Spec::Rake::SpecTask.new(:passed) do |t|
-    t.spec_files = FileList['spec/statistics/passed/**/*_spec.rb']
+  RSpec::Core::RakeTask.new(:passed) do |t|
+    t.pattern = 'spec/statistics/passed/**/*_spec.rb'
   end
 
-  Spec::Rake::SpecTask.new(:failed) do |t|
-    t.spec_files = FileList['spec/statistics/failed/**/*_spec.rb']
+  RSpec::Core::RakeTask.new(:failed) do |t|
+    t.pattern = 'spec/statistics/failed/**/*_spec.rb'
   end
 
-  Spec::Rake::SpecTask.new(:error) do |t|
-    t.spec_files = FileList['spec/statistics/error/**/*_spec.rb']
+  RSpec::Core::RakeTask.new(:error) do |t|
+    t.pattern = 'spec/statistics/error/**/*_spec.rb'
   end
 
-  Spec::Rake::SpecTask.new(:ignored) do |t|
-    t.spec_files = FileList['spec/statistics/ignored/**/*_spec.rb']
+  RSpec::Core::RakeTask.new(:ignored) do |t|
+    t.pattern = 'spec/statistics/ignored/**/*_spec.rb'
   end
 
-  Spec::Rake::SpecTask.new(:compile_error) do |t|
-    t.spec_files = FileList['spec/statistics/compile_error/**/*_spec.rb']
+  RSpec::Core::RakeTask.new(:compile_error) do |t|
+    t.pattern = 'spec/statistics/compile_error/**/*_spec.rb'
   end
 end

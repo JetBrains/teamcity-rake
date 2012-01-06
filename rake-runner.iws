@@ -56,337 +56,16 @@
     </treeState>
   </component>
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="9cec1cca-0a2f-4e2c-b18b-341adf07bffd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rake-runner-agent/src/META-INF" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/idea-resolve-helper.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rake-runner-agent/teamcity-agent-plugin.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rake-runner-server/fake-teamcity-server-plugin-context.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/antclipse" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/antserver/client" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/antserver/commands" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/antserver/server" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/antserver" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/design" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/inifile" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/input" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/logic/condition" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/logic" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/math" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/net/httpclient" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/net" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/perf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/platform" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/process" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/property" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/util" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib/walls" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf/antcontrib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net/sf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/net" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api/resources" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/api" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/manual/tasks" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs/manual" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/docs" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib/lib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/ant-contrib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/rake-runner-agent/resources/META-INF" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/rake-runner-agent/resources" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/rake-runner-server/resources/buildServerResources" afterPath="" />
-      <change type="MOVED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\rake-runner-server\resources\META-INF" afterPath="$PROJECT_DIR$/rake-runner-server/src/META-INF" />
-    </list>
+    <list default="true" readonly="true" id="9cec1cca-0a2f-4e2c-b18b-341adf07bffd" name="Default" comment="" />
     <list id="8dd1cc11-2b30-4974-bb75-7a8d001f5be6" name="move Rake Runner plugin building from Ant to IDEA " comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/ant.build.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rake-runner-server/src/META-INF/build-server-plugin-rakerunner.xml" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\LICENSE.txt" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\allclasses-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\allclasses-noframe.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\constant-values.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\deprecated-list.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\help-doc.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\index-all.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\index.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\AntContribVersion.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antclipse\ClassPathParser.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antclipse\ClassPathTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antclipse\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antclipse\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antclipse\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\Command.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\Response.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\Util.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\client\Client.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\client\ClientTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\client\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\client\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\client\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\AbstractCommand.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\DisconnectCommand.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\HelloWorldCommand.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\PropertyContainer.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\ReferenceContainer.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\RunAntCommand.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\RunTargetCommand.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\SendFileCommand.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\ShutdownCommand.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\commands\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\server\ConnectionBuildListener.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\server\ConnectionHandler.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\server\Server.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\server\ServerTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\server\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\server\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\antserver\server\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\Depends.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\Design.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\InstructionVisitor.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\Log.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\Package.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\VerifyDesign.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\VerifyDesignDelegate.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\design\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniFile.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniFileTask.Exists.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniFileTask.Get.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniFileTask.IniOperation.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniFileTask.IniOperationConditional.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniFileTask.IniOperationPropertySetter.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniFileTask.Remove.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniFileTask.Set.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniFileTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniPart.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniProperty.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\IniSection.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\inifile\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\input\GUIInputHandler.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\input\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\input\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\input\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\AntCallBack.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\AntFetch.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\Assert.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\ForEach.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\ForTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\IfTask.ElseIf.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\IfTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\OutOfDate.CollectionEnum.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\OutOfDate.DeleteTargets.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\OutOfDate.MyMapper.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\OutOfDate.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\ProjectDelegate.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\Relentless.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\RunTargetTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\Switch.Case.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\Switch.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\Throw.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\TimestampSelector.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\TryCatchTask.CatchBlock.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\TryCatchTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\condition\BooleanConditionBase.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\condition\IsGreaterThan.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\condition\IsLessThan.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\condition\IsPropertyFalse.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\condition\IsPropertyTrue.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\condition\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\condition\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\condition\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\logic\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\math\Evaluateable.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\math\Math.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\math\MathTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\math\Numeric.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\math\Operation.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\math\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\math\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\math\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\PostTask.Cookie.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\PostTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\Prop.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\URLImportTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\AbstractHttpStateTypeTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\AbstractMethodTask.ResponseHeader.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\AbstractMethodTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\AddCookieTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\AddCredentialsTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\ClearCookiesTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\ClearCredentialsTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\ClientParams.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\Credentials.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\GetCookieTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\GetMethodTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\HeadMethodTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\HostConfig.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\HostParams.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\HttpClientType.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\HttpStateType.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\MethodParams.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\Params.BooleanParam.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\Params.DoubleParam.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\Params.IntParam.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\Params.LongParam.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\Params.Param.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\Params.StringParam.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\Params.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\PostMethodTask.FilePartType.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\PostMethodTask.TextPartType.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\PostMethodTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\PurgeExpiredCookiesTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\httpclient\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\net\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\perf\AntPerformanceListener.StopWatch.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\perf\AntPerformanceListener.StopWatchComparator.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\perf\AntPerformanceListener.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\perf\StopWatch.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\perf\StopWatchTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\perf\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\perf\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\perf\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\platform\OsFamily.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\platform\Platform.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\platform\ShellScriptTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\platform\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\platform\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\platform\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\process\ForgetTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\process\Limit.TimeUnit.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\process\Limit.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\process\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\process\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\process\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\AbstractPropertySetterTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\PathFilterTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\PathToFileSet.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\PropertyCopy.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\PropertySelector.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\RegexTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\RegexUtil.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\SortList.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\URLEncodeTask.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\Variable.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\property\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\util\Reflector.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\util\ThreadPool.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\util\ThreadPoolThread.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\util\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\util\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\util\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\walls\CompileWithWalls.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\walls\Package.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\walls\SilentCopy.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\walls\SilentMove.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\walls\Walls.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\walls\package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\walls\package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\net\sf\antcontrib\walls\package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\overview-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\overview-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\overview-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\serialized-form.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\stylesheet.css" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\index.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\antcallback_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\antclipse_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\antfetch_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\assert_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\compilewithwalls.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\for.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\foreach.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\forget.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\get-cookie_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\get-method_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\head-method_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\http-client_type.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\http-state_type.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\if.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\importurl.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\index.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\inifile.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\limit_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\math_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\method_task_common.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\more_conditions.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\osfamily.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\outofdate.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\pathtofileset.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\performance_monitor.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\post-method_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\post_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\propertycopy.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\propertyregex.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\propertyselector.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\relentless.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\runtarget.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\server_tasks.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\shellscript.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\sortlist.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\stopwatch_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\switch.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\throw.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\timestampselector.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\toc.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\trycatch.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\urlencode.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\variable_task.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\verifydesign.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\verifylegacytutorial.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\manual\tasks\verifynewprojtutorial.html" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\ant-contrib-1.0b3.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\package-list" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\docs\api\resources\inherit.gif" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\lib\bcel-5.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\lib\commons-httpclient-3.0.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\lib\commons-logging-1.0.4.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ant-contrib\lib\ivy-1.3.1.jar" afterPath="" />
-    </list>
-    <list id="dc23412a-a931-4e52-b929-cf9c00dbd818" name="Failed commit: move Rake Runner plugin building from Ant to IDEA " comment="">
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\build.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\ivy.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\ivyconf.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\rake-runner.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\teamcity-common.xml" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\commons-codec-1.3.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\commons-httpclient-3.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\commons-logging.jar" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\lib\ivy-2.1.0.jar" afterPath="" />
-      <change type="MOVED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\rake-runner-agent\resources\META-INF\build-agent-plugin-rakerunner.xml" afterPath="$PROJECT_DIR$/rake-runner-agent/src/META-INF/build-agent-plugin-rakerunner.xml" />
-      <change type="MOVED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\rake-runner-server\resources\META-INF\build-server-plugin-rakerunner.xml" afterPath="$PROJECT_DIR$/rake-runner-server/src/META-INF/build-server-plugin-rakerunner.xml" />
-      <change type="MOVED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\rake-runner-server\resources\buildServerResources\rubyEnvConvfiguratorParams.jsp" afterPath="$PROJECT_DIR$/rake-runner-server/resources/rubyEnvConvfiguratorParams.jsp" />
-      <change type="MOVED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\rake-runner-server\resources\buildServerResources\taskRunnerRunParams.jsp" afterPath="$PROJECT_DIR$/rake-runner-server/resources/taskRunnerRunParams.jsp" />
-      <change type="MOVED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\rake-runner-server\resources\buildServerResources\viewTaskRunnerRunParams.jsp" afterPath="$PROJECT_DIR$/rake-runner-server/resources/viewTaskRunnerRunParams.jsp" />
-      <change type="MOVED" beforePath="C:\Users\Vladislav.Rassokhin\Documents\developing\perforce-wrkspc\BuildServer\svnrepo\rake-runner\teamcity-plugin.xml" afterPath="$PROJECT_DIR$/rake-runner-server/teamcity-server-plugin.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent-internal.iml" afterPath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent-internal.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" afterPath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-root.iml" afterPath="$PROJECT_DIR$/rake-runner-root.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-server/rake-runner-server-internal.iml" afterPath="$PROJECT_DIR$/rake-runner-server/rake-runner-server-internal.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" afterPath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" afterPath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner.ipr" afterPath="$PROJECT_DIR$/rake-runner.ipr" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner.iws" afterPath="$PROJECT_DIR$/rake-runner.iws" />
+    </list>
+    <list id="dc23412a-a931-4e52-b929-cf9c00dbd818" name="Failed commit: move Rake Runner plugin building from Ant to IDEA " comment="" />
+    <list id="abb6711e-59f1-426b-97db-c832d02cc5ff" name="rake runner" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rake-runner-test/rake-runner-test-internal.iml" afterPath="$PROJECT_DIR$/rake-runner-test/rake-runner-test-internal.iml" />
     </list>
     <ignored path="rake-runner.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="$PROJECT_DIR$/rake-runner.iws" changelist="9cec1cca-0a2f-4e2c-b18b-341adf07bffd" time="1319799517569" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -395,7 +74,7 @@
   </component>
   <component name="ChangesViewManager" flattened_view="false" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage-remote-IDEA/bt1745/coverage.ic" NAME="Faradi 7.0::Plugin - DotNetTools #20455" MODIFIED="1319793873843" SOURCE_PROVIDER="jetbrains.buildServer.coverage.IDEACoverageDataProvider$IDEACoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage-remote-IDEA/bt1745/coverage.ic" NAME="Faradi 7.0::Plugin - DotNetTools #20461" MODIFIED="1319805637759" SOURCE_PROVIDER="jetbrains.buildServer.coverage.IDEACoverageDataProvider$IDEACoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>jetbrains.buildServer.dotnetTools.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage-remote-IDEA/bt590/coverage.ic" NAME="Faradi 7.0::IntegrationBuild (HSQLDB + Coverage) #1045" MODIFIED="1319775790357" SOURCE_PROVIDER="jetbrains.buildServer.coverage.IDEACoverageDataProvider$IDEACoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
@@ -484,6 +163,7 @@
         <option value="$PROJECT_DIR$/idea-resolve-helper.iml" />
         <option value="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" />
         <option value="$PROJECT_DIR$/rake-runner.ipr" />
+        <option value="$PROJECT_DIR$/rake-runner.iws" />
       </list>
     </option>
   </component>
@@ -504,10 +184,10 @@
     <option name="LAST_EDITED_TAB_NAME" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
+    <option name="x" value="-1288" />
     <option name="y" value="-8" />
     <option name="width" value="1296" />
-    <option name="height" value="1000" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -574,17 +254,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rake-runner" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -616,6 +285,54 @@
               <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rake-runner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rake-runner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="runner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rake-runner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rake-runner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rb" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="patch" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -629,6 +346,17 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="build" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rake-runner" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -955,7 +683,17 @@
       <created>1318089726329</created>
       <updated>1318089726329</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="move Rake Runner plugin building from Ant to IDEA ">
+      <changelist id="8dd1cc11-2b30-4974-bb75-7a8d001f5be6" name="move Rake Runner plugin building from Ant to IDEA " comment="" />
+      <created>1319799870163</created>
+      <updated>1319799870163</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Failed commit: move Rake Runner plugin building from Ant to IDEA ">
+      <changelist id="dc23412a-a931-4e52-b929-cf9c00dbd818" name="Failed commit: move Rake Runner plugin building from Ant to IDEA " comment="" />
+      <created>1319799870163</created>
+      <updated>1319799870163</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -979,11 +717,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
+    <frame x="-1288" y="-8" width="1296" height="1040" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32927817" sideWeight="0.6710671" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34319526" sideWeight="0.4809408" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32768363" sideWeight="0.4809408" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24979724" sideWeight="0.67118645" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -998,7 +736,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21978913" sideWeight="0.65680474" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21816707" sideWeight="0.6723164" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299435" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1149,63 +887,60 @@
       </provider>
     </entry>
     <entry file="jar://$TeamCityDistribution$/webapps/ROOT/WEB-INF/lib/server.jar!/META-INF/buildServerSpring.xml">
+      <provider editor-type-id="com.intellij.spring.perspectives.SpringBeansStructureEditorProvider">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state line="1034" column="2" selection-start="59283" selection-end="59283" vertical-scroll-proportion="0.33271027" />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rake-runner-agent/src/META-INF/build-agent-plugin-rakerunner.xml">
       <provider editor-type-id="com.intellij.spring.perspectives.SpringBeansStructureEditorProvider">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rake-runner.ipr">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="537" column="96" selection-start="36481" selection-end="36481" vertical-scroll-proportion="0.45945945" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rake-runner-agent/src/META-INF/build-agent-plugin-rakerunner.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="25" selection-start="788" selection-end="788" vertical-scroll-proportion="-16.15" />
       </provider>
-      <provider editor-type-id="com.intellij.spring.perspectives.SpringBeansStructureEditorProvider">
-        <state />
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rake-runner-server/src/META-INF/build-server-plugin-rakerunner.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="46" selection-start="991" selection-end="991" vertical-scroll-proportion="0.4868735" />
-      </provider>
       <provider editor-type-id="com.intellij.spring.perspectives.SpringBeansStructureEditorProvider">
         <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="46" selection-start="991" selection-end="991" vertical-scroll-proportion="0.4868735" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rake-runner-server/resources/rubyEnvConvfiguratorParams.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="27" selection-start="778" selection-end="778" vertical-scroll-proportion="0.3478261">
-          <folding />
-        </state>
+        <state line="15" column="27" selection-start="778" selection-end="778" vertical-scroll-proportion="0.3478261" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rake-runner-server/resources/taskRunnerRunParams.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="27" selection-start="760" selection-end="760" vertical-scroll-proportion="0.3478261">
-          <folding />
-        </state>
+        <state line="18" column="27" selection-start="760" selection-end="760" vertical-scroll-proportion="0.3478261" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rake-runner-server/resources/viewTaskRunnerRunParams.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="27" selection-start="705" selection-end="705" vertical-scroll-proportion="0.3478261">
-          <folding />
-        </state>
+        <state line="17" column="27" selection-start="705" selection-end="705" vertical-scroll-proportion="0.3478261" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/rake-runner-server/fake-teamcity-server-plugin-context.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="76" selection-start="693" selection-end="693" vertical-scroll-proportion="0.2859813">
-          <folding />
-        </state>
-      </provider>
       <provider editor-type-id="com.intellij.spring.perspectives.SpringBeansStructureEditorProvider">
         <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="76" selection-start="693" selection-end="693" vertical-scroll-proportion="0.2859813" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rake-runner.iws">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="61" selection-start="1035" selection-end="1035" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rake-runner.ipr">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="45" selection-start="2258" selection-end="2258" vertical-scroll-proportion="0.51891893" />
       </provider>
     </entry>
   </component>
