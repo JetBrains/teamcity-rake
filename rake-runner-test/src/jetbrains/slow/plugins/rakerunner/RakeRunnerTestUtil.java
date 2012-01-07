@@ -26,11 +26,6 @@ public class RakeRunnerTestUtil {
   static public void setInterpreterPath(@NotNull final BuildTypeSettings bt) {
     String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
     if (!StringUtil.isEmpty(interpreterPath)) {
-
-      if (!new File(interpreterPath).exists() && interpreterPath.indexOf("jruby-1.3.0") > 0) {
-        interpreterPath = interpreterPath.replace("jruby-1.3.0", "jruby-1.4.0");
-      }
-
       bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreterPath));
       bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
           RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));

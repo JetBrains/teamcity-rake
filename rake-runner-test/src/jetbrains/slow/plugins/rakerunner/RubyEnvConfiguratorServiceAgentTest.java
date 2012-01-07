@@ -88,12 +88,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     // configure build
     final SBuildType bt = configureFakeBuild(configuration);
 
-    if (SystemInfo.isWindows) {
-      // set ruby interpreter path
-      RakeRunnerTestUtil.setInterpreterPath(bt);
-    } else if (SystemInfo.isLinux) {
-      RakeRunnerTestUtil.setRVMConfiguration(bt);
-    }
+    // set ruby interpreter path
+    final String interpreterPath = RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/ruby").getAbsolutePath();
+    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, interpreterPath);
 
     // launch buld
     finishBuild(startBuild(bt, false));
