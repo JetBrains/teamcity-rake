@@ -19,7 +19,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="rake-runner-common" />
     <orderEntry type="library" name="TeamCity-agentAPI" level="project" />
-    <orderEntry type="library" name="TeamCity-common" level="project" />
+    <orderEntry type="library" name="TeamCity-commonAPI" level="project" />
   </component>
 </module>
 

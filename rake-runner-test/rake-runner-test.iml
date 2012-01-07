@@ -26,25 +26,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/junit-3.8.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/spring-mock.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="TeamCity-common" level="project" />
+    <orderEntry type="library" name="TeamCity-commonAPI" level="project" />
     <orderEntry type="library" name="TeamCity-agentAPI" level="project" />
     <orderEntry type="library" name="TeamCity-serverAPI" level="project" />
   </component>

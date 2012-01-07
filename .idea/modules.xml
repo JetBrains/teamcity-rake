@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/idea-resolve-helper.iml" filepath="$PROJECT_DIR$/idea-resolve-helper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" filepath="$PROJECT_DIR$/rake-runner-agent/rake-runner-agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-common/rake-runner-common.iml" filepath="$PROJECT_DIR$/rake-runner-common/rake-runner-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-root.iml" filepath="$PROJECT_DIR$/rake-runner-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" filepath="$PROJECT_DIR$/rake-runner-server/rake-runner-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" filepath="$PROJECT_DIR$/rake-runner-test/rake-runner-test.iml" />
+    </modules>
+  </component>
+</project>
+
