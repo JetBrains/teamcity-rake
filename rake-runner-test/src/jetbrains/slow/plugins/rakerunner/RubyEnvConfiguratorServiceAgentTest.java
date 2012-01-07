@@ -2,12 +2,6 @@ package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.SystemInfo;
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import jetbrains.buildServer.AgentServerFunctionalTestCase;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.*;
@@ -21,10 +15,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings.*;
+import static jetbrains.slow.plugins.rakerunner.AbstractRakeRunnerTest.DEFAULT_GEMSET_NAME;
+import static jetbrains.slow.plugins.rakerunner.AbstractRakeRunnerTest.RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY;
 
 /**
  * @author Roman.Chernyatchik
@@ -34,12 +38,18 @@ import static jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings.*;
 public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTestCase {
   private final String RUN_TYPE = "mySomeRunner!";
 
+  private static enum FakeBuildConfiguration {
+    Nothing,
+    Feature,
+    FeatureAndFakeRvmHome // And fake RVM home
+  }
+
   @BeforeMethod
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
 
-    getAgentEvents().addListener(new AgentLifeCycleAdapter(){
+    getAgentEvents().addListener(new AgentLifeCycleAdapter() {
       @Override
       public void beforeRunnerStart(@NotNull final BuildRunnerContext runner) {
         runner.getBuild().getBuildLogger().message("message");
@@ -51,55 +61,36 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
   @Test
   public void test_cmdlinePatcher_enabled() throws IOException {
-    final AtomicBoolean patcherEnabled = new AtomicBoolean(false);
+    final boolean patcherEnabled = runCmdlinePatcherTest(FakeBuildConfiguration.Feature);
 
-    getExtensionHolder().registerExtension(BuildRunnerPrecondition.class, "aaa",
-                                           new RubyEnvConfiguratorService() {
-                                             @Override
-                                             protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
-                                                                                   @NotNull final RubyLightweightSdk sdk)
-                                               throws RunBuildException {
-
-                                               patcherEnabled.set(true);
-                                             }
-                                           });
-
-    // configure build
-    final SBuildType bt = configureFakeBuild(true, false);
-
-    // enable ruby env build feature
-    enableRubyEnvBuildFeature(bt);
-
-    // launch buld
-    finishBuild(startBuild(bt, false));
-
-    assertTrue("RubyEnvConfiguratorService should be enabled", patcherEnabled.get());
+    Assert.assertTrue(patcherEnabled, "RubyEnvConfiguratorService should be enabled");
   }
 
   @Test
   public void test_cmdlinePatcher_disabled() throws IOException {
+    final boolean patcherEnabled = runCmdlinePatcherTest(FakeBuildConfiguration.Nothing);
+
+    Assert.assertFalse(patcherEnabled, "RubyEnvConfiguratorService should not be enabled");
+  }
+
+  private boolean runCmdlinePatcherTest(FakeBuildConfiguration configuration) throws IOException {
     final AtomicBoolean patcherEnabled = new AtomicBoolean(false);
 
     getExtensionHolder().registerExtension(BuildRunnerPrecondition.class, "aaa",
-                                           new RubyEnvConfiguratorService() {
-                                             @Override
-                                             protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
-                                                                                   @NotNull final RubyLightweightSdk sdk)
-                                               throws RunBuildException {
-
-                                               patcherEnabled.set(true);
-                                             }
-                                           });
+        new RubyEnvConfiguratorService() {
+          @Override
+          protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
+                                                @NotNull final RubyLightweightSdk sdk) throws RunBuildException {
+            patcherEnabled.set(true);
+          }
+        });
 
     // configure build
-    final SBuildType bt = configureFakeBuild(false, false);
-
-    // don't enable ruby env build feature
+    final SBuildType bt = configureFakeBuild(configuration);
 
     // launch buld
     finishBuild(startBuild(bt, false));
-
-    assertFalse("RubyEnvConfiguratorService should not be enabled", patcherEnabled.get());
+    return patcherEnabled.get();
   }
 
 
@@ -108,12 +99,12 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final Ref<BuildRunnerContext> contextRef = new Ref<BuildRunnerContext>();
 
     // add listener
-    addBuildParamsListener(null, null, contextRef);
+    addBuildParamsListener(null, null, null, contextRef);
 
-    final SBuildType bt = configureFakeBuild(true, true);
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.FeatureAndFakeRvmHome);
     // use rvm
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "true");
-    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, "ruby-1.8.7-p249");
+    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, "ruby-1.8.7-p352");
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_GEMSET_NAME_KEY, "teamcity");
 
     // launch
@@ -124,10 +115,13 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     Assert.assertNotNull(params);
 
     Assert.assertEquals(params.get(SHARED_RUBY_PARAMS_ARE_SET), "true");
-    Assert.assertEquals(params.get(SHARED_RUBY_PARAMS_ARE_APPLIED), "true");
-    Assert.assertEquals(params.get(SHARED_RUBY_RVM_SDK_NAME), "ruby-1.8.7-p249");
+    Assert.assertEquals(params.get(SHARED_RUBY_RVM_SDK_NAME), "ruby-1.8.7-p352");
     Assert.assertEquals(params.get(SHARED_RUBY_RVM_GEMSET_NAME), "teamcity");
     Assert.assertNull(params.get(SHARED_RUBY_INTERPRETER_PATH));
+    if (SystemInfo.isUnix) {
+      // Really, RVM may be tested only on linux agents
+      Assert.assertEquals(params.get(SHARED_RUBY_PARAMS_ARE_APPLIED), "true");
+    }
   }
 
   @Test
@@ -135,12 +129,12 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final Ref<BuildRunnerContext> contextRef = new Ref<BuildRunnerContext>();
 
     // add listener
-    addBuildParamsListener(null, null, contextRef);
+    addBuildParamsListener(null, null, null, contextRef);
 
-    final SBuildType bt = configureFakeBuild(true, false);
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature);
 
     final String interpreterPath =
-      RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p249/bin/ruby").getAbsolutePath();
+      RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/ruby").getAbsolutePath();
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, interpreterPath);
 
     // launch
@@ -166,9 +160,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final Ref<BuildRunnerContext> contextRef = new Ref<BuildRunnerContext>();
 
     // add listener
-    addBuildParamsListener(null, null, contextRef);
+    addBuildParamsListener(null, null, null, contextRef);
 
-    final SBuildType bt = configureFakeBuild(true, false);
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature);
 
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, "this path doesn't exist");
     // default : RubyEnvConfiguratorUtil.UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY = "false"
@@ -192,9 +186,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final Ref<BuildRunnerContext> contextRef = new Ref<BuildRunnerContext>();
 
     // add listener
-    addBuildParamsListener(null, null, contextRef);
+    addBuildParamsListener(null, null, null, contextRef);
 
-    final SBuildType bt = configureFakeBuild(true, false);
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature);
 
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, "this path doesn't exist");
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY, "true");
@@ -214,25 +208,28 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   }
 
   @Test
-  public void test_RvmSdk_EnvSettings() throws IOException {
+  public void test_RvmSdk_EnvSettings() throws Exception {
     if (!SystemInfo.isUnix) {
       // TODO: use mocks
-      // rmv support is only for Unix
-      return;
+      throw new SkipException("Not a UNIX. RVM support is only for Unix.");
     }
 
+    final Ref<Map<String, String>> allParamsRef = new Ref<Map<String, String>>();
     final Ref<Map<String, String>> envParamsRef = new Ref<Map<String, String>>();
     final Ref<Map<String, String>> sysPropertiesRef = new Ref<Map<String, String>>();
 
     // add listener
-    addBuildParamsListener(envParamsRef, sysPropertiesRef, null);
+    addBuildParamsListener(envParamsRef, sysPropertiesRef, allParamsRef, null);
 
-    final SBuildType bt = configureFakeBuild(true, true);
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.FeatureAndFakeRvmHome);
 
     // use rvm
+    final String rvmRubyName = System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY);
+    final String rvmGemsetName = DEFAULT_GEMSET_NAME;
+
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "true");
-    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, "ruby-1.8.7-p249");
-    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_GEMSET_NAME_KEY, "teamcity");
+    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, rvmRubyName);
+    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_GEMSET_NAME_KEY, rvmGemsetName);
 
     SBuild build = startBuild(bt, false);
     build = finishBuild(build);
@@ -240,17 +237,73 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     final Map<String, String> envs = envParamsRef.get();
     Assert.assertNotNull(envs);
+
+    Assert.assertNotNull(allParamsRef.get());
+    RVMPathsSettings.getInstanceEx().initialize(allParamsRef.get());
     final String rvmHomePath = RVMPathsSettings.getInstance().getRvmHomePath();
-    Assert.assertEquals(envs.get("GEM_PATH"), rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity:"
-                                              + rvmHomePath + "/gems/ruby-1.8.7-p249@global");
-    Assert.assertEquals(envs.get("GEM_HOME"), rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity");
-    Assert.assertTrue(envs.get("PATH").startsWith(rvmHomePath + "/rubies/ruby-1.8.7-p249/bin:" +
-                                                  rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity/bin:" +
-                                                  rvmHomePath + "/gems/ruby-1.8.7-p249@global/bin:" +
-                                                  rvmHomePath + "/bin"));
-    Assert.assertEquals(envs.get("MY_RUBY_HOME"), rvmHomePath + "/rubies/ruby-1.8.7-p249");
-    Assert.assertEquals(envs.get("BUNDLE_PATH"), rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity");
-    Assert.assertEquals(envs.get("rvm_ruby_string"), "ruby-1.8.7-p249");
+
+    Assert.assertNotNull(rvmHomePath, "Cannot retrieve RVM home path");
+
+    // Use some regex
+    final String regexRuby = "[^/]*" + rvmRubyName + "[^/@]*";
+    final String regexRubyAndGemset = regexRuby + "@" + rvmGemsetName;
+    final String regexRubyAndGlobal = regexRuby + "@global";
+
+    final String envGemPath = envs.get("GEM_PATH");
+    {
+      Assert.assertNotNull(envGemPath, "GEM_PATH not setted");
+      final String[] paths = envGemPath.split(File.pathSeparator);
+      Assert.assertEquals(2, paths.length);
+
+      Assert.assertTrue(paths[0].matches(rvmHomePath + "/gems/" + regexRubyAndGemset), paths[0]);
+      Assert.assertTrue(paths[1].matches(rvmHomePath + "/gems/" + regexRubyAndGlobal), paths[1]);
+    }
+
+    final String envGemHome = envs.get("GEM_HOME");
+    {
+      Assert.assertEquals(envGemHome, rvmHomePath + "/gems/" + regexRubyAndGemset);
+    }
+
+    final String envPath = envs.get("PATH");
+    {
+      Assert.assertNotNull(envPath, "PATH not setted");
+      final String[] paths = envPath.split(File.pathSeparator);
+      Assert.assertTrue(paths.length >= 4);
+
+      Assert.assertTrue(paths[0].matches(rvmHomePath + "/gems/" + regexRubyAndGemset + "/bin"), paths[0]);
+      Assert.assertTrue(paths[1].matches(rvmHomePath + "/gems/" + regexRubyAndGlobal + "/bin"), paths[1]);
+      Assert.assertTrue(paths[2].matches(rvmHomePath + "/rubies/" + regexRuby + "/bin"), paths[2]);
+      Assert.assertEquals(paths[3], rvmHomePath + "/bin");
+    }
+
+    final String envMyRubyHome = envs.get("MY_RUBY_HOME");
+    {
+      Assert.assertNotNull(envMyRubyHome);
+      Assert.assertTrue(envMyRubyHome.matches(rvmHomePath + "/rubies/" + regexRuby), envMyRubyHome);
+    }
+
+//    final String envBundlePath = envs.get("BUNDLE_PATH");
+//    {
+//      Assert.assertNotNull(envBundlePath);
+//      Assert.assertTrue(envBundlePath.matches(rvmHomePath + "/gems/" + regexRubyAndGemset));
+//    }
+
+    final String envRVMRubyString = envs.get("rvm_ruby_string");
+    {
+      Assert.assertNotNull(envRVMRubyString);
+      Assert.assertTrue(envRVMRubyString.matches(regexRuby));
+    }
+
+//    Assert.assertEquals(envs.get("GEM_PATH"), rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity:"
+//        + rvmHomePath + "/gems/ruby-1.8.7-p249@global");
+//    Assert.assertEquals(envs.get("GEM_HOME"), rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity");
+//    Assert.assertTrue(envs.get("PATH").startsWith(rvmHomePath + "/rubies/ruby-1.8.7-p249/bin:" +
+//        rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity/bin:" +
+//        rvmHomePath + "/gems/ruby-1.8.7-p249@global/bin:" +
+//        rvmHomePath + "/bin"));
+//    Assert.assertEquals(envs.get("MY_RUBY_HOME"), rvmHomePath + "/rubies/ruby-1.8.7-p249");
+//    Assert.assertEquals(envs.get("BUNDLE_PATH"), rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity");
+//    Assert.assertEquals(envs.get("rvm_ruby_string"), "ruby-1.8.7-p249");
 
     // sucessfully finished
     Assert.assertTrue(build.getBuildProblems().isEmpty());
@@ -258,7 +311,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   }
 
 
-  @Test
+  //@Test
   //public void test_NonRvmSdk_EnvSettings() throws IOException {
   //  if (!SystemInfo.isUnix) {
   //    // TODO: use mocks
@@ -297,8 +350,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   //  Assert.assertTrue(build.getStatusDescriptor().isSuccessful());
   //}
 
-  private SBuildType configureFakeBuild(final boolean enableBuildFeature,
-                                        final boolean enableFakeRvm) throws IOException {
+  private SBuildType configureFakeBuild(final FakeBuildConfiguration conf) throws IOException {
     // create build
     final SBuildType bt = createBuildType();
 
@@ -308,13 +360,15 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     // add our fake runner
     bt.addBuildRunner("", RUN_TYPE, Collections.<String, String>emptyMap());
 
-    if (enableBuildFeature) {
-      enableRubyEnvBuildFeature(bt);
-
-      // fake rvm home
-      if (enableFakeRvm) {
+    switch (conf) {
+      case Nothing:
+        break;
+      case FeatureAndFakeRvmHome: {
         final File testRvmHome = RakeRunnerTestUtil.getTestDataItemPath(".rvm");
         addBuildParameter(bt, "env.rvm_path", testRvmHome.getAbsolutePath());
+      } // NO BREAK!
+      case Feature: {
+        enableRubyEnvBuildFeature(bt);
       }
     }
     return bt;
@@ -322,8 +376,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
   private void addBuildParamsListener(@Nullable final Ref<Map<String, String>> envParamsRef,
                                       @Nullable final Ref<Map<String, String>> sysPropertiesRef,
+                                      @Nullable final Ref<Map<String, String>> allParamsRef,
                                       @Nullable final Ref<BuildRunnerContext> contextRef) {
-    getAgentEvents().addListener(new AgentLifeCycleAdapter(){
+    getAgentEvents().addListener(new AgentLifeCycleAdapter() {
       @Override
       public void beforeRunnerStart(@NotNull final BuildRunnerContext runner) {
         if (contextRef != null) {
@@ -335,6 +390,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
       public void runnerFinished(@NotNull final BuildRunnerContext runner, @NotNull final BuildFinishedStatus status) {
         final BuildParametersMap buildParameters = runner.getBuildParameters();
 
+        if (allParamsRef != null) {
+          allParamsRef.set(new HashMap<String, String>(buildParameters.getAllParameters()));
+        }
         if (envParamsRef != null) {
           envParamsRef.set(new HashMap<String, String>(buildParameters.getEnvironmentVariables()));
         }
