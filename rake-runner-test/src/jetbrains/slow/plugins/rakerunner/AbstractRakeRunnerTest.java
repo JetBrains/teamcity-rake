@@ -23,7 +23,6 @@ import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.messages.BuildMessagesProcessor;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
-import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.serverSide.ShortStatistics;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.util.StringUtil;
@@ -47,10 +46,6 @@ import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
  * @author Roman Chernyatchik
  */
 public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
-  private static final String INTERPRETER_PATH_PROPERTY = "rake-runner.ruby.interpreter.path";
-  public static final String RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY = "rake-runner.testing.ruby.version";
-  public static final String DEFAULT_GEMSET_NAME = "all-trunk";
-  public static final String GEMSET_PREFIX = "";
 
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
   private boolean myShouldTranslateMessages = false;
@@ -85,32 +80,19 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   }
 
   private void setInterpreterPath() {
-    String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
-    if (!StringUtil.isEmpty(interpreterPath)) {
-
-      if (!new File(interpreterPath).exists() && interpreterPath.indexOf("jruby-1.3.0") > 0) {
-        interpreterPath = interpreterPath.replace("jruby-1.3.0", "jruby-1.4.0");
-      }
-
-      getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreterPath));
-      getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
-                                                         RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
-    }
+    RakeRunnerTestUtil.setInterpreterPath(getBuildType());
   }
 
   private void setRVMConfiguration() {
-    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
-        RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
-    useRVMRubySDK(System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY));
-    useRVMGemSet(DEFAULT_GEMSET_NAME);
+    RakeRunnerTestUtil.setRVMConfiguration(getBuildType());
   }
 
   protected void useRVMRubySDK(@NotNull String sdkname) {
-    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME, sdkname));
+    RakeRunnerTestUtil.useRVMRubySDK(sdkname, getBuildType());
   }
 
   protected void useRVMGemSet(@NotNull String gemset) {
-    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME, GEMSET_PREFIX + gemset));
+    RakeRunnerTestUtil.useRVMGemSet(gemset, getBuildType());
   }
 
   @Override
@@ -155,13 +137,13 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     setTaskNames(task_full_name);
 
     final String resultFileName = result_file_suffix == null
-                                  ? null
-                                  : testDataApp + "/results/"
-                                    + task_full_name.replace(":", "/")
-                                    + result_file_suffix
-                                    // lets automatically expect "_log"
-                                    // suffix to each translated result (build log) file
-                                    + (myShouldTranslateMessages ? "_log" : "");
+        ? null
+        : testDataApp + "/results/"
+        + task_full_name.replace(":", "/")
+        + result_file_suffix
+        // lets automatically expect "_log"
+        // suffix to each translated result (build log) file
+        + (myShouldTranslateMessages ? "_log" : "");
     doTest(resultFileName);
     assertEquals(shouldPass, !getLastFinishedBuild().getBuildStatus().isFailed());
   }

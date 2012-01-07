@@ -27,8 +27,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings.*;
-import static jetbrains.slow.plugins.rakerunner.AbstractRakeRunnerTest.DEFAULT_GEMSET_NAME;
-import static jetbrains.slow.plugins.rakerunner.AbstractRakeRunnerTest.RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY;
+import static jetbrains.slow.plugins.rakerunner.RakeRunnerTestUtil.DEFAULT_GEMSET_NAME;
+import static jetbrains.slow.plugins.rakerunner.RakeRunnerTestUtil.RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY;
 
 /**
  * @author Roman.Chernyatchik
@@ -88,6 +88,13 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     // configure build
     final SBuildType bt = configureFakeBuild(configuration);
 
+    if (SystemInfo.isWindows) {
+      // set ruby interpreter path
+      RakeRunnerTestUtil.setInterpreterPath(bt);
+    } else if (SystemInfo.isLinux) {
+      RakeRunnerTestUtil.setRVMConfiguration(bt);
+    }
+
     // launch buld
     finishBuild(startBuild(bt, false));
     return patcherEnabled.get();
@@ -134,7 +141,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature);
 
     final String interpreterPath =
-      RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/ruby").getAbsolutePath();
+        RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/ruby").getAbsolutePath();
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, interpreterPath);
 
     // launch
