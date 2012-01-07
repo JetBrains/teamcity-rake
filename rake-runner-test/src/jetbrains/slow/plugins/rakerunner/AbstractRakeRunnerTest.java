@@ -48,6 +48,9 @@ import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
  */
 public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   private static final String INTERPRETER_PATH_PROPERTY = "rake-runner.ruby.interpreter.path";
+  public static final String RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY = "rake-runner.testing.ruby.version";
+  public static final String DEFAULT_GEMSET_NAME = "all-trunk";
+  public static final String GEMSET_PREFIX = "";
 
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
   private boolean myShouldTranslateMessages = false;
@@ -98,8 +101,8 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   private void setRVMConfiguration() {
     getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
         RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
-    useRVMRubySDK(System.getProperty("rake-runner.testing.ruby.version"));
-    useRVMGemSet("all-trunk");
+    useRVMRubySDK(System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY));
+    useRVMGemSet(DEFAULT_GEMSET_NAME);
   }
 
   protected void useRVMRubySDK(@NotNull String sdkname) {
@@ -107,7 +110,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   }
 
   protected void useRVMGemSet(@NotNull String gemset) {
-    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME, gemset));
+    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME, GEMSET_PREFIX + gemset));
   }
 
   @Override
@@ -192,7 +195,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
           patchedActual = VFS_FILE_PROTOCOL_PATTERN_WIN.matcher(actual).replaceAll("file:");
         }
         patchedActual = patchedActual.replaceAll(" +", " ");
-        patchedActual = patchedActual.replace("RSpec", "Spec");
+//        patchedActual = patchedActual.replace("RSpec", "Spec");
 
         patchedActual = reorderAttributesOfServiceMessages(patchedActual);
 

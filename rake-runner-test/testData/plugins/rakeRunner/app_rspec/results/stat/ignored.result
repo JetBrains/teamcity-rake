@@ -12,7 +12,7 @@
 --1--##teamcity[testFinished name='Pending should pending block' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
 --1--##teamcity[testStarted name='Pending should be fixed pending' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testFailed name='Pending should be fixed pending' message='Expected pending |'some|' to fail. No Error was raised.' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Pending should be fixed pending' message='RSpec::Core::PendingExampleFixedError' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Pending should be fixed pending' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
 --1--##teamcity[testSuiteFinished name='Pending' timestamp='##TIME##'] NORMAL
