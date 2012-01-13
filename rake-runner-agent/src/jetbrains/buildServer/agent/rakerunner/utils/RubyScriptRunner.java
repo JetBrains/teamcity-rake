@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,16 @@ import com.intellij.execution.process.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.CharsetToolkit;
+import jetbrains.buildServer.agent.rakerunner.RubySdk;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
+
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-import jetbrains.buildServer.agent.rakerunner.RubySdk;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
 
@@ -179,9 +180,11 @@ public class RubyScriptRunner {
     cmdLine.addParameters(arguments);
 
     // set env params
-    final Map<String, String> envParams = new HashMap<String, String>();
-    envParams.putAll(environment);
-    cmdLine.setEnvParams(envParams);
+    if (environment != null) {
+      final Map<String, String> envParams = new HashMap<String, String>();
+      envParams.putAll(environment);
+      cmdLine.setEnvParams(envParams);
+    }
 
     return cmdLine;
   }
