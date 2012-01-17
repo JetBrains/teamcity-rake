@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package jetbrains.buildServer.feature;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
@@ -58,12 +59,10 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
       return;
     }
 
-    final String rubyEnvConfiguratorFeatureType = getType();
-
     final Collection<SBuildFeatureDescriptor> buildFeatures = buildType.getResolvedSettings().getBuildFeatures();
     for (SBuildFeatureDescriptor bf : buildFeatures) {
       // if our type
-      if (rubyEnvConfiguratorFeatureType.equals(bf.getType())) {
+      if (getType().equals(bf.getType())) {
         // mark that feature is enabled
         context.addSharedParameter(RubyEnvConfiguratorUtil.RUBY_ENV_CONFIGURATOR_KEY, Boolean.TRUE.toString());
 
@@ -88,20 +87,33 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
   @Override
   public String describeParameters(@NotNull final Map<String, String> params) {
     StringBuilder result = new StringBuilder();
-    if (RubyEnvConfiguratorUtil.isRVMEnabled(params)) {
-      final String rvmSdkName = RubyEnvConfiguratorUtil.getRVMSdkName(params);
+    final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(params);
+    switch (configuration.getType()) {
+      case INTERPRETER_PATH: {
+        final String sdkPath = configuration.getRubySdkPath();
 
-      result.append("RVM interpreter: ").append(rvmSdkName != null ? rvmSdkName
-                                                                   : RakeRunnerBundle.DEFAULT_RVM_SDK);
-      final String gemset = RubyEnvConfiguratorUtil.getRVMGemsetName(params);
-      if (gemset != null) {
-        result.append('@').append(gemset);
+        result.append("Interpreter path: ").append(sdkPath != null ? sdkPath : "default");
+        break;
       }
-    } else {
-      final String sdkPath = RubyEnvConfiguratorUtil.getRubySdkPath(params);
-      result.append("Interpreter path: ").append(sdkPath != null ? sdkPath : "default");
+      case RVM: {
+        final String rvmSdkName = configuration.getRVMSdkName();
+        final String gemset = configuration.getRVMGemsetName();
+
+        result.append("RVM interpreter: ").append(rvmSdkName != null ? rvmSdkName : RakeRunnerBundle.DEFAULT_RVM_SDK);
+        if (gemset != null) {
+          result.append('@').append(gemset);
+        }
+        break;
+      }
+      case RVMRC: {
+        final String rvmrcPath = configuration.getRVMRCFilePath();
+
+        result.append("Path to a '.rvmrc' file:").append(rvmrcPath != null ? rvmrcPath : "default");
+        break;
+      }
     }
-    if (RubyEnvConfiguratorUtil.shouldFailBuildIfNoSdkFound(params)) {
+
+    if (configuration.isShouldFailBuildIfNoSdkFound()) {
       result.append("\n").append("Fail build if Ruby interpreter wasn't found.");
     }
     return result.toString();

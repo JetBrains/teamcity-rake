@@ -16,20 +16,20 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import java.io.File;
-import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
-import jetbrains.buildServer.agent.rakerunner.RubyLightweightSdk;
-import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings;
-import jetbrains.buildServer.agent.rakerunner.utils.impl.RubyLightweightSdkImpl;
-import jetbrains.buildServer.agent.rakerunner.utils.impl.RubySdkImpl;
-import jetbrains.buildServer.util.PropertiesUtil;
+import jetbrains.buildServer.agent.ruby.RubyLightweightSdk;
+import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRubyLightweightSdkImpl;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
+
+import java.io.File;
+import java.util.Map;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 
@@ -44,20 +44,20 @@ public class InternalRubySdkUtil {
   public static final String RUBY19_DISABLE_GEMS_OPTION = "--disable-gems";
 
   @NotNull
-  static RubyLightweightSdk createLightWeightSdk(final Map<String, String> runParameters,
-                                                 final Map<String, String> buildParameters)
-    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+  static RubyLightweightSdk createLightWeightSdk(@NotNull final Map<String, String> runParameters,
+                                                 @NotNull final Map<String, String> buildParameters)
+      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
 
     // Check if path to ruby interpreter was explicitly set
     // and calculate corresponding interpreter path
-    final String rubyInterpreterPath = determineRubyInterpreterPath(runParameters, buildParameters);
+    final RubyLightweightSdk sdk = determineRubyLightweightSdk(runParameters, buildParameters);
 
     // Final check that interpreter file exists
-    final File rubyInterpreter = rubyInterpreterPath != null ? new File(rubyInterpreterPath) : null;
+    final File rubyInterpreterFile = new File(sdk.getInterpreterPath());
     try {
-      if (rubyInterpreter == null || !rubyInterpreter.exists() || !rubyInterpreter.isFile()) {
-        return throwInterpratatorDoesntExistError(rubyInterpreterPath);
+      if (rubyInterpreterFile == null || !FileUtil.checkIfFileExists(rubyInterpreterFile)) {
+        return throwInterpratatorDoesntExistError(sdk.getInterpreterPath());
       }
     } catch (SecurityException e) {
       //unknown error
@@ -65,76 +65,61 @@ public class InternalRubySdkUtil {
     }
 
     // Check if interpreter is RVM based
-    if (!RVMSupportUtil.isRVMInterpreter(rubyInterpreterPath)) {
-      // 2 options are possible: non-rvm sdk or "rvm use system"
-      @Nullable final String rvmSdkName = runParameters.get(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH) != null
-                                          ? null
-                                          : runParameters.get(SharedRubyEnvSettings.SHARED_RUBY_RVM_SDK_NAME);
-      if (RVMSupportUtil.isSystemRuby(rvmSdkName)) {
-        // fake RVM
-        return new RubyLightweightSdkImpl(rubyInterpreterPath, true, true, null);
-      } else {
-        // not RVM
-        return new RubyLightweightSdkImpl(rubyInterpreterPath, false, false, null);
-      }
+    if (sdk.isRvmSdk() && !sdk.isSystem()) {
+      // TODO: check is gemset validaton needed
     }
-
-    // RVM - determine gemset
-    final String rvmGemset = determineGemset(rubyInterpreterPath, runParameters);
-    return new RubyLightweightSdkImpl(rubyInterpreterPath, true, false, rvmGemset);
+    return sdk;
   }
 
   @NotNull
-  static String determineRubyInterpreterPath(final Map<String, String> runParameters,
-                                             final Map<String, String> buildParameters)
-    throws RakeTasksBuildService.MyBuildFailureException {
+  static RubyLightweightSdk determineRubyLightweightSdk(@NotNull final Map<String, String> runParameters,
+                                                        @NotNull final Map<String, String> buildParameters)
+      throws RakeTasksBuildService.MyBuildFailureException {
 
     String sharedRubyInterpreterSetting = runParameters.get(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH);
+    // custom
+    if (sharedRubyInterpreterSetting != null && FileUtil.checkIfExists(sharedRubyInterpreterSetting)) {
+      return new jetbrains.buildServer.agent.ruby.impl.RubyLightweightSdkImpl(sharedRubyInterpreterSetting, false);
+    }
+
     if (sharedRubyInterpreterSetting == null) {
       sharedRubyInterpreterSetting = runParameters.get(SharedRubyEnvSettings.SHARED_RUBY_RVM_SDK_NAME);
     }
 
-    if (PropertiesUtil.isEmptyOrNull(sharedRubyInterpreterSetting)) {
-      return findSystemInterpreterPath(buildParameters);
-    }
-
-    // custom
-    if (FileUtil.checkIfExists(sharedRubyInterpreterSetting)) {
-      return sharedRubyInterpreterSetting;
+    if (StringUtil.isEmptyOrSpaces(sharedRubyInterpreterSetting)) {
+      return new jetbrains.buildServer.agent.ruby.impl.RubyLightweightSdkImpl(findSystemInterpreterPath(buildParameters), true);
     }
 
     // probably rvm short sdk name
-
     // short name shouldn't contain slashes
     if (!sharedRubyInterpreterSetting.contains("/")
         && !sharedRubyInterpreterSetting.contains("\\")) {
 
       // at first lets check that it isn't "system" interpreter
       if (RVMSupportUtil.isSystemRuby(sharedRubyInterpreterSetting)) {
-        return findSystemInterpreterPath(buildParameters);
+        return new RVMRubyLightweightSdkImpl(findSystemInterpreterPath(buildParameters), "system", true, null);
       }
 
       // build  dist/gemsets table, match ref with dist. name
       final String rvmGemset = getGemsetName(runParameters);
 
       final String distName = RVMSupportUtil.determineSuitableRVMSdkDist(sharedRubyInterpreterSetting, rvmGemset);
+
       if (distName != null) {
-        return RVMSupportUtil.suggestInterpretatorPath(distName);
+        return new RVMRubyLightweightSdkImpl(RVMSupportUtil.suggestInterpretatorPath(distName), distName, false, rvmGemset);
       }
       final String msg = "Gemset '" + rvmGemset + "' isn't defined for Ruby interpreter '"
-                         + sharedRubyInterpreterSetting
-                         + "' or the interpreter doesn't exist or isn't a file or isn't a valid RVM interpreter name.";
+          + sharedRubyInterpreterSetting
+          + "' or the interpreter doesn't exist or isn't a file or isn't a valid RVM interpreter name.";
       throw new RakeTasksBuildService.MyBuildFailureException(msg);
     }
 
-    throwInterpratatorDoesntExistError(sharedRubyInterpreterSetting);
-
-    // cannot happen
-    return null;
+    return throwInterpratatorDoesntExistError(sharedRubyInterpreterSetting);
   }
 
-  static String findSystemInterpreterPath(final Map<String, String> buildParameters)
-    throws RakeTasksBuildService.MyBuildFailureException {
+  @NotNull
+  static String findSystemInterpreterPath(@NotNull final Map<String, String> buildParameters)
+      throws RakeTasksBuildService.MyBuildFailureException {
     // find in $PATH
     final String path = OSUtil.findRubyInterpreterInPATH(buildParameters);
     if (path != null) {
@@ -148,21 +133,22 @@ public class InternalRubySdkUtil {
   @Nullable
   static String getGemsetName(final Map<String, String> runParameters) {
     final String uiRVMGemsetString = runParameters.get(SharedRubyEnvSettings.SHARED_RUBY_RVM_GEMSET_NAME);
-    return !PropertiesUtil.isEmptyOrNull(uiRVMGemsetString) ? uiRVMGemsetString.trim() : null;
+    return !StringUtil.isEmptyOrSpaces(uiRVMGemsetString) ? uiRVMGemsetString.trim() : null;
   }
 
-  static RubySdkImpl throwInterpratatorDoesntExistError(final String rubyInterpreterPath)
-    throws RakeTasksBuildService.MyBuildFailureException {
+  @NotNull
+  static <T> T throwInterpratatorDoesntExistError(final String rubyInterpreterPath)
+      throws RakeTasksBuildService.MyBuildFailureException {
     final String msg = "Ruby interpreter '"
-                       + rubyInterpreterPath
-                       + "' doesn't exist or isn't a file or isn't a valid RVM interpreter name.";
+        + rubyInterpreterPath
+        + "' doesn't exist or isn't a file or isn't a valid RVM interpreter name.";
     throw new RakeTasksBuildService.MyBuildFailureException(msg);
   }
 
   @Nullable
   static String determineGemset(@NotNull final String rubyInterpreterPath,
-                                final Map<String, String> runParameters)
-    throws RakeTasksBuildService.MyBuildFailureException {
+                                @NotNull final Map<String, String> runParameters)
+      throws RakeTasksBuildService.MyBuildFailureException {
 
     // RVM - determine gemset
     final String rvmGemset = getGemsetName(runParameters);
@@ -176,9 +162,9 @@ public class InternalRubySdkUtil {
     if (!isValid) {
       final String gemsets = RVMSupportUtil.dumpAvailableGemsets(rubyInterpreterPath);
       final String msg = "Gemset '" + rvmGemset + "' isn't defined for ruby interpreter '"
-                         + rubyInterpreterPath
-                         + "'. Please create the gemset at first.\n"
-                         + (gemsets == null ? "" : "\nAvailable gemsets: " + gemsets);
+          + rubyInterpreterPath
+          + "'. Please create the gemset at first.\n"
+          + (gemsets == null ? "" : "\nAvailable gemsets: " + gemsets);
       throw new RakeTasksBuildService.MyBuildFailureException(msg);
     }
     return rvmGemset;
@@ -188,9 +174,9 @@ public class InternalRubySdkUtil {
                                      final Map<String, String> buildConfEnvironment) {
     boolean isRuby19 = false;
     final RubyScriptRunner.Output rubyVersionResult =
-      RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment, RUBY_VERSION_SCRIPT);
+        RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment, RUBY_VERSION_SCRIPT);
     final String stdOut = rubyVersionResult.getStdout();
-    if (stdOut != null && stdOut.contains("1.9.")) {
+    if (stdOut.contains("1.9.")) {
       isRuby19 = true;
     }
     return isRuby19;
@@ -204,9 +190,9 @@ public class InternalRubySdkUtil {
     }
     boolean isJRuby = false;
     final RubyScriptRunner.Output rubyVersionResult =
-      RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment, RUBY_PLATFORM_SCRIPT);
+        RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment, RUBY_PLATFORM_SCRIPT);
     final String stdOut = rubyVersionResult.getStdout();
-    if (stdOut != null && stdOut.contains("java")) {
+    if (stdOut.contains("java")) {
       isJRuby = true;
     }
     return isJRuby;
@@ -225,6 +211,6 @@ public class InternalRubySdkUtil {
     }
 
     return RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment,
-                                               GET_LOAD_PATH_SCRIPT, rubyArgs);
+        GET_LOAD_PATH_SCRIPT, rubyArgs);
   }
 }

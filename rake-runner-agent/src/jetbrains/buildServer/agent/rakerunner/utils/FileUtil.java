@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import java.io.File;
-import java.io.IOException;
 import jetbrains.buildServer.RunBuildException;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Roman.Chernyatchik
@@ -35,6 +36,14 @@ public class FileUtil {
   }
 
   /**
+   * @param file file to check
+   * @return true, if file exists and is normal file
+   */
+  public static boolean checkIfFileExists(@NotNull final File file) {
+    return file.exists() && file.isFile();
+  }
+
+  /**
    * @param path Path to check
    * @return true, if path exists
    */
@@ -42,13 +51,14 @@ public class FileUtil {
     return new File(path).exists();
   }
 
-  public static String getCanonicalPath(final File file) throws RunBuildException {
-    final String binFolderCanonicalPath;
+  @NotNull
+  public static String getCanonicalPath(@NotNull final File file) throws RunBuildException {
     try {
-      binFolderCanonicalPath = file.getCanonicalPath();
+      return file.getCanonicalPath();
     } catch (IOException e) {
       throw new RunBuildException(e.getMessage(), e);
+    } catch (SecurityException e) {
+      throw new RunBuildException(e.getMessage(), e);
     }
-    return binFolderCanonicalPath;
   }
 }

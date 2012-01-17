@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package jetbrains.buildServer.rakerunner;
 
 import com.intellij.openapi.util.text.StringUtil;
-import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
@@ -30,16 +31,17 @@ public class RakeRunnerUtils {
     INTERPRETER_PATH("path"),
     RVM("rvm");
 
-    private String myModeString;
+    private final String myModeString;
 
-    RubyConfigMode(final String modeString) {
+    RubyConfigMode(@NotNull final String modeString) {
       myModeString = modeString;
     }
 
-    public boolean isThisMode(final String modeStrValue) {
+    public boolean isThisMode(@Nullable final String modeStrValue) {
       return myModeString.equals(modeStrValue);
     }
 
+    @NotNull
     public String getModeValueString() {
       return myModeString;
     }

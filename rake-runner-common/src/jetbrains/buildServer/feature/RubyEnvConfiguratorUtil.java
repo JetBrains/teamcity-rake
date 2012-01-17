@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package jetbrains.buildServer.feature;
 
 import com.intellij.openapi.util.text.StringUtil;
-import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
@@ -30,23 +31,13 @@ public class RubyEnvConfiguratorUtil {
 
   public static final String UI_RVM_GEMSET_NAME_KEY = "ui.ruby.configurator.rvm.gemset.name";
   public static final String UI_RVM_SDK_NAME_KEY = "ui.ruby.configurator.rvm.sdk.name";
+  public static final String UI_RVM_RVMRC_PATH_KEY = "ui.ruby.configurator.rvm.rvmrc.path";
   public static final String UI_USE_RVM_KEY = "ui.ruby.configurator.use.rvm";
   public static final String UI_RUBY_SDK_PATH_KEY = "ui.ruby.configurator.ruby.interpreter.path";
 
-  public static boolean isRubyEnvConfiguratorEnabled(@NotNull final Map<String, String> params) {
-    final String value = params.get(RUBY_ENV_CONFIGURATOR_KEY);
-    return !StringUtil.isEmpty(value) && Boolean.valueOf(value);
-  }
-
-  public static boolean isRVMEnabled(@NotNull final Map<String, String> params) {
-    return !StringUtil.isEmpty(params.get(UI_USE_RVM_KEY));
-  }
-
   public static boolean shouldFailBuildIfNoSdkFound(@NotNull final Map<String, String> params) {
     final String key = UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY;
-
-    return params.containsKey(key)
-           && params.get(key).equals(Boolean.TRUE.toString());
+    return Boolean.parseBoolean(params.get(key));
   }
 
   @Nullable
@@ -66,4 +57,25 @@ public class RubyEnvConfiguratorUtil {
     final String value = params.get(UI_RVM_SDK_NAME_KEY);
     return StringUtil.isEmpty(value) ? null : value;
   }
+
+  @Nullable
+  public static String getRVMRCFilePath(@NotNull final Map<String, String> params) {
+    final String value = params.get(UI_RVM_RVMRC_PATH_KEY);
+    return StringUtil.isEmpty(value) ? null : value;
+  }
+
+  @NotNull
+  public static RubyEnvConfiguratorConfiguration.Type getFeatureWorkingType(@NotNull final Map<String, String> params) {
+    if (StringUtil.isEmpty(params.get(RUBY_ENV_CONFIGURATOR_KEY))) return RubyEnvConfiguratorConfiguration.Type.OFF;
+
+    final String useRVMType = params.get(UI_USE_RVM_KEY);
+    if ("manual".equals(useRVMType)) {
+      return RubyEnvConfiguratorConfiguration.Type.RVM;
+    } else if ("rvmrc".equals(useRVMType)) {
+      return RubyEnvConfiguratorConfiguration.Type.RVMRC;
+    } else {
+      return RubyEnvConfiguratorConfiguration.Type.INTERPRETER_PATH;
+    }
+  }
+
 }

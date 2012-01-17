@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.PathUtil;
-import java.io.File;
 import jetbrains.buildServer.RunBuildException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 /**
  * @author Roman.Chernyatchik
@@ -33,11 +34,12 @@ public class RubyProjectSourcesUtil {
   private static final String RUBY_SOURCES_SUBDIR = "rb";
   @NonNls
   private static final String PATCH_FOLDER = File.separatorChar + "patch" + File.separatorChar;
-  private static final String PATCH_FOLDER_BDD = PATCH_FOLDER  + "bdd";
+  private static final String PATCH_FOLDER_BDD = PATCH_FOLDER + "bdd";
   private static final String PATCH_FOLDER_COMMON = PATCH_FOLDER + "common";
   private static final String PATCH_FOLDER_TESTUNIT = PATCH_FOLDER + "testunit";
-  private static final String RUBY_SOURCES_RAKE_RUNNER = File.separatorChar + "runner"+ File.separatorChar + "rakerunner.rb";
-  @NonNls public static final String TUNIT_LOADPATH_PATH_SCRIPT = "test/unit/ui/teamcity/loadpath_patch.rb";
+  private static final String RUBY_SOURCES_RAKE_RUNNER = File.separatorChar + "runner" + File.separatorChar + "rakerunner.rb";
+  @NonNls
+  public static final String TUNIT_LOADPATH_PATH_SCRIPT = "test/unit/ui/teamcity/loadpath_patch.rb";
 
   @NotNull
   private static String getRootPath() throws RunBuildException {
@@ -71,7 +73,7 @@ public class RubyProjectSourcesUtil {
 
   @NotNull
   public static String getLoadPath_PatchRoot_Bdd() throws RunBuildException {
-    return getRootPath() +PATCH_FOLDER_BDD;
+    return getRootPath() + PATCH_FOLDER_BDD;
   }
 
   @NotNull

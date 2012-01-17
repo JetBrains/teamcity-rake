@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.rakerunner;
+package jetbrains.buildServer.agent.ruby;
 
+import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Roman.Chernyatchik
  */
-public interface RubyLightweightSdk {
+public interface RubySdk extends RubyLightweightSdk {
   @NotNull
-  String getInterpreterPath();
+  String[] getGemPaths();
 
-  boolean isRvmSdk();
+  boolean isRuby19();
 
-  @Nullable
-  String getRvmGemsetName();
+  boolean isJRuby();
 
   @NotNull
-  String getPresentableName();
+  RubyScriptRunner.Output getGemPathsFetchLog();
 
-  boolean isSystemRvm();
+  @NotNull
+  RubyScriptRunner.Output getLoadPathsFetchLog();
+
+  @NotNull
+  String[] getLoadPath();
 }

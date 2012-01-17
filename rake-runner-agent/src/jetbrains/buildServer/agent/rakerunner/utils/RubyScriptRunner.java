@@ -21,7 +21,7 @@ import com.intellij.execution.process.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.CharsetToolkit;
-import jetbrains.buildServer.agent.rakerunner.RubySdk;
+import jetbrains.buildServer.agent.ruby.RubySdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
@@ -100,7 +100,7 @@ public class RubyScriptRunner {
   public static Output runInPath(@Nullable final String workingDir,
                                  @Nullable final Map<String, String> environment,
                                  @NotNull final String... command) {
-// executing
+    // executing
     final StringBuilder out = new StringBuilder();
     final StringBuilder err = new StringBuilder();
     Process process = createProcess(workingDir, environment, command);
@@ -108,6 +108,7 @@ public class RubyScriptRunner {
       ProcessHandler osProcessHandler = new OSProcessHandler(process, TextUtil.concat(command)) {
         private final Charset DEFAULT_SYSTEM_CHARSET = CharsetToolkit.getDefaultSystemCharset();
 
+        @Override
         public Charset getCharset() {
           return DEFAULT_SYSTEM_CHARSET;
         }
@@ -162,9 +163,9 @@ public class RubyScriptRunner {
   /**
    * Creates process builder and setups it's commandLine, working directory, enviroment variables
    *
-   * @param workingDir         Process working dir
-   * @param executablePath     Path to executable file
-   * @param arguments          Process commandLine
+   * @param workingDir     Process working dir
+   * @param executablePath Path to executable file
+   * @param arguments      Process commandLine
    * @return process builder
    */
   public static GeneralCommandLine createAndSetupCmdLine(@Nullable final String workingDir,
@@ -191,18 +192,22 @@ public class RubyScriptRunner {
 
 
   public static class Output {
-    private String stdout;
-    private String stderr;
+    @NotNull
+    private final String stdout;
+    @NotNull
+    private final String stderr;
 
-    public Output(String stdout, String stderr) {
+    public Output(@NotNull final String stdout, @NotNull final String stderr) {
       this.stdout = stdout;
       this.stderr = stderr;
     }
 
+    @NotNull
     public String getStdout() {
       return stdout;
     }
 
+    @NotNull
     public String getStderr() {
       return stderr;
     }
@@ -217,6 +222,7 @@ public class RubyScriptRunner {
       this.err = err;
     }
 
+    @Override
     public void onTextAvailable(final ProcessEvent event, final Key outputType) {
       if (outputType == ProcessOutputTypes.STDOUT) {
         out.append(event.getText());

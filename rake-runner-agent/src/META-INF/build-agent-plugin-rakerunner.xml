@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2000-2011 JetBrains s.r.o.
+  ~ Copyright 2000-2012 JetBrains s.r.o.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,6 +18,29 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans default-autowire="constructor">
-  <bean id="rakeBuildServiceFactory" class="jetbrains.buildServer.agent.rakerunner.RakeRunnerCommandLineServiceFactory"/>
-  <bean id="rubyRuntimeContextFeature" class="jetbrains.buildServer.agent.feature.RubyEnvConfiguratorService"/>
+  <!-- Rake Runner -->
+  <bean id="rakeBuildServiceFactory"
+        class="jetbrains.buildServer.agent.rakerunner.RakeRunnerCommandLineServiceFactory"/>
+
+  <!-- RVM detector -->
+  <bean id="rvmDetectorFactory"
+        class="jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetectorFactory"/>
+  <bean id="rvmDetector"
+        class="jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector"
+        factory-bean="rvmDetectorFactory"
+        factory-method="createRVMDetector"/>
+  <bean id="agentRVMDetector"
+        class="jetbrains.buildServer.agent.ruby.rvm.detector.AgentRVMDetector"/>
+  <bean id="rvmPathSettings"
+        class="org.jetbrains.plugins.ruby.rvm.RVMPathsSettings">
+  </bean>
+
+  <!-- Ruby Environment Configurator  feature -->
+  <bean id="rubyRuntimeContextFeature"
+        class="jetbrains.buildServer.agent.feature.RubyEnvConfiguratorService"/>
+
+  <!-- Path patcher -->
+  <bean id="rubyCommandLineProcessor"
+        class="jetbrains.buildServer.agent.ruby.rvm.RVMCommandLineProcessor"/>
+
 </beans>

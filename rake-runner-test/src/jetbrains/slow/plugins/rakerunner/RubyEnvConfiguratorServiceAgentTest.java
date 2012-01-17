@@ -1,13 +1,31 @@
+/*
+ * Copyright 2000-2012 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.SystemInfo;
 import jetbrains.buildServer.AgentServerFunctionalTestCase;
-import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.*;
 import jetbrains.buildServer.agent.feature.RubyEnvConfiguratorService;
 import jetbrains.buildServer.agent.impl.SpringContextFixture;
-import jetbrains.buildServer.agent.rakerunner.RubyLightweightSdk;
+import jetbrains.buildServer.agent.ruby.RubyLightweightSdk;
+import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
+import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetectorFactory;
+import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorUtil;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.util.TestFor;
@@ -60,14 +78,14 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   }
 
   @Test
-  public void test_cmdlinePatcher_enabled() throws IOException {
+  public void testRunnerPathingEnabled() throws IOException {
     final boolean patcherEnabled = runCmdlinePatcherTest(FakeBuildConfiguration.Feature);
 
     Assert.assertTrue(patcherEnabled, "RubyEnvConfiguratorService should be enabled");
   }
 
   @Test
-  public void test_cmdlinePatcher_disabled() throws IOException {
+  public void testRunnerPathingDisabled() throws IOException {
     final boolean patcherEnabled = runCmdlinePatcherTest(FakeBuildConfiguration.Nothing);
 
     Assert.assertFalse(patcherEnabled, "RubyEnvConfiguratorService should not be enabled");
@@ -76,11 +94,14 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   private boolean runCmdlinePatcherTest(FakeBuildConfiguration configuration) throws IOException {
     final AtomicBoolean patcherEnabled = new AtomicBoolean(false);
 
+    final RVMDetector detector = new RVMDetectorFactory().createRVMDetector();
+
     getExtensionHolder().registerExtension(BuildRunnerPrecondition.class, "aaa",
-        new RubyEnvConfiguratorService() {
+        new RubyEnvConfiguratorService(detector) {
           @Override
           protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
-                                                @NotNull final RubyLightweightSdk sdk) throws RunBuildException {
+                                                @NotNull final RubyLightweightSdk sdk,
+                                                @NotNull final RubyEnvConfiguratorConfiguration configuration) {
             patcherEnabled.set(true);
           }
         });
@@ -107,7 +128,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.FeatureAndFakeRvmHome);
     // use rvm
-    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "true");
+    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "manual");
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, "ruby-1.8.7-p352");
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_GEMSET_NAME_KEY, "teamcity");
 
@@ -160,7 +181,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   }
 
   @Test
-  public void test_BadRvmSdk_DoesntFailBuild() throws IOException {
+  public void testBadSdkDoesntFailBuild() throws IOException {
     final Ref<BuildRunnerContext> contextRef = new Ref<BuildRunnerContext>();
 
     // add listener
@@ -186,7 +207,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   }
 
   @Test
-  public void test_BadRvmSdk_FailsBuild() throws IOException {
+  public void testBadSdkFailsBuild() throws IOException {
     final Ref<BuildRunnerContext> contextRef = new Ref<BuildRunnerContext>();
 
     // add listener
@@ -231,7 +252,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final String rvmRubyName = System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY);
     final String rvmGemsetName = DEFAULT_GEMSET_NAME;
 
-    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "true");
+    addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "manual");
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, rvmRubyName);
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RVM_GEMSET_NAME_KEY, rvmGemsetName);
 
@@ -243,7 +264,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     Assert.assertNotNull(envs);
 
     Assert.assertNotNull(allParamsRef.get());
-    RVMPathsSettings.getInstanceEx().initialize(allParamsRef.get());
+    RVMPathsSettings.getInstanceEx().initialize(envParamsRef.get());
     final String rvmHomePath = RVMPathsSettings.getInstance().getRvmHomePath();
 
     Assert.assertNotNull(rvmHomePath, "Cannot retrieve RVM home path");

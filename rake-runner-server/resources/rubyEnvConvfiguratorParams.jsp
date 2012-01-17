@@ -1,4 +1,4 @@
-<%--Copyright 2000-2011 JetBrains s.r.o.--%>
+<%--Copyright 2000-2012 JetBrains s.r.o.--%>
 
 <%--Licensed under the Apache License, Version 2.0 (the "License");--%>
 <%--you may not use this file except in compliance with the License.--%>
@@ -28,6 +28,7 @@
     <c:set var="onclick">
       if (this.checked) {
         $('ui.ruby.configurator.ruby.interpreter.path').focus();
+        $('ui.ruby.configurator.rvm.path').value='';
       }
     </c:set>
     <props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="" id="ui.ruby.configurator.use.rvm:path"
@@ -44,10 +45,12 @@
     <c:set var="onclick">
       if (this.checked) {
         $('ui.ruby.configurator.rvm.sdk.name').focus();
+        $('ui.ruby.configurator.rvm.path').value='%env.rvm_path%';
       }
     </c:set>
-    <props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="true" id="ui.ruby.configurator.use.rvm:rvm" onclick="${onclick}"/>
+    <props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="manual" id="ui.ruby.configurator.use.rvm:rvm" onclick="${onclick}"/>
     <label for="ui.ruby.configurator.use.rvm:rvm">RVM interpreter:</label>
+    <props:hiddenProperty name="ui.ruby.configurator.rvm.path" value=""/>
   </th>
   <td>
     <style type="text/css">
@@ -69,10 +72,16 @@
       <script type="text/javascript">
         if ($('ui.ruby.configurator.use.rvm:path').checked) {
           $('ui.ruby.configurator.ruby.interpreter.path').focus();
+          $('ui.ruby.configurator.rvm.path').value="";
         }
         if ($('ui.ruby.configurator.use.rvm:rvm').checked) {
           $('ui.ruby.configurator.rvm.sdk.name').focus();
+          $('ui.ruby.configurator.rvm.path').value="%env.rvm_path%";
         }
+//        if ($('ui.ruby.configurator.use.rvm:rvmrc').checked) {
+//          $('ui.ruby.configurator.rvm.rvmrc.path').focus();
+//          $('ui.ruby.configurator.rvm.path').value="%env.rvm_path%";
+//        }
       </script>
     </div>
     <div class="rvm_options">
@@ -84,6 +93,36 @@
     </div>
   </td>
 </tr>
+<%--<tr>--%>
+  <%--<th>--%>
+    <%--<c:set var="onclick">--%>
+      <%--if (this.checked) {--%>
+        <%--$('ui.ruby.configurator.rvm.rvmrc.path').focus();--%>
+        <%--$('ui.ruby.configurator.rvm.path').value='%env.rvm_path%';--%>
+      <%--}--%>
+    <%--</c:set>--%>
+    <%--<props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="rvmrc" id="ui.ruby.configurator.use.rvm:rvmrc" onclick="${onclick}"/>--%>
+    <%--<label for="ui.ruby.configurator.use.rvm:rvmrc">RVM with .rvmrc file:</label>--%>
+  <%--</th>--%>
+  <%--<td>--%>
+    <%--<style type="text/css">--%>
+      <%--.rvm_options {--%>
+        <%--padding-top: 3px;--%>
+      <%--}--%>
+
+      <%--.rvm_options_editor {--%>
+        <%--padding-top: 2px;--%>
+      <%--}--%>
+    <%--</style>--%>
+    <%--<div class="rvm_options">--%>
+      <%--Path to a '.rvmrc' file:--%>
+      <%--<div class="rvm_options_editor">--%>
+        <%--<props:textProperty name="ui.ruby.configurator.rvm.rvmrc.path" style="width:25em;" maxlength="256" className="buildTypeParams"/>--%>
+        <%--<span class="smallNote">Path relative to a checkout directory</span>--%>
+      <%--</div>--%>
+    <%--</div>--%>
+  <%--</td>--%>
+<%--</tr>--%>
 <td colspan="2">
   <props:checkboxProperty name="ui.ruby.configurator.fail.build.if.interpreter.not.found"/>
   <label for="ui.ruby.configurator.fail.build.if.interpreter.not.found">Fail build if Ruby interpreter wasn't found</label>

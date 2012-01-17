@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,16 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.Pair;
-import java.io.File;
-import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
-import jetbrains.buildServer.agent.rakerunner.RubySdk;
+import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.util.Map;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 import static jetbrains.buildServer.rakerunner.RakeRunnerConstants.TEST_UNIT_GEM_VERSION_PROPERTY;
@@ -38,7 +39,9 @@ public class TestUnitUtil {
   public static final String AUTORUNNER_SCRIPT_PATH = "test/unit/autorunner.rb";
   @NonNls
   public static final String TESTRUNNERMEDIATOR_SCRIPT_PATH = "test/unit/ui/testrunnermediator.rb";
+  @NonNls
   public static final String TEST_UNIT_GEM_NAME = "test-unit";
+  @NonNls
   public static final String MINITEST_RUNNER_UNIT_SCRIPT_PATH = "minitest/unit.rb";
 
   @NotNull
@@ -47,7 +50,7 @@ public class TestUnitUtil {
                                                           @NotNull final Map<String, String> buildParameters,
                                                           @NotNull final Map<String, String> runnerEnvParams,
                                                           @NotNull final String checkoutDirPath)
-    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     return findTestUnitScript(sdk, AUTORUNNER_SCRIPT_PATH, runParams, buildParameters, runnerEnvParams, checkoutDirPath);
   }
@@ -58,7 +61,7 @@ public class TestUnitUtil {
                                                                   @NotNull final Map<String, String> buildParameters,
                                                                   @NotNull final Map<String, String> runnerEnvParams,
                                                                   @NotNull final String checkoutDirPath)
-    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     return findTestUnitScript(sdk, TESTRUNNERMEDIATOR_SCRIPT_PATH, runParams, buildParameters, runnerEnvParams, checkoutDirPath);
   }
@@ -72,19 +75,22 @@ public class TestUnitUtil {
   /**
    * Finds script with given relative path in test-unit gem or Test::Unit framework bundled in SDK
    *
-   * @param scriptPath Path of given script
+   * @param scriptPath      Path of given script
    * @param buildParameters Build params
    * @return Full path of given script
-   * @throws jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService.MyBuildFailureException If script will not be found
-   * @throws jetbrains.buildServer.RunBuildException Other error
+   * @throws jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService.MyBuildFailureException
+   *          If script will not be found
+   * @throws jetbrains.buildServer.RunBuildException
+   *          Other error
    */
+  @NotNull
   public static String findTestUnitScript(@NotNull final RubySdk sdk,
-                                          final String scriptPath,
+                                          @NotNull final String scriptPath,
                                           @NotNull final Map<String, String> runParams,
-                                          final Map<String, String> buildParameters,
+                                          @NotNull final Map<String, String> buildParameters,
                                           @NotNull final Map<String, String> runnerEnvParams,
                                           @NotNull final String checkoutDirPath)
-    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     // At first let's try to find script in "test-unit" gem
     // then in sdk load path
@@ -98,18 +104,18 @@ public class TestUnitUtil {
 
       // use bundler gems root if it is defined! (i.e. we use bundle exec emulation with custom gem paths)
       final String bundlerGemRoot = BundlerUtil.determineGemsRootsAccordingToBundlerSettings(sdk,
-                                                                                             runParams, buildParameters,
-                                                                                             runnerEnvParams,
-                                                                                             checkoutDirPath);
+          runParams, buildParameters,
+          runnerEnvParams,
+          checkoutDirPath);
       final String[] gemPaths = bundlerGemRoot == null ? sdk.getGemPaths() : new String[]{bundlerGemRoot};
 
       // If user overrides bundler.path sys var or uses project custom bundle..
       // we need to look for test-unit gems in "frozen" paths
       final Pair<String, String> pathAndVersion = RubySDKUtil.findGemRootFolderAndVersion(TEST_UNIT_GEM_NAME,
-                                                                                          gemPaths,
-                                                                                          forcedTestUnitGemVersion);
+          gemPaths,
+          forcedTestUnitGemVersion);
       final String testUnitGemPath = pathAndVersion.first;
-      final String  testUnitGemVersion = pathAndVersion.second;
+      final String testUnitGemVersion = pathAndVersion.second;
 
       if (testUnitGemPath != null) {
         final String fullScriptPath = testUnitGemPath + File.separatorChar + "lib" + File.separatorChar + scriptPath;
@@ -119,7 +125,7 @@ public class TestUnitUtil {
 
           // Error: Script wasn't found in test-unit gem
           final String msg = "Rake runner isn't compatible with your'" + TEST_UNIT_GEM_NAME + "-" + testUnitGemVersion
-                             + "'(" + testUnitGemPath + ") gem. Please submit a feature request.";
+              + "'(" + testUnitGemPath + ") gem. Please submit a feature request.";
           throw new RakeTasksBuildService.MyBuildFailureException(msg);
         }
 
@@ -128,12 +134,12 @@ public class TestUnitUtil {
         if (forcedTestUnitGemVersion != null) {
           // not "built-in", but something specifed
           final String msg = "test-unit gem with version '"
-                             + forcedTestUnitGemVersion
-                             + "' wasn't found in Gem paths of Ruby SDK with interpreter: '"
-                             + sdk.getPresentableName()
-                             + "'.\n"
-                             + "Gem paths:\n"
-                             + (bundlerGemRoot == null ? sdk.getGemPathsFetchLog().getStdout() : bundlerGemRoot);
+              + forcedTestUnitGemVersion
+              + "' wasn't found in Gem paths of Ruby SDK with interpreter: '"
+              + sdk.getPresentableName()
+              + "'.\n"
+              + "Gem paths:\n"
+              + (bundlerGemRoot == null ? sdk.getGemPathsFetchLog().getStdout() : bundlerGemRoot);
           throw new RakeTasksBuildService.MyBuildFailureException(msg);
         }
       }
@@ -154,20 +160,20 @@ public class TestUnitUtil {
 
     // General error message
     final boolean isRuby19 = sdk.isRuby19();
-    final String msg = (forceUseBuiltInTestUnit? "You asked TC to use built-in Test::Unit test framework, but file '"
-                                               : "File '")
-                       + scriptPath
-                       + "' wasn't found in Gem paths and in $LOAD_PATH of Ruby SDK with interpreter: '"
-                       + sdk.getPresentableName()
-                       + "'.\n"
-                       + (isRuby19 ? "Rake runner detected that your are using Ruby 1.9. So please install 'test-unit' gem because simplified Test::Unit framework, which is bundled in Ruby 1.9, doesn't support pluggable test reporters.\n" : "")
-                       + "\n"
-                       + "Gem paths:\n"
-                       + gemPathsLog.getStdout()
-                       + "\n"
-                       + "\n"
-                       + "$LOAD_PATH:\n"
-                       + loadPathsLog.getStdout();
+    final String msg = (forceUseBuiltInTestUnit ? "You asked TC to use built-in Test::Unit test framework, but file '"
+        : "File '")
+        + scriptPath
+        + "' wasn't found in Gem paths and in $LOAD_PATH of Ruby SDK with interpreter: '"
+        + sdk.getPresentableName()
+        + "'.\n"
+        + (isRuby19 ? "Rake runner detected that your are using Ruby 1.9. So please install 'test-unit' gem because simplified Test::Unit framework, which is bundled in Ruby 1.9, doesn't support pluggable test reporters.\n" : "")
+        + "\n"
+        + "Gem paths:\n"
+        + gemPathsLog.getStdout()
+        + "\n"
+        + "\n"
+        + "$LOAD_PATH:\n"
+        + loadPathsLog.getStdout();
     throw new RakeTasksBuildService.MyBuildFailureException(msg);
   }
 

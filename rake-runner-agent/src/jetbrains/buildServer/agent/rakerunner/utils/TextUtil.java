@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import java.util.regex.Pattern;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.NotNull;
 import jetbrains.buildServer.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.regex.Pattern;
 
 /**
  * @author Roman.Chernyatchik
@@ -48,7 +49,8 @@ public class TextUtil {
     return s == null || s.trim().length() == 0;
   }
 
-  public static String removeNewLine(String s) {
+  @NotNull
+  public static String removeNewLine(@NotNull String s) {
     if (s.length() == 0) return s;
     if (s.charAt(s.length() - 1) == '\n')
       s = s.substring(0, s.length() - 1);
@@ -63,10 +65,12 @@ public class TextUtil {
    * @param string String to split
    * @return array of strings
    */
-  public static String[] splitByLines(final String string) {
+  @NotNull
+  public static String[] splitByLines(@NotNull final String string) {
     return EOL_SPLIT_PATTERN.split(string);
   }
 
+  @NotNull
   public static String stripDoubleQuoteAroundValue(@NotNull final String str) {
     String text = str;
     if (StringUtil.startsWithChar(text, '\"')) {

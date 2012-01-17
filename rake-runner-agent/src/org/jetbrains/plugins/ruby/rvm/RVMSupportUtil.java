@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,22 @@
 
 package org.jetbrains.plugins.ruby.rvm;
 
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.SystemInfo;
-import java.io.File;
-import java.util.*;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
-import jetbrains.buildServer.agent.rakerunner.RubyLightweightSdk;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
+import jetbrains.buildServer.agent.ruby.rvm.RVMRubyLightweightSdk;
+import jetbrains.buildServer.agent.ruby.RubyLightweightSdk;
+import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_GEMS_FOLDER_NAME;
+import java.io.File;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+
 import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_FOLDER_NAME;
 
 /**
@@ -38,66 +40,18 @@ import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_
 public class RVMSupportUtil {
   private static final String RVM_SYSTEM_INTERPRETER = "system";
 
-  public static boolean isRVMInterpreter(final String executablePath) {
-    return SharedRVMUtil.isRVMInterpreter(executablePath);
-  }
-
   @NotNull
   public static SharedRVMUtil.RubyDistToGemsetTable getInterpreterDistName2GemSetsTable() {
-    if (SystemInfo.isUnix) {
-
-      final String rvmHomeDirPath = RVMPathsSettings.getInstance().getRvmHomePath();
-      if (rvmHomeDirPath != null) {
-        return getInterpreterDistName2GemSetsTable(rvmHomeDirPath);
-      }
+    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
+    if (rvm != null) {
+      return rvm.getInterpreterDistName2GemSetsTable();
     }
     return SharedRVMUtil.RubyDistToGemsetTable.emptyTable();
   }
 
-  @NotNull
-  private static SharedRVMUtil.RubyDistToGemsetTable getInterpreterDistName2GemSetsTable(@NotNull final String rvmHomeDirPath) {
-    final String rubyGemsFolderPath = rvmHomeDirPath + File.separatorChar + RVM_GEMS_FOLDER_NAME;
-    final String rubySdksRootPath = rvmHomeDirPath + File.separatorChar + RVM_RUBIES_FOLDER_NAME;
-
-    if (!FileUtil.checkIfDirExists(rubyGemsFolderPath) || !FileUtil.checkIfDirExists(rubySdksRootPath)) {
-      return SharedRVMUtil.RubyDistToGemsetTable.emptyTable();
-    }
-
-    final File rubyGemsFolder = new File(rubyGemsFolderPath);
-    final File rubySdksRoot = new File(rubySdksRootPath);
-
-    final HashSet<String> distSet = new HashSet<String>(Arrays.asList(rubySdksRoot.list()));
-    if (distSet.isEmpty()) {
-      return SharedRVMUtil.RubyDistToGemsetTable.emptyTable();
-    }
-
-    final SharedRVMUtil.RubyDistToGemsetTable rubyDist2Gemset = new SharedRVMUtil.RubyDistToGemsetTable();
-
-    // 1. scan .rvm/gems directory and find all existing (sdk, gemset) pairs
-    for (File folder : rubyGemsFolder.listFiles()) {
-      // ignore ordnary files
-      if (!folder.isDirectory()) {
-        continue;
-      }
-
-      final Condition<String> isRVMDistCond = new Condition<String>() {
-        public boolean value(final String distName) {
-          return distSet.contains(distName);
-        }
-      };
-
-      // 2. Register if folder is a valid gempath for some sdk
-      SharedRVMUtil.registerGemset(folder.getName(),
-                                   isRVMDistCond,
-                                   rubyDist2Gemset);
-    }
-
-    return rubyDist2Gemset;
-  }
-
-  public static boolean isGemsetExists(@NotNull final String rvmGemset, 
+  public static boolean isGemsetExists(@NotNull final String rvmGemset,
                                        @NotNull final String rubyInterpreterPath)
-    throws RakeTasksBuildService.MyBuildFailureException {
+      throws RakeTasksBuildService.MyBuildFailureException {
     final Pair<String, String> gemsRootAndDistName = getNormalizedDistAndGemset(rubyInterpreterPath);
 
     if (gemsRootAndDistName == null) {
@@ -108,12 +62,12 @@ public class RVMSupportUtil {
     final String distName = gemsRootAndDistName.second;
 
     return FileUtil.checkIfDirExists(gemsRoot + File.separatorChar
-                                     + distName + SharedRVMUtil.getGemsetSeparator() + rvmGemset);
+        + distName + SharedRVMUtil.getGemsetSeparator() + rvmGemset);
   }
 
   @Nullable
-  public static String dumpAvailableGemsets(@NotNull final String rubyInterpreterPath) 
-    throws RakeTasksBuildService.MyBuildFailureException {
+  public static String dumpAvailableGemsets(@NotNull final String rubyInterpreterPath)
+      throws RakeTasksBuildService.MyBuildFailureException {
 
     final SharedRVMUtil.RubyDistToGemsetTable table = getInterpreterDistName2GemSetsTable();
 
@@ -139,7 +93,7 @@ public class RVMSupportUtil {
   }
 
   private static Pair<String, String> getNormalizedDistAndGemset(final String rubyInterpreterPath)
-    throws RakeTasksBuildService.MyBuildFailureException {
+      throws RakeTasksBuildService.MyBuildFailureException {
     final Pair<String, String> gemsRootAndDistName;
     try {
       gemsRootAndDistName = SharedRVMUtil.getRVMGemsRootAndDistName(rubyInterpreterPath);
@@ -159,55 +113,58 @@ public class RVMSupportUtil {
 
     // rvm defines "ruby" symlink for all ruby interpreters
     return rvmHomePath
-           + File.separator + RVM_RUBIES_FOLDER_NAME
-           + File.separator + distName
-           + File.separator + "bin"
-           + File.separator + "ruby";
+        + File.separator + RVM_RUBIES_FOLDER_NAME
+        + File.separator + distName
+        + File.separator + "bin"
+        + File.separator + "ruby";
   }
 
   public static String determineSuitableRVMSdkDist(final String uiRubyInterpreterSetting, final String rvmGemset) {
     final SharedRVMUtil.RubyDistToGemsetTable table = getInterpreterDistName2GemSetsTable();
 
-    return SharedRVMUtil.determineSuitableRVMSdkDist(uiRubyInterpreterSetting,
-                                                     rvmGemset, table);
+    return SharedRVMUtil.determineSuitableRVMSdkDist(uiRubyInterpreterSetting, rvmGemset, table);
   }
 
   public static void patchEnvForRVMIfNecessary(@NotNull final RubyLightweightSdk sdk,
-                                               final Map<String, String> envParams)
-    throws RakeTasksBuildService.MyBuildFailureException {
-
-    if (!sdk.isRvmSdk()) {
-      // do nothing
-      return;
+                                               @NotNull final Map<String, String> envParams)
+      throws RakeTasksBuildService.MyBuildFailureException {
+    if (sdk.isRvmSdk()) {
+      patchEnvForRVMIfNecessary((RVMRubyLightweightSdk) sdk, envParams);
     }
+  }
+
+  public static void patchEnvForRVMIfNecessary(@NotNull final RVMRubyLightweightSdk sdk,
+                                               @NotNull final Map<String, String> envParams)
+      throws RakeTasksBuildService.MyBuildFailureException {
 
     // patch
-    final LinkedHashSet<String> gemRootsPaths = sdk.isSystemRvm()
-                                                ? new LinkedHashSet<String>()
-                                                : SharedRVMUtil.determineGemRootsPaths(sdk.getInterpreterPath(), sdk.getRvmGemsetName(), false);
+    final LinkedHashSet<String> gemRootsPaths = sdk.isSystem()
+        ? new LinkedHashSet<String>()
+        : SharedRVMUtil.determineGemRootsPaths(sdk.getInterpreterPath(), sdk.getRvmGemsetName(), false);
 
     try {
       SharedRVMUtil.patchEnvForRVM(sdk.getInterpreterPath(),
-                                   sdk.getRvmGemsetName(),
-                                   sdk.isSystemRvm(),
-                                   gemRootsPaths,
-                                   envParams,
-                                   envParams, // system + buildAgent.config + build properties env. vars
-                                   false,
-                                   File.pathSeparatorChar,
-                                   OSUtil.getPATHEnvVariableKey(),
-                                   getDefaultEnvVarsForRvmEnvPatcher());  // system env. vars
+          sdk.getRvmGemsetName(),
+          sdk.isSystem(),
+          gemRootsPaths,
+          envParams,
+          envParams, // system + buildAgent.config + build properties env. vars
+          false,
+          File.pathSeparatorChar,
+          OSUtil.getPATHEnvVariableKey(),
+          getDefaultEnvVarsForRvmEnvPatcher());  // system env. vars
     } catch (IllegalArgumentException e) {
       throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage());
     }
   }
 
+  @NotNull
   private static Map<String, String> getDefaultEnvVarsForRvmEnvPatcher() {
     return System.getenv();
   }
 
-  public static void inspectCurrentEnvironment(final Map<String, String> envParams,
-                                               final RubyLightweightSdk sdk,
+  public static void inspectCurrentEnvironment(@NotNull final Map<String, String> envParams,
+                                               @NotNull final RubyLightweightSdk sdk,
                                                @NotNull final BuildProgressLogger logger) {
     // Diagnostic check:
 
@@ -224,7 +181,8 @@ public class RVMSupportUtil {
         if (!SharedRVMUtil.canOverride(envVarName, envParams, defaultEnvs)) {
           final String value = envParams.get(envVarName);
           // info msg - most likely user understand what he is doing.
-          logger.message("Environment variable '" + envVarName + "' has predefined value '" + value + "'. It may affect runtime build behaviour because TeamCity RVM support wont override it.");
+          logger.warning("Environment variable '" + envVarName + "' has predefined value '" + value +
+              "'. It may affect runtime build behaviour because TeamCity RVM support wont override it.");
         }
       }
     } else {
@@ -234,9 +192,9 @@ public class RVMSupportUtil {
       // thus following env variables are potentially dangerous.
       // (e.g. user launched TC agent from rvm-enabled console)
       final String[] variablesToCheck = new String[]{
-        SharedRVMUtil.Constants.GEM_PATH,
-        SharedRVMUtil.Constants.GEM_HOME,
-        SharedRVMUtil.Constants.BUNDLE_PATH,
+          SharedRVMUtil.Constants.GEM_PATH,
+          SharedRVMUtil.Constants.GEM_HOME,
+          SharedRVMUtil.Constants.BUNDLE_PATH,
       };
 
       // do check
@@ -245,7 +203,7 @@ public class RVMSupportUtil {
           final String value = envParams.get(envVarName);
           // warning - most likely user doesn't understand what he is doing.
           logger.warning("Environment variable '" + envVarName + "' has predefined value '" + value +
-                         "'. It may affect runtime build behaviour because TeamCity Ruby support wont override it.");
+              "'. It may affect runtime build behaviour because TeamCity Ruby support wont override it.");
         }
       }
     }

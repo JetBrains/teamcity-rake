@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,20 @@ package jetbrains.buildServer.agent.rakerunner;
 import com.intellij.util.containers.HashMap;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
+import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.runner.BuildServiceAdapter;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
+import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
-import jetbrains.buildServer.runner.CommandLineArgumentsUtil;
 
 import java.io.File;
 import java.util.*;
@@ -41,6 +43,7 @@ import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_P
 /**
  * @author Roman.Chernyatchik
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRunnerConstants {
   private final Set<File> myFilesToDelete = new HashSet<File>();
   private final String RSPEC_RUNNER_OPTIONS_REQUIRE_KEY = "--require";
@@ -81,8 +84,10 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       final String checkoutDirPath = getCanonicalPath(getCheckoutDirectory());
 
+      RVMPathsSettings.getInstanceEx().initialize(getBuildParameters().getEnvironmentVariables());
+
       // Sdk
-      final RubySdk sdk = RubySDKUtil.createAndSetupSdk(runParams, buildParams, buildEnvVars);
+      final RubySdk sdk = RubySDKUtil.createAndSetupSdk(runParams, getBuildParameters());
 
       if (!(interpreterConfigMode == RakeRunnerUtils.RubyConfigMode.DEFAULT && rubyEnvAlreadyConfigured)) {
         // 1. default, but build feature wasn't configured
@@ -96,7 +101,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
           // Patch env for RVM
           RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
 
-          if (sdk.isSystemRvm()) {
+          if (sdk.isSystem()) {
             // Also Patch path for fake RVM
             RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
           }
@@ -114,7 +119,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       // attached frameworks info
       if (SupportedTestFramework.isAnyFrameworkActivated(runParams)) {
         runnerEnvParams.put(RAKERUNNER_USED_FRAMEWORKS_KEY,
-                            SupportedTestFramework.getActivatedFrameworksConfig(runParams));
+            SupportedTestFramework.getActivatedFrameworksConfig(runParams));
 
       }
 
@@ -169,9 +174,9 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       // Result:
       return new SimpleProgramCommandLine(runnerEnvParams,
-                                          getWorkingDirectory().getAbsolutePath(),
-                                          sdk.getInterpreterPath(),
-                                          arguments);
+          getWorkingDirectory().getAbsolutePath(),
+          sdk.getInterpreterPath(),
+          arguments);
     } catch (MyBuildFailureException e) {
       throw new RunBuildException(e.getMessage(), e);
     }
@@ -179,14 +184,14 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
   private void configureRunnerParams(@NotNull final RakeRunnerUtils.RubyConfigMode interpreterConfigMode,
                                      final boolean rubyEnvAlreadyConfigured,
-                                     final Map<String, String> runParams) throws MyBuildFailureException {
+                                     @NotNull final Map<String, String> runParams) throws MyBuildFailureException {
     switch (interpreterConfigMode) {
       case DEFAULT:
         if (rubyEnvAlreadyConfigured) {
           // check that params were applied
           if (!Boolean.valueOf(runParams.get(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_APPLIED))) {
             throw new MyBuildFailureException(
-              "Ruby interpeter is configured outside Rake build runner but configuration settings weren't applied. No sense to launch rake.");
+                "Ruby interpeter is configured outside Rake build runner but configuration settings weren't applied. No sense to launch rake.");
           }
         } else {
           // if shared params are not defined - use default system interpreter
@@ -202,7 +207,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
         }
         runParams.put(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET, Boolean.TRUE.toString());
         runParams.put(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH,
-                      rubySdkPath);
+            rubySdkPath);
         break;
       case RVM:
         final String rvmSdkName = RakeRunnerUtils.getRVMSdkName(runParams);
@@ -220,13 +225,14 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
   /**
    * Specify gem version attribute if property is set
-   * @param arguments Cmdline arguments
+   *
+   * @param arguments          Cmdline arguments
    * @param gemVersionProperty Property name
-   * @param buildParams  Build params
+   * @param buildParams        Build params
    */
-  private void addGemVersionAttribute(final List<String> arguments,
-                                      final String gemVersionProperty,
-                                      final Map<String, String> buildParams) {
+  private void addGemVersionAttribute(@NotNull final List<String> arguments,
+                                      @NotNull final String gemVersionProperty,
+                                      @NotNull final Map<String, String> buildParams) {
     final String rakeGemVersion = buildParams.get(gemVersionProperty);
     if (!StringUtil.isEmpty(rakeGemVersion)) {
       arguments.add("_" + rakeGemVersion + "_");
@@ -242,8 +248,8 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     myFilesToDelete.clear();
   }
 
-  private void attachRSpecFormatterIfNeeded(final Map<String, String> runParams,
-                                            final Map<String, String> env) {
+  private void attachRSpecFormatterIfNeeded(@NotNull final Map<String, String> runParams,
+                                            @NotNull final Map<String, String> env) {
 
     //attach RSpec formatter only if spec reporter enabled
     if (SupportedTestFramework.RSPEC.isActivated(runParams)) {
@@ -268,9 +274,8 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     }
   }
 
-  private void attachCucumberFormatterIfNeeded(
-    final Map<String, String> runParams,
-    final Map<String, String> env) {
+  private void attachCucumberFormatterIfNeeded(@NotNull final Map<String, String> runParams,
+                                               @NotNull final Map<String, String> env) {
 
     //attach Cucumber formatter only if cucumber reporter enabled
     if (SupportedTestFramework.CUCUMBER.isActivated(runParams)) {
@@ -324,13 +329,13 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       // due to patching loadpath we replace original autorunner but it is used buy our tests runner
       runnerEnvParams.put(ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
-                          TestUnitUtil.getSDKTestUnitAutoRunnerScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
+          TestUnitUtil.getSDKTestUnitAutoRunnerScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
       runnerEnvParams.put(ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY,
-                          TestUnitUtil.getSDKTestUnitTestRunnerMediatorScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
+          TestUnitUtil.getSDKTestUnitTestRunnerMediatorScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
 
       // [optional] inform user if minitest framework detected
       final String minitestPath =
-        TestUnitUtil.getRuby19SDKMiniTestRunnerScriptPath(sdk);
+          TestUnitUtil.getRuby19SDKMiniTestRunnerScriptPath(sdk);
       if (minitestPath != null) {
         runnerEnvParams.put(ORIGINAL_SDK_19_MINITEST_UNIT_SCRIPT_PATH_KEY, minitestPath);
       }
@@ -352,7 +357,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   }
 
   @Nullable
-  private File getBuildFile(Map<String, String> runParameters) throws RunBuildException {
+  private File getBuildFile(@NotNull final Map<String, String> runParameters) throws RunBuildException {
     final File buildFile;
     if (BuildFileRunnerUtil.isCustomBuildFileUsed(runParameters)) {
       buildFile = BuildFileRunnerUtil.getBuildFile(runParameters);

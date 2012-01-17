@@ -16,78 +16,56 @@
 
 package org.jetbrains.plugins.ruby.rvm;
 
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.util.NullableFunction;
-import java.io.File;
-import java.util.Map;
-import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.Constants;
-import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
-import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
+import jetbrains.buildServer.agent.BuildParametersMap;
+import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
  */
 public class RVMPathsSettings extends SharedRVMPathsSettings {
-  private static RVMPathsSettings myInstance;
-  private String myRVMHomePath;
+  private static RVMPathsSettings ourInstance;
 
-  private RVMPathsSettings() {
+  @NotNull
+  private final RVMDetector myDetector;
+
+  @Nullable
+  private InstalledRVM myInstalledRVM;
+
+  public RVMPathsSettings(RVMDetector detector) {
+    myDetector = detector;
+    ourInstance = this;
   }
 
   public static SharedRVMPathsSettings getInstance() {
-    return getInstanceEx();
+    return ourInstance;
   }
 
   public static RVMPathsSettings getInstanceEx() {
-    if (myInstance == null) {
-      myInstance = new RVMPathsSettings();
-    }
-    return myInstance;
+    return ourInstance;
   }
 
-  public void initialize(@NotNull final Map<String, String> buildParameters)
-    throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
+  public void initialize(@NotNull final Map<String, String> env) {
+    myInstalledRVM = myDetector.detect(env);
+  }
 
-    myRVMHomePath = null;
-
-    if (SystemInfo.isWindows) {
-      // N/A
-      throw new UnsupportedOperationException("This method is only for testing purposes");
-    }
-
-    // custom or system wide rvm path
-    final String rvmPath = determineNonLocalRvmPath(new NullableFunction<String, String>() {
-      public String fun(final String envVariableName) {
-        return buildParameters.get(Constants.ENV_PREFIX + envVariableName);
-      }
-    });
-    if (rvmPath != null) {
-      final File rvmHome = new File(rvmPath);
-      if (!rvmHome.exists()) {
-        throw new RakeTasksBuildService.MyBuildFailureException("Cannot find rvm home directory: " + rvmPath);
-      }
-      myRVMHomePath = FileUtil.getCanonicalPath(rvmHome);
-      return;
-    }
-
-    // Local RVM installation
-    final String homeFolder = OSUtil.getUserHomeFolder();
-    if (homeFolder == null) {
-      throw new RakeTasksBuildService.MyBuildFailureException("Cannot find user home directory: " + System.getProperty("user.home"));
-    }
-    final File localRvmHomeFolder = new File(homeFolder + File.separatorChar + SharedRVMUtil.Constants.LOCAL_RVM_HOME_FOLDER_NAME);
-    if (localRvmHomeFolder.exists()) {
-      myRVMHomePath = FileUtil.getCanonicalPath(localRvmHomeFolder);
-    }
+  public void initialize(@Nullable final InstalledRVM rvm) {
+    myInstalledRVM = rvm;
   }
 
   @Override
   @Nullable
   public String getRvmHomePath() {
-    return myRVMHomePath;
+    return myInstalledRVM == null ? null : myInstalledRVM.getPath();
+  }
+
+  @Override
+  @Nullable
+  public InstalledRVM getRVM() {
+    return myInstalledRVM;
   }
 }

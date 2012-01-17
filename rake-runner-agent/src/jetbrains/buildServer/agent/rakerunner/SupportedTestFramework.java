@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 
 package jetbrains.buildServer.agent.rakerunner;
 
-import java.util.Map;
-import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.agent.rakerunner.utils.ConfigurationParamsUtil;
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 /**
-* @author Roman.Chernyatchik
-*/
+ * @author Roman.Chernyatchik
+ */
 
 public enum SupportedTestFramework {
   TEST_UNIT(":test_unit", RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY),
@@ -31,24 +33,28 @@ public enum SupportedTestFramework {
   RSPEC(":rspec", RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY),
   CUCUMBER(":cucumber", RakeRunnerConstants.SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY);
 
+  @NotNull
   private final String myFrameworkId;
+  @NotNull
   private final String myFrameworkUIProperty;
 
-  SupportedTestFramework(final String frameworkId,
-                         final String frameworkUIProperty) {
+  SupportedTestFramework(@NotNull final String frameworkId,
+                         @NotNull final String frameworkUIProperty) {
     myFrameworkId = frameworkId;
     myFrameworkUIProperty = frameworkUIProperty;
   }
 
+  @NotNull
   public String getFrameworkId() {
     return myFrameworkId;
   }
 
+  @NotNull
   public String getFrameworkUIProperty() {
     return myFrameworkUIProperty;
   }
 
-  public static void convertOptionsIfNecessary(final Map<String, String> runParams) {
+  public static void convertOptionsIfNecessary(@NotNull final Map<String, String> runParams) {
     final String versionString = runParams.get(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY);
 
     int version;
@@ -66,14 +72,16 @@ public enum SupportedTestFramework {
     }
   }
 
-  public boolean isActivated(final Map<String, String> runParams) {
+  public boolean isActivated(@NotNull final Map<String, String> runParams) {
     return ConfigurationParamsUtil.isParameterEnabled(runParams, getFrameworkUIProperty());
   }
-  public void activate(final Map<String, String> runParams) {
+
+  public void activate(@NotNull final Map<String, String> runParams) {
     ConfigurationParamsUtil.setParameterEnabled(runParams, getFrameworkUIProperty(), true);
   }
 
-  public static String getActivatedFrameworksConfig(final Map<String, String> runParams) {
+  @NotNull
+  public static String getActivatedFrameworksConfig(@NotNull final Map<String, String> runParams) {
     final StringBuilder buff = new StringBuilder();
 
     for (SupportedTestFramework framework : SupportedTestFramework.values()) {
@@ -84,7 +92,7 @@ public enum SupportedTestFramework {
     return buff.toString();
   }
 
-  public static boolean isAnyFrameworkActivated(final Map<String, String> runParams) {
+  public static boolean isAnyFrameworkActivated(@NotNull final Map<String, String> runParams) {
     for (SupportedTestFramework framework : SupportedTestFramework.values()) {
       if (framework.isActivated(runParams)) {
         return true;
@@ -93,9 +101,9 @@ public enum SupportedTestFramework {
     return false;
   }
 
-  public static boolean isTestUnitBasedFrameworksActivated(final Map<String, String> runParams) {
+  public static boolean isTestUnitBasedFrameworksActivated(@NotNull final Map<String, String> runParams) {
     return TEST_UNIT.isActivated(runParams)
-           || TEST_SPEC.isActivated(runParams)
-           || SHOULDA.isActivated(runParams);
+        || TEST_SPEC.isActivated(runParams)
+        || SHOULDA.isActivated(runParams);
   }
 }

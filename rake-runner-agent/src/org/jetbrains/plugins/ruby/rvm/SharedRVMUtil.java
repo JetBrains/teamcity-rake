@@ -4,6 +4,8 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.containers.HashMap;
+import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,10 +13,10 @@ import java.util.*;
 
 /**
  * @author Roman.Chernyatchik
- *
- * Shared with TeamCity
+ *         <p/>
+ *         Shared with TeamCity
  */
-class SharedRVMUtil {
+public class SharedRVMUtil {
   public interface Constants {
     String LOCAL_RVM_HOME_FOLDER_NAME = ".rvm";
     String RVM_GEMS_FOLDER_NAME = "gems";
@@ -31,12 +33,12 @@ class SharedRVMUtil {
     String RVM_RUBY_STRING = "rvm_ruby_string";
     String RVM_GEMSET = "gemset";
 
-    String[] SYSTEM_RVM_ENVVARS_TO_RESET = new String[] {
-      SharedRVMUtil.Constants.GEM_HOME,
-      SharedRVMUtil.Constants.GEM_PATH,
-      SharedRVMUtil.Constants.BUNDLE_PATH,
-      SharedRVMUtil.Constants.MY_RUBY_HOME,
-      SharedRVMUtil.Constants.RVM_GEMSET
+    String[] SYSTEM_RVM_ENVVARS_TO_RESET = new String[]{
+        SharedRVMUtil.Constants.GEM_HOME,
+        SharedRVMUtil.Constants.GEM_PATH,
+        SharedRVMUtil.Constants.BUNDLE_PATH,
+        SharedRVMUtil.Constants.MY_RUBY_HOME,
+        SharedRVMUtil.Constants.RVM_GEMSET
     };
   }
 
@@ -93,11 +95,11 @@ class SharedRVMUtil {
     if (!SystemInfo.isUnix) {
       return false;
     }
-    final String rvmHomePath = RVMPathsSettings.getInstance().getRvmHomePath();
-    if (rvmHomePath == null) {
+    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
+    if (rvm == null) {
       return false;
     }
-    return executablePath.startsWith(rvmHomePath + "/" + Constants.RVM_RUBIES_FOLDER_NAME);
+    return rvm.isRVMInterpreter(executablePath);
   }
 
   public static String getGemsetSeparator() {
@@ -115,8 +117,8 @@ class SharedRVMUtil {
   }
 
   public static void registerGemset(@NotNull final String rvmGemsSubFolder,
-                             @NotNull final Condition<String> isRVMDistCondition,
-                             @NotNull final RubyDistToGemsetTable rubyDist2Gemset) {
+                                    @NotNull final Condition<String> isRVMDistCondition,
+                                    @NotNull final RubyDistToGemsetTable rubyDist2Gemset) {
     final int separatorIndex = rvmGemsSubFolder.indexOf(getGemsetSeparator());
 
     // 1. [dist][@][gemset] or just [dist] with default gemset
@@ -136,13 +138,13 @@ class SharedRVMUtil {
 
     // 3. add gem to table. We won't ignore "global" gempath just to allow user install gems in
     // "shared" gem path from RubyMine
-    rubyDist2Gemset.putGemset(gemset != null && gemset.length() > 0 ? gemset : null, distName);
+    rubyDist2Gemset.putGemset(StringUtil.isEmpty(gemset) ? null : gemset, distName);
   }
 
   public static boolean areGemsetsEqual(@Nullable final String gemset1,
                                         @Nullable final String gemset2) {
     return (gemset1 == null && gemset2 == null)               // if gemset is default (null)
-           || (gemset1 != null && gemset1.equals(gemset2));      // or custom
+        || (gemset1 != null && gemset1.equals(gemset2));      // or custom
   }
 
   @Nullable
@@ -162,8 +164,6 @@ class SharedRVMUtil {
   }
 
   /**
-   *
-   *
    * @param executablePath
    * @param gemSetName
    * @param isSystemRvm
@@ -173,7 +173,7 @@ class SharedRVMUtil {
    * @param globalGempathIgnored
    * @param pathSeparator
    * @param pathEnvVarName
-   * @param defaultEnvVars If specified then userDefinedEnvVars with default values can be overridden        @throws IllegalArgumentException
+   * @param defaultEnvVars       If specified then userDefinedEnvVars with default values can be overridden        @throws IllegalArgumentException
    */
   public static void patchEnvForRVM(@NotNull final String executablePath,
                                     @Nullable final String gemSetName,
@@ -414,8 +414,8 @@ class SharedRVMUtil {
     }
 
     final String interpreterRelativePath = executablePath.startsWith(rvmInterpretersFolderPath)
-                                           ? executablePath.substring(rvmInterpretersFolderPath.length())
-                                           : null;
+        ? executablePath.substring(rvmInterpretersFolderPath.length())
+        : null;
     if (interpreterRelativePath == null) {
       return null;
     }
@@ -466,5 +466,5 @@ class SharedRVMUtil {
     public Set<String> getDists() {
       return myRubyDist2Gemset.keySet();
     }
-   }
+  }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,16 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.SystemInfo;
-import java.io.File;
-import java.util.Map;
-import java.util.StringTokenizer;
 import jetbrains.buildServer.agent.Constants;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
@@ -36,7 +37,7 @@ import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
 public class OSUtil {
   public static String INDEPENDENT_PATH_SEPARATOR = "/";
 
-  private static String ENVIRONMENT_PATH_VARIABLE_NAME;
+  private static final String ENVIRONMENT_PATH_VARIABLE_NAME;
 
   static {
     if (SystemInfo.isWindows) {
@@ -47,12 +48,12 @@ public class OSUtil {
       throw new RuntimeException(RakeRunnerBundle.MSG_OS_NOT_SUPPORTED);
     }
   }
-  private static String RUBY_EXE_WIN = "ruby.exe";
-  private static String RUBY_EXE_WIN_BAT = "ruby.bat";
-  private static String RUBY_EXE_UNIX = "ruby";
-  private static String JRUBY_EXE_WIN = "jruby.exe";
-  private static String JRUBY_EXE_WIN_BAT = "jruby.bat";
-  private static String JRUBY_EXE_UNIX = "jruby";
+  private static final String RUBY_EXE_WIN = "ruby.exe";
+  private static final String RUBY_EXE_WIN_BAT = "ruby.bat";
+  private static final String RUBY_EXE_UNIX = "ruby";
+  private static final String JRUBY_EXE_WIN = "jruby.exe";
+  private static final String JRUBY_EXE_WIN_BAT = "jruby.bat";
+  private static final String JRUBY_EXE_UNIX = "jruby";
 
   public static void appendToRUBYLIBEnvVariable(@NotNull final String additionalPath,
                                                 @NotNull final Map<String, String> envMap) {
@@ -87,10 +88,10 @@ public class OSUtil {
   }
 
   private static void mergeWithEnvVariable(final boolean append,
-                                           final String additionalValue,
-                                           final String separator,
-                                           final String variableName,
-                                           final Map<String, String> envMap,
+                                           @NotNull final String additionalValue,
+                                           @NotNull final String separator,
+                                           @NotNull final String variableName,
+                                           @NotNull final Map<String, String> envMap,
                                            final boolean convertToSystemDependent,
                                            final boolean convertToSystemInDependent) {
     if (convertToSystemDependent && convertToSystemInDependent) {
@@ -118,10 +119,12 @@ public class OSUtil {
     envMap.put(variableName, newValue);
   }
 
+  @Nullable
   public static String getPATHEnvVariable(@NotNull final Map<String, String> buildParameters) {
     return buildParameters.get(Constants.ENV_PREFIX + getPATHEnvVariableKey());
   }
 
+  @NotNull
   public static String getPATHEnvVariableKey() {
     return ENVIRONMENT_PATH_VARIABLE_NAME;
   }

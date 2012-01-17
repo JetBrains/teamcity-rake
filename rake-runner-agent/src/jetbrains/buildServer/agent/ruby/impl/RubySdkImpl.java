@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2011 JetBrains s.r.o.
+ * Copyright 2000-2012 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.rakerunner.utils.impl;
+package jetbrains.buildServer.agent.ruby.impl;
 
-import jetbrains.buildServer.agent.rakerunner.RubyLightweightSdk;
-import jetbrains.buildServer.agent.rakerunner.RubySdk;
 import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
+import jetbrains.buildServer.agent.ruby.RubyLightweightSdk;
+import jetbrains.buildServer.agent.ruby.RubySdk;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,10 +35,7 @@ public class RubySdkImpl extends RubyLightweightSdkImpl implements RubySdk {
   private String[] myLoadPaths;
 
   public RubySdkImpl(@NotNull final RubyLightweightSdk sdk) {
-    super(sdk.getInterpreterPath(),
-          sdk.isRvmSdk(),
-          sdk.isSystemRvm(),
-          sdk.getRvmGemsetName());
+    super(sdk.getInterpreterPath(), sdk.isSystem());
   }
 
   @NotNull
