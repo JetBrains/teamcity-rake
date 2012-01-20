@@ -16,14 +16,13 @@
 
 package jetbrains.buildServer.agent.ruby.rvm.detector;
 
+import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 /**
  * Base class for "RVM Detector" - an utility designed for
@@ -35,10 +34,6 @@ public abstract class RVMDetector {
 
   public static final String CONF_PARAMETER_PREFIX = "rvm.";
   public static final String CONF_RVM_RUBIES_LIST = CONF_PARAMETER_PREFIX + "rubies.list";
-  public static final String CONF_RVM_VERSION = CONF_PARAMETER_PREFIX + "installation.version";
-  public static final String CONF_RVM_PATH = CONF_PARAMETER_PREFIX + "installation.path";
-  public static final String CONF_RVM_TYPE = CONF_PARAMETER_PREFIX + "installation.type";
-  public static final String CONF_RVM_EXIST = CONF_PARAMETER_PREFIX + "exist";
 
   protected void init() {
   }
@@ -52,25 +47,15 @@ public abstract class RVMDetector {
   @Nullable
   public abstract InstalledRVM detect(@NotNull final Map<String, String> environmentParams);
 
-  @NotNull
-  public Map<String, String> createConfigurationParameters(@Nullable final InstalledRVM rvm) {
+  public void patchBuildAgentConfiguration(@NotNull final BuildAgentConfiguration configuration, @Nullable final InstalledRVM rvm) {
     if (rvm == null) {
-      return Collections.emptyMap();
+      return;
     }
-    final SortedMap<String, String> params = new TreeMap<String, String>();
 
-    params.put("env.rvm_path", rvm.getPath());
-//    params.put(CONF_RVM_EXIST, "true");
-//    params.put(CONF_RVM_TYPE, rvm.getType().name().toLowerCase());
-//    params.put(CONF_RVM_PATH, rvm.getPath());
-//    params.put(CONF_RVM_VERSION, rvm.getVersion());
-//
-//    StringBuilder allVersions = new StringBuilder();
-//    for (String rubyName : rvm.getRubiesNames()) {
-//      allVersions.append(rubyName).append(',');
-//    }
-//
-//    params.put(CONF_RVM_RUBIES_LIST, StringUtil.trimEnd(allVersions.toString(), ","));
-    return params;
+    configuration.addEnvironmentVariable("rvm_path", rvm.getPath());
+
+    // TODO: do not provide this parameter, install ruby if necessary
+    String allVersions = StringUtil.join(",", rvm.getRubiesNames());
+    configuration.addConfigurationParameter(CONF_RVM_RUBIES_LIST, allVersions);
   }
 }

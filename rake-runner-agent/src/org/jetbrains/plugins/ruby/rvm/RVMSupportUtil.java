@@ -21,9 +21,9 @@ import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
-import jetbrains.buildServer.agent.ruby.rvm.RVMRubyLightweightSdk;
 import jetbrains.buildServer.agent.ruby.RubyLightweightSdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.agent.ruby.rvm.RVMRubyLightweightSdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -106,13 +106,13 @@ public class RVMSupportUtil {
 
   @NotNull
   public static String suggestInterpretatorPath(@NotNull final String distName) {
-    final String rvmHomePath = RVMPathsSettings.getInstance().getRvmHomePath();
-    if (rvmHomePath == null) {
+    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
+    if (rvm == null) {
       throw new IllegalArgumentException("RVM home cannot be unkown here.");
     }
 
     // rvm defines "ruby" symlink for all ruby interpreters
-    return rvmHomePath
+    return rvm.getPath()
         + File.separator + RVM_RUBIES_FOLDER_NAME
         + File.separator + distName
         + File.separator + "bin"
@@ -140,11 +140,11 @@ public class RVMSupportUtil {
     // patch
     final LinkedHashSet<String> gemRootsPaths = sdk.isSystem()
         ? new LinkedHashSet<String>()
-        : SharedRVMUtil.determineGemRootsPaths(sdk.getInterpreterPath(), sdk.getRvmGemsetName(), false);
+        : SharedRVMUtil.determineGemRootsPaths(sdk.getInterpreterPath(), sdk.getGemsetName(), false);
 
     try {
       SharedRVMUtil.patchEnvForRVM(sdk.getInterpreterPath(),
-          sdk.getRvmGemsetName(),
+          sdk.getGemsetName(),
           sdk.isSystem(),
           gemRootsPaths,
           envParams,

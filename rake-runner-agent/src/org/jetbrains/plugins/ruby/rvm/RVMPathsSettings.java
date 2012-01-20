@@ -16,7 +16,6 @@
 
 package org.jetbrains.plugins.ruby.rvm;
 
-import jetbrains.buildServer.agent.BuildParametersMap;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
 import org.jetbrains.annotations.NotNull;

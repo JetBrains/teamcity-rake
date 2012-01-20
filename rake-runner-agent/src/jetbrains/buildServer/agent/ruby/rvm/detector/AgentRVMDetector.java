@@ -25,8 +25,6 @@ import jetbrains.buildServer.util.EventDispatcher;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
 /**
  * @author Vladislav.Rassokhin
  */
@@ -53,10 +51,7 @@ public class AgentRVMDetector {
     public void afterAgentConfigurationLoaded(@NotNull BuildAgent agent) {
       final BuildAgentConfiguration buildAgentConfiguration = agent.getConfiguration();
       @Nullable InstalledRVM rvm = myDetector.detect(buildAgentConfiguration.getBuildParameters().getEnvironmentVariables());
-      final Map<String, String> parameters = myDetector.createConfigurationParameters(rvm);
-      for (Map.Entry<String, String> entry : parameters.entrySet()) {
-        buildAgentConfiguration.addConfigurationParameter(entry.getKey(), entry.getValue());
-      }
+      myDetector.patchBuildAgentConfiguration(buildAgentConfiguration, rvm);
     }
   }
 

@@ -33,27 +33,18 @@ import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_
  */
 public class InstalledRVM {
   @NotNull
-  private final String path;
+  private final String myPath;
   @NotNull
-  private final SortedSet<RVMRubySdk> rubies = new TreeSet<RVMRubySdk>();
-  @NotNull
-  private final Type type;
-  @NotNull
-  private String version = "undefined";
+  private final Type myType;
 
   @NotNull
   public String getPath() {
-    return path;
+    return myPath;
   }
 
   @NotNull
   public Type getType() {
-    return type;
-  }
-
-  @NotNull
-  public String getVersion() {
-    return version;
+    return myType;
   }
 
   public enum Type {
@@ -63,8 +54,8 @@ public class InstalledRVM {
   }
 
   public InstalledRVM(final @NotNull String path, final @NotNull Type type) {
-    this.path = path;
-    this.type = type;
+    this.myPath = path;
+    this.myType = type;
     determineRVMConfigData();
   }
 
@@ -72,25 +63,16 @@ public class InstalledRVM {
     // TODO: exec rvm for data collecting
   }
 
-  //  public boolean hasRubies() {
-//    return !rubies.isEmpty();
-//  }
-//
-//  public SortedSet<InstalledRuby> getRubies() {
-//    return Collections.unmodifiableSortedSet(rubies);
-//  }      \
-
-  @NotNull
-  public Collection<RVMRubySdk> getRubies() {
-    return Collections.emptyList(); // FIXME: implement
-  }
-
   @NotNull
   public Collection<String> getRubiesNames() {
     final List<String> rubies = new ArrayList<String>();
-    String stdout = executeCommandLine(path + "/bin/rvm", "list", "strings");
+    String stdout = executeCommandLine(getExecutablePath(), "list", "strings");
     Collections.addAll(rubies, stdout.split("\n"));
     return rubies;
+  }
+
+  private String getExecutablePath() {
+    return myPath + "/bin/rvm";
   }
 
   @NotNull

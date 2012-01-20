@@ -37,13 +37,13 @@ public class RVMRubySdkImpl extends RVMRubyLightweightSdkImpl implements RVMRuby
   final private RubyScriptRunner.Output myGemPathsFetchLog;
 
   public RVMRubySdkImpl(@NotNull RVMRubyLightweightSdk sdk) {
-    super(sdk.getInterpreterPath(), sdk.getName(), sdk.isSystem(), sdk.getRvmGemsetName());
+    super(sdk.getInterpreterPath(), sdk.getName(), sdk.isSystem(), sdk.getGemsetName());
 
     // Check is JRuby
     myIsJRuby = getName().startsWith("jruby");
 
     // get Gem Paths
-    final Pair<String, String> gemPaths = SharedRVMUtil.getMainAndGlobalGemPaths(getInterpreterPath(), getRvmGemsetName());
+    final Pair<String, String> gemPaths = SharedRVMUtil.getMainAndGlobalGemPaths(getInterpreterPath(), getGemsetName());
     if (gemPaths == null) {
       myGemPathsFetchLog = new RubyScriptRunner.Output("", "Cannot determine RVM ruby gempaths for sdk '" + getPresentableName() + "'");
     } else {

@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface RVMRubyLightweightSdk extends RubyLightweightSdk {
   @Nullable
-  String getRvmGemsetName();
+  String getGemsetName();
 
   @NotNull
   public String getName();

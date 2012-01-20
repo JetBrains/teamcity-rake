@@ -41,7 +41,7 @@ public class RVMRubyLightweightSdkImpl extends RubyLightweightSdkImpl implements
     myName = name;
   }
 
-  public String getRvmGemsetName() {
+  public String getGemsetName() {
     return myGemsetName;
   }
 
@@ -58,7 +58,7 @@ public class RVMRubyLightweightSdkImpl extends RubyLightweightSdkImpl implements
   @NotNull
   @Override
   public String getPresentableName() {
-    final String gemsetName = getRvmGemsetName();
+    final String gemsetName = getGemsetName();
     return getInterpreterPath() + (gemsetName != null ? "[" + RVMSupportUtil.getGemsetSeparator() + gemsetName + "]" : "");
   }
 }
