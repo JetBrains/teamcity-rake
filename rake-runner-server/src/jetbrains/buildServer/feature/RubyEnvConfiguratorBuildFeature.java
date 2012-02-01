@@ -59,8 +59,9 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
       return;
     }
 
-    final Collection<SBuildFeatureDescriptor> buildFeatures = buildType.getResolvedSettings().getBuildFeatures();
+    final Collection<SBuildFeatureDescriptor> buildFeatures = buildType.getBuildFeatures();
     for (SBuildFeatureDescriptor bf : buildFeatures) {
+      if (!buildType.isEnabled(bf.getId())) continue;
       // if our type
       if (getType().equals(bf.getType())) {
         // mark that feature is enabled
