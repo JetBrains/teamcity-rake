@@ -63,13 +63,13 @@
   <tr>
     <th><label for="ui.rakeRunner.rake.tasks.names">Rake tasks: </label></th>
     <td><props:textProperty name="ui.rakeRunner.rake.tasks.names"  className="longField" maxlength="256"/>
-      <span class="smallNote">Enter tasks names separated by space character if you don't want to use 'default' task.<br/>E.g. 'test:functionals' or 'mytask:test mytask:test2'.</span>
+      <span class="smallNote">Enter task names separated by space character if you don't want to use the 'default' task.<br/>E.g. 'test:functionals' or 'mytask:test mytask:test2'.</span>
     </td>
   </tr>
   <tr>
     <th><label for="ui.rakeRunner.additional.rake.cmd.params">Additional Rake command line parameters: </label></th>
     <td><props:textProperty name="ui.rakeRunner.additional.rake.cmd.params"  className="longField" expandable="true"/>
-      <span class="smallNote">If isn't empty these parameters will be added to 'rake' command line.</span>
+      <span class="smallNote">If not empty, these parameters will be added to 'rake' command line.</span>
     </td>
   </tr>
 </l:settingsGroup>
@@ -81,7 +81,7 @@
       <label for="ui.rakeRunner.ruby.use.mode:default">Use default Ruby:</label>
     </th>
     <td>
-    <span class="smallNote">E.g. Ruby interpreter provided by  <span style="font-weight: bold;">Ruby Environment Configurator</span> build feature. If build feature isn't configured the interpreter will be searched in the <span
+    <span class="smallNote">E.g., a Ruby interpreter provided by  <span style="font-weight: bold;">Ruby Environment Configurator</span> build feature. If build feature isn't configured the interpreter will be searched in the <span
         style="font-weight: bold;">PATH</span> environment variable.</span>
     </td>
   </tr>
