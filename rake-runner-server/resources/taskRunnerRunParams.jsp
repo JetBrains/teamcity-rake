@@ -55,7 +55,7 @@
       <label for="custom2">Rakefile content:</label>
     </th>
     <td>
-      <props:multilineProperty expanded="${propertiesBean.properties['use-custom-build-file'] == true}" name="build-file" rows="10" cols="58" linkTitle="Type the Rakefile content" onkeydown="$('custom2').checked = true;"  className="longField"/>
+      <props:multilineProperty expanded="${propertiesBean.properties['use-custom-build-file'] == true}" name="build-file" rows="10" cols="58" linkTitle="Enter the Rakefile content" onkeydown="$('custom2').checked = true;"  className="longField"/>
       <span class="error" id="error_build-file"></span>
     </td>
   </tr>
