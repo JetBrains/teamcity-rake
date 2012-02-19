@@ -69,7 +69,7 @@ public class RubyEnvConfiguratorUtil {
     if (StringUtil.isEmpty(params.get(RUBY_ENV_CONFIGURATOR_KEY))) return RubyEnvConfiguratorConfiguration.Type.OFF;
 
     final String useRVMType = params.get(UI_USE_RVM_KEY);
-    if ("manual".equals(useRVMType)) {
+    if ("manual".equals(useRVMType) || "true".equals(useRVMType)) {
       return RubyEnvConfiguratorConfiguration.Type.RVM;
     } else if ("rvmrc".equals(useRVMType)) {
       return RubyEnvConfiguratorConfiguration.Type.RVMRC;

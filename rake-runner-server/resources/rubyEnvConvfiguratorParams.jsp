@@ -70,6 +70,13 @@
             style="font-weight: bold;">jruby-1.4.0</span> or <span style="font-weight: bold;">system</span></span>
       </div>
       <script type="text/javascript">
+        // TODO: This is a temporary fix for TW-20333. Must replaced with db converter.
+        if (!$('ui.ruby.configurator.use.rvm:path').checked && !$('ui.ruby.configurator.use.rvm:rvm').checked) {
+          $('ui.ruby.configurator.use.rvm:rvm').checked = true;
+          $('ui.ruby.configurator.rvm.sdk.name').focus();
+          $('ui.ruby.configurator.rvm.path').value="%env.rvm_path%";
+        }
+        // End of fix
         if ($('ui.ruby.configurator.use.rvm:path').checked) {
           $('ui.ruby.configurator.ruby.interpreter.path').focus();
           $('ui.ruby.configurator.rvm.path').value="";

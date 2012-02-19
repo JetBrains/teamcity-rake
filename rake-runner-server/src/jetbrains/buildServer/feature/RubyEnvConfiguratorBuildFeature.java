@@ -59,6 +59,10 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
       return;
     }
 
+    if ("true".equals(context.getSharedParameters().get(RubyEnvConfiguratorUtil.UI_USE_RVM_KEY))) {
+      context.addSharedParameter(RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "manual");
+    }
+
     final Collection<SBuildFeatureDescriptor> buildFeatures = buildType.getBuildFeatures();
     for (SBuildFeatureDescriptor bf : buildFeatures) {
       if (!buildType.isEnabled(bf.getId())) continue;
