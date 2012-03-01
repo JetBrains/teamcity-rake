@@ -52,6 +52,7 @@ import static jetbrains.slow.plugins.rakerunner.RakeRunnerTestUtil.RAKE_RUNNER_T
  * @author Roman.Chernyatchik
  */
 @TestFor(testForClass = {RubyEnvConfiguratorService.class})
+@Test(groups = {"all","slow"})
 @SpringContextFixture(configs = {"classpath*:/META-INF/build-agent-plugin-rakerunner.xml"})
 public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTestCase {
   private final String RUN_TYPE = "mySomeRunner!";
@@ -232,7 +233,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     Assert.assertFalse(build.getStatusDescriptor().isSuccessful());
   }
 
-  @Test
+  @Test(groups = {"unix"})
   public void test_RvmSdk_EnvSettings() throws Exception {
     if (!SystemInfo.isUnix) {
       // TODO: use mocks

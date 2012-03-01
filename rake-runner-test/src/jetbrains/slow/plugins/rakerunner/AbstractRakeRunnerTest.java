@@ -37,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 
 import static jetbrains.buildServer.messages.serviceMessages.ServiceMessage.SERVICE_MESSAGE_START;
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
@@ -48,6 +49,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
 
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
   private boolean myShouldTranslateMessages = false;
+  private String myRubyVersion;
 
 
   @Override
@@ -56,20 +58,34 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     return RakeRunnerConstants.RUNNER_TYPE;
   }
 
-  @BeforeMethod
+  @BeforeMethod(dependsOnMethods = "setRubyVersion")
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
     setMockingOptions(FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
     setMessagesTranslationEnabled(false);
-
-    if (SystemInfo.isWindows) {
-      // set ruby interpreter path
-      setInterpreterPath();
-    } else if (SystemInfo.isLinux) {
-      setRVMConfiguration();
+    if (myRubyVersion == null) {
+      if (SystemInfo.isWindows) {
+        setInterpreterPath();
+      } else if (SystemInfo.isUnix) {
+        setRVMConfiguration();
+      }
+    } else {
+      if (SystemInfo.isWindows) {
+        setInterpreterPath(myRubyVersion);
+      } else if (SystemInfo.isUnix) {
+        setRVMConfiguration(myRubyVersion);
+      }
     }
-    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY, RakeRunnerConstants.CURRENT_CONFIG_VERSION));
+
+    getBuildType().addRunParameter(
+      new SimpleParameter(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY, RakeRunnerConstants.CURRENT_CONFIG_VERSION));
+  }
+
+  @BeforeMethod
+  @Parameters({"ruby.version"})
+  protected void setRubyVersion(@NotNull final String rubyVersion) throws Throwable {
+    myRubyVersion = rubyVersion;
   }
 
   protected void setMessagesTranslationEnabled(boolean enabled) {
@@ -82,8 +98,16 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     RakeRunnerTestUtil.setInterpreterPath(getBuildType());
   }
 
+  private void setInterpreterPath(@NotNull final String rubyVersion) throws RakeRunnerTestUtil.InterpreterNotFoundException {
+    RakeRunnerTestUtil.setInterpreterPath(getBuildType(), rubyVersion);
+  }
+
   private void setRVMConfiguration() {
     RakeRunnerTestUtil.setRVMConfiguration(getBuildType());
+  }
+
+  private void setRVMConfiguration(@NotNull final String rubySdkName) {
+    RakeRunnerTestUtil.setRVMConfiguration(getBuildType(), rubySdkName);
   }
 
   protected void useRVMRubySDK(@NotNull String sdkname) {

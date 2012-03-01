@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="RakeRunner Suite : Windows JRuby 1.6">
+  <parameter name="ruby.version" value="jruby-1.6"/>
+  <test name="RakeRunner Suite : Windows JRuby 1.6">
+    <groups>
+      <run>
+        <exclude name="unix"/>
+      </run>
+    </groups>
+    <packages>
+      <package name="jetbrains.slow.plugins.rakerunner"/>
+    </packages>
+  </test>
+</suite>
