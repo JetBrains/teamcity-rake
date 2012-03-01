@@ -6,12 +6,12 @@ function removeGemsetsForRubySdk {
 local sdk=$1
 echo "##teamcity[blockOpened name='Deleting Gemsets for |'$sdk|'']"
 for i in `ls -d */ | grep -v vendor`; do
-    pushd $i
+    pushd $i > /dev/null
     echo "##teamcity[blockOpened name='Removing gemset |'$sdk@$rrprefix$i|'']"
     rvm use "$sdk"
     rvm --force gemset delete "$rrprefix$i"
     echo "##teamcity[blockClosed name='Removing gemset |'$sdk@$rrprefix$i|'']"
-    popd
+    popd > /dev/null
 done
 echo "##teamcity[blockClosed name='Deleting Gemsets for |'$sdk|'']"
 }

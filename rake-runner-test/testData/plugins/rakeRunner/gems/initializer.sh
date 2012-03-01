@@ -14,7 +14,7 @@ function initializeRubySdk {
 local sdk=$1
 echo "##teamcity[blockOpened name='Creating Gemsets for |'$sdk|'']"
 for i in `ls -d */ | grep -v vendor`; do
-    pushd $i
+    pushd $i > /dev/null
     echo "##teamcity[blockOpened name='Processing $i']"
 
 
@@ -44,7 +44,7 @@ for i in `ls -d */ | grep -v vendor`; do
     echo "##teamcity[blockClosed name='Updating cache']"
 
     echo "##teamcity[blockClosed name='Processing $i']"
-    popd
+    popd > /dev/null
 done
 echo "##teamcity[blockClosed name='Creating Gemsets for |'$sdk|'']"
 }
