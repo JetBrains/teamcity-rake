@@ -23,6 +23,25 @@
 <%-- [NB] Config version should be synchronized with RakeRunnerConstants --%>
 <props:hiddenProperty name="ui.rakeRunner.config.version" value="2" />
 
+<style type="text/css">
+  .rvm_options {
+    padding-top: 3px;
+  }
+
+  .rvm_options_editor {
+    padding-top: 2px;
+  }
+
+  .rake_reporter {
+    padding-top: 3px;
+  }
+
+  .rake_reporter_options {
+    padding-top: 2px;
+    padding-left: 17px;
+  }
+</style>
+
 <l:settingsGroup title="Rake Parameters">
   <tr>
     <th>
@@ -110,15 +129,6 @@
       <label for="ui.rakeRunner.ruby.use.mode:rvm">RVM interpreter:</label>
     </th>
     <td>
-      <style type="text/css">
-        .rvm_options {
-          padding-top: 3px;
-        }
-        <%----%>
-        .rvm_options_editor {
-          padding-top: 2px;
-        }
-      </style>
       <div class="rvm_options">
         Interpreter name:
         <div class="rvm_options_editor">
@@ -168,17 +178,6 @@
     </th>
 
     <td>
-      <style type="text/css">
-        .rake_reporter {
-          padding-top: 3px;
-        }
-
-        .rake_reporter_options {
-          padding-top: 2px;
-          padding-left: 17px;
-        }
-      </style>
-
       <%-- Test Unit --%>
       <div class="rake_reporter">
         <props:checkboxProperty name="ui.rakeRunner.frameworks.testunit.enabled"/>
