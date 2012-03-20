@@ -16,26 +16,49 @@
 
 package jetbrains.buildServer.agent.ruby;
 
+import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Roman.Chernyatchik
+ * @author Vladislav.Rassokhin
  */
-public interface RubySdk extends RubyLightweightSdk {
+public interface RubySdk {
   @NotNull
-  String[] getGemPaths();
+  String getInterpreterPath();
+
+  @NotNull
+  String getPresentableName();
+
+  boolean isRvmSdk();
+
+  boolean isSystem();
 
   boolean isRuby19();
 
   boolean isJRuby();
 
   @NotNull
+  String[] getGemPaths();
+
+  @NotNull
+  String[] getLoadPath();
+
+  boolean isSetupCompleted();
+
+  void setup(@NotNull final Map<String, String> buildConfEnvironment);
+
+  //ProgramCommandLine createProgramCommandLineForScript(@NotNull final String workingDirectory,
+  //                                                     @NotNull final String[] rubyArgs,
+  //                                                     @Nullable final Map<String, String> buildConfEnvironment,
+  //                                                     @NotNull final String scriptSource,
+  //                                                     @NotNull final String... scriptArgs)
+  //  throws RakeTasksBuildService.MyBuildFailureException;
+
+  @NotNull
   RubyScriptRunner.Output getGemPathsFetchLog();
 
   @NotNull
   RubyScriptRunner.Output getLoadPathsFetchLog();
-
-  @NotNull
-  String[] getLoadPath();
 }

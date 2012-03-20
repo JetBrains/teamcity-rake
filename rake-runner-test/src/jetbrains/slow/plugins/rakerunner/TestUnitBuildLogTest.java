@@ -16,42 +16,32 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all","slow"})
-public class TestUnitBuildLogTest extends AbstractRakeRunnerTest {
-  @BeforeMethod
-  @Override
-  protected void setUp1() throws Throwable {
-    super.setUp1();
-    setMessagesTranslationEnabled(true);
-    activateTestFramework(SupportedTestFramework.TEST_UNIT);
-    useRVMGemSet("test-unit-trunk");
-  }
+@Test(groups = {"all", "slow"})
+public class TestUnitBuildLogTest extends AbstractTestUnitTest {
 
-  public void testTestPassed()  throws Throwable {
-    doTestWithoutLogCheck("stat:passed", true, "app_testunit");
+  public void testTestPassed() throws Throwable {
+    doTestWithoutLogCheck("stat:passed", true);
     assertTestsCount(4, 0, 0);
   }
 
-  public void testTestFailed()  throws Throwable {
-    doTestWithoutLogCheck("stat:failed", false, "app_testunit");
+  public void testTestFailed() throws Throwable {
+    doTestWithoutLogCheck("stat:failed", false);
     assertTestsCount(0, 4, 0);
   }
 
-  public void testTestError()  throws Throwable {
-    doTestWithoutLogCheck("stat:error", false, "app_testunit");
+  public void testTestError() throws Throwable {
+    doTestWithoutLogCheck("stat:error", false);
     assertTestsCount(0, 2, 0);
   }
 
   public void testTestsOutput() throws Throwable {
     setPartialMessagesChecker();
 
-    initAndDoTest("tests:test_output", false, "app_testunit");
+    initAndDoTest("tests:test_output", false);
   }
 }

@@ -17,15 +17,17 @@
 # @author: Roman.Chernyatchik
 # @date: 27.12.2007
 
-if (RUBY_VERSION.to_f == 1.9) then
-  p "Founded 1.9 ruby, loading 'test-unit' gem"
-  require 'rubygems'
-  gem "test-unit"
-end
-
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
+
+namespace :bundle do
+  task :install do
+    system("bundle", "install")
+    require "bundler"
+    Bundler.setup()
+  end
+end
 
 #############################################
 Dir["tasks/**/*.rake"].sort.each {|ext| load ext}

@@ -1,15 +1,30 @@
+/*
+ * Copyright 2000-2012 JetBrains s.r.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.jetbrains.plugins.ruby.rvm;
 
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.containers.HashMap;
+import java.util.*;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
 
 /**
  * @author Roman.Chernyatchik
@@ -34,11 +49,11 @@ public class SharedRVMUtil {
     String RVM_GEMSET = "gemset";
 
     String[] SYSTEM_RVM_ENVVARS_TO_RESET = new String[]{
-        SharedRVMUtil.Constants.GEM_HOME,
-        SharedRVMUtil.Constants.GEM_PATH,
-        SharedRVMUtil.Constants.BUNDLE_PATH,
-        SharedRVMUtil.Constants.MY_RUBY_HOME,
-        SharedRVMUtil.Constants.RVM_GEMSET
+      SharedRVMUtil.Constants.GEM_HOME,
+      SharedRVMUtil.Constants.GEM_PATH,
+      SharedRVMUtil.Constants.BUNDLE_PATH,
+      SharedRVMUtil.Constants.MY_RUBY_HOME,
+      SharedRVMUtil.Constants.RVM_GEMSET
     };
   }
 
@@ -144,7 +159,7 @@ public class SharedRVMUtil {
   public static boolean areGemsetsEqual(@Nullable final String gemset1,
                                         @Nullable final String gemset2) {
     return (gemset1 == null && gemset2 == null)               // if gemset is default (null)
-        || (gemset1 != null && gemset1.equals(gemset2));      // or custom
+           || (gemset1 != null && gemset1.equals(gemset2));      // or custom
   }
 
   @Nullable
@@ -401,10 +416,12 @@ public class SharedRVMUtil {
 
   @Nullable
   public static Pair<String, String> getRVMGemsRootAndDistName(@NotNull final String executablePath) throws IllegalArgumentException {
-    final String rvmHomePath = RVMPathsSettings.getInstance().getRvmHomePath();
-    if (rvmHomePath == null) {
+    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
+    if (rvm == null) {
       return null;
     }
+
+    final String rvmHomePath = rvm.getPath();
 
     // rvm home, e.g. ~/.rvm/  or /usr/local/rvm
     final String rvmHome = rvmHomePath + "/";
@@ -414,8 +431,8 @@ public class SharedRVMUtil {
     }
 
     final String interpreterRelativePath = executablePath.startsWith(rvmInterpretersFolderPath)
-        ? executablePath.substring(rvmInterpretersFolderPath.length())
-        : null;
+                                           ? executablePath.substring(rvmInterpretersFolderPath.length())
+                                           : null;
     if (interpreterRelativePath == null) {
       return null;
     }

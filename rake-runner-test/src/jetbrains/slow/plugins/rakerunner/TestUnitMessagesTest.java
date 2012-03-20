@@ -16,63 +16,60 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
+ * @author Vladislav.Rassokhin
  */
-@Test(groups = {"all","slow"})
-public class TestUnitMessagesTest extends AbstractRakeRunnerTest {
-  @BeforeMethod
+@Test(groups = {"all", "slow"})
+public class TestUnitMessagesTest extends AbstractTestUnitTest {
+
   @Override
-  protected void setUp1() throws Throwable {
-    super.setUp1();
+  protected void setUp2() throws Throwable {
+    super.setUp2();
     setMessagesTranslationEnabled(false);
-    activateTestFramework(SupportedTestFramework.TEST_UNIT);
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
-    useRVMGemSet("test-unit-trunk");
   }
 
   public void testTestsOutput() throws Throwable {
     setPartialMessagesChecker();
 
-    initAndDoTest("tests:test_output", false, "app_testunit");
+    initAndDoTest("tests:test_output", false);
   }
 
   public void testTestGeneral() throws Throwable {
     setPartialMessagesChecker();
 
-    initAndDoTest("stat:general", true, "app_testunit");
+    initAndDoTest("stat:general", true);
   }
 
-  public void testTestPassed()  throws Throwable {
+  public void testTestPassed() throws Throwable {
     setPartialMessagesChecker();
-    initAndDoTest("stat:passed", true, "app_testunit");
+    initAndDoTest("stat:passed", true);
   }
 
-  public void testTestFailed()  throws Throwable {
-    setPartialMessagesChecker();
-
-    initAndDoTest("stat:failed", false, "app_testunit");
-  }
-
-  public void testTestError()  throws Throwable {
+  public void testTestFailed() throws Throwable {
     setPartialMessagesChecker();
 
-    initAndDoTest("stat:error", false, "app_testunit");
+    initAndDoTest("stat:failed", false);
   }
 
-  public void testTestCompileError()  throws Throwable {
+  public void testTestError() throws Throwable {
     setPartialMessagesChecker();
 
-    initAndDoTest("stat:compile_error", false, "app_testunit");
+    initAndDoTest("stat:error", false);
   }
 
-  public void testLocationUrl()  throws Throwable {
+  public void testTestCompileError() throws Throwable {
+    setPartialMessagesChecker();
+
+    initAndDoTest("stat:compile_error", false);
+  }
+
+  public void testLocationUrl() throws Throwable {
     setPartialMessagesChecker();
     setMockingOptions();
-    initAndDoTest("stat:passed", "_location", true, "app_testunit");
+    initAndDoTest("stat:passed", "_location", true);
   }
 }

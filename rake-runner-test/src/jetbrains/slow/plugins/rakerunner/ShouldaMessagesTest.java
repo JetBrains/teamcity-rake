@@ -16,28 +16,24 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all","slow"})
-public class ShouldaMessagesTest extends AbstractRakeRunnerTest {
-  @BeforeMethod
+@Test(groups = {"all", "slow"})
+public class ShouldaMessagesTest extends AbstractShouldaTest {
   @Override
-  protected void setUp1() throws Throwable {
-    super.setUp1();
-    activateTestFramework(SupportedTestFramework.SHOULDA);
-    useRVMGemSet("shoulda-trunk");
+  protected void setUp2() throws Throwable {
+    super.setUp2();
+    setMessagesTranslationEnabled(false);
   }
 
-  public void testLocation()  throws Throwable {
+  public void testLocation() throws Throwable {
     //TODO implement test location for shoulda!
     setPartialMessagesChecker();
 
     setMockingOptions();
-    initAndDoTest("stat:general", "_location", false, "app_shoulda");
+    initAndDoTest("stat:general", "_location", false);
   }
 }

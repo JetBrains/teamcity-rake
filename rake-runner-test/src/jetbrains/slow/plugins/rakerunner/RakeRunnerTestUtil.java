@@ -52,7 +52,7 @@ public class RakeRunnerTestUtil {
     if (!StringUtil.isEmpty(interpreterPath)) {
       bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreterPath));
       bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
-          RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
+                                             RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
     }
   }
 
@@ -99,7 +99,7 @@ public class RakeRunnerTestUtil {
 
   static public void setRVMConfiguration(@NotNull final BuildTypeSettings bt) {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
-        RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
+                                           RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
     useRVMRubySDK(System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY), bt);
     useRVMGemSet(DEFAULT_GEMSET_NAME, bt);
   }
@@ -110,5 +110,9 @@ public class RakeRunnerTestUtil {
 
   static public void useRVMGemSet(@NotNull final String gemset, @NotNull final BuildTypeSettings bt) {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME, GEMSET_PREFIX + gemset));
+  }
+
+  static public void useBundleExec(@NotNull final BuildTypeSettings bt) {
+    bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, Boolean.TRUE.toString()));
   }
 }

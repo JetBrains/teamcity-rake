@@ -27,7 +27,6 @@
 --1-- Feature: Several skipped steps $TEST_SUITE$ NORMAL
 --1--   Scenario: first group of skipped steps $TEST_SUITE$ NORMAL
 --1--    When we have undefined step definition $TEST_BLOCK$ NORMAL
---1--     [Test Output]
 
 --1--    You can implement step definitions for undefined steps with these snippets:
 

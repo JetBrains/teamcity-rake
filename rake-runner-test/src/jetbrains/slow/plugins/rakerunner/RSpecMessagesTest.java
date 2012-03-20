@@ -17,59 +17,57 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all","slow"})
-public class RSpecMessagesTest extends AbstractRakeRunnerTest {
-  @BeforeMethod
+@Test(groups = {"all", "slow"})
+public class RSpecMessagesTest extends AbstractRSpecTest {
   @Override
-  protected void setUp1() throws Throwable {
-    super.setUp1();
+  protected void setUp2() throws Throwable {
+    super.setUp2();
+    setMessagesTranslationEnabled(false);
     activateTestFramework(SupportedTestFramework.RSPEC);
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
-    useRVMGemSet("rspec-trunk");
   }
 
   public void testSpecOutput() throws Throwable {
     setPartialMessagesChecker();
 
-    initAndDoTest("output:spec_output", false, "app_rspec");
+    initAndDoTest("output:spec_output", false);
   }
 
-  public void testSpecPassed()  throws Throwable {
+  public void testSpecPassed() throws Throwable {
     setPartialMessagesChecker();
-    initAndDoTest("stat:passed", true, "app_rspec");
+    initAndDoTest("stat:passed", true);
   }
 
-  public void testSpecFailed()  throws Throwable {
-    setPartialMessagesChecker();
-
-    initAndDoTest("stat:failed", false, "app_rspec");
-  }
-
-  public void testSpecError()  throws Throwable {
+  public void testSpecFailed() throws Throwable {
     setPartialMessagesChecker();
 
-    initAndDoTest("stat:error", false, "app_rspec");
+    initAndDoTest("stat:failed", false);
   }
 
-  public void testSpecIgnored()  throws Throwable {
+  public void testSpecError() throws Throwable {
     setPartialMessagesChecker();
-    initAndDoTest("stat:ignored", false, "app_rspec");
+
+    initAndDoTest("stat:error", false);
   }
 
-  public void testSpecCompileError()  throws Throwable {
+  public void testSpecIgnored() throws Throwable {
     setPartialMessagesChecker();
-    initAndDoTest("stat:compile_error", false, "app_rspec");
+    initAndDoTest("stat:ignored", false);
   }
 
-  public void testSpecLocation()  throws Throwable {
+  public void testSpecCompileError() throws Throwable {
+    setPartialMessagesChecker();
+    initAndDoTest("stat:compile_error", false);
+  }
+
+  public void testSpecLocation() throws Throwable {
     setPartialMessagesChecker();
     setMockingOptions();
-    initAndDoTest("stat:passed", "_location", true, "app_rspec");
+    initAndDoTest("stat:passed", "_location", true);
   }
 }

@@ -16,17 +16,10 @@
 
 package jetbrains.buildServer.agent.ruby.rvm;
 
-import jetbrains.buildServer.agent.ruby.RubyLightweightSdk;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import jetbrains.buildServer.agent.ruby.RubySdk;
 
 /**
  * @author Vladislav.Rassokhin
  */
-public interface RVMRubyLightweightSdk extends RubyLightweightSdk {
-  @Nullable
-  String getGemsetName();
-
-  @NotNull
-  public String getName();
+public interface RVMRCBasedRubySdk extends RubySdk, RVMRubySdk {
 }

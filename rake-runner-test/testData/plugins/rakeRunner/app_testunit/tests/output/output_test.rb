@@ -4,8 +4,8 @@ require "test/unit"
 class OutputTest < Test::Unit::TestCase
 
   def test_pass
-    $stdout << "test:$stdout<<msg1"
-    STDOUT << "\ntest:STDOUT<<msg2\n"
+    $stdout << "\ntest:$stdout<<msg1"
+    STDOUT << "\ntest:STDOUT<<msg2"
     $stderr << "test:$stderr<<msg3\n"
     STDERR << "test:STDERR<<msg4\n"
 
@@ -19,8 +19,8 @@ class OutputTest < Test::Unit::TestCase
   end
 
   def test_fail
-    $stdout << "test:$stdout<<msg5"
-    STDOUT << "\ntest:STDOUT<<msg6\n"
+    $stdout << "\ntest:$stdout<<msg5"
+    STDOUT << "\ntest:STDOUT<<msg6"
     $stderr << "test:$stderr<<msg7\n"
     STDERR << "test:STDERR<<msg8\n"
 
@@ -34,8 +34,8 @@ class OutputTest < Test::Unit::TestCase
   end
 
   def test_error
-    $stdout << "test:$stdout<<msg9"
-    STDOUT << "\ntest:STDOUT<<msg10\n"
+    $stdout << "\ntest:$stdout<<msg9"
+    STDOUT << "\ntest:STDOUT<<msg10"
     $stderr << "test:$stderr<<msg11\n"
     STDERR << "test:STDERR<<msg12\n"
 

@@ -16,28 +16,19 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all","slow"})
-public class TestSpecMessagesTest extends AbstractRakeRunnerTest {
-  @BeforeMethod
-  @Override
-  protected void setUp1() throws Throwable {
-    super.setUp1();
-    activateTestFramework(SupportedTestFramework.TEST_SPEC);
-    useRVMGemSet("test-spec-trunk");
-  }
-
-  public void testLocation()  throws Throwable {
+@Test(groups = {"all", "slow"})
+public class TestSpecMessagesTest extends AbstractTestSpecTest {
+  public void testLocation() throws Throwable {
     //TODO implement test location for test-spec!
+    setMessagesTranslationEnabled(false);
     setPartialMessagesChecker();
 
     setMockingOptions();
-    initAndDoTest("stat:general", "_location", false, "app_testspec");
+    initAndDoTest("stat:general", "_location", false);
   }
 }

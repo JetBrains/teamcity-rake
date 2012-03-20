@@ -57,12 +57,6 @@ public class RVMPathsSettings extends SharedRVMPathsSettings {
 
   @Override
   @Nullable
-  public String getRvmHomePath() {
-    return myInstalledRVM == null ? null : myInstalledRVM.getPath();
-  }
-
-  @Override
-  @Nullable
   public InstalledRVM getRVM() {
     return myInstalledRVM;
   }

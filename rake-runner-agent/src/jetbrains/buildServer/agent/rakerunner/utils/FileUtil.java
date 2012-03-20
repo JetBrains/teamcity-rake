@@ -16,11 +16,13 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import jetbrains.buildServer.RunBuildException;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
+import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
+import jetbrains.buildServer.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Roman.Chernyatchik
@@ -60,5 +62,15 @@ public class FileUtil {
     } catch (SecurityException e) {
       throw new RunBuildException(e.getMessage(), e);
     }
+  }
+
+  public static String getCheckoutDirectoryPath(final Map<String, String> buildParameters)
+    throws RakeTasksBuildService.MyBuildFailureException {
+    final String checkoutDir = buildParameters.get("system.teamcity.build.checkoutDir");
+    if (StringUtil.isEmptyOrSpaces(checkoutDir) ||
+        !checkIfDirExists(checkoutDir)) {
+      throw new RakeTasksBuildService.MyBuildFailureException("Cannot determine \"system.teamcity.build.checkoutDir\"");
+    }
+    return checkoutDir;
   }
 }

@@ -17,25 +17,20 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.Pair;
-import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.BuildParametersMap;
-import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
-import jetbrains.buildServer.agent.ruby.RubyLightweightSdk;
-import jetbrains.buildServer.agent.ruby.RubySdk;
-import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
-import jetbrains.buildServer.agent.ruby.rvm.RVMRubyLightweightSdk;
-import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRubySdkImpl;
-import jetbrains.buildServer.util.StringUtil;
-import jetbrains.buildServer.util.VersionComparatorUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.BuildParametersMap;
+import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
+import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.util.VersionComparatorUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 
@@ -53,7 +48,7 @@ public class RubySDKUtil {
   public static Pair<String, String> findGemRootFolderAndVersion(@NotNull final String gemName,
                                                                  @NotNull final String[] gemPaths,
                                                                  @Nullable final String forcedGemVersion)
-      throws RakeTasksBuildService.MyBuildFailureException {
+    throws RakeTasksBuildService.MyBuildFailureException {
 
     String ourGemVersion = null;
     String ourGemPath = null;
@@ -93,7 +88,7 @@ public class RubySDKUtil {
         final String version;
         if (!matcher.find()) {
           final String msg = "Cannot determine gem version: " + gemNamePrefix + dirtyVersion
-              + "'(" + gemPath + ") gem. Please submit a feature request.";
+                             + "'(" + gemPath + ") gem. Please submit a feature request.";
           throw new RakeTasksBuildService.MyBuildFailureException(msg);
         }
         version = matcher.group();
@@ -125,11 +120,11 @@ public class RubySDKUtil {
     final String customGemVersionProperty = buildParameters.get(forcedVersionProperty);
 
     return !StringUtil.isEmpty(customGemVersionProperty) ? customGemVersionProperty.trim()
-        : null;
+                                                         : null;
   }
 
   public static void failIfWithErrors(@NotNull final RubyScriptRunner.Output result)
-      throws RakeTasksBuildService.MyBuildFailureException {
+    throws RakeTasksBuildService.MyBuildFailureException {
     // script wasn't found in LOAD_PATH:
     if (!StringUtil.isEmpty(result.getStderr())) {
       throw new RakeTasksBuildService.MyBuildFailureException(result.getStdout() + "\n" + result.getStderr());
@@ -150,67 +145,23 @@ public class RubySDKUtil {
   }
 
   @NotNull
-  public static RubyLightweightSdk createAndSetupLightweightSdk(@NotNull final Map<String, String> runParameters,
-                                                                @NotNull final BuildParametersMap buildParametersMap)
-      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
-
-    // create
-    return InternalRubySdkUtil.createLightWeightSdk(runParameters, buildParametersMap.getAllParameters());
-  }
-
-  @NotNull
   public static RubySdk createAndSetupSdk(@NotNull final Map<String, String> runParameters,
                                           @NotNull final BuildParametersMap buildParametersMap)
-      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
-    return createAndSetupSdk(runParameters, buildParametersMap, createAndSetupLightweightSdk(runParameters, buildParametersMap));
+    // create
+    return setupSdk(buildParametersMap, InternalRubySdkUtil.createSdk(runParameters, buildParametersMap.getAllParameters()));
   }
 
   @NotNull
-  public static RubySdk createAndSetupSdk(@NotNull final Map<String, String> runParameters,
-                                          @NotNull final BuildParametersMap buildParametersMap,
-                                          @NotNull final RubyLightweightSdk lwSdk)
-      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+  private static RubySdk setupSdk(@NotNull final BuildParametersMap buildParametersMap,
+                                  @NotNull final RubySdk lwSdk) {
 
-    final Map<String, String> buildConfEnvironment = buildParametersMap.getEnvironmentVariables();
-
-    // create
-    // TODO: bundler gem paths!
-
-    final RubySdk sdk;
-
-    if (lwSdk.isRvmSdk() && !lwSdk.isSystem()) {
-      // There a specific algorithm for true rvm rubies
-      RVMRubySdkImpl sdkImpl = new RVMRubySdkImpl((RVMRubyLightweightSdk) lwSdk);
-      sdk = sdkImpl;
-      // initialize
-
-      // language level
-      sdkImpl.setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(sdk, buildConfEnvironment));
-
-      // load path
-      sdkImpl.setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(sdk, buildConfEnvironment, sdkImpl.isRuby19()));
-
-      // Other already initialized
-    } else {
-      RubySdkImpl sdkImpl = new RubySdkImpl(lwSdk);
-      sdk = sdkImpl;
-      // initialize:
-
-      // language level
-      sdkImpl.setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(sdk, buildConfEnvironment));
-
-      // ruby / jruby
-      sdkImpl.setIsJRuby(InternalRubySdkUtil.isJRubyInterpreter(sdk, buildConfEnvironment));
-
-      // gem paths
-      sdkImpl.setGemPathsLog(executeScriptFromSource(sdk, buildConfEnvironment, GET_GEM_PATHS_SCRIPT));
-
-      // load path
-      sdkImpl.setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(sdk, buildConfEnvironment, sdkImpl.isRuby19()));
+    if (lwSdk.isSetupCompleted()) {
+      return lwSdk;
     }
-
-    return sdk;
+    lwSdk.setup(buildParametersMap.getEnvironmentVariables());
+    return lwSdk;
   }
 
   public static void patchPathEnvForNonRvmOrSystemRvmSdk(@NotNull final RubySdk sdk,
@@ -218,7 +169,7 @@ public class RubySDKUtil {
                                                          @NotNull final Map<String, String> buildParams,
                                                          @NotNull final Map<String, String> runnerEnvParams,
                                                          @Nullable final String checkoutDirPath)
-      throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
+    throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
     if (sdk.isRvmSdk() && !sdk.isSystem()) {
       // do nothing
@@ -244,9 +195,9 @@ public class RubySDKUtil {
     // gempath bin folders
     // use bundler gems root if it is defined! (i.e. we use bundle exec emulation with custom gem paths)
     final String bundlerGemRoot = BundlerUtil.determineGemsRootsAccordingToBundlerSettings(sdk,
-        runParams, buildParams,
-        runnerEnvParams,
-        checkoutDirPath);
+                                                                                           runParams, buildParams,
+                                                                                           runnerEnvParams,
+                                                                                           checkoutDirPath);
     final String[] gemPaths = bundlerGemRoot == null ? sdk.getGemPaths() : new String[]{bundlerGemRoot};
     // add to path
     for (String gemPath : gemPaths) {

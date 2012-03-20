@@ -16,11 +16,10 @@
 
 package jetbrains.buildServer.agent.rakerunner;
 
+import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.utils.ConfigurationParamsUtil;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
@@ -103,7 +102,7 @@ public enum SupportedTestFramework {
 
   public static boolean isTestUnitBasedFrameworksActivated(@NotNull final Map<String, String> runParams) {
     return TEST_UNIT.isActivated(runParams)
-        || TEST_SPEC.isActivated(runParams)
-        || SHOULDA.isActivated(runParams);
+           || TEST_SPEC.isActivated(runParams)
+           || SHOULDA.isActivated(runParams);
   }
 }

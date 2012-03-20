@@ -16,6 +16,7 @@
 
 package jetbrains.buildServer.agent.ruby.rvm.detector.impl;
 
+import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
@@ -24,8 +25,6 @@ import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
-
-import java.util.Map;
 
 import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_BIN_FOLDER_RELATIVE_PATH;
 
@@ -66,9 +65,9 @@ public class RVMDetectorForUNIX extends RVMDetector {
   }
 
   @Nullable
-  public static String determinePathUsingEnvVariable(@NotNull final Map<String,String> env) {
+  public static String determinePathUsingEnvVariable(@NotNull final Map<String, String> env) {
     // custom path defined by env variable
-    final String customRvmPath = env.get("rvm_path");
+    final String customRvmPath = env.get(RVM_PATH_ENV_VARIABLE);
     if (!StringUtil.isEmpty(customRvmPath)) {
       return customRvmPath;
     }

@@ -22,6 +22,7 @@
     <orderEntry type="module" module-name="xml-rpc-wrapper" />
     <orderEntry type="module" module-name="test-api" />
     <orderEntry type="module" module-name="server-test" />
+    <orderEntry type="library" name="annotations.jar" level="project" />
   </component>
 </module>
 

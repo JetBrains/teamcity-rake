@@ -20,6 +20,14 @@
 require 'rake'
 require 'rubygems'
 
+namespace :bundle do
+  task :install do
+    system("bundle", "install")
+    require "bundler"
+    Bundler.setup()
+  end
+end
+
 #begin
   gem 'cucumber'
   require 'cucumber'

@@ -18,6 +18,11 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.io.FileUtil;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
@@ -26,12 +31,6 @@ import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil.*;
 import static jetbrains.buildServer.rakerunner.RakeRunnerConstants.BUNDLER_GEM_VERSION_PROPERTY;
@@ -87,7 +86,7 @@ public class BundlerUtil {
                                                        @NotNull final Map<String, String> buildParams,
                                                        @NotNull final Map<String, String> runnerEnvParams,
                                                        @NotNull final String checkoutDirPath)
-      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     if (!isBundleExecEmulationEnabled(runParams)) {
       return;
@@ -119,7 +118,7 @@ public class BundlerUtil {
                                                                     @NotNull final Map<String, String> buildParams,
                                                                     @NotNull final Map<String, String> runnerEnvParams,
                                                                     @Nullable final String checkoutDirPath)
-      throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
+    throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
     if (!isBundleExecEmulationEnabled(runParams)) {
       return null;
@@ -143,7 +142,7 @@ public class BundlerUtil {
                                                          @NotNull final Map<String, String> runnerEnvParams,
                                                          @Nullable final String checkoutDirPath,
                                                          @NotNull final String gemfilePath)
-      throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
+    throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
     String bundlerGemsRoot;
     final String customBundleFolderPath = buildParams.get(RakeRunnerConstants.CUSTOM_BUNDLE_FOLDER_PATH);
@@ -177,11 +176,11 @@ public class BundlerUtil {
   private static String getCustomBundlerGemsRoot(@NotNull final RubySdk sdk,
                                                  @Nullable final String checkoutDirPath,
                                                  @NotNull final String customBundleFolderPath)
-      throws RakeTasksBuildService.MyBuildFailureException {
+    throws RakeTasksBuildService.MyBuildFailureException {
 
     String bundlerGemsRoot = checkoutDirPath != null
-        ? findGemFolderForSdk(sdk, checkoutDirPath + File.separator + customBundleFolderPath)
-        : null;
+                             ? findGemFolderForSdk(sdk, checkoutDirPath + File.separator + customBundleFolderPath)
+                             : null;
     if (bundlerGemsRoot == null) {
       // as full path:
       bundlerGemsRoot = findGemFolderForSdk(sdk, customBundleFolderPath);
@@ -234,19 +233,21 @@ public class BundlerUtil {
   }
 
   @NotNull
-  private static String determineGemfilePath(@NotNull final Map<String, String> buildParams,
-                                             @NotNull final Map<String, String> runnerEnvParams,
-                                             @NotNull final String checkoutDirPath) throws RakeTasksBuildService.MyBuildFailureException {
-
+  public static String determineGemfilePath(@NotNull final Map<String, String> buildParams,
+                                            @NotNull final Map<String, String> runnerEnvParams,
+                                            @NotNull final String checkoutDirPath) throws RakeTasksBuildService.MyBuildFailureException {
     final String userDefinedGemFilePath = runnerEnvParams.get(BUNDLE_GEMFILE_ENV_VAR);
     if (!StringUtil.isEmpty(userDefinedGemFilePath)) {
       return userDefinedGemFilePath;
     }
 
-    final String customGemFileRelativePath = buildParams.get(CUSTOM_GEMFILE_RELATIVE_PATH);
-    if (!StringUtil.isEmpty(customGemFileRelativePath)) {
+    final String customGemFilePath = buildParams.get(CUSTOM_GEMFILE_RELATIVE_PATH);
+    if (!StringUtil.isEmpty(customGemFilePath)) {
+      if (FileUtil.isAbsolute(customGemFilePath)) {
+        return customGemFilePath;
+      }
       // use custom runner
-      final String gemfilePath = checkoutDirPath + File.separator + customGemFileRelativePath;
+      final String gemfilePath = checkoutDirPath + File.separator + customGemFilePath;
       if (checkIfExists(gemfilePath)) {
         return gemfilePath;
       }
@@ -262,7 +263,8 @@ public class BundlerUtil {
         }
       }
       final String msg = "Cannot find Gemfile in checkout directory : '" + checkoutDirPath
-          + "'. If Gemfile is located in other directory please specify Gemfile relative path using system propery: " + CUSTOM_GEMFILE_RELATIVE_PATH;
+                         + "'. If Gemfile is located in other directory please specify Gemfile relative path using system propery: " +
+                         CUSTOM_GEMFILE_RELATIVE_PATH;
       throw new RakeTasksBuildService.MyBuildFailureException(msg);
     }
   }
@@ -287,7 +289,7 @@ public class BundlerUtil {
 
   private static void addBundlerSetupScriptToLoadPath(@NotNull final Map<String, String> runnerEnvParams,
                                                       @NotNull final String bundlerGemRootPath)
-      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
     // RUBYLIB: Let's add bundler setup script to loadpath
     // it's better than -I option in RUBYOPT because path may contain whitespaces
     final File libFolder = new File(bundlerGemRootPath + File.separator + "lib");
@@ -298,7 +300,7 @@ public class BundlerUtil {
 
   private static void setBundleBinPath(@NotNull final Map<String, String> runnerEnvParams,
                                        @NotNull final String bundlerGemRootPath)
-      throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
     if (StringUtil.isEmpty(runnerEnvParams.get(BUNDLE_BIN_PATH_ENV_VAR))) {
       // if user doesn't overload bundle bin path
 
@@ -326,7 +328,7 @@ public class BundlerUtil {
   @NotNull
   private static String findBundlerGemRoot(@NotNull final RubySdk sdk,
                                            @NotNull final Map<String, String> buildParameters)
-      throws RakeTasksBuildService.MyBuildFailureException {
+    throws RakeTasksBuildService.MyBuildFailureException {
 
     // At first let's try to find script in "test-unit" gem
     // then in sdk load path
@@ -335,8 +337,8 @@ public class BundlerUtil {
 
     // P.S: we are not intereseted to search bundler gem in bundler git paths or in "frozen" bundler paths
     final Pair<String, String> pathAndVersion = RubySDKUtil.findGemRootFolderAndVersion(BUNDLER_GEM_NAME,
-        sdk.getGemPaths(),
-        forcedBundlerGemVersion);
+                                                                                        sdk.getGemPaths(),
+                                                                                        forcedBundlerGemVersion);
     final String bundlerGemPath = pathAndVersion.first;
 
 
@@ -353,20 +355,21 @@ public class BundlerUtil {
       if (forcedBundlerGemVersion != null) {
         // forced version
         final String msg = "bundler gem with version '"
-            + forcedBundlerGemVersion
-            + "' wasn't found in Gem paths of Ruby SDK with interpreter: '"
-            + sdk.getPresentableName()
-            + "'.\n"
-            + "Gem paths:\n"
-            + sdk.getGemPathsFetchLog().getStdout();
+                           + forcedBundlerGemVersion
+                           + "' wasn't found in Gem paths of Ruby SDK with interpreter: '"
+                           + sdk.getPresentableName()
+                           + "'.\n"
+                           + "Gem paths:\n"
+                           + sdk.getGemPathsFetchLog().getStdout();
         throw new RakeTasksBuildService.MyBuildFailureException(msg);
       } else {
         // any version
-        final String msg = "If you wan't to use bundler please install it at first. The gem wasn't found in Gem paths of Ruby SDK with interpreter: '"
-            + sdk.getPresentableName()
-            + "'.\n"
-            + "Gem paths:\n"
-            + sdk.getGemPathsFetchLog().getStdout();
+        final String msg =
+          "If you wan't to use bundler please install it at first. The gem wasn't found in Gem paths of Ruby SDK with interpreter: '"
+          + sdk.getPresentableName()
+          + "'.\n"
+          + "Gem paths:\n"
+          + sdk.getGemPathsFetchLog().getStdout();
         throw new RakeTasksBuildService.MyBuildFailureException(msg);
       }
     }

@@ -17,6 +17,11 @@
 package jetbrains.buildServer.agent.ruby.rvm;
 
 import com.intellij.openapi.util.SystemInfo;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildRunnerContext;
@@ -28,12 +33,6 @@ import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author Vladislav.Rassokhin
  */
@@ -43,7 +42,8 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
   public static final String SCRIPT_PERMISSIONS = "u+x";
 
   @NotNull
-  public ProgramCommandLine process(@NotNull final BuildRunnerContext runnerContext, @NotNull final ProgramCommandLine origCommandLine) throws RunBuildException {
+  public ProgramCommandLine process(@NotNull final BuildRunnerContext runnerContext, @NotNull final ProgramCommandLine origCommandLine)
+    throws RunBuildException {
     if (!SystemInfo.isUnix) {
       return origCommandLine;
     }
@@ -51,7 +51,8 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
     final AgentRunningBuild build = runnerContext.getBuild();
     final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(build.getSharedConfigParameters());
 
-    if (configuration.getType() != RubyEnvConfiguratorConfiguration.Type.RVM && configuration.getType() != RubyEnvConfiguratorConfiguration.Type.RVMRC) {
+    if (configuration.getType() != RubyEnvConfiguratorConfiguration.Type.RVM &&
+        configuration.getType() != RubyEnvConfiguratorConfiguration.Type.RVMRC) {
       return origCommandLine;
     }
 
@@ -82,7 +83,8 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
     };
   }
 
-  private static File createScriptFile(@NotNull final ProgramCommandLine origCommandLine, @NotNull final File directory) throws RunBuildException {
+  private static File createScriptFile(@NotNull final ProgramCommandLine origCommandLine, @NotNull final File directory)
+    throws RunBuildException {
     final File script;
     try {
       script = File.createTempFile("build", ".sh", directory);

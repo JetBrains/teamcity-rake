@@ -28,9 +28,7 @@ public class RVMDetectorFactory {
 
   @NotNull
   public RVMDetector createRVMDetector() {
-    final RVMDetector detector = SystemInfo.isUnix ? new RVMDetectorForUNIX() : new RVMDetectorForUnsupportedOS();
-    detector.init();
-    return detector;
+    return SystemInfo.isUnix ? new RVMDetectorForUNIX() : new RVMDetectorForUnsupportedOS();
   }
 
 }

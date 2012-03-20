@@ -16,50 +16,40 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all","slow"})
-public class RSpecBuildLogTest extends AbstractRakeRunnerTest {
-  @BeforeMethod
-  @Override
-  protected void setUp1() throws Throwable {
-    super.setUp1();
-    setMessagesTranslationEnabled(true);
-    activateTestFramework(SupportedTestFramework.RSPEC);
-    useRVMGemSet("rspec-trunk");
-  }
+@Test(groups = {"all", "slow"})
+public class RSpecBuildLogTest extends AbstractRSpecTest {
 
-  public void testSpecPassed()  throws Throwable {
-    doTestWithoutLogCheck("stat:passed", true, "app_rspec");
+  public void testSpecPassed() throws Throwable {
+    doTestWithoutLogCheck("stat:passed", true);
 
     assertTestsCount(3, 0, 0);
   }
 
-  public void testSpecFailed()  throws Throwable {
-    doTestWithoutLogCheck("stat:failed", false, "app_rspec");
+  public void testSpecFailed() throws Throwable {
+    doTestWithoutLogCheck("stat:failed", false);
 
     assertTestsCount(0, 3, 0);
   }
 
-  public void testSpecError()  throws Throwable {
-    doTestWithoutLogCheck("stat:error", false, "app_rspec");
+  public void testSpecError() throws Throwable {
+    doTestWithoutLogCheck("stat:error", false);
 
     assertTestsCount(0, 3, 0);
   }
 
-  public void testSpecIgnored()  throws Throwable {
-    doTestWithoutLogCheck("stat:ignored", false, "app_rspec");
+  public void testSpecIgnored() throws Throwable {
+    doTestWithoutLogCheck("stat:ignored", false);
 
     assertTestsCount(0, 1, 2);
   }
 
-  public void testSpecCompileError()  throws Throwable {
-    doTestWithoutLogCheck("stat:compile_error", false, "app_rspec");
+  public void testSpecCompileError() throws Throwable {
+    doTestWithoutLogCheck("stat:compile_error", false);
 
     assertTestsCount(0, 0, 0);
   }

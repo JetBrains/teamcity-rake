@@ -21,16 +21,17 @@ import com.intellij.execution.process.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.CharsetToolkit;
-import jetbrains.buildServer.agent.ruby.RubySdk;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
-
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
+import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
 
@@ -188,6 +189,24 @@ public class RubyScriptRunner {
     }
 
     return cmdLine;
+  }
+
+  @NotNull
+  public static Output runUnderRvmShell(@NotNull final String workingDirectory,
+                                        @NotNull final String... args) {
+    final HashMap<String, String> environment = new HashMap<String, String>();
+    environment.put("rvm_trust_rvmrcs_flag", "1");
+
+    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
+    if (rvm == null) {
+      throw new IllegalArgumentException("RVM home unkown.");
+    }
+    final String[] newArgs = new String[2 + args.length];
+    newArgs[0] = rvm.getPath() + "/bin/rvm-shell";
+    newArgs[1] = "--";
+    System.arraycopy(args, 0, newArgs, 2, args.length);
+
+    return runInPath(workingDirectory, environment, newArgs);
   }
 
 

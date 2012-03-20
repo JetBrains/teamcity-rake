@@ -17,26 +17,24 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all","slow"})
-public class CucumberMessagesTest extends AbstractRakeRunnerTest {
-  @BeforeMethod
+@Test(groups = {"all", "slow"})
+public class CucumberMessagesTest extends AbstractCucumberTest {
   @Override
-  protected void setUp1() throws Throwable {
-    super.setUp1();
+  protected void setUp2() throws Throwable {
+    super.setUp2();
+    setMessagesTranslationEnabled(false);
     activateTestFramework(SupportedTestFramework.CUCUMBER);
-    useRVMGemSet("cucumber-trunk");
   }
 
-  public void testLocation()  throws Throwable {
+  public void testLocation() throws Throwable {
     setPartialMessagesChecker();
 
     setMockingOptions();
-    initAndDoTest("stat:features", "_location", false, "app_cucumber");
+    initAndDoTest("stat:features", "_location", false);
   }
 }

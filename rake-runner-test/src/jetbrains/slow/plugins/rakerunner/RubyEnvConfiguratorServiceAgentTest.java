@@ -18,11 +18,20 @@ package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.SystemInfo;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import jetbrains.buildServer.AgentServerFunctionalTestCase;
 import jetbrains.buildServer.agent.*;
 import jetbrains.buildServer.agent.feature.RubyEnvConfiguratorService;
 import jetbrains.buildServer.agent.impl.SpringContextFixture;
-import jetbrains.buildServer.agent.ruby.RubyLightweightSdk;
+import jetbrains.buildServer.agent.rakerunner.SharedParams;
+import jetbrains.buildServer.agent.rakerunner.SharedParamsType;
+import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
 import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetectorFactory;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
@@ -37,14 +46,6 @@ import org.testng.SkipException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static jetbrains.buildServer.agent.rakerunner.SharedRubyEnvSettings.*;
 import static jetbrains.slow.plugins.rakerunner.RakeRunnerTestUtil.DEFAULT_GEMSET_NAME;
 import static jetbrains.slow.plugins.rakerunner.RakeRunnerTestUtil.RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY;
 
@@ -52,7 +53,7 @@ import static jetbrains.slow.plugins.rakerunner.RakeRunnerTestUtil.RAKE_RUNNER_T
  * @author Roman.Chernyatchik
  */
 @TestFor(testForClass = {RubyEnvConfiguratorService.class})
-@Test(groups = {"all","slow"})
+@Test(groups = {"all", "slow"})
 @SpringContextFixture(configs = {"classpath*:/META-INF/build-agent-plugin-rakerunner.xml"})
 public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTestCase {
   private final String RUN_TYPE = "mySomeRunner!";
@@ -98,14 +99,15 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final RVMDetector detector = new RVMDetectorFactory().createRVMDetector();
 
     getExtensionHolder().registerExtension(BuildRunnerPrecondition.class, "aaa",
-        new RubyEnvConfiguratorService(detector) {
-          @Override
-          protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
-                                                @NotNull final RubyLightweightSdk sdk,
-                                                @NotNull final RubyEnvConfiguratorConfiguration configuration) {
-            patcherEnabled.set(true);
-          }
-        });
+                                           new RubyEnvConfiguratorService(detector) {
+                                             @Override
+                                             protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
+                                                                                   @NotNull final RubySdk sdk,
+                                                                                   @NotNull final RubyEnvConfiguratorConfiguration configuration,
+                                                                                   @NotNull final SharedParams sharedParams) {
+                                               patcherEnabled.set(true);
+                                             }
+                                           });
 
     // configure build
     final SBuildType bt = configureFakeBuild(configuration);
@@ -140,13 +142,19 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final Map<String, String> params = contextRef.get().getRunnerParameters();
     Assert.assertNotNull(params);
 
-    Assert.assertEquals(params.get(SHARED_RUBY_PARAMS_ARE_SET), "true");
-    Assert.assertEquals(params.get(SHARED_RUBY_RVM_SDK_NAME), "ruby-1.8.7-p352");
-    Assert.assertEquals(params.get(SHARED_RUBY_RVM_GEMSET_NAME), "teamcity");
-    Assert.assertNull(params.get(SHARED_RUBY_INTERPRETER_PATH));
+    SharedParams sharedParams = SharedParams.fromRunParameters(params);
+
+    assertTrue(sharedParams.isSetted());
+    assertEquals(SharedParamsType.RVM, sharedParams.getType());
+
+    assertEquals("ruby-1.8.7-p352", sharedParams.getRVMSdkName());
+    assertEquals("teamcity", sharedParams.getRVMGemsetName());
+    assertNull(sharedParams.getInterpreterPath());
+    assertNull(sharedParams.getRVMRCPath());
+
     if (SystemInfo.isUnix) {
       // Really, RVM may be tested only on linux agents
-      Assert.assertEquals(params.get(SHARED_RUBY_PARAMS_ARE_APPLIED), "true");
+      assertTrue(sharedParams.isApplied());
     }
   }
 
@@ -160,7 +168,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature);
 
     final String interpreterPath =
-        RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/ruby").getAbsolutePath();
+      RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/ruby").getAbsolutePath();
     addBuildParameter(bt, RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, interpreterPath);
 
     // launch
@@ -174,11 +182,17 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final Map<String, String> params = contextRef.get().getRunnerParameters();
     Assert.assertNotNull(params);
 
-    Assert.assertEquals(params.get(SHARED_RUBY_PARAMS_ARE_SET), "true");
-    Assert.assertEquals(params.get(SHARED_RUBY_PARAMS_ARE_APPLIED), "true");
-    Assert.assertEquals(params.get(SHARED_RUBY_INTERPRETER_PATH), interpreterPath);
-    Assert.assertNull(params.get(SHARED_RUBY_RVM_SDK_NAME));
-    Assert.assertNull(params.get(SHARED_RUBY_RVM_GEMSET_NAME));
+    SharedParams sharedParams = SharedParams.fromRunParameters(params);
+
+    assertTrue(sharedParams.isSetted());
+    assertEquals(SharedParamsType.INTERPRETER_PATH, sharedParams.getType());
+
+    assertEquals(interpreterPath, sharedParams.getInterpreterPath());
+    assertNull(sharedParams.getRVMSdkName());
+    assertNull(sharedParams.getRVMGemsetName());
+    assertNull(sharedParams.getRVMRCPath());
+
+    assertTrue(sharedParams.isApplied());
   }
 
   @Test
@@ -200,8 +214,13 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final Map<String, String> params = contextRef.get().getRunnerParameters();
     Assert.assertNotNull(params);
 
-    Assert.assertEquals(params.get(SHARED_RUBY_PARAMS_ARE_SET), "true");
-    Assert.assertNull(params.get(SHARED_RUBY_PARAMS_ARE_APPLIED));
+    SharedParams sharedParams = SharedParams.fromRunParameters(params);
+
+    assertTrue(sharedParams.isSetted());
+    assertFalse(sharedParams.isApplied());
+
+    assertTrue(sharedParams.isSetted());
+    assertFalse(sharedParams.isApplied());
 
     Assert.assertTrue(build.getBuildProblems().isEmpty());
     Assert.assertTrue(build.getStatusDescriptor().isSuccessful());
@@ -226,8 +245,13 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final Map<String, String> params = contextRef.get().getRunnerParameters();
     Assert.assertNotNull(params);
 
-    Assert.assertEquals(params.get(SHARED_RUBY_PARAMS_ARE_SET), "true");
-    Assert.assertNull(params.get(SHARED_RUBY_PARAMS_ARE_APPLIED));
+    SharedParams sharedParams = SharedParams.fromRunParameters(params);
+
+    assertTrue(sharedParams.isSetted());
+    assertFalse(sharedParams.isApplied());
+
+    assertTrue(sharedParams.isSetted());
+    assertFalse(sharedParams.isApplied());
 
     Assert.assertFalse(build.getBuildProblems().isEmpty());
     Assert.assertFalse(build.getStatusDescriptor().isSuccessful());
@@ -266,7 +290,10 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     Assert.assertNotNull(allParamsRef.get());
     RVMPathsSettings.getInstanceEx().initialize(envParamsRef.get());
-    final String rvmHomePath = RVMPathsSettings.getInstance().getRvmHomePath();
+    assertNotNull(RVMPathsSettings.getInstance());
+    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
+    assertNotNull(rvm);
+    final String rvmHomePath = rvm.getPath();
 
     Assert.assertNotNull(rvmHomePath, "Cannot retrieve RVM home path");
 

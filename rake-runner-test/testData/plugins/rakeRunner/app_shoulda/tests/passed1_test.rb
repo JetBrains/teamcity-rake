@@ -1,7 +1,4 @@
-require 'test/unit'
-require 'rubygems'
-gem 'shoulda'
-require 'shoulda'
+require File.join(File.dirname(__FILE__), 'test_helper.rb')
 
 class Pass1Test < Test::Unit::TestCase
   context "This context" do

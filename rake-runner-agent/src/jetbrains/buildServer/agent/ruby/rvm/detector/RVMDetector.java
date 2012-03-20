@@ -16,13 +16,12 @@
 
 package jetbrains.buildServer.agent.ruby.rvm.detector;
 
+import java.util.Map;
 import jetbrains.buildServer.agent.BuildAgentConfiguration;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 /**
  * Base class for "RVM Detector" - an utility designed for
@@ -34,9 +33,7 @@ public abstract class RVMDetector {
 
   public static final String CONF_PARAMETER_PREFIX = "rvm.";
   public static final String CONF_RVM_RUBIES_LIST = CONF_PARAMETER_PREFIX + "rubies.list";
-
-  protected void init() {
-  }
+  public static final String RVM_PATH_ENV_VARIABLE = "rvm_path";
 
   /**
    * That function detects installed RVM.
@@ -52,7 +49,7 @@ public abstract class RVMDetector {
       return;
     }
 
-    configuration.addEnvironmentVariable("rvm_path", rvm.getPath());
+    configuration.addEnvironmentVariable(RVM_PATH_ENV_VARIABLE, rvm.getPath());
 
     // TODO: do not provide this parameter, install ruby if necessary
     String allVersions = StringUtil.join(",", rvm.getRubiesNames());

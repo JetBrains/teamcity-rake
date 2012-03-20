@@ -17,79 +17,90 @@
 package jetbrains.buildServer.agent.ruby.rvm.impl;
 
 import com.intellij.openapi.util.Pair;
+import java.util.Map;
+import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
-import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
-import jetbrains.buildServer.agent.ruby.rvm.RVMRubyLightweightSdk;
+import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
 
 /**
  * @author Vladislav.Rassokhin
  */
-public class RVMRubySdkImpl extends RVMRubyLightweightSdkImpl implements RVMRubySdk {
+public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
 
-  private boolean myIsRuby19;
-  final private boolean myIsJRuby;
-  final private String[] myGemPaths = new String[2];
-  private RubyScriptRunner.Output myLoadPathsLog;
-  private String[] myLoadPaths;
-  final private RubyScriptRunner.Output myGemPathsFetchLog;
+  @Nullable
+  private final String myGemsetName;
+  @NotNull
+  private final String myName;
 
-  public RVMRubySdkImpl(@NotNull RVMRubyLightweightSdk sdk) {
-    super(sdk.getInterpreterPath(), sdk.getName(), sdk.isSystem(), sdk.getGemsetName());
+  public RVMRubySdkImpl(@NotNull final String interpreterPath,
+                        @NotNull final String name,
+                        final boolean isSystem,
+                        @Nullable final String gemsetName) {
+    super(interpreterPath, isSystem);
+    myGemsetName = gemsetName;
+    myName = name;
+
+    // Autofill some parameters
 
     // Check is JRuby
-    myIsJRuby = getName().startsWith("jruby");
+    setIsJRuby(getName().startsWith("jruby"));
 
     // get Gem Paths
     final Pair<String, String> gemPaths = SharedRVMUtil.getMainAndGlobalGemPaths(getInterpreterPath(), getGemsetName());
     if (gemPaths == null) {
-      myGemPathsFetchLog = new RubyScriptRunner.Output("", "Cannot determine RVM ruby gempaths for sdk '" + getPresentableName() + "'");
+      setGemPathsLog(new RubyScriptRunner.Output("", "Cannot determine RVM ruby gempaths for sdk '" + getPresentableName() + "'"));
     } else {
-      myGemPaths[0] = gemPaths.first;
-      myGemPaths[1] = gemPaths.second;
       StringBuilder sb = new StringBuilder();
-      sb.append(myGemPaths[0]).append('\n');
-      sb.append(myGemPaths[1]).append('\n');
-      myGemPathsFetchLog = new RubyScriptRunner.Output(sb.toString(), "");
+      sb.append(gemPaths.first).append('\n');
+      sb.append(gemPaths.second).append('\n');
+      setGemPathsLog(new RubyScriptRunner.Output(sb.toString(), ""));
     }
   }
 
+  @Override
+  public void setup(@NotNull final Map<String, String> buildConfEnvironment) {
+    if (isSetupCompleted()) {
+      return;
+    }
+    if (!this.isSystem()) {
+      // language level
+      setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(this, buildConfEnvironment));
+
+      // load path
+      setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, buildConfEnvironment, isRuby19()));
+
+      // Other already initialized
+      setIsSetupCompleted(true);
+    } else {
+      super.setup(buildConfEnvironment);
+    }
+  }
+
+  @Nullable
+  public String getGemsetName() {
+    return myGemsetName;
+  }
+
   @NotNull
-  public String[] getGemPaths() {
-    return myGemPaths;
+  public String getName() {
+    return myName;
   }
 
-  public boolean isRuby19() {
-    return myIsRuby19;
+  @Override
+  public final boolean isRvmSdk() {
+    return true;
   }
 
-  public boolean isJRuby() {
-    return myIsJRuby;
-  }
-
+  @Override
   @NotNull
-  public RubyScriptRunner.Output getGemPathsFetchLog() {
-    return myGemPathsFetchLog;
-  }
-
-  @NotNull
-  public RubyScriptRunner.Output getLoadPathsFetchLog() {
-    return myLoadPathsLog;
-  }
-
-  @NotNull
-  public String[] getLoadPath() {
-    return myLoadPaths;
-  }
-
-  public void setIsRuby19(boolean isRuby19) {
-    myIsRuby19 = isRuby19;
-  }
-
-  public void setLoadPathsLog(@NotNull RubyScriptRunner.Output loadPathsLog) {
-    myLoadPathsLog = loadPathsLog;
-    myLoadPaths = TextUtil.splitByLines(loadPathsLog.getStdout());
+  public String getPresentableName() {
+    return myGemsetName == null
+           ? getInterpreterPath()
+           : getInterpreterPath() + "[" + RVMSupportUtil.getGemsetSeparator() + myGemsetName + "]";
   }
 }

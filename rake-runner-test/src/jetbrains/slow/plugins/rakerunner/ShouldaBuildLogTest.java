@@ -16,34 +16,29 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
+ * @author Vladislav.Rassokhin
  */
 @Test(groups = {"all", "slow"})
-public class ShouldaBuildLogTest extends AbstractRakeRunnerTest {
+public class ShouldaBuildLogTest extends AbstractShouldaTest {
 
-  @BeforeMethod
   @Override
-  protected void setUp1() throws Throwable {
-    super.setUp1();
-    setMessagesTranslationEnabled(true);
-    activateTestFramework(SupportedTestFramework.SHOULDA);
+  protected void setUp2() throws Throwable {
+    super.setUp2();
     setMockingOptions(MockingOptions.FAKE_LOCATION_URL, MockingOptions.FAKE_STACK_TRACE);
-    useRVMGemSet("shoulda-trunk");
   }
 
   public void testGeneral() throws Throwable {
     setPartialMessagesChecker();
 
-    initAndDoRealTest("stat:general", false, "app_shoulda");
+    initAndDoRealTest("stat:general", false);
   }
 
   public void testCounts() throws Throwable {
-    doTestWithoutLogCheck("stat:general", false, "app_shoulda");
+    doTestWithoutLogCheck("stat:general", false);
 
     assertTestsCount(4, 2, 0);
   }

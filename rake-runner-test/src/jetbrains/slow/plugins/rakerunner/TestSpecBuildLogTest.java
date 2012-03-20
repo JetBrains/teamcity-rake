@@ -16,33 +16,22 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all","slow"})
-public class TestSpecBuildLogTest extends AbstractRakeRunnerTest {
-  @BeforeMethod
-  @Override
-  protected void setUp1() throws Throwable {
-    super.setUp1();
-    setMessagesTranslationEnabled(true);
-    activateTestFramework(SupportedTestFramework.TEST_SPEC);
-    useRVMGemSet("test-spec-trunk");
-  }
-
- public void testGeneral()  throws Throwable {
+@Test(groups = {"all", "slow"})
+public class TestSpecBuildLogTest extends AbstractTestSpecTest {
+  public void testGeneral() throws Throwable {
     setPartialMessagesChecker();
     setMockingOptions(MockingOptions.FAKE_LOCATION_URL, MockingOptions.FAKE_STACK_TRACE);
 
-    initAndDoRealTest("stat:general", false, "app_testspec");
+    initAndDoRealTest("stat:general", false);
   }
 
-  public void testCounts()  throws Throwable {
-    doTestWithoutLogCheck("stat:general", false, "app_testspec");
+  public void testCounts() throws Throwable {
+    doTestWithoutLogCheck("stat:general", false);
 
     assertTestsCount(4, 2, 1);
   }

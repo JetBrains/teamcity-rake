@@ -18,11 +18,10 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.util.PathUtil;
+import java.io.File;
 import jetbrains.buildServer.RunBuildException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 /**
  * @author Roman.Chernyatchik
@@ -59,8 +58,8 @@ public class RubyProjectSourcesUtil {
         return rubySourcesDir.getCanonicalPath();
       }
       throw new RunBuildException("Unable to find bundled ruby scripts folder("
-          + rubySourcesDir.getCanonicalPath()
-          + " [original path: " + rubySourcesDir.getPath() + "]). Plugin is damaged.");
+                                  + rubySourcesDir.getCanonicalPath()
+                                  + " [original path: " + rubySourcesDir.getPath() + "]). Plugin is damaged.");
     } catch (Exception e) {
       throw new RunBuildException(e.getMessage(), e);
     }

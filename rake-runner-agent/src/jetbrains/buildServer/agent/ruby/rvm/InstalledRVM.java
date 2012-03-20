@@ -17,13 +17,12 @@
 package jetbrains.buildServer.agent.ruby.rvm;
 
 import com.intellij.openapi.util.Condition;
+import java.io.File;
+import java.util.*;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
-
-import java.io.File;
-import java.util.*;
 
 import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_GEMS_FOLDER_NAME;
 import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_FOLDER_NAME;

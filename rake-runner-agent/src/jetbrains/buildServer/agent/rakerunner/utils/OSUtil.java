@@ -17,16 +17,15 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.SystemInfo;
+import java.io.File;
+import java.util.Map;
+import java.util.StringTokenizer;
 import jetbrains.buildServer.agent.Constants;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 import static jetbrains.buildServer.util.FileUtil.toSystemDependentName;
@@ -48,6 +47,7 @@ public class OSUtil {
       throw new RuntimeException(RakeRunnerBundle.MSG_OS_NOT_SUPPORTED);
     }
   }
+
   private static final String RUBY_EXE_WIN = "ruby.exe";
   private static final String RUBY_EXE_WIN_BAT = "ruby.bat";
   private static final String RUBY_EXE_UNIX = "ruby";
@@ -105,7 +105,7 @@ public class OSUtil {
       mergedValue = additionalValue;
     } else {
       mergedValue = append ? oldValue + separator + additionalValue
-                         : additionalValue + separator + oldValue;
+                           : additionalValue + separator + oldValue;
     }
 
     String newValue = mergedValue;

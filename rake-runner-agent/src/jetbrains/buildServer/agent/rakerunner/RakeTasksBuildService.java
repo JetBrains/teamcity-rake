@@ -17,6 +17,8 @@
 package jetbrains.buildServer.agent.rakerunner;
 
 import com.intellij.util.containers.HashMap;
+import java.io.File;
+import java.util.*;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.agent.ruby.RubySdk;
@@ -33,9 +35,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
-
-import java.io.File;
-import java.util.*;
 
 import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil.getCanonicalPath;
 import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
@@ -59,6 +58,8 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   @NotNull
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
+    RVMPathsSettings.getInstanceEx().initialize(getBuildParameters().getEnvironmentVariables());
+
     List<String> arguments = new ArrayList<String>();
     final Map<String, String> runParams = new HashMap<String, String>(getRunnerParameters());
     final Map<String, String> buildParams = new HashMap<String, String>(getBuildParameters().getAllParameters());
@@ -75,16 +76,18 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     final File buildFile = getBuildFile(runParams);
 
     final RakeRunnerUtils.RubyConfigMode interpreterConfigMode = RakeRunnerUtils.getRubyInterpreterConfigMode(runParams);
-    final boolean rubyEnvAlreadyConfigured = Boolean.valueOf(runParams.get(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET));
+    final SharedParams shared = SharedParams.fromRunParameters(runParams);
+    final boolean rubyEnvAlreadyConfigured = shared.isSetted(); // Do not inline!!!
 
 
     try {
+      validateRunnerParams(interpreterConfigMode, runParams, shared);
       // configure params in terms of "shared params"
-      configureRunnerParams(interpreterConfigMode, rubyEnvAlreadyConfigured, runParams);
+      configureRunnerParams(interpreterConfigMode, runParams, shared);
+
+      shared.applyToParameters(runParams);
 
       final String checkoutDirPath = getCanonicalPath(getCheckoutDirectory());
-
-      RVMPathsSettings.getInstanceEx().initialize(getBuildParameters().getEnvironmentVariables());
 
       // Sdk
       final RubySdk sdk = RubySDKUtil.createAndSetupSdk(runParams, getBuildParameters());
@@ -118,9 +121,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       // attached frameworks info
       if (SupportedTestFramework.isAnyFrameworkActivated(runParams)) {
-        runnerEnvParams.put(RAKERUNNER_USED_FRAMEWORKS_KEY,
-            SupportedTestFramework.getActivatedFrameworksConfig(runParams));
-
+        runnerEnvParams.put(RAKERUNNER_USED_FRAMEWORKS_KEY, SupportedTestFramework.getActivatedFrameworksConfig(runParams));
       }
 
       // track invoke/execute stages
@@ -174,51 +175,60 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       // Result:
       return new SimpleProgramCommandLine(runnerEnvParams,
-          getWorkingDirectory().getAbsolutePath(),
-          sdk.getInterpreterPath(),
-          arguments);
+                                          getWorkingDirectory().getAbsolutePath(),
+                                          sdk.getInterpreterPath(),
+                                          arguments);
     } catch (MyBuildFailureException e) {
       throw new RunBuildException(e.getMessage(), e);
     }
   }
 
+  private void validateRunnerParams(@NotNull final RakeRunnerUtils.RubyConfigMode interpreterConfigMode,
+                                    @NotNull final Map<String, String> runParams,
+                                    @NotNull final SharedParams sharedParams) throws MyBuildFailureException {
+    switch (interpreterConfigMode) {
+      case DEFAULT: {
+        if (sharedParams.isSetted()) {
+          // check that params were applied
+          if (!sharedParams.isApplied()) {
+            throw new MyBuildFailureException(
+              "Ruby interpeter is configured outside Rake build runner but configuration settings weren't applied. No sense to launch rake.");
+          }
+        }
+        break;
+      }
+      case INTERPRETER_PATH:
+        if (StringUtil.isEmpty(RakeRunnerUtils.getRubySdkPath(runParams))) {
+          throw new MyBuildFailureException("Ruby interpeter path isn't specified.");
+        }
+        break;
+      case RVM:
+        if (StringUtil.isEmpty(RakeRunnerUtils.getRVMSdkName(runParams))) {
+          throw new MyBuildFailureException("RVM Ruby interpeter name isn't specified.");
+        }
+        break;
+    }
+  }
+
+
   private void configureRunnerParams(@NotNull final RakeRunnerUtils.RubyConfigMode interpreterConfigMode,
-                                     final boolean rubyEnvAlreadyConfigured,
-                                     @NotNull final Map<String, String> runParams) throws MyBuildFailureException {
+                                     @NotNull final Map<String, String> runParams,
+                                     final SharedParams shared) {
     switch (interpreterConfigMode) {
       case DEFAULT:
-        if (rubyEnvAlreadyConfigured) {
-          // check that params were applied
-          if (!Boolean.valueOf(runParams.get(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_APPLIED))) {
-            throw new MyBuildFailureException(
-                "Ruby interpeter is configured outside Rake build runner but configuration settings weren't applied. No sense to launch rake.");
-          }
-        } else {
+        if (!shared.isSetted()) {
           // if shared params are not defined - use default system interpreter
-          runParams.put(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET, Boolean.TRUE.toString());
-          runParams.put(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH, "");
+          shared.setType(SharedParamsType.DEFAULT);
         }
         break;
       case INTERPRETER_PATH:
-        final String rubySdkPath = RakeRunnerUtils.getRubySdkPath(runParams);
-
-        if (StringUtil.isEmpty(rubySdkPath)) {
-          throw new MyBuildFailureException("Ruby interpeter path isn't specified.");
-        }
-        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET, Boolean.TRUE.toString());
-        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_INTERPRETER_PATH,
-            rubySdkPath);
+        shared.setInterpreterPath(RakeRunnerUtils.getRubySdkPath(runParams));
+        shared.setType(SharedParamsType.INTERPRETER_PATH);
         break;
       case RVM:
-        final String rvmSdkName = RakeRunnerUtils.getRVMSdkName(runParams);
-
-        if (StringUtil.isEmpty(rvmSdkName)) {
-          throw new MyBuildFailureException("RVM Ruby interpeter name isn't specified.");
-        }
-
-        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_PARAMS_ARE_SET, Boolean.TRUE.toString());
-        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_RVM_SDK_NAME, rvmSdkName);
-        runParams.put(SharedRubyEnvSettings.SHARED_RUBY_RVM_GEMSET_NAME, RakeRunnerUtils.getRVMGemsetName(runParams));
+        shared.setRVMSdkName(RakeRunnerUtils.getRVMSdkName(runParams));
+        shared.setRVMGemsetName(RakeRunnerUtils.getRVMGemsetName(runParams));
+        shared.setType(SharedParamsType.RVM);
         break;
     }
   }
@@ -307,7 +317,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
                                        @NotNull final Map<String, String> buildParams,
                                        @NotNull final Map<String, String> runnerEnvParams,
                                        @NotNull final String checkoutDirPath)
-      throws MyBuildFailureException, RunBuildException {
+    throws MyBuildFailureException, RunBuildException {
 
 
     final StringBuilder buff = new StringBuilder();
@@ -329,13 +339,14 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       // due to patching loadpath we replace original autorunner but it is used buy our tests runner
       runnerEnvParams.put(ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
-          TestUnitUtil.getSDKTestUnitAutoRunnerScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
+                          TestUnitUtil.getSDKTestUnitAutoRunnerScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
       runnerEnvParams.put(ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY,
-          TestUnitUtil.getSDKTestUnitTestRunnerMediatorScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
+                          TestUnitUtil
+                            .getSDKTestUnitTestRunnerMediatorScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
 
       // [optional] inform user if minitest framework detected
       final String minitestPath =
-          TestUnitUtil.getRuby19SDKMiniTestRunnerScriptPath(sdk);
+        TestUnitUtil.getRuby19SDKMiniTestRunnerScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
       if (minitestPath != null) {
         runnerEnvParams.put(ORIGINAL_SDK_19_MINITEST_UNIT_SCRIPT_PATH_KEY, minitestPath);
       }

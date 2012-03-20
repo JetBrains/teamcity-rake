@@ -16,11 +16,10 @@
 
 package jetbrains.buildServer.agent.ruby.rvm.detector.impl;
 
+import java.util.Map;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
 
 /**
  * @author Vladislav.Rassokhin

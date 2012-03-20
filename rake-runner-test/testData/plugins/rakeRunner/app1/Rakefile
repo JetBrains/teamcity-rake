@@ -21,6 +21,14 @@ require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 
+namespace :bundle do
+  task :install do
+    system("bundle", "install")
+    require "bundler"
+    Bundler.setup()
+  end
+end
+
 #############################################
 Dir["tasks/**/*.rake"].sort.each {|ext| load ext}
 
