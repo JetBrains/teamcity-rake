@@ -16,6 +16,8 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.serverSide.SimpleParameter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.testng.annotations.BeforeMethod;
@@ -29,7 +31,12 @@ public abstract class AbstractBundlerBasedRakeRunnerTest extends AbstractRakeRun
 
   @BeforeMethod(dependsOnMethods = {"setUp1"})
   protected final void runBundleInstall() throws Throwable {
-    initAndDoTest(BUNDLE_INSTALL_TASK, null, true, getTestDataApp());
+    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, Boolean.FALSE.toString()));
+    try {
+      initAndDoTest(BUNDLE_INSTALL_TASK, null, true, getTestDataApp());
+    } finally {
+      getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, Boolean.TRUE.toString()));
+    }
   }
 
   /**

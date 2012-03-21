@@ -30,9 +30,14 @@ namespace :bundle do
 end
 
 ########################################
+begin
 namespace :stat do
 
   Rake::TestTask.new(:general) do |t|
     t.test_files = FileList['tests/**/*_test.rb']
   end
+end
+rescue LoadError
+  desc 'Some gem not available'
+  p "Some gem not available. Run 'bundle:install' task at first"
 end

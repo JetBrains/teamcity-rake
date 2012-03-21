@@ -30,6 +30,11 @@ namespace :bundle do
 end
 
 #############################################
+begin
 Dir["tasks/**/*.rake"].sort.each {|ext| load ext}
 
 task :default => :"build_script:my_default_task"
+rescue LoadError
+  desc 'Some gem not available'
+  p "Some gem not available. Run 'bundle:install' task at first"
+end
