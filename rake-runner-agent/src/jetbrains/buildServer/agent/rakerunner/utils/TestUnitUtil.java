@@ -66,11 +66,9 @@ public class TestUnitUtil {
   }
 
   @Nullable
-  public static String getRuby19SDKMiniTestRunnerScriptPath(@NotNull final RubySdk sdk,
-                                                            final Map<String, String> runParams,
-                                                            final Map<String, String> buildParams,
-                                                            final Map<String, String> runnerEnvParams, final String checkoutDirPath) {
-    return findInSdkRootsUnderBundler(sdk, MINITEST_RUNNER_UNIT_SCRIPT_PATH, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+  public static String getRuby19SDKMiniTestRunnerScriptPath(@NotNull final RubySdk sdk) {
+    return findInSdkRoots(sdk, MINITEST_RUNNER_UNIT_SCRIPT_PATH);
+
   }
 
 
@@ -184,28 +182,6 @@ public class TestUnitUtil {
   @Nullable
   private static String findInSdkRoots(@NotNull final RubySdk sdk,
                                        @NotNull final String relativeScriptPath) {
-    final String[] loadPaths = sdk.getLoadPath();
-    for (String path : loadPaths) {
-      final String fullScriptPath = toSystemIndependentName(path + File.separatorChar + relativeScriptPath);
-      if (FileUtil.checkIfExists(fullScriptPath)) {
-        return fullScriptPath;
-      }
-    }
-    return null;
-  }
-
-  @Nullable
-  private static String findInSdkRootsUnderBundler(@NotNull final RubySdk sdk,
-                                                   @NotNull final String relativeScriptPath,
-                                                   final Map<String, String> runParams,
-                                                   final Map<String, String> buildParams,
-                                                   final Map<String, String> runnerEnvParams,
-                                                   final String checkoutDirPath) {
-    if (!BundlerUtil.isBundleExecEmulationEnabled(runParams)) {
-      return findInSdkRoots(sdk, relativeScriptPath);
-    }
-
-
     final String[] loadPaths = sdk.getLoadPath();
     for (String path : loadPaths) {
       final String fullScriptPath = toSystemIndependentName(path + File.separatorChar + relativeScriptPath);

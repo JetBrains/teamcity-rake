@@ -346,7 +346,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       // [optional] inform user if minitest framework detected
       final String minitestPath =
-        TestUnitUtil.getRuby19SDKMiniTestRunnerScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+        TestUnitUtil.getRuby19SDKMiniTestRunnerScriptPath(sdk);
       if (minitestPath != null) {
         runnerEnvParams.put(ORIGINAL_SDK_19_MINITEST_UNIT_SCRIPT_PATH_KEY, minitestPath);
       }
