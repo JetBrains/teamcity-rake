@@ -15,6 +15,7 @@
   --%>
 
 <%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
+<%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="l" tagdir="/WEB-INF/tags/layout" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
@@ -55,7 +56,7 @@
       <label for="custom1">Path to a Rakefile:</label>
     </th>
     <td>
-      <props:textProperty name="build-file-path"  className="longField" maxlength="256"/>
+      <props:textProperty name="build-file-path"  className="longField"/><bs:vcsTree fieldId="build-file-path"/>
       <span class="error" id="error_build-file-path"></span>
       <span class="smallNote">Enter Rakefile path if you don't want to use a default one. Specified path should be relative to the checkout directory.</span>
     </td>
