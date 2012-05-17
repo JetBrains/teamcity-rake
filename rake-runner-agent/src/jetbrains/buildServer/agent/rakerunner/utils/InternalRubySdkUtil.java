@@ -120,7 +120,7 @@ public class InternalRubySdkUtil {
   public static boolean isRuby19Interpreter(@NotNull final RubySdk sdk,
                                             @Nullable final Map<String, String> buildConfEnvironment) {
     boolean isRuby19 = false;
-    final RubyScriptRunner.Output rubyVersionResult =
+    final RunnerUtil.Output rubyVersionResult =
       RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment, RUBY_VERSION_SCRIPT);
     final String stdOut = rubyVersionResult.getStdout();
     if (stdOut.contains("1.9.")) {
@@ -136,7 +136,7 @@ public class InternalRubySdkUtil {
       return true;
     }
     boolean isJRuby = false;
-    final RubyScriptRunner.Output rubyVersionResult =
+    final RunnerUtil.Output rubyVersionResult =
       RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment, RUBY_PLATFORM_SCRIPT);
     final String stdOut = rubyVersionResult.getStdout();
     if (stdOut.contains("java")) {
@@ -145,7 +145,7 @@ public class InternalRubySdkUtil {
     return isJRuby;
   }
 
-  public static RubyScriptRunner.Output getLoadPaths(@NotNull final RubySdk sdk,
+  public static RunnerUtil.Output getLoadPaths(@NotNull final RubySdk sdk,
                                                      final Map<String, String> buildConfEnvironment,
                                                      final boolean ruby19) {
     // LOAD_PATH way

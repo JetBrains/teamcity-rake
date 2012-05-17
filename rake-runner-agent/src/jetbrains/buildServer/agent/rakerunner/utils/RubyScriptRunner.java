@@ -16,24 +16,17 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.*;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.vfs.CharsetToolkit;
-import java.io.File;
-import java.io.PrintStream;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 import jetbrains.buildServer.agent.ruby.RubySdk;
-import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
-import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
+import java.io.File;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
@@ -44,19 +37,19 @@ public class RubyScriptRunner {
   /**
    * Returns out after scriptSource run.
    *
-   * @param rubyExe      Path to ruby executable
+   * @param sdk          Ruby SDK
    * @param scriptSource script source to tun
    * @param rubyArgs     ruby Arguments
    * @param scriptArgs   script arguments
    * @return Out object
    */
   @NotNull
-  public static Output runScriptFromSource(@NotNull final RubySdk sdk,
-                                           @NotNull final String[] rubyArgs,
-                                           @NotNull final String scriptSource,
-                                           @NotNull final String[] scriptArgs,
-                                           @Nullable final Map<String, String> buildConfEnvironment) {
-    Output result = null;
+  public static RunnerUtil.Output runScriptFromSource(@NotNull final RubySdk sdk,
+                                                      @NotNull final String[] rubyArgs,
+                                                      @NotNull final String scriptSource,
+                                                      @NotNull final String[] scriptArgs,
+                                                      @Nullable final Map<String, String> buildConfEnvironment) {
+    RunnerUtil.Output result = null;
     File scriptFile = null;
     try {
       // Writing source to the temp file
@@ -77,7 +70,7 @@ public class RubyScriptRunner {
       RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, processEnv);
 
       //Result
-      result = RubyScriptRunner.runInPath(null, processEnv, args);
+      result = RunnerUtil.run(null, processEnv, args);
     } catch (Exception e) {
       LOG.error(e.getMessage(), e);
     } finally {
@@ -90,165 +83,15 @@ public class RubyScriptRunner {
     return result;
   }
 
-  /**
-   * Returns output after execution.
-   *
-   * @param workingDir working directory
-   * @param command    Command to execute @return Output object
-   * @return Output
-   */
-  @NotNull
-  public static Output runInPath(@Nullable final String workingDir,
-                                 @Nullable final Map<String, String> environment,
-                                 @NotNull final String... command) {
-    // executing
-    final StringBuilder out = new StringBuilder();
-    final StringBuilder err = new StringBuilder();
-    Process process = createProcess(workingDir, environment, command);
-    if (process != null) {
-      ProcessHandler osProcessHandler = new OSProcessHandler(process, TextUtil.concat(command)) {
-        private final Charset DEFAULT_SYSTEM_CHARSET = CharsetToolkit.getDefaultSystemCharset();
-
-        @Override
-        public Charset getCharset() {
-          return DEFAULT_SYSTEM_CHARSET;
-        }
-      };
-      osProcessHandler.addProcessListener(new OutputListener(out, err));
-      osProcessHandler.startNotify();
-      osProcessHandler.waitFor();
+  public static String rubyScriptToShellScript(@NotNull final String rubyScript, @NotNull String... rubyArgs) {
+    final StringBuilder sb = new StringBuilder();
+    sb.append("ruby");
+    for (String rubyArg : rubyArgs) {
+      sb.append(' ').append(rubyArg);
     }
-    return new Output(out.toString(), err.toString());
+    sb.append(" -e ");
+    sb.append('"').append(StringUtil.quoteReplacement(rubyScript)).append('"');
+    return sb.toString();
   }
 
-  /**
-   * Creates add by command and working directory
-   *
-   * @param command    add command line
-   * @param workingDir add working directory or null, if no special needed
-   * @return add
-   */
-  @Nullable
-  public static Process createProcess(@Nullable final String workingDir,
-                                      @Nullable final Map<String, String> environment,
-                                      @NotNull final String... command) {
-    Process process = null;
-
-    final String[] arguments;
-    if (command.length > 1) {
-      arguments = new String[command.length - 1];
-      System.arraycopy(command, 1, arguments, 0, command.length - 1);
-    } else {
-      arguments = new String[0];
-    }
-
-    final GeneralCommandLine cmdLine = createAndSetupCmdLine(workingDir, environment, command[0], arguments);
-    try {
-      process = cmdLine.createProcess();
-    } catch (Exception e) {
-      if (!isUnitTest()) {
-        LOG.error(e.getMessage(), e);
-      } else {
-        LOG.warn(e.getMessage(), e);
-      }
-    }
-    return process;
-  }
-
-  private static boolean isUnitTest() {
-    //This is jetbrains.buildServer.log.LogInitializer.isUnitTest():
-    //this class is shared with RubyMine sources, let's avoaid adding TC dependency here
-    return "yes".equals(System.getProperty("jetbrains.unit.test"));
-  }
-
-  /**
-   * Creates process builder and setups it's commandLine, working directory, enviroment variables
-   *
-   * @param workingDir     Process working dir
-   * @param executablePath Path to executable file
-   * @param arguments      Process commandLine
-   * @return process builder
-   */
-  public static GeneralCommandLine createAndSetupCmdLine(@Nullable final String workingDir,
-                                                         @Nullable final Map<String, String> environment,
-                                                         @NotNull final String executablePath,
-                                                         @NotNull final String... arguments) {
-    final GeneralCommandLine cmdLine = new GeneralCommandLine();
-
-    cmdLine.setExePath(toSystemDependentName(executablePath));
-    if (workingDir != null) {
-      cmdLine.setWorkDirectory(toSystemDependentName(workingDir));
-    }
-    cmdLine.addParameters(arguments);
-
-    // set env params
-    if (environment != null) {
-      final Map<String, String> envParams = new HashMap<String, String>();
-      envParams.putAll(environment);
-      cmdLine.setEnvParams(envParams);
-    }
-
-    return cmdLine;
-  }
-
-  @NotNull
-  public static Output runUnderRvmShell(@NotNull final String workingDirectory,
-                                        @NotNull final String... args) {
-    final HashMap<String, String> environment = new HashMap<String, String>();
-    environment.put("rvm_trust_rvmrcs_flag", "1");
-
-    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
-    if (rvm == null) {
-      throw new IllegalArgumentException("RVM home unkown.");
-    }
-    final String[] newArgs = new String[2 + args.length];
-    newArgs[0] = rvm.getPath() + "/bin/rvm-shell";
-    newArgs[1] = "--";
-    System.arraycopy(args, 0, newArgs, 2, args.length);
-
-    return runInPath(workingDirectory, environment, newArgs);
-  }
-
-
-  public static class Output {
-    @NotNull
-    private final String stdout;
-    @NotNull
-    private final String stderr;
-
-    public Output(@NotNull final String stdout, @NotNull final String stderr) {
-      this.stdout = stdout;
-      this.stderr = stderr;
-    }
-
-    @NotNull
-    public String getStdout() {
-      return stdout;
-    }
-
-    @NotNull
-    public String getStderr() {
-      return stderr;
-    }
-  }
-
-  public static class OutputListener extends ProcessAdapter {
-    private final StringBuilder out;
-    private final StringBuilder err;
-
-    public OutputListener(@NotNull final StringBuilder out, @NotNull final StringBuilder err) {
-      this.out = out;
-      this.err = err;
-    }
-
-    @Override
-    public void onTextAvailable(final ProcessEvent event, final Key outputType) {
-      if (outputType == ProcessOutputTypes.STDOUT) {
-        out.append(event.getText());
-      }
-      if (outputType == ProcessOutputTypes.STDERR) {
-        err.append(event.getText());
-      }
-    }
-  }
 }

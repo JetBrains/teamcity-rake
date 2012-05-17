@@ -93,36 +93,37 @@
     </div>
   </td>
 </tr>
-<%--<tr>--%>
-  <%--<th>--%>
-    <%--<c:set var="onclick">--%>
-      <%--if (this.checked) {--%>
-        <%--$('ui.ruby.configurator.rvm.rvmrc.path').focus();--%>
-        <%--$('ui.ruby.configurator.rvm.path').value='%env.rvm_path%';--%>
-      <%--}--%>
-    <%--</c:set>--%>
-    <%--<props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="rvmrc" id="ui.ruby.configurator.use.rvm:rvmrc" onclick="${onclick}"/>--%>
-    <%--<label for="ui.ruby.configurator.use.rvm:rvmrc">RVM with .rvmrc file:</label>--%>
-  <%--</th>--%>
-  <%--<td>--%>
-    <%--<style type="text/css">--%>
-      <%--.rvm_options {--%>
-        <%--padding-top: 3px;--%>
-      <%--}--%>
+<tr>
+  <th>
+    <c:set var="onclick">
+      if (this.checked) {
+      $('ui.ruby.configurator.rvm.rvmrc.path').focus();
+      $('ui.ruby.configurator.rvm.path').value='%env.rvm_path%';
+      }
+    </c:set>
+    <props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="rvmrc" id="ui.ruby.configurator.use.rvm:rvmrc"
+                               onclick="${onclick}"/>
+    <label for="ui.ruby.configurator.use.rvm:rvmrc">RVM with .rvmrc file:</label>
+  </th>
+  <td>
+    <style type="text/css">
+      .rvm_options {
+        padding-top: 3px;
+      }
 
-      <%--.rvm_options_editor {--%>
-        <%--padding-top: 2px;--%>
-      <%--}--%>
-    <%--</style>--%>
-    <%--<div class="rvm_options">--%>
-      <%--Path to a '.rvmrc' file:--%>
-      <%--<div class="rvm_options_editor">--%>
-        <%--<props:textProperty name="ui.ruby.configurator.rvm.rvmrc.path" style="width:25em;" maxlength="256" className="buildTypeParams"/>--%>
-        <%--<span class="smallNote">Path relative to a checkout directory</span>--%>
-      <%--</div>--%>
-    <%--</div>--%>
-  <%--</td>--%>
-<%--</tr>--%>
+      .rvm_options_editor {
+        padding-top: 2px;
+      }
+    </style>
+    <div class="rvm_options">
+      Path to a directory with '.rvmrc' file:
+      <div class="rvm_options_editor">
+        <props:textProperty name="ui.ruby.configurator.rvm.rvmrc.path" style="width:25em;" maxlength="256" className="buildTypeParams"/>
+        <span class="smallNote">Path relative to a checkout directory</span>
+      </div>
+    </div>
+  </td>
+</tr>
 <td colspan="2">
   <props:checkboxProperty name="ui.ruby.configurator.fail.build.if.interpreter.not.found"/>
   <label for="ui.ruby.configurator.fail.build.if.interpreter.not.found">Fail build if Ruby interpreter wasn't found</label>

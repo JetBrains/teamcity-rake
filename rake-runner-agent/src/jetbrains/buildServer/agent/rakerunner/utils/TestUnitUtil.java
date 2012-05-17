@@ -152,9 +152,9 @@ public class TestUnitUtil {
     }
 
     // If stderr isn't empty / JAVA_HOME error
-    final RubyScriptRunner.Output gemPathsLog = sdk.getGemPathsFetchLog();
+    final RunnerUtil.Output gemPathsLog = sdk.getGemPathsFetchLog();
     RubySDKUtil.failIfWithErrors(gemPathsLog);
-    final RubyScriptRunner.Output loadPathsLog = sdk.getLoadPathsFetchLog();
+    final RunnerUtil.Output loadPathsLog = sdk.getLoadPathsFetchLog();
     RubySDKUtil.failIfWithErrors(loadPathsLog);
 
 

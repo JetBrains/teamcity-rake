@@ -123,7 +123,7 @@ public class RubySDKUtil {
                                                          : null;
   }
 
-  public static void failIfWithErrors(@NotNull final RubyScriptRunner.Output result)
+  public static void failIfWithErrors(@NotNull final RunnerUtil.Output result)
     throws RakeTasksBuildService.MyBuildFailureException {
     // script wasn't found in LOAD_PATH:
     if (!StringUtil.isEmpty(result.getStderr())) {
@@ -136,7 +136,7 @@ public class RubySDKUtil {
   }
 
   @NotNull
-  public static RubyScriptRunner.Output executeScriptFromSource(@NotNull final RubySdk sdk,
+  public static RunnerUtil.Output executeScriptFromSource(@NotNull final RubySdk sdk,
                                                                 @Nullable final Map<String, String> buildConfEnvironment,
                                                                 @NotNull final String scriptSource,
                                                                 @NotNull final String... rubyArgs) {

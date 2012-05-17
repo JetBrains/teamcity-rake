@@ -20,7 +20,7 @@ import com.intellij.openapi.util.Condition;
 import java.io.File;
 import java.util.*;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
 
@@ -76,7 +76,7 @@ public class InstalledRVM {
 
   @NotNull
   public static String executeCommandLine(String... query) {
-    final RubyScriptRunner.Output output = RubyScriptRunner.runInPath(null, null, query);
+    final RunnerUtil.Output output = RunnerUtil.run(null, null, query);
     return output.getStdout();
   }
 

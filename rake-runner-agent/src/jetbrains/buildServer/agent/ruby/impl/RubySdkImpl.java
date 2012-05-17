@@ -17,10 +17,8 @@
 package jetbrains.buildServer.agent.ruby.impl;
 
 import java.util.Map;
-import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
-import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
+
+import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,8 +35,8 @@ public class RubySdkImpl implements RubySdk {
   private boolean myIsJRuby;
   private String[] myGemPaths;
   private String[] myLoadPaths;
-  private RubyScriptRunner.Output myGemPathsLog;
-  private RubyScriptRunner.Output myLoadPathsLog;
+  private RunnerUtil.Output myGemPathsLog;
+  private RunnerUtil.Output myLoadPathsLog;
   private boolean myIsSetupCompleted = false;
 
   public RubySdkImpl(@NotNull final String interpreterPath, boolean isSystem) {
@@ -60,12 +58,12 @@ public class RubySdkImpl implements RubySdk {
   }
 
   @NotNull
-  public RubyScriptRunner.Output getGemPathsFetchLog() {
+  public RunnerUtil.Output getGemPathsFetchLog() {
     return myGemPathsLog;
   }
 
   @NotNull
-  public RubyScriptRunner.Output getLoadPathsFetchLog() {
+  public RunnerUtil.Output getLoadPathsFetchLog() {
     return myLoadPathsLog;
   }
 
@@ -121,13 +119,13 @@ public class RubySdkImpl implements RubySdk {
     myIsJRuby = isJRuby;
   }
 
-  public void setGemPathsLog(final RubyScriptRunner.Output gemPathsLog) {
+  public void setGemPathsLog(final RunnerUtil.Output gemPathsLog) {
     myGemPathsLog = gemPathsLog;
     myGemPaths = TextUtil.splitByLines(gemPathsLog.getStdout());
 
   }
 
-  public void setLoadPathsLog(final RubyScriptRunner.Output loadPathsLog) {
+  public void setLoadPathsLog(final RunnerUtil.Output loadPathsLog) {
     myLoadPathsLog = loadPathsLog;
     myLoadPaths = TextUtil.splitByLines(loadPathsLog.getStdout());
   }

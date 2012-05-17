@@ -17,7 +17,8 @@
 package jetbrains.buildServer.agent.ruby;
 
 import java.util.Map;
-import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
+
+import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -57,8 +58,8 @@ public interface RubySdk {
   //  throws RakeTasksBuildService.MyBuildFailureException;
 
   @NotNull
-  RubyScriptRunner.Output getGemPathsFetchLog();
+  RunnerUtil.Output getGemPathsFetchLog();
 
   @NotNull
-  RubyScriptRunner.Output getLoadPathsFetchLog();
+  RunnerUtil.Output getLoadPathsFetchLog();
 }

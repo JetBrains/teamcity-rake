@@ -19,7 +19,7 @@ package jetbrains.buildServer.agent.ruby.rvm.impl;
 import com.intellij.openapi.util.Pair;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
 import org.jetbrains.annotations.NotNull;
@@ -53,12 +53,12 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
     // get Gem Paths
     final Pair<String, String> gemPaths = SharedRVMUtil.getMainAndGlobalGemPaths(getInterpreterPath(), getGemsetName());
     if (gemPaths == null) {
-      setGemPathsLog(new RubyScriptRunner.Output("", "Cannot determine RVM ruby gempaths for sdk '" + getPresentableName() + "'"));
+      setGemPathsLog(new RunnerUtil.Output("", "Cannot determine RVM ruby gempaths for sdk '" + getPresentableName() + "'"));
     } else {
       StringBuilder sb = new StringBuilder();
       sb.append(gemPaths.first).append('\n');
       sb.append(gemPaths.second).append('\n');
-      setGemPathsLog(new RubyScriptRunner.Output(sb.toString(), ""));
+      setGemPathsLog(new RunnerUtil.Output(sb.toString(), ""));
     }
   }
 
