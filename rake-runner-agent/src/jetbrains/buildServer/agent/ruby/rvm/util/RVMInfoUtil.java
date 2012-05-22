@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import jetbrains.buildServer.agent.rakerunner.utils.ShellScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingFactory;
+import jetbrains.buildServer.agent.rakerunner.scripting.ShellScriptRunner;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,9 +34,10 @@ public class RVMInfoUtil {
 
   @NotNull
   public static RVMInfo gatherInfoUnderRvmShell(@NotNull final String directoryWithRvmrcFile) {
-    RVMInfo info = new RVMInfo(ShellScriptRunner.runUnderRvmShell(directoryWithRvmrcFile, "rvm current").getStdout());
+    final ShellScriptRunner shellScriptRunner = ScriptingFactory.getDefault().getShellScriptRunner();
+    RVMInfo info = new RVMInfo(shellScriptRunner.run("rvm current", directoryWithRvmrcFile).getStdout());
     for (RVMInfo.Section section : RVMInfo.Section.values()) {
-      final String stdout = ShellScriptRunner.runUnderRvmShell(directoryWithRvmrcFile, "rvm info " + section.name()).getStdout();
+      final String stdout = shellScriptRunner.run("rvm info " + section.name(), directoryWithRvmrcFile).getStdout();
       Map<String, String> ret = new HashMap<String, String>();
       for (String line : stdout.split("\n")) {
         final Matcher matcher = INFO_LINE_PATTERN.matcher(line);

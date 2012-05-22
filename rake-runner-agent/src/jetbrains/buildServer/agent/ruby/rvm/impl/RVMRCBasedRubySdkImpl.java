@@ -17,17 +17,16 @@
 package jetbrains.buildServer.agent.ruby.rvm.impl;
 
 import com.intellij.openapi.diagnostic.Logger;
+import java.util.Map;
+import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingFactory;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RubyScriptRunner;
-import jetbrains.buildServer.agent.rakerunner.utils.ShellScriptRunner;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
 import jetbrains.buildServer.agent.ruby.rvm.RVMRCBasedRubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.util.RVMInfoUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
-
-import java.util.Map;
 
 /**
  * @author Vladislav.Rassokhin
@@ -59,12 +58,13 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
     LOG.debug("Gemset is " + gemset);
     LOG.debug("Name is " + name);
 
+    final RubyScriptRunner rubyScriptRunner = ScriptingFactory.getDefault().getRubyScriptRunner();
     if (RVMSupportUtil.RVM_SYSTEM_INTERPRETER.equals(name)) {
       isSystem = true;
-      isJRuby = ShellScriptRunner.runUnderRvmShell(pathToRVMRCFolder, RubyScriptRunner.rubyScriptToShellScript(InternalRubySdkUtil.RUBY_PLATFORM_SCRIPT))
-          .getStdout().contains("java");
-      isRuby19 = ShellScriptRunner.runUnderRvmShell(pathToRVMRCFolder, RubyScriptRunner.rubyScriptToShellScript(InternalRubySdkUtil.RUBY_VERSION_SCRIPT))
-          .getStdout().contains("1.9.");
+      isJRuby = rubyScriptRunner.run(InternalRubySdkUtil.RUBY_PLATFORM_SCRIPT, pathToRVMRCFolder)
+        .getStdout().contains("java");
+      isRuby19 = rubyScriptRunner.run(InternalRubySdkUtil.RUBY_VERSION_SCRIPT, pathToRVMRCFolder)
+        .getStdout().contains("1.9.");
     } else {
       isSystem = false;
       isJRuby = "jruby".equalsIgnoreCase(info.getSection(RVMInfo.Section.ruby).get("interpreter"));
@@ -84,11 +84,13 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
     sdk.setIsJRuby(isJRuby);
     sdk.setIsRuby19(isRuby19);
 
-    sdk.setLoadPathsLog(ShellScriptRunner.runUnderRvmShell(pathToRVMRCFolder, RubyScriptRunner.rubyScriptToShellScript(InternalRubySdkUtil.GET_LOAD_PATH_SCRIPT,
-        // filter gem paths in case of Ruby 1.9 (use --disable-gems)
-        isRuby19 ? new String[]{InternalRubySdkUtil.RUBY19_DISABLE_GEMS_OPTION} : new String[]{})));
+    // filter gem paths in case of Ruby 1.9 (use --disable-gems)
+    final String[] additiaonalArg = isRuby19
+                                    ? new String[]{InternalRubySdkUtil.RUBY19_DISABLE_GEMS_OPTION}
+                                    : new String[]{};
+    sdk.setLoadPathsLog(rubyScriptRunner.run(InternalRubySdkUtil.GET_LOAD_PATH_SCRIPT, pathToRVMRCFolder, additiaonalArg));
 
-    sdk.setGemPathsLog(ShellScriptRunner.runUnderRvmShell(pathToRVMRCFolder, RubyScriptRunner.rubyScriptToShellScript(RubySDKUtil.GET_GEM_PATHS_SCRIPT)));
+    sdk.setGemPathsLog(rubyScriptRunner.run(RubySDKUtil.GET_GEM_PATHS_SCRIPT, pathToRVMRCFolder));
 
 
     sdk.setIsSetupCompleted(true);

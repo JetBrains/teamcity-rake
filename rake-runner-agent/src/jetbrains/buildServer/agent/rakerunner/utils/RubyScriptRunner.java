@@ -17,16 +17,14 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.diagnostic.Logger;
-import jetbrains.buildServer.agent.ruby.RubySdk;
-import jetbrains.buildServer.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
-
 import java.io.File;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import jetbrains.buildServer.agent.ruby.RubySdk;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
 /**
  * @author Roman.Chernyatchik
@@ -81,17 +79,6 @@ public class RubyScriptRunner {
 
     //noinspection ConstantConditions
     return result;
-  }
-
-  public static String rubyScriptToShellScript(@NotNull final String rubyScript, @NotNull String... rubyArgs) {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("ruby");
-    for (String rubyArg : rubyArgs) {
-      sb.append(' ').append(rubyArg);
-    }
-    sb.append(" -e ");
-    sb.append('"').append(StringUtil.quoteReplacement(rubyScript)).append('"');
-    return sb.toString();
   }
 
 }
