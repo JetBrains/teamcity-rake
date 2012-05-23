@@ -78,10 +78,10 @@
           $('ui.ruby.configurator.rvm.sdk.name').focus();
           $('ui.ruby.configurator.rvm.path').value="%env.rvm_path%";
         }
-//        if ($('ui.ruby.configurator.use.rvm:rvmrc').checked) {
-//          $('ui.ruby.configurator.rvm.rvmrc.path').focus();
-//          $('ui.ruby.configurator.rvm.path').value="%env.rvm_path%";
-//        }
+        if ($('ui.ruby.configurator.use.rvm:rvmrc').checked) {
+          $('ui.ruby.configurator.rvm.rvmrc.path').focus();
+          $('ui.ruby.configurator.rvm.path').value="%env.rvm_path%";
+        }
       </script>
     </div>
     <div class="rvm_options">
