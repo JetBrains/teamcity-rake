@@ -29,6 +29,7 @@ import jetbrains.buildServer.messages.BuildMessagesProcessor;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.ShortStatistics;
 import jetbrains.buildServer.serverSide.SimpleParameter;
+import jetbrains.buildServer.serverSide.buildLog.LogMessage;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -184,7 +185,8 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
                                     // suffix to each translated result (build log) file
                                     + (myShouldTranslateMessages ? "_log" : "");
     doTest(resultFileName);
-    assertEquals(shouldPass, !getLastFinishedBuild().getBuildStatus().isFailed());
+    final List<LogMessage> errorMessages = getLastFinishedBuild().getBuildLog().getErrorMessages();
+    assertEquals(errorMessages.toString(), shouldPass, !getLastFinishedBuild().getBuildStatus().isFailed());
   }
 
 

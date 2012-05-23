@@ -18,8 +18,6 @@ package jetbrains.buildServer.agent.ruby.rvm.impl;
 
 import com.intellij.openapi.util.Pair;
 import java.util.Map;
-import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
-import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingRunnersProvider;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
@@ -102,13 +100,7 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
   @NotNull
   public String getPresentableName() {
     return myGemsetName == null
-           ? getInterpreterPath()
-           : getInterpreterPath() + "[" + RVMSupportUtil.getGemsetSeparator() + myGemsetName + "]";
-  }
-
-  @NotNull
-  @Override
-  public RubyScriptRunner getScriptRunner() {
-    return ScriptingRunnersProvider.getRVMDefault().getRubyScriptRunner();
+           ? getName()
+           : getName() + "[" + RVMSupportUtil.getGemsetSeparator() + myGemsetName + "]";
   }
 }

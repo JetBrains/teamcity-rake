@@ -21,11 +21,6 @@ import org.testng.annotations.Test;
 @TestFor(testForClass = {RVMInfoUtil.class})
 @Test(groups = {"unix"})
 public class RVMInfoUtilTest extends TestCase {
-  @Override
-  public void tearDown() throws Exception {
-    ScriptingRunnersProvider.setRVMDefault(ScriptingRunnersProvider.RVM_SHELL_BASED_SCRIPTING_RUNNERS_PROVIDER);
-  }
-
   @Test(groups = {"unix"})
   public void testParsingOk() throws Exception {
     final String myCurrentName = "ruby-1.9.3-p194@rails";
@@ -57,12 +52,16 @@ public class RVMInfoUtilTest extends TestCase {
                 "    IRBRC:        \"/home/vlad/.rvm/rubies/ruby-1.9.3-p194/.irbrc\"\n" +
                 "    RUBYOPT:      \"-rauto_gem\"\n" +
                 "    gemset:       \"rails\"\n");
-    setupScriptingFactory(myCurrentName, infoMap);
+    try {
+      setupScriptingFactory(myCurrentName, infoMap);
 
-    final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell("any", null);
-    Assert.assertEquals("ruby-1.9.3-p194", info.getInterpreterName());
-    for (RVMInfo.Section section : RVMInfo.Section.values()) {
-      Assert.assertNotNull("section '" + section + "' doesn't exist", info.getSection(section));
+      final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell("any", null);
+      Assert.assertEquals("ruby-1.9.3-p194", info.getInterpreterName());
+      for (RVMInfo.Section section : RVMInfo.Section.values()) {
+        Assert.assertNotNull("section '" + section + "' doesn't exist", info.getSection(section));
+      }
+    } finally {
+      ScriptingRunnersProvider.setRVMDefault(ScriptingRunnersProvider.RVM_SHELL_BASED_SCRIPTING_RUNNERS_PROVIDER);
     }
   }
 

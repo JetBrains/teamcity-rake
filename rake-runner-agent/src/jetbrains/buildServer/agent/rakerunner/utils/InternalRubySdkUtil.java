@@ -37,7 +37,7 @@ public class InternalRubySdkUtil {
   public static final String RUBY_VERSION_SCRIPT = "print RUBY_VERSION";
   public static final String RUBY_PLATFORM_SCRIPT = "print RUBY_PLATFORM";
   @NonNls
-  public static final String GET_LOAD_PATH_SCRIPT = "print $LOAD_PATH";
+  public static final String GET_LOAD_PATH_SCRIPT = "puts $LOAD_PATH";
   public static final String RUBY19_DISABLE_GEMS_OPTION = "--disable-gems";
 
   @NotNull

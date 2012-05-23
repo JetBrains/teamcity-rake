@@ -107,4 +107,10 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
   public void setup(@NotNull final Map<String, String> env) {
     // Nothing to do, because setupped when constructed
   }
+
+  @NotNull
+  @Override
+  public RubyScriptRunner getScriptRunner() {
+    return ScriptingRunnersProvider.getRVMDefault().getRubyScriptRunner();
+  }
 }
