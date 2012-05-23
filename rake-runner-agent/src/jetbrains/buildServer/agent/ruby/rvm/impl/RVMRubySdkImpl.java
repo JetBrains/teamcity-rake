@@ -18,6 +18,8 @@ package jetbrains.buildServer.agent.ruby.rvm.impl;
 
 import com.intellij.openapi.util.Pair;
 import java.util.Map;
+import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingRunnersProvider;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
@@ -63,21 +65,21 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
   }
 
   @Override
-  public void setup(@NotNull final Map<String, String> buildConfEnvironment) {
+  public void setup(@NotNull final Map<String, String> env) {
     if (isSetupCompleted()) {
       return;
     }
     if (!this.isSystem()) {
       // language level
-      setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(this, buildConfEnvironment));
+      setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(this, env));
 
       // load path
-      setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, buildConfEnvironment, isRuby19()));
+      setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, env));
 
       // Other already initialized
       setIsSetupCompleted(true);
     } else {
-      super.setup(buildConfEnvironment);
+      super.setup(env);
     }
   }
 
@@ -102,5 +104,11 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
     return myGemsetName == null
            ? getInterpreterPath()
            : getInterpreterPath() + "[" + RVMSupportUtil.getGemsetSeparator() + myGemsetName + "]";
+  }
+
+  @NotNull
+  @Override
+  public RubyScriptRunner getScriptRunner() {
+    return ScriptingRunnersProvider.getRVMDefault().getRubyScriptRunner();
   }
 }

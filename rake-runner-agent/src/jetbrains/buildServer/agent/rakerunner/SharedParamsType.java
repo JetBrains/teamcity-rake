@@ -17,7 +17,7 @@
 package jetbrains.buildServer.agent.rakerunner;
 
 import java.io.File;
-import java.util.Map;
+import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
@@ -28,6 +28,7 @@ import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
+import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil.getCanonicalPath2;
 import static jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil.findSystemInterpreterPath;
 import static org.jetbrains.plugins.ruby.rvm.RVMSupportUtil.RVM_SYSTEM_INTERPRETER;
 
@@ -38,25 +39,25 @@ public enum SharedParamsType {
   NOT_SETTED("notsetted") {
     @NotNull
     @Override
-    public RubySdk createSdk(@NotNull final Map<String, String> buildParameters,
+    public RubySdk createSdk(@NotNull final BuildRunnerContext context,
                              @NotNull final SharedParams sharedParams)
       throws RakeTasksBuildService.MyBuildFailureException {
-      return DEFAULT.createSdk(buildParameters, sharedParams);
+      return DEFAULT.createSdk(context, sharedParams);
     }
   },
   DEFAULT("default") {
     @NotNull
     @Override
-    public RubySdk createSdk(@NotNull final Map<String, String> buildParameters,
+    public RubySdk createSdk(@NotNull final BuildRunnerContext context,
                              @NotNull final SharedParams sharedParams)
       throws RakeTasksBuildService.MyBuildFailureException {
-      return new RubySdkImpl(findSystemInterpreterPath(buildParameters), true);
+      return new RubySdkImpl(findSystemInterpreterPath(context.getBuildParameters().getEnvironmentVariables()), true);
     }
   },
   INTERPRETER_PATH("intpath") {
     @NotNull
     @Override
-    public RubySdk createSdk(@NotNull final Map<String, String> buildParameters,
+    public RubySdk createSdk(@NotNull final BuildRunnerContext context,
                              @NotNull final SharedParams sharedParams)
       throws RakeTasksBuildService.MyBuildFailureException {
       final String path = StringUtil.emptyIfNull(sharedParams.getInterpreterPath());
@@ -67,14 +68,15 @@ public enum SharedParamsType {
   RVM("rvmsdk") {
     @NotNull
     @Override
-    public RubySdk createSdk(@NotNull final Map<String, String> buildParameters,
+    public RubySdk createSdk(@NotNull final BuildRunnerContext context,
                              @NotNull final SharedParams sharedParams)
       throws RakeTasksBuildService.MyBuildFailureException {
       final String sdkName = StringUtil.emptyIfNull(sharedParams.getRVMSdkName());
 
       // at first lets check that it isn't "system" interpreter
       if (RVMSupportUtil.isSystemRuby(sdkName)) {
-        return new RVMRubySdkImpl(findSystemInterpreterPath(buildParameters), RVM_SYSTEM_INTERPRETER, true, null);
+        return new RVMRubySdkImpl(findSystemInterpreterPath(context.getBuildParameters().getEnvironmentVariables()), RVM_SYSTEM_INTERPRETER,
+                                  true, null);
       }
 
       // build  dist/gemsets table, match ref with dist. name
@@ -92,16 +94,19 @@ public enum SharedParamsType {
   RVMRC("rvmrc") {
     @NotNull
     @Override
-    public RubySdk createSdk(@NotNull final Map<String, String> buildParameters,
+    public RubySdk createSdk(@NotNull final BuildRunnerContext context,
                              @NotNull final SharedParams sharedParams)
       throws RakeTasksBuildService.MyBuildFailureException {
-      final String rvmrc = StringUtil.emptyIfNull(sharedParams.getRVMRCPath());
+      String rvmrc = StringUtil.emptyIfNull(sharedParams.getRVMRCPath());
+      if (rvmrc.endsWith(".rvmrc")) {
+        rvmrc = rvmrc.substring(0, rvmrc.length() - ".rvmrc".length());
+      }
 
       final File file;
       if (!StringUtil.isEmptyOrSpaces(rvmrc) && FileUtil.isAbsolute(rvmrc)) {
         file = new File(rvmrc + "/.rvmrc");
       } else {
-        final String checkoutDir = jetbrains.buildServer.agent.rakerunner.utils.FileUtil.getCheckoutDirectoryPath(buildParameters);
+        final String checkoutDir = getCanonicalPath2(context.getBuild().getCheckoutDirectory());
         file = new File(checkoutDir, rvmrc + "/.rvmrc");
       }
       if (!jetbrains.buildServer.agent.rakerunner.utils.FileUtil.checkIfFileExists(file)) {
@@ -109,7 +114,8 @@ public enum SharedParamsType {
       }
 
       // Create SDK using known .rvmrc file
-      return RVMRCBasedRubySdkImpl.createAndSetup(file.getParentFile().getAbsolutePath());
+      return RVMRCBasedRubySdkImpl
+        .createAndSetup(file.getParentFile().getAbsolutePath(), context.getBuildParameters().getEnvironmentVariables());
     }
   };
 
@@ -124,7 +130,7 @@ public enum SharedParamsType {
   }
 
   @NotNull
-  public abstract RubySdk createSdk(@NotNull final Map<String, String> buildParameters,
+  public abstract RubySdk createSdk(@NotNull final BuildRunnerContext context,
                                     @NotNull final SharedParams sharedParams)
     throws RakeTasksBuildService.MyBuildFailureException;
 }

@@ -20,10 +20,12 @@ import com.intellij.openapi.diagnostic.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.ShellScriptRunnerUtil;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 
 /**
@@ -68,7 +70,9 @@ public class RvmShellRunner implements ShellScriptRunner {
    * @return script output
    */
   @NotNull
-  public RunnerUtil.Output run(@NotNull final String script, @NotNull final String workingDirectory) {
+  public RunnerUtil.Output run(@NotNull final String script,
+                               @NotNull final String workingDirectory,
+                               @Nullable final Map<String, String> environment) {
     final File directory = new File(workingDirectory);
     File scriptFile;
     try {
@@ -84,10 +88,13 @@ public class RvmShellRunner implements ShellScriptRunner {
     }
 
     // Patching environment
-    final HashMap<String, String> environment = new HashMap<String, String>();
-    environment.put("rvm_trust_rvmrcs_flag", "1");
-    environment.put("rvm_path", myRVM.getPath());
+    final HashMap<String, String> environment1 = new HashMap<String, String>();
+    if (environment != null) {
+      environment1.putAll(environment);
+    }
+    environment1.put("rvm_trust_rvmrcs_flag", "1");
+    environment1.put("rvm_path", myRVM.getPath());
 
-    return RunnerUtil.run(workingDirectory, environment, scriptFile.getAbsolutePath());
+    return RunnerUtil.run(workingDirectory, environment1, scriptFile.getAbsolutePath());
   }
 }

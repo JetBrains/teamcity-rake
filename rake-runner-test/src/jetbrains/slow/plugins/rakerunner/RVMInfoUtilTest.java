@@ -3,7 +3,7 @@ package jetbrains.slow.plugins.rakerunner;
 import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
-import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingFactory;
+import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingRunnersProvider;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShellScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
@@ -12,6 +12,7 @@ import jetbrains.buildServer.util.TestFor;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.testng.annotations.Test;
 
 /**
@@ -22,7 +23,7 @@ import org.testng.annotations.Test;
 public class RVMInfoUtilTest extends TestCase {
   @Override
   public void tearDown() throws Exception {
-    ScriptingFactory.setDefault(ScriptingFactory.RVM_SHELL_BASED_SCRIPTING_FACTORY);
+    ScriptingRunnersProvider.setRVMDefault(ScriptingRunnersProvider.RVM_SHELL_BASED_SCRIPTING_RUNNERS_PROVIDER);
   }
 
   @Test(groups = {"unix"})
@@ -58,7 +59,7 @@ public class RVMInfoUtilTest extends TestCase {
                 "    gemset:       \"rails\"\n");
     setupScriptingFactory(myCurrentName, infoMap);
 
-    final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell("any");
+    final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell("any", null);
     Assert.assertEquals("ruby-1.9.3-p194", info.getInterpreterName());
     for (RVMInfo.Section section : RVMInfo.Section.values()) {
       Assert.assertNotNull("section '" + section + "' doesn't exist", info.getSection(section));
@@ -66,7 +67,7 @@ public class RVMInfoUtilTest extends TestCase {
   }
 
   private void setupScriptingFactory(@NotNull final String currentOutput, @NotNull final Map<String, String> infoMap) {
-    ScriptingFactory.setDefault(new ScriptingFactory() {
+    ScriptingRunnersProvider.setRVMDefault(new ScriptingRunnersProvider() {
 
       @NotNull
       @Override
@@ -79,7 +80,9 @@ public class RVMInfoUtilTest extends TestCase {
       public ShellScriptRunner getShellScriptRunner() {
         return new ShellScriptRunner() {
           @NotNull
-          public RunnerUtil.Output run(@NotNull final String script, @NotNull final String workingDirectory) {
+          public RunnerUtil.Output run(@NotNull final String script,
+                                       @NotNull final String workingDirectory,
+                                       @Nullable final Map<String, String> environment) {
             final String[] strings = script.split(" ");
             Assert.assertTrue(strings.length >= 2);
             Assert.assertEquals("Must starts with 'rvm'", "rvm", strings[0]);

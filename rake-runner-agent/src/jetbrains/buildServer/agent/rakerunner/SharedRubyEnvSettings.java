@@ -28,5 +28,6 @@ public interface SharedRubyEnvSettings {
   @NonNls String SHARED_RUBY_INTERPRETER_PATH = "teamcity.ruby.shared.interpreter.path";
   @NonNls String SHARED_RUBY_RVM_SDK_NAME = "teamcity.ruby.shared.rvm.sdk.name";
   @NonNls String SHARED_RUBY_RVM_GEMSET_NAME = "teamcity.ruby.shared.rvm.gemset";
+  @NonNls String SHARED_RUBY_RVM_GEMSET_CREATE = "teamcity.ruby.shared.rvm.gemset.create";
   @NonNls String SHARED_RUBY_RVM_RVMRC_PATH = "teamcity.ruby.shared.rvm.rvmrc.path";
 }

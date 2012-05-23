@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.BuildParametersMap;
+import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.util.StringUtil;
@@ -119,8 +119,7 @@ public class RubySDKUtil {
                                            @NotNull final Map<String, String> buildParameters) {
     final String customGemVersionProperty = buildParameters.get(forcedVersionProperty);
 
-    return !StringUtil.isEmpty(customGemVersionProperty) ? customGemVersionProperty.trim()
-                                                         : null;
+    return !StringUtil.isEmpty(customGemVersionProperty) ? customGemVersionProperty.trim() : null;
   }
 
   public static void failIfWithErrors(@NotNull final RunnerUtil.Output result)
@@ -136,32 +135,22 @@ public class RubySDKUtil {
   }
 
   @NotNull
-  public static RunnerUtil.Output executeScriptFromSource(@NotNull final RubySdk sdk,
-                                                                @Nullable final Map<String, String> buildConfEnvironment,
-                                                                @NotNull final String scriptSource,
-                                                                @NotNull final String... rubyArgs) {
-
-    return RubyScriptRunner.runScriptFromSource(sdk, rubyArgs, scriptSource, new String[0], buildConfEnvironment);
-  }
-
-  @NotNull
   public static RubySdk createAndSetupSdk(@NotNull final Map<String, String> runParameters,
-                                          @NotNull final BuildParametersMap buildParametersMap)
+                                          @NotNull final BuildRunnerContext context)
     throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     // create
-    return setupSdk(buildParametersMap, InternalRubySdkUtil.createSdk(runParameters, buildParametersMap.getAllParameters()));
+    return setupSdk(context, InternalRubySdkUtil.createSdk(runParameters, context));
   }
 
   @NotNull
-  private static RubySdk setupSdk(@NotNull final BuildParametersMap buildParametersMap,
-                                  @NotNull final RubySdk lwSdk) {
+  private static RubySdk setupSdk(@NotNull final BuildRunnerContext context,
+                                  @NotNull final RubySdk sdk) {
 
-    if (lwSdk.isSetupCompleted()) {
-      return lwSdk;
+    if (!sdk.isSetupCompleted()) {
+      sdk.setup(context.getBuildParameters().getEnvironmentVariables());
     }
-    lwSdk.setup(buildParametersMap.getEnvironmentVariables());
-    return lwSdk;
+    return sdk;
   }
 
   public static void patchPathEnvForNonRvmOrSystemRvmSdk(@NotNull final RubySdk sdk,

@@ -16,13 +16,8 @@
 
 package jetbrains.buildServer.agent.rakerunner.scripting;
 
-import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Runner for script. Script Language may be different.
  */
 public interface ScriptRunner {
-  @NotNull
-  RunnerUtil.Output run(@NotNull final String script, @NotNull final String workingDirectory);
 }

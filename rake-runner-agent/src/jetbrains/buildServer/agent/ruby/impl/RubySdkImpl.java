@@ -17,9 +17,14 @@
 package jetbrains.buildServer.agent.ruby.impl;
 
 import java.util.Map;
-
-import jetbrains.buildServer.agent.rakerunner.utils.*;
+import jetbrains.buildServer.agent.rakerunner.scripting.ProcessBasedRubyScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -65,6 +70,11 @@ public class RubySdkImpl implements RubySdk {
   @NotNull
   public RunnerUtil.Output getLoadPathsFetchLog() {
     return myLoadPathsLog;
+  }
+
+  @NotNull
+  public RubyScriptRunner getScriptRunner() {
+    return new ProcessBasedRubyScriptRunner(this);
   }
 
   @NotNull
@@ -156,23 +166,22 @@ public class RubySdkImpl implements RubySdk {
     myIsSetupCompleted = isSetupCompleted;
   }
 
-  public void setup(@NotNull final Map<String, String> buildConfEnvironment) {
+  public void setup(@NotNull final Map<String, String> env) {
     if (isSetupCompleted()) {
       return;
     }
 
     // 1.8 / 1.9
-    setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(this, buildConfEnvironment));
+    setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(this, env));
 
     // ruby / jruby
-    setIsJRuby(InternalRubySdkUtil.isJRubyInterpreter(this, buildConfEnvironment));
+    setIsJRuby(InternalRubySdkUtil.isJRubyInterpreter(this, env));
 
     // gem paths
-    setGemPathsLog(
-      RubyScriptRunner.runScriptFromSource(this, new String[0], RubySDKUtil.GET_GEM_PATHS_SCRIPT, new String[0], buildConfEnvironment));
+    setGemPathsLog(getScriptRunner().run(RubySDKUtil.GET_GEM_PATHS_SCRIPT, FileUtil.getTempDirectory(), env));
 
     // load path
-    setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, buildConfEnvironment, isRuby19()));
+    setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, env));
 
     // Set setup completed
     setIsSetupCompleted(true);

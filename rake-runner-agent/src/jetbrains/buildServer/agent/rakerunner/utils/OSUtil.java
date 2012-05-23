@@ -20,7 +20,6 @@ import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.util.Map;
 import java.util.StringTokenizer;
-import jetbrains.buildServer.agent.Constants;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.util.StringUtil;
@@ -120,8 +119,8 @@ public class OSUtil {
   }
 
   @Nullable
-  public static String getPATHEnvVariable(@NotNull final Map<String, String> buildParameters) {
-    return buildParameters.get(Constants.ENV_PREFIX + getPATHEnvVariableKey());
+  public static String getPATHEnvVariable(@NotNull final Map<String, String> envVariables) {
+    return envVariables.get(getPATHEnvVariableKey());
   }
 
   @NotNull
@@ -131,8 +130,8 @@ public class OSUtil {
 
   @Nullable
   public static String findExecutableByNameInPATH(@NotNull final String exeName,
-                                                  @NotNull final Map<String, String> buildParameters) {
-    final String path = getPATHEnvVariable(buildParameters);
+                                                  @NotNull final Map<String, String> envVariables) {
+    final String path = getPATHEnvVariable(envVariables);
     if (path != null) {
       final StringTokenizer st = new StringTokenizer(path, File.pathSeparator);
 
@@ -148,33 +147,33 @@ public class OSUtil {
   }
 
   @Nullable
-  public static String findRubyInterpreterInPATH(@NotNull final Map<String, String> buildParameters) {
+  public static String findRubyInterpreterInPATH(@NotNull final Map<String, String> envVariables) {
     if (SystemInfo.isWindows) {
       //ruby.exe file
-      String path = findExecutableByNameInPATH(RUBY_EXE_WIN, buildParameters);
+      String path = findExecutableByNameInPATH(RUBY_EXE_WIN, envVariables);
       if (path != null) {
         return path;
       }
       //ruby.bat file
-      path = findExecutableByNameInPATH(RUBY_EXE_WIN_BAT, buildParameters);
+      path = findExecutableByNameInPATH(RUBY_EXE_WIN_BAT, envVariables);
       if (path != null) {
         return path;
       }
       //jruby.exe file
-      path = findExecutableByNameInPATH(JRUBY_EXE_WIN, buildParameters);
+      path = findExecutableByNameInPATH(JRUBY_EXE_WIN, envVariables);
       if (path != null) {
         return path;
       }
       //jruby.bat file
-      return findExecutableByNameInPATH(JRUBY_EXE_WIN_BAT, buildParameters);
+      return findExecutableByNameInPATH(JRUBY_EXE_WIN_BAT, envVariables);
     } else if (SystemInfo.isUnix) {
       //ruby file
-      String path = findExecutableByNameInPATH(RUBY_EXE_UNIX, buildParameters);
+      String path = findExecutableByNameInPATH(RUBY_EXE_UNIX, envVariables);
       if (path != null) {
         return path;
       }
       //jruby file
-      return findExecutableByNameInPATH(JRUBY_EXE_UNIX, buildParameters);
+      return findExecutableByNameInPATH(JRUBY_EXE_UNIX, envVariables);
     } else {
       throw new RuntimeException(RakeRunnerBundle.MSG_OS_NOT_SUPPORTED);
     }

@@ -18,8 +18,9 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.AgentRuntimeProperties;
+import jetbrains.buildServer.agent.BuildParametersMap;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -64,11 +65,21 @@ public class FileUtil {
     }
   }
 
-  public static String getCheckoutDirectoryPath(final Map<String, String> buildParameters)
+  @NotNull
+  public static String getCanonicalPath2(@NotNull final File file) throws RakeTasksBuildService.MyBuildFailureException {
+    try {
+      return file.getCanonicalPath();
+    } catch (IOException e) {
+      throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage(), e);
+    } catch (SecurityException e) {
+      throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage(), e);
+    }
+  }
+
+  public static String getCheckoutDirectoryPath(final BuildParametersMap buildParameters)
     throws RakeTasksBuildService.MyBuildFailureException {
-    final String checkoutDir = buildParameters.get("system.teamcity.build.checkoutDir");
-    if (StringUtil.isEmptyOrSpaces(checkoutDir) ||
-        !checkIfDirExists(checkoutDir)) {
+    final String checkoutDir = buildParameters.getSystemProperties().get(AgentRuntimeProperties.BUILD_CHECKOUT_DIR);
+    if (StringUtil.isEmptyOrSpaces(checkoutDir) || !checkIfDirExists(checkoutDir)) {
       throw new RakeTasksBuildService.MyBuildFailureException("Cannot determine \"system.teamcity.build.checkoutDir\"");
     }
     return checkoutDir;

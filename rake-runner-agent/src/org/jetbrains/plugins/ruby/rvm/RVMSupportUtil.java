@@ -16,14 +16,12 @@
 
 package org.jetbrains.plugins.ruby.rvm;
 
-import com.intellij.openapi.util.Pair;
 import java.io.File;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
-import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
@@ -46,61 +44,6 @@ public class RVMSupportUtil {
       return rvm.getInterpreterDistName2GemSetsTable();
     }
     return SharedRVMUtil.RubyDistToGemsetTable.emptyTable();
-  }
-
-  public static boolean isGemsetExists(@NotNull final String rvmGemset,
-                                       @NotNull final String rubyInterpreterPath)
-    throws RakeTasksBuildService.MyBuildFailureException {
-    final Pair<String, String> gemsRootAndDistName = getNormalizedDistAndGemset(rubyInterpreterPath);
-
-    if (gemsRootAndDistName == null) {
-      return false;
-    }
-
-    final String gemsRoot = gemsRootAndDistName.first;
-    final String distName = gemsRootAndDistName.second;
-
-    return FileUtil.checkIfDirExists(gemsRoot + File.separatorChar
-                                     + distName + SharedRVMUtil.getGemsetSeparator() + rvmGemset);
-  }
-
-  @Nullable
-  public static String dumpAvailableGemsets(@NotNull final String rubyInterpreterPath)
-    throws RakeTasksBuildService.MyBuildFailureException {
-
-    final SharedRVMUtil.RubyDistToGemsetTable table = getInterpreterDistName2GemSetsTable();
-
-    final Pair<String, String> distAndGemset = getNormalizedDistAndGemset(rubyInterpreterPath);
-    if (distAndGemset == null) {
-      return null;
-    }
-    final String dist = distAndGemset.second;
-    final List<String> gemsets = table.getGemsets(dist);
-    if (gemsets == null) {
-      return null;
-    }
-
-    // dump
-    final StringBuilder buff = new StringBuilder();
-    for (String gemset : gemsets) {
-      if (buff.length() != 0) {
-        buff.append(", ");
-      }
-      buff.append(gemset == null ? "[default]" : gemset);
-    }
-    return buff.toString();
-  }
-
-  private static Pair<String, String> getNormalizedDistAndGemset(final String rubyInterpreterPath)
-    throws RakeTasksBuildService.MyBuildFailureException {
-    final Pair<String, String> gemsRootAndDistName;
-    try {
-      gemsRootAndDistName = SharedRVMUtil.getRVMGemsRootAndDistName(rubyInterpreterPath);
-    } catch (IllegalArgumentException e) {
-      // dist wasn't determined
-      throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage());
-    }
-    return gemsRootAndDistName;
   }
 
   @NotNull
@@ -126,15 +69,15 @@ public class RVMSupportUtil {
   }
 
   public static void patchEnvForRVMIfNecessary(@NotNull final RubySdk sdk,
-                                               @NotNull final Map<String, String> envParams)
+                                               @NotNull final EnvironmentPatchableMap env)
     throws RakeTasksBuildService.MyBuildFailureException {
     if (sdk.isRvmSdk()) {
-      patchEnvForRVMIfNecessary((RVMRubySdk)sdk, envParams);
+      patchEnvForRVMIfNecessary((RVMRubySdk)sdk, env);
     }
   }
 
   public static void patchEnvForRVMIfNecessary(@NotNull final RVMRubySdk sdk,
-                                               @NotNull final Map<String, String> envParams)
+                                               @NotNull final EnvironmentPatchableMap env)
     throws RakeTasksBuildService.MyBuildFailureException {
 
     // patch
@@ -148,8 +91,8 @@ public class RVMSupportUtil {
                                    sdk.getGemsetName(),
                                    sdk.isSystem(),
                                    gemRootsPaths,
-                                   envParams,
-                                   envParams, // system + buildAgent.config + build properties env. vars
+                                   env,
+                                   env, // system + buildAgent.config + build properties env. vars
                                    false,
                                    File.pathSeparatorChar,
                                    OSUtil.getPATHEnvVariableKey(),
@@ -164,7 +107,7 @@ public class RVMSupportUtil {
     return System.getenv();
   }
 
-  public static void inspectCurrentEnvironment(@NotNull final Map<String, String> envParams,
+  public static void inspectCurrentEnvironment(@NotNull final EnvironmentPatchableMap envParams,
                                                @NotNull final RubySdk sdk,
                                                @NotNull final BuildProgressLogger logger) {
     // Diagnostic check:

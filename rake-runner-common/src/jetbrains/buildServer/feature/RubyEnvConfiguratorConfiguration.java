@@ -16,10 +16,9 @@
 
 package jetbrains.buildServer.feature;
 
+import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 /**
  * @author Vladislav.Rassokhin
@@ -47,6 +46,8 @@ public class RubyEnvConfiguratorConfiguration {
   @Nullable
   private final String myRVMRCFilePath;
 
+  private final boolean myRVMGemsetCreate;
+
   public RubyEnvConfiguratorConfiguration(final Map<String, String> configParameters) {
     this.type = RubyEnvConfiguratorUtil.getFeatureWorkingType(configParameters);
     this.shouldFailBuildIfNoSdkFound = RubyEnvConfiguratorUtil.shouldFailBuildIfNoSdkFound(configParameters);
@@ -54,6 +55,7 @@ public class RubyEnvConfiguratorConfiguration {
     this.myRVMSdkName = RubyEnvConfiguratorUtil.getRVMSdkName(configParameters);
     this.myRVMGemsetName = RubyEnvConfiguratorUtil.getRVMGemsetName(configParameters);
     this.myRVMRCFilePath = RubyEnvConfiguratorUtil.getRVMRCFilePath(configParameters);
+    this.myRVMGemsetCreate = RubyEnvConfiguratorUtil.isRVMGemsetCreateIfNonExists(configParameters);
   }
 
   @NotNull
@@ -83,5 +85,9 @@ public class RubyEnvConfiguratorConfiguration {
   @Nullable
   public String getRVMRCFilePath() {
     return myRVMRCFilePath;
+  }
+
+  public boolean isRVMGemsetCreate() {
+    return myRVMGemsetCreate;
   }
 }

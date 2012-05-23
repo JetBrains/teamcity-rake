@@ -18,6 +18,7 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.SharedParams;
 import jetbrains.buildServer.agent.ruby.RubySdk;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static com.intellij.openapi.util.io.FileUtil.getTempDirectory;
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 
 /**
@@ -35,18 +37,18 @@ public class InternalRubySdkUtil {
   public static final String RUBY_VERSION_SCRIPT = "print RUBY_VERSION";
   public static final String RUBY_PLATFORM_SCRIPT = "print RUBY_PLATFORM";
   @NonNls
-  public static final String GET_LOAD_PATH_SCRIPT = "puts $LOAD_PATH";
+  public static final String GET_LOAD_PATH_SCRIPT = "print $LOAD_PATH";
   public static final String RUBY19_DISABLE_GEMS_OPTION = "--disable-gems";
 
   @NotNull
   static RubySdk createSdk(@NotNull final Map<String, String> runParameters,
-                           @NotNull final Map<String, String> buildParameters)
-    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+                           @NotNull final BuildRunnerContext context)
+  throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     // Check if path to ruby interpreter was explicitly set
     // and calculate corresponding interpreter path
 
-    final RubySdk sdk = SharedParams.fromRunParameters(runParameters).createSdk(buildParameters);
+    final RubySdk sdk = SharedParams.fromRunParameters(runParameters).createSdk(context);
 
     // Final check that interpreter file exists
     try {
@@ -61,15 +63,15 @@ public class InternalRubySdkUtil {
 
   public static void checkInterpreterPathValid(@Nullable final String path) throws RakeTasksBuildService.MyBuildFailureException {
     if (path == null || StringUtil.isEmptyOrSpaces(path) || !FileUtil.checkIfExists(path)) {
-      throwInterpratatorDoesntExistError(path);
+      throwInterpreterDoesntExistError(path);
     }
   }
 
   @NotNull
-  public static String findSystemInterpreterPath(@NotNull final Map<String, String> buildParameters)
-    throws RakeTasksBuildService.MyBuildFailureException {
+  public static String findSystemInterpreterPath(@NotNull final Map<String, String> envVariables)
+  throws RakeTasksBuildService.MyBuildFailureException {
     // find in $PATH
-    final String path = OSUtil.findRubyInterpreterInPATH(buildParameters);
+    final String path = OSUtil.findRubyInterpreterInPATH(envVariables);
 
     if (path == null) {
       throw new RakeTasksBuildService.MyBuildFailureException("Unable to find Ruby interpreter in PATH.");
@@ -84,8 +86,8 @@ public class InternalRubySdkUtil {
   //}
 
   @NotNull
-  private static <T> T throwInterpratatorDoesntExistError(@Nullable final String rubyInterpreterPath)
-    throws RakeTasksBuildService.MyBuildFailureException {
+  private static <T> T throwInterpreterDoesntExistError(@Nullable final String rubyInterpreterPath)
+  throws RakeTasksBuildService.MyBuildFailureException {
     final String msg = "Ruby interpreter '"
                        + String.valueOf(rubyInterpreterPath)
                        + "' doesn't exist or isn't a file or isn't a valid RVM interpreter name.";
@@ -118,46 +120,31 @@ public class InternalRubySdkUtil {
   //}
 
   public static boolean isRuby19Interpreter(@NotNull final RubySdk sdk,
-                                            @Nullable final Map<String, String> buildConfEnvironment) {
-    boolean isRuby19 = false;
-    final RunnerUtil.Output rubyVersionResult =
-      RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment, RUBY_VERSION_SCRIPT);
+                                            @Nullable final Map<String, String> env) {
+    final RunnerUtil.Output rubyVersionResult = sdk.getScriptRunner().run(RUBY_VERSION_SCRIPT, getTempDirectory(), env);
     final String stdOut = rubyVersionResult.getStdout();
-    if (stdOut.contains("1.9.")) {
-      isRuby19 = true;
-    }
-    return isRuby19;
+    return stdOut.contains("1.9.");
   }
 
   public static boolean isJRubyInterpreter(@NotNull final RubySdk sdk,
-                                           @Nullable final Map<String, String> buildConfEnvironment) {
+                                           @Nullable final Map<String, String> env) {
     final String interpPath = toSystemIndependentName(sdk.getInterpreterPath());
     if (interpPath.endsWith("/jruby")) {
       return true;
     }
-    boolean isJRuby = false;
-    final RunnerUtil.Output rubyVersionResult =
-      RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment, RUBY_PLATFORM_SCRIPT);
-    final String stdOut = rubyVersionResult.getStdout();
-    if (stdOut.contains("java")) {
-      isJRuby = true;
-    }
-    return isJRuby;
+    final RunnerUtil.Output rubyPlatformResult = sdk.getScriptRunner().run(RUBY_PLATFORM_SCRIPT, getTempDirectory(), env);
+    final String stdOut = rubyPlatformResult.getStdout();
+    return stdOut.contains("java");
   }
 
   public static RunnerUtil.Output getLoadPaths(@NotNull final RubySdk sdk,
-                                                     final Map<String, String> buildConfEnvironment,
-                                                     final boolean ruby19) {
+                                               @Nullable final Map<String, String> env) {
     // LOAD_PATH way
-    final String[] rubyArgs;
-    if (ruby19) {
+    if (sdk.isRuby19()) {
       // filter gem paths in case of Ruby 1.9 (use --disable-gems)
-      rubyArgs = new String[]{RUBY19_DISABLE_GEMS_OPTION};
+      return sdk.getScriptRunner().run(GET_LOAD_PATH_SCRIPT, getTempDirectory(), env, RUBY19_DISABLE_GEMS_OPTION);
     } else {
-      rubyArgs = new String[0];
+      return sdk.getScriptRunner().run(GET_LOAD_PATH_SCRIPT, getTempDirectory(), env);
     }
-
-    return RubySDKUtil.executeScriptFromSource(sdk, buildConfEnvironment,
-                                               GET_LOAD_PATH_SCRIPT, rubyArgs);
   }
 }

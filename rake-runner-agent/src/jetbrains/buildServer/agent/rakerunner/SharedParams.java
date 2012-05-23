@@ -32,13 +32,13 @@ public class SharedParams implements SharedRubyEnvSettings {
   @Nullable private String myRVMSdkName;
   @Nullable private String myRVMGemsetName;
   @Nullable private String myRVMRCPath;
+  private boolean myRVMGemsetCreate;
   private boolean isApplied = false;
 
 
   @NotNull
-  public RubySdk createSdk(@NotNull final Map<String, String> buildParameters)
-    throws RakeTasksBuildService.MyBuildFailureException {
-    return getType().createSdk(buildParameters, this);
+  public RubySdk createSdk(@NotNull final BuildRunnerContext context) throws RakeTasksBuildService.MyBuildFailureException {
+    return getType().createSdk(context, this);
   }
 
   public void applyToParameters(@NotNull final Map<String, String> params) {
@@ -78,6 +78,7 @@ public class SharedParams implements SharedRubyEnvSettings {
       case RVM: {
         context.addRunnerParameter(SHARED_RUBY_RVM_SDK_NAME, StringUtil.emptyIfNull(getRVMSdkName()));
         context.addRunnerParameter(SHARED_RUBY_RVM_GEMSET_NAME, StringUtil.emptyIfNull(getRVMGemsetName()));
+        context.addRunnerParameter(SHARED_RUBY_RVM_GEMSET_CREATE, String.valueOf(isRVMGemsetCreate()));
         break;
       }
       case RVMRC: {
@@ -151,6 +152,14 @@ public class SharedParams implements SharedRubyEnvSettings {
     myType = type;
   }
 
+  public void setRVMGemsetCreate(final boolean create) {
+    myRVMGemsetCreate = create;
+  }
+
+  public boolean isRVMGemsetCreate() {
+    return myRVMGemsetCreate;
+  }
+
   public static SharedParams fromRunParameters(@NotNull final Map<String, String> runParams) {
     SharedParams shared = new SharedParams();
     shared.setApplied(Boolean.valueOf(runParams.get(SHARED_RUBY_PARAMS_ARE_APPLIED)));
@@ -159,6 +168,7 @@ public class SharedParams implements SharedRubyEnvSettings {
     shared.setRVMSdkName(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RVM_SDK_NAME)));
     shared.setRVMGemsetName(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RVM_GEMSET_NAME)));
     shared.setRVMRCPath(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RVM_RVMRC_PATH)));
+    shared.setRVMGemsetCreate(Boolean.valueOf(runParams.get(SHARED_RUBY_RVM_GEMSET_CREATE)));
     return shared;
   }
 

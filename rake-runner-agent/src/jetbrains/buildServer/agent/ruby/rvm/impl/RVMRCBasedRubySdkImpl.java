@@ -19,7 +19,7 @@ package jetbrains.buildServer.agent.ruby.rvm.impl;
 import com.intellij.openapi.diagnostic.Logger;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
-import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingFactory;
+import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingRunnersProvider;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
@@ -35,8 +35,9 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
 
   private static final Logger LOG = Logger.getInstance(RVMRCBasedRubySdkImpl.class.getName());
 
-  public static RVMRCBasedRubySdkImpl createAndSetup(@NotNull final String pathToRVMRCFolder) {
-    final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell(pathToRVMRCFolder);
+  public static RVMRCBasedRubySdkImpl createAndSetup(@NotNull final String pathToRVMRCFolder,
+                                                     @NotNull final Map<String, String> envVariables) {
+    final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell(pathToRVMRCFolder, envVariables);
 
     // Constructor params
     final String gemset;
@@ -58,12 +59,12 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
     LOG.debug("Gemset is " + gemset);
     LOG.debug("Name is " + name);
 
-    final RubyScriptRunner rubyScriptRunner = ScriptingFactory.getDefault().getRubyScriptRunner();
+    final RubyScriptRunner rubyScriptRunner = ScriptingRunnersProvider.getRVMDefault().getRubyScriptRunner();
     if (RVMSupportUtil.RVM_SYSTEM_INTERPRETER.equals(name)) {
       isSystem = true;
-      isJRuby = rubyScriptRunner.run(InternalRubySdkUtil.RUBY_PLATFORM_SCRIPT, pathToRVMRCFolder)
+      isJRuby = rubyScriptRunner.run(InternalRubySdkUtil.RUBY_PLATFORM_SCRIPT, pathToRVMRCFolder, envVariables)
         .getStdout().contains("java");
-      isRuby19 = rubyScriptRunner.run(InternalRubySdkUtil.RUBY_VERSION_SCRIPT, pathToRVMRCFolder)
+      isRuby19 = rubyScriptRunner.run(InternalRubySdkUtil.RUBY_VERSION_SCRIPT, pathToRVMRCFolder, envVariables)
         .getStdout().contains("1.9.");
     } else {
       isSystem = false;
@@ -88,9 +89,9 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
     final String[] additiaonalArg = isRuby19
                                     ? new String[]{InternalRubySdkUtil.RUBY19_DISABLE_GEMS_OPTION}
                                     : new String[]{};
-    sdk.setLoadPathsLog(rubyScriptRunner.run(InternalRubySdkUtil.GET_LOAD_PATH_SCRIPT, pathToRVMRCFolder, additiaonalArg));
+    sdk.setLoadPathsLog(rubyScriptRunner.run(InternalRubySdkUtil.GET_LOAD_PATH_SCRIPT, pathToRVMRCFolder, envVariables, additiaonalArg));
 
-    sdk.setGemPathsLog(rubyScriptRunner.run(RubySDKUtil.GET_GEM_PATHS_SCRIPT, pathToRVMRCFolder));
+    sdk.setGemPathsLog(rubyScriptRunner.run(RubySDKUtil.GET_GEM_PATHS_SCRIPT, pathToRVMRCFolder, envVariables));
 
 
     sdk.setIsSetupCompleted(true);
@@ -103,7 +104,7 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
   }
 
   @Override
-  public void setup(@NotNull final Map<String, String> buildConfEnvironment) {
+  public void setup(@NotNull final Map<String, String> env) {
     // Nothing to do, because setupped when constructed
   }
 }

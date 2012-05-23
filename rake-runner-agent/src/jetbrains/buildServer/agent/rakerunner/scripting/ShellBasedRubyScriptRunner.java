@@ -16,9 +16,11 @@
 
 package jetbrains.buildServer.agent.rakerunner.scripting;
 
+import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Vladislav.Rassokhin
@@ -31,16 +33,14 @@ public class ShellBasedRubyScriptRunner implements jetbrains.buildServer.agent.r
   }
 
   @NotNull
-  public RunnerUtil.Output run(@NotNull final String script, @NotNull final String workingDirectory) {
-    return myShellScriptRunner.run(rubyScriptToShellScript(script), workingDirectory);
+  public RunnerUtil.Output run(@NotNull final String script,
+                               @NotNull final String workingDirectory,
+                               @Nullable final Map<String, String> environment,
+                               @NotNull final String... rubyArgs) {
+    return myShellScriptRunner.run(rubyScriptToShellScript(script, rubyArgs), workingDirectory, environment);
   }
 
-  @NotNull
-  public RunnerUtil.Output run(@NotNull final String script, @NotNull final String workingDirectory, @NotNull final String... rubyArgs) {
-    return myShellScriptRunner.run(rubyScriptToShellScript(script, rubyArgs), workingDirectory);
-  }
-
-  public static String rubyScriptToShellScript(@NotNull final String rubyScript, @NotNull String... rubyArgs) {
+  public static String rubyScriptToShellScript(@NotNull final String rubyScript, @NotNull final String... rubyArgs) {
     final StringBuilder sb = new StringBuilder();
     sb.append("ruby");
     for (String rubyArg : rubyArgs) {

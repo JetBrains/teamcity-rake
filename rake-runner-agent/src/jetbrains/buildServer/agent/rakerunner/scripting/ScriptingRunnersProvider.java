@@ -21,8 +21,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Vladislav.Rassokhin
  */
-public abstract class ScriptingFactory {
-  private static ScriptingFactory ourDefaultFactory;
+public abstract class ScriptingRunnersProvider {
+  private static ScriptingRunnersProvider ourRVMDefaultRunnersProvider;
 
   @NotNull
   public abstract RubyScriptRunner getRubyScriptRunner();
@@ -30,10 +30,10 @@ public abstract class ScriptingFactory {
   @NotNull
   public abstract ShellScriptRunner getShellScriptRunner();
 
-  public static final ScriptingFactory RVM_SHELL_BASED_SCRIPTING_FACTORY;
+  public static final ScriptingRunnersProvider RVM_SHELL_BASED_SCRIPTING_RUNNERS_PROVIDER;
 
   static {
-    RVM_SHELL_BASED_SCRIPTING_FACTORY = new ScriptingFactory() {
+    RVM_SHELL_BASED_SCRIPTING_RUNNERS_PROVIDER = new ScriptingRunnersProvider() {
       @NotNull
       @Override
       public RubyScriptRunner getRubyScriptRunner() {
@@ -46,15 +46,15 @@ public abstract class ScriptingFactory {
         return RvmShellRunner.getRvmShellRunner();
       }
     };
-    ourDefaultFactory = RVM_SHELL_BASED_SCRIPTING_FACTORY;
+    ourRVMDefaultRunnersProvider = RVM_SHELL_BASED_SCRIPTING_RUNNERS_PROVIDER;
   }
 
   @NotNull
-  public static ScriptingFactory getDefault() {
-    return ourDefaultFactory;
+  public static ScriptingRunnersProvider getRVMDefault() {
+    return ourRVMDefaultRunnersProvider;
   }
 
-  public static void setDefault(@NotNull final ScriptingFactory factory) {
-    ourDefaultFactory = factory;
+  public static void setRVMDefault(@NotNull final ScriptingRunnersProvider runnersProvider) {
+    ourRVMDefaultRunnersProvider = runnersProvider;
   }
 }

@@ -20,6 +20,7 @@ import com.intellij.util.containers.HashMap;
 import java.io.File;
 import java.util.*;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.runner.BuildServiceAdapter;
@@ -70,8 +71,9 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     // runParams - all server-ui options
     // buildParams - system properties (system.*), environment vars (env.*)
 
-    final Map<String, String> buildEnvVars = getBuildParameters().getEnvironmentVariables();
-    final Map<String, String> runnerEnvParams = new HashMap<String, String>(buildEnvVars);
+    //final Map<String, String> runnerEnvParams = new HashMap<String, String>(getEnvironmentVariables);
+    final EnvironmentPatchableMap env = new EnvironmentPatchableMap(getEnvironmentVariables());
+    final BuildRunnerContext context = getRunnerContext();
 
     final File buildFile = getBuildFile(runParams);
 
@@ -90,7 +92,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       final String checkoutDirPath = getCanonicalPath(getCheckoutDirectory());
 
       // Sdk
-      final RubySdk sdk = RubySDKUtil.createAndSetupSdk(runParams, getBuildParameters());
+      final RubySdk sdk = RubySDKUtil.createAndSetupSdk(runParams, context);
 
       if (!(interpreterConfigMode == RakeRunnerUtils.RubyConfigMode.DEFAULT && rubyEnvAlreadyConfigured)) {
         // 1. default, but build feature wasn't configured
@@ -98,35 +100,35 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
         // Inspect env, warn about any problems
         // (if defaults were set by smb else we cannot check them)
-        RVMSupportUtil.inspectCurrentEnvironment(runnerEnvParams, sdk, getBuild().getBuildLogger());
+        RVMSupportUtil.inspectCurrentEnvironment(env, sdk, getBuild().getBuildLogger());
 
         if (sdk.isRvmSdk()) {
           // Patch env for RVM
-          RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+          RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, env);
 
           if (sdk.isSystem()) {
             // Also Patch path for fake RVM
-            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, env, checkoutDirPath);
           }
         } else {
           if (interpreterConfigMode == RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH) {
             // non-rvm sdk
-            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, env, checkoutDirPath);
           }
         }
       }
 
       // loadpath patch for test runners
-      addTestRunnerPatchFiles(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+      addTestRunnerPatchFiles(sdk, runParams, buildParams, env, checkoutDirPath);
 
       // attached frameworks info
       if (SupportedTestFramework.isAnyFrameworkActivated(runParams)) {
-        runnerEnvParams.put(RAKERUNNER_USED_FRAMEWORKS_KEY, SupportedTestFramework.getActivatedFrameworksConfig(runParams));
+        env.put(RAKERUNNER_USED_FRAMEWORKS_KEY, SupportedTestFramework.getActivatedFrameworksConfig(runParams));
       }
 
       // track invoke/execute stages
       if (ConfigurationParamsUtil.isTraceStagesOptionEnabled(runParams)) {
-        runnerEnvParams.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
+        env.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
       }
 
       // Rake runner script
@@ -164,17 +166,17 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       }
 
       // rspec
-      attachRSpecFormatterIfNeeded(runParams, runnerEnvParams);
+      env.putAll(attachRSpecFormatterIfNeeded(runParams));
 
       // cucumber
-      attachCucumberFormatterIfNeeded(runParams, runnerEnvParams);
+      env.putAll(attachCucumberFormatterIfNeeded(runParams));
 
       // Bunlde exec emulation:
       // (do not do it befor RVM Env patch!!!!!!)
-      BundlerUtil.enableBundleExecEmulationIfNeeded(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+      BundlerUtil.enableBundleExecEmulationIfNeeded(sdk, runParams, buildParams, env, checkoutDirPath);
 
       // Result:
-      return new SimpleProgramCommandLine(runnerEnvParams,
+      return new SimpleProgramCommandLine(new HashMap<String, String>(env.getPatched()),
                                           getWorkingDirectory().getAbsolutePath(),
                                           sdk.getInterpreterPath(),
                                           arguments);
@@ -258,8 +260,8 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     myFilesToDelete.clear();
   }
 
-  private void attachRSpecFormatterIfNeeded(@NotNull final Map<String, String> runParams,
-                                            @NotNull final Map<String, String> env) {
+  @NotNull
+  private Map<String, String> attachRSpecFormatterIfNeeded(@NotNull final Map<String, String> runParams) {
 
     //attach RSpec formatter only if spec reporter enabled
     if (SupportedTestFramework.RSPEC.isActivated(runParams)) {
@@ -280,12 +282,14 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       getLogger().message("RSpec Options: " + specOpts);
 
       // Set env variable
-      env.put(RAKE_RSPEC_OPTS_PARAM_NAME, specOpts);
+      return Collections.singletonMap(RAKE_RSPEC_OPTS_PARAM_NAME, specOpts);
+    } else {
+      return Collections.emptyMap();
     }
   }
 
-  private void attachCucumberFormatterIfNeeded(@NotNull final Map<String, String> runParams,
-                                               @NotNull final Map<String, String> env) {
+  @NotNull
+  private Map<String, String> attachCucumberFormatterIfNeeded(@NotNull final Map<String, String> runParams) {
 
     //attach Cucumber formatter only if cucumber reporter enabled
     if (SupportedTestFramework.CUCUMBER.isActivated(runParams)) {
@@ -308,8 +312,9 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       getLogger().message("Cucumber Options: " + cucumberOpts);
 
       // Set env variable
-      env.put(RAKE_CUCUMBER_OPTS_PARAM_NAME, cucumberOpts);
+      return Collections.singletonMap(RAKE_CUCUMBER_OPTS_PARAM_NAME, cucumberOpts);
     }
+    return Collections.emptyMap();
   }
 
   private void addTestRunnerPatchFiles(@NotNull final RubySdk sdk,
@@ -388,6 +393,10 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   public static class MyBuildFailureException extends Exception {
     public MyBuildFailureException(@NotNull final String msg) {
       super(msg);
+    }
+
+    public MyBuildFailureException(@NotNull final String message, final Throwable cause) {
+      super(message, cause);
     }
   }
 

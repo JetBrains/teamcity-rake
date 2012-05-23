@@ -16,7 +16,6 @@
 
 package jetbrains.buildServer.agent.feature;
 
-import com.intellij.util.containers.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildRunnerContext;
@@ -24,6 +23,7 @@ import jetbrains.buildServer.agent.BuildRunnerPrecondition;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.SharedParams;
 import jetbrains.buildServer.agent.rakerunner.SharedParamsType;
+import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
@@ -74,7 +74,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
       validateConfiguratorParams(configuration);
 
       // try to create sdk, it will validate paths
-      sdk = RubySDKUtil.createAndSetupSdk(context.getRunnerParameters(), context.getBuildParameters());
+      sdk = RubySDKUtil.createAndSetupSdk(context.getRunnerParameters(), context);
 
     } catch (RakeTasksBuildService.MyBuildFailureException e) {
       if (configuration.isShouldFailBuildIfNoSdkFound()) {
@@ -98,21 +98,21 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
                                         @NotNull final SharedParams sharedParams) throws RunBuildException {
 
     // editable env variables
-    final Map<String, String> runnerEnvParams = new HashMap<String, String>(context.getBuildParameters().getEnvironmentVariables());
+    final EnvironmentPatchableMap env = new EnvironmentPatchableMap(context.getBuildParameters().getEnvironmentVariables());
 
     try {
 
       // Inspect env, warn about any problems
-      RVMSupportUtil.inspectCurrentEnvironment(runnerEnvParams, sdk, context.getBuild().getBuildLogger());
+      RVMSupportUtil.inspectCurrentEnvironment(env, sdk, context.getBuild().getBuildLogger());
 
       // Save patched env variables to runnerEnvParams
       if (sdk.isRvmSdk() && !sdk.isSystem()) {
         // true rvm sdk
-        RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+        RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, env);
       } else {
         // fake or non-rvm sdk
         if (sdk.isRvmSdk()) {
-          RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, runnerEnvParams);
+          RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, env);
         }
 
         final Map<String, String> runParams = context.getRunnerParameters();
@@ -121,11 +121,11 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         // if checkout dir isn't ok for bundler path here, user may specify it using system property
         // see RakeRunnerConstants.CUSTOM_BUNDLE_FOLDER_PATH.
         final String checkoutDirPath = context.getBuild().getCheckoutDirectory().getCanonicalPath();
-        RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath);
+        RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, env, checkoutDirPath);
       }
 
       // apply updated env variables to context:
-      for (Map.Entry<String, String> keyAndValue : runnerEnvParams.entrySet()) {
+      for (Map.Entry<String, String> keyAndValue : env.entrySet()) {
         context.addEnvironmentVariable(keyAndValue.getKey(), keyAndValue.getValue());
       }
 
@@ -165,6 +165,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         // gemset
         shared.setRVMSdkName(configuration.getRVMSdkName());
         shared.setRVMGemsetName(configuration.getRVMGemsetName());
+        shared.setRVMGemsetCreate(configuration.isRVMGemsetCreate());
         shared.setType(SharedParamsType.RVM);
         break;
       }

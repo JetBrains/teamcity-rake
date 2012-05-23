@@ -17,10 +17,9 @@
 package jetbrains.buildServer.feature;
 
 import com.intellij.openapi.util.text.StringUtil;
+import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
@@ -30,6 +29,7 @@ public class RubyEnvConfiguratorUtil {
   public static final String UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY = "ui.ruby.configurator.fail.build.if.interpreter.not.found";
 
   public static final String UI_RVM_GEMSET_NAME_KEY = "ui.ruby.configurator.rvm.gemset.name";
+  public static final String UI_RVM_GEMSET_CREATE_IF_NON_EXISTS = "ui.ruby.configurator.rvm.gemset.create.if.non.exists";
   public static final String UI_RVM_SDK_NAME_KEY = "ui.ruby.configurator.rvm.sdk.name";
   public static final String UI_RVM_RVMRC_PATH_KEY = "ui.ruby.configurator.rvm.rvmrc.path";
   public static final String UI_USE_RVM_KEY = "ui.ruby.configurator.use.rvm";
@@ -50,6 +50,11 @@ public class RubyEnvConfiguratorUtil {
   public static String getRVMGemsetName(@NotNull final Map<String, String> params) {
     final String value = params.get(UI_RVM_GEMSET_NAME_KEY);
     return StringUtil.isEmpty(value) ? null : value;
+  }
+
+  public static boolean isRVMGemsetCreateIfNonExists(@NotNull final Map<String, String> params) {
+    final String value = params.get(UI_RVM_GEMSET_CREATE_IF_NON_EXISTS);
+    return Boolean.parseBoolean(value);
   }
 
   @Nullable

@@ -17,7 +17,7 @@
 package jetbrains.buildServer.agent.ruby;
 
 import java.util.Map;
-
+import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +48,7 @@ public interface RubySdk {
 
   boolean isSetupCompleted();
 
-  void setup(@NotNull final Map<String, String> buildConfEnvironment);
+  void setup(@NotNull final Map<String, String> env);
 
   //ProgramCommandLine createProgramCommandLineForScript(@NotNull final String workingDirectory,
   //                                                     @NotNull final String[] rubyArgs,
@@ -62,4 +62,7 @@ public interface RubySdk {
 
   @NotNull
   RunnerUtil.Output getLoadPathsFetchLog();
+
+  @NotNull
+  RubyScriptRunner getScriptRunner();
 }
