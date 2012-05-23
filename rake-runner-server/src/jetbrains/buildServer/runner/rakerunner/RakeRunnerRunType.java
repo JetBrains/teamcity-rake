@@ -21,6 +21,7 @@ import java.util.Map;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
+import jetbrains.buildServer.runner.BuildFileRunnerConstants;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
@@ -69,8 +70,11 @@ public class RakeRunnerRunType extends RunType {
     map.put(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY,
             RakeRunnerConstants.CURRENT_CONFIG_VERSION);
 
-    // select ruby interpreter path mode by default:
-    RakeRunnerUtils.setConfigMode(RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH, map);
+    // select 'default/rec' ruby interpreter mode by default:
+    RakeRunnerUtils.setConfigMode(RakeRunnerUtils.RubyConfigMode.DEFAULT, map);
+
+    // select 'bundle exec' by default
+    map.put(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, trueStr);
     return map;
   }
 
@@ -94,10 +98,10 @@ public class RakeRunnerRunType extends RunType {
   @Override
   public String describeParameters(@NotNull final Map<String, String> parameters) {
     StringBuilder result = new StringBuilder();
-    if (parameters.get("use-custom-build-file") != null) {
+    if (parameters.get(BuildFileRunnerConstants.USE_CUSTOM_BUILD_FILE_KEY) != null) {
       result.append("Rake file: custom");
     } else {
-      result.append("Rake file path: ").append(StringUtil.emptyIfNull(parameters.get("build-file-path")));
+      result.append("Rake file path: ").append(StringUtil.emptyIfNull(parameters.get(BuildFileRunnerConstants.BUILD_FILE_PATH_KEY)));
     }
     result.append("\n");
 
@@ -105,13 +109,14 @@ public class RakeRunnerRunType extends RunType {
     result.append("Rake tasks: ").append(StringUtil.isEmpty(tasks) ? "default" : tasks);
     result.append("\n");
 
+    result.append("Ruby interpreter: ");
     switch (RakeRunnerUtils.getRubyInterpreterConfigMode(parameters)) {
       case DEFAULT:
-        result.append("Default Ruby interpreter");
+        result.append("Default / REC feature");
         break;
       case INTERPRETER_PATH:
         final String rubyInterpreterPath = RakeRunnerUtils.getRubySdkPath(parameters);
-        result.append("Ruby interpreter: ").append(rubyInterpreterPath);
+        result.append("Path: ").append(rubyInterpreterPath);
         break;
       case RVM:
         final String rvmSdkName = RakeRunnerUtils.getRVMSdkName(parameters);
