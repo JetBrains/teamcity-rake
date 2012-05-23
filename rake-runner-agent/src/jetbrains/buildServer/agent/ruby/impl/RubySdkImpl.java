@@ -20,11 +20,9 @@ import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.scripting.ProcessBasedRubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
-import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -178,7 +176,7 @@ public class RubySdkImpl implements RubySdk {
     setIsJRuby(InternalRubySdkUtil.isJRubyInterpreter(this, env));
 
     // gem paths
-    setGemPathsLog(getScriptRunner().run(RubySDKUtil.GET_GEM_PATHS_SCRIPT, FileUtil.getTempDirectory(), env));
+    setGemPathsLog(InternalRubySdkUtil.getGemPaths(this, env));
 
     // load path
     setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, env));

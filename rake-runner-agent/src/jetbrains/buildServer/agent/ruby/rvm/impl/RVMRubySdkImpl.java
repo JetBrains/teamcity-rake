@@ -47,9 +47,6 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
 
     // Autofill some parameters
 
-    // Check is JRuby
-    setIsJRuby(getName().startsWith("jruby"));
-
     // get Gem Paths
     final Pair<String, String> gemPaths = SharedRVMUtil.getMainAndGlobalGemPaths(getInterpreterPath(), getGemsetName());
     if (gemPaths == null) {
@@ -70,6 +67,9 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
     if (!this.isSystem()) {
       // language level
       setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(this, env));
+
+      // language level
+      setIsJRuby(InternalRubySdkUtil.isJRubyInterpreter(this, env));
 
       // load path
       setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, env));

@@ -43,7 +43,7 @@ public class InternalRubySdkUtil {
   @NotNull
   static RubySdk createSdk(@NotNull final Map<String, String> runParameters,
                            @NotNull final BuildRunnerContext context)
-  throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     // Check if path to ruby interpreter was explicitly set
     // and calculate corresponding interpreter path
@@ -69,7 +69,7 @@ public class InternalRubySdkUtil {
 
   @NotNull
   public static String findSystemInterpreterPath(@NotNull final Map<String, String> envVariables)
-  throws RakeTasksBuildService.MyBuildFailureException {
+    throws RakeTasksBuildService.MyBuildFailureException {
     // find in $PATH
     final String path = OSUtil.findRubyInterpreterInPATH(envVariables);
 
@@ -87,7 +87,7 @@ public class InternalRubySdkUtil {
 
   @NotNull
   private static <T> T throwInterpreterDoesntExistError(@Nullable final String rubyInterpreterPath)
-  throws RakeTasksBuildService.MyBuildFailureException {
+    throws RakeTasksBuildService.MyBuildFailureException {
     final String msg = "Ruby interpreter '"
                        + String.valueOf(rubyInterpreterPath)
                        + "' doesn't exist or isn't a file or isn't a valid RVM interpreter name.";
@@ -146,5 +146,10 @@ public class InternalRubySdkUtil {
     } else {
       return sdk.getScriptRunner().run(GET_LOAD_PATH_SCRIPT, getTempDirectory(), env);
     }
+  }
+
+  public static RunnerUtil.Output getGemPaths(@NotNull final RubySdk sdk,
+                                              @Nullable final Map<String, String> env) {
+    return sdk.getScriptRunner().run(RubySDKUtil.GET_GEM_PATHS_SCRIPT, getTempDirectory(), env);
   }
 }

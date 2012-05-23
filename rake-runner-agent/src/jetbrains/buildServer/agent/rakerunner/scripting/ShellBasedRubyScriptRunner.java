@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 public class ShellBasedRubyScriptRunner implements jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner {
   private final ShellScriptRunner myShellScriptRunner;
 
-  ShellBasedRubyScriptRunner(@NotNull final ShellScriptRunner shellScriptRunner) {
+  public ShellBasedRubyScriptRunner(@NotNull final ShellScriptRunner shellScriptRunner) {
     myShellScriptRunner = shellScriptRunner;
   }
 
