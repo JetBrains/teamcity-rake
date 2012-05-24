@@ -16,19 +16,21 @@
 
 package jetbrains.buildServer.feature;
 
-import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
-import jetbrains.buildServer.serverSide.*;
-import jetbrains.buildServer.web.openapi.PluginDescriptor;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import jetbrains.buildServer.serverSide.*;
+import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.web.openapi.PluginDescriptor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Roman.Chernyatchik
  */
 public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements BuildStartContextProcessor {
+  public static final String NOT_SPECIFIED_GOOD = "<i>not specified</i>";
+  public static final String NOT_SPECIFIED_ERR = "<strong>NOT SPECIFIED!</strong>";
   private final String myEditUrl;
 
   public RubyEnvConfiguratorBuildFeature(@NotNull final PluginDescriptor descriptor) {
@@ -57,10 +59,6 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
     final SBuildType buildType = context.getBuild().getBuildType();
     if (buildType == null) {
       return;
-    }
-
-    if ("true".equals(context.getSharedParameters().get(RubyEnvConfiguratorUtil.UI_USE_RVM_KEY))) {
-      context.addSharedParameter(RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "manual");
     }
 
     final Collection<SBuildFeatureDescriptor> buildFeatures = buildType.getBuildFeatures();
@@ -92,44 +90,52 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
   @Override
   public String describeParameters(@NotNull final Map<String, String> params) {
     StringBuilder result = new StringBuilder();
+
+    result.append("<ul style=\"list-style: none; padding-left: 0; margin: 0;\">");
+
     final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(params);
     switch (configuration.getType()) {
       case INTERPRETER_PATH: {
-        final String sdkPath = configuration.getRubySdkPath();
-
-        result.append("Interpreter path: ").append(sdkPath != null ? sdkPath : "default");
+        displayParameter(result, "Interpreter path", configuration.getRubySdkPath(), NOT_SPECIFIED_GOOD);
         break;
       }
       case RVM: {
-        final String rvmSdkName = configuration.getRVMSdkName();
-        final String gemset = configuration.getRVMGemsetName();
+        displayParameter(result, "RVM sdk", configuration.getRVMSdkName(), NOT_SPECIFIED_ERR);
+        displayParameter(result, "RVM gemset", configuration.getRVMGemsetName(), NOT_SPECIFIED_GOOD);
 
-        result.append("RVM interpreter: ").append(rvmSdkName != null ? rvmSdkName : RakeRunnerBundle.DEFAULT_RVM_SDK);
-        if (gemset != null) {
-          result.append('@').append(gemset);
+        if (configuration.isRVMGemsetCreate()) {
+          result.append("<li>Create gemset if not exist</li>");
         }
         break;
       }
       case RVMRC: {
-        final String rvmrcPath = configuration.getRVMRCFilePath();
-
-        result.append("Path to a '.rvmrc' file:").append(rvmrcPath != null ? rvmrcPath : "default");
+        displayParameter(result, "Path to folder with '.rvmrc' file", configuration.getRVMRCFilePath(), NOT_SPECIFIED_GOOD);
         break;
       }
     }
 
     if (configuration.isShouldFailBuildIfNoSdkFound()) {
-      result.append("\n").append("Fail build if Ruby interpreter wasn't found.");
+      result.append("<li>Fail build if Ruby interpreter wasn't found<li>");
     }
+    result.append("</ul>");
     return result.toString();
+  }
+
+  private static void displayParameter(@NotNull final StringBuilder sb,
+                                       @NotNull final String name,
+                                       @Nullable final String value,
+                                       @NotNull final String emptyValue) {
+    sb.append("<li>").append(name).append(": ");
+    sb.append(StringUtil.isEmptyOrSpaces(value) ? emptyValue : value);
+    sb.append("</li>");
   }
 
   @Override
   public Map<String, String> getDefaultParameters() {
-    final Map<String, String> defaults = new HashMap<String, String>(1);
+    final Map<String, String> defaults = new HashMap<String, String>(2);
 
     defaults.put(RubyEnvConfiguratorUtil.UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
-
+    defaults.put(RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "manual");
     return defaults;
   }
 }

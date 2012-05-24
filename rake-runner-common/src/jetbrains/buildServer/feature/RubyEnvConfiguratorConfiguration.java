@@ -27,9 +27,9 @@ public class RubyEnvConfiguratorConfiguration {
 
   public static enum Type {
     OFF,
-    INTERPRETER_PATH,
-    RVM,
-    RVMRC
+    INTERPRETER_PATH, // null
+    RVM, // "manual"
+    RVMRC // "rvmrc"
   }
 
   @NotNull
