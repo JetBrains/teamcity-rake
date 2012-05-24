@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.ShellScriptRunnerUtil;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -74,27 +73,33 @@ public class RvmShellRunner implements ShellScriptRunner {
                                @NotNull final String workingDirectory,
                                @Nullable final Map<String, String> environment) {
     final File directory = new File(workingDirectory);
-    File scriptFile;
+    File scriptFile = null;
     try {
-      scriptFile = File.createTempFile("rvm_shell", ".sh", directory);
-      StringBuilder content = new StringBuilder();
-      content.append("#!").append(myRVM.getPath()).append("/bin/rvm-shell").append('\n');
-      content.append(script);
-      jetbrains.buildServer.util.FileUtil.writeFile(scriptFile, content.toString());
-      ShellScriptRunnerUtil.makeScriptFileExecutable(scriptFile); // script needs to be made executable for all (chmod a+x)
-    } catch (IOException e) {
-      LOG.error("Failed to create temp file, error: ", e);
-      return new RunnerUtil.Output("", "Failed to create temp file, error: " + e.getMessage());
-    }
+      try {
+        scriptFile = File.createTempFile("rvm_shell", ".sh", directory);
+        jetbrains.buildServer.util.FileUtil.writeFile(scriptFile, script);
+      } catch (IOException e) {
+        LOG.error("Failed to create temp file, error: ", e);
+        return new RunnerUtil.Output("", "Failed to create temp file, error: " + e.getMessage());
+      }
 
-    // Patching environment
-    final HashMap<String, String> environment1 = new HashMap<String, String>();
-    if (environment != null) {
-      environment1.putAll(environment);
-    }
-    environment1.put("rvm_trust_rvmrcs_flag", "1");
-    environment1.put("rvm_path", myRVM.getPath());
+      // Patching environment
+      final HashMap<String, String> environment1 = new HashMap<String, String>();
+      if (environment != null) {
+        environment1.putAll(environment);
+      }
+      environment1.put("rvm_trust_rvmrcs_flag", "1");
+      environment1.put("rvm_path", myRVM.getPath());
 
-    return RunnerUtil.run(workingDirectory, environment1, scriptFile.getAbsolutePath());
+      return RunnerUtil
+        .run(workingDirectory, environment1, myRVM.getPath() + "/bin/rvm-shell", "--path", workingDirectory, scriptFile.getAbsolutePath());
+    } finally {
+      try {
+        if (scriptFile != null) {
+          scriptFile.delete();
+        }
+      } catch (SecurityException ignored) {
+      }
+    }
   }
 }

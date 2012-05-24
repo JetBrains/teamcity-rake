@@ -28,15 +28,16 @@ import java.util.Map;
  */
 public class RVMInfo {
 
-  private String myInterpreterName;
-  private Map<Section, Map<String, String>> mySectionsValues = new EnumMap<Section, Map<String, String>>(Section.class);
+  private final String myInterpreterName;
+  private final Map<Section, Map<String, String>> mySectionsValues = new EnumMap<Section, Map<String, String>>(Section.class);
 
   public RVMInfo(@NotNull final String interpreterNameWithGemset) {
-    final int i = interpreterNameWithGemset.indexOf("@");
+    final String trimmed = interpreterNameWithGemset.trim();
+    final int i = trimmed.indexOf("@");
     if (i != -1) {
-      myInterpreterName = new String(interpreterNameWithGemset.substring(0, i));
+      myInterpreterName = trimmed.substring(0, i);
     } else {
-      myInterpreterName = interpreterNameWithGemset;
+      myInterpreterName = trimmed;
     }
   }
 

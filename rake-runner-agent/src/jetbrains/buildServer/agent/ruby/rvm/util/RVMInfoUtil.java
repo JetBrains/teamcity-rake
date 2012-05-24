@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingRunnersProvider;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShellScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,9 +38,10 @@ public class RVMInfoUtil {
   public static RVMInfo gatherInfoUnderRvmShell(@NotNull final String directoryWithRvmrcFile,
                                                 @Nullable final Map<String, String> envVariables) {
     final ShellScriptRunner shellScriptRunner = ScriptingRunnersProvider.getRVMDefault().getShellScriptRunner();
-    RVMInfo info = new RVMInfo(shellScriptRunner.run("rvm current", directoryWithRvmrcFile, envVariables).getStdout());
+    RVMInfo info = new RVMInfo(shellScriptRunner.run("rvm current", directoryWithRvmrcFile, envVariables).getStdout().trim());
     for (RVMInfo.Section section : RVMInfo.Section.values()) {
-      final String stdout = shellScriptRunner.run("rvm info " + section.name(), directoryWithRvmrcFile, envVariables).getStdout();
+      final RunnerUtil.Output output = shellScriptRunner.run("rvm info " + section.name(), directoryWithRvmrcFile, envVariables);
+      final String stdout = output.getStdout();
       Map<String, String> ret = new HashMap<String, String>();
       for (String line : stdout.split("\n")) {
         final Matcher matcher = INFO_LINE_PATTERN.matcher(line);
