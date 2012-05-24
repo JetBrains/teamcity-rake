@@ -23,8 +23,8 @@ import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.RvmShellRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingRunnersProvider;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShellBasedRubyScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
-import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
 import jetbrains.buildServer.agent.ruby.rvm.RVMRCBasedRubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.util.RVMInfoUtil;
@@ -83,8 +83,24 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
 
   @Override
   public void setup(@NotNull final Map<String, String> env) {
-    //noinspection RedundantCast
-    ((RubySdkImpl)this).setup(env);
+    if (isSetupCompleted()) {
+      return;
+    }
+
+    // 1.8 / 1.9
+    setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(this, env));
+
+    // ruby / jruby
+    setIsJRuby(InternalRubySdkUtil.isJRubyInterpreter(this, env));
+
+    // gem paths
+    setGemPathsLog(InternalRubySdkUtil.getGemPaths(this, env));
+
+    // load path
+    setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, env));
+
+    // Set setup completed
+    setIsSetupCompleted(true);
   }
 
   @NotNull
