@@ -111,7 +111,8 @@ public class InstalledRVM {
     final SharedRVMUtil.RubyDistToGemsetTable rubyDist2Gemset = new SharedRVMUtil.RubyDistToGemsetTable();
 
     // 1. scan .rvm/gems directory and find all existing (sdk, gemset) pairs
-    for (File folder : rubyGemsFolder.listFiles()) {
+    final File[] files = rubyGemsFolder.listFiles();
+    if (files != null) for (File folder : files) {
       // ignore ordnary files
       if (!folder.isDirectory()) {
         continue;

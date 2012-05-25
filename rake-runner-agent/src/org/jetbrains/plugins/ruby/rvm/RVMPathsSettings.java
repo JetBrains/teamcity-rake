@@ -51,10 +51,6 @@ public class RVMPathsSettings extends SharedRVMPathsSettings {
     myInstalledRVM = myDetector.detect(env);
   }
 
-  public void initialize(@Nullable final InstalledRVM rvm) {
-    myInstalledRVM = rvm;
-  }
-
   @Override
   @Nullable
   public InstalledRVM getRVM() {

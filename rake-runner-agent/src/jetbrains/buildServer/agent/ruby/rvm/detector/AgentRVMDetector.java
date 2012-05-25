@@ -16,10 +16,7 @@
 
 package jetbrains.buildServer.agent.ruby.rvm.detector;
 
-import jetbrains.buildServer.agent.AgentLifeCycleAdapter;
-import jetbrains.buildServer.agent.AgentLifeCycleListener;
-import jetbrains.buildServer.agent.BuildAgent;
-import jetbrains.buildServer.agent.BuildAgentConfiguration;
+import jetbrains.buildServer.agent.*;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.util.EventDispatcher;
 import org.jetbrains.annotations.NotNull;
@@ -50,9 +47,19 @@ public class AgentRVMDetector {
     @Override
     public void afterAgentConfigurationLoaded(@NotNull BuildAgent agent) {
       final BuildAgentConfiguration buildAgentConfiguration = agent.getConfiguration();
-      @Nullable InstalledRVM rvm = myDetector.detect(buildAgentConfiguration.getBuildParameters().getEnvironmentVariables());
-      myDetector.patchBuildAgentConfiguration(buildAgentConfiguration, rvm);
+      updateConfig(buildAgentConfiguration);
     }
+
+    @Override
+    public void buildFinished(@NotNull final AgentRunningBuild build, @NotNull final BuildFinishedStatus buildStatus) {
+      final BuildAgentConfiguration buildAgentConfiguration = build.getAgentConfiguration();
+      updateConfig(buildAgentConfiguration);
+    }
+  }
+
+  private void updateConfig(final BuildAgentConfiguration buildAgentConfiguration) {
+    @Nullable InstalledRVM rvm = myDetector.detect(buildAgentConfiguration.getBuildParameters().getEnvironmentVariables());
+    myDetector.patchBuildAgentConfiguration(buildAgentConfiguration, rvm);
   }
 
 

@@ -32,8 +32,6 @@ import jetbrains.buildServer.agent.rakerunner.SharedParams;
 import jetbrains.buildServer.agent.rakerunner.SharedParamsType;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
-import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
-import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetectorFactory;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorUtil;
@@ -94,10 +92,8 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   private boolean runCmdlinePatcherTest(FakeBuildConfiguration configuration) throws IOException {
     final AtomicBoolean patcherEnabled = new AtomicBoolean(false);
 
-    final RVMDetector detector = new RVMDetectorFactory().createRVMDetector();
-
     getExtensionHolder().registerExtension(BuildRunnerPrecondition.class, "aaa",
-                                           new RubyEnvConfiguratorService(detector) {
+                                           new RubyEnvConfiguratorService() {
                                              @Override
                                              protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
                                                                                    @NotNull final RubySdk sdk,

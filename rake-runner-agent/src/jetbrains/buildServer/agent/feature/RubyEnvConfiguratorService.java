@@ -28,13 +28,10 @@ import jetbrains.buildServer.agent.rakerunner.SharedParamsType;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
-import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
-import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
@@ -44,11 +41,7 @@ import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
  */
 public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
 
-  @NotNull
-  private final RVMDetector myRVMDetector;
-
-  public RubyEnvConfiguratorService(@NotNull final RVMDetector myRVMDetector) {
-    this.myRVMDetector = myRVMDetector;
+  public RubyEnvConfiguratorService() {
   }
 
   public void canStart(@NotNull final BuildRunnerContext context) throws RunBuildException {
@@ -62,8 +55,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
 
     final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(featureParameters);
 
-    @Nullable final InstalledRVM rvm = myRVMDetector.detect(context.getBuildParameters().getEnvironmentVariables());
-    RVMPathsSettings.getInstanceEx().initialize(rvm);
+    RVMPathsSettings.getInstanceEx().initialize(context.getBuildParameters().getEnvironmentVariables());
 
     final SharedParams sharedParams = new SharedParams();
 
