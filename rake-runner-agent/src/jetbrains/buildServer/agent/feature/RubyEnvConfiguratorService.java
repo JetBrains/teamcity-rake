@@ -94,7 +94,8 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
                                         @NotNull final SharedParams sharedParams) throws RunBuildException {
 
     // editable env variables
-    final EnvironmentPatchableMap env = new EnvironmentPatchableMap(context.getBuildParameters().getEnvironmentVariables());
+    final Map<String, String> oldenv = context.getBuildParameters().getEnvironmentVariables();
+    final EnvironmentPatchableMap env = new EnvironmentPatchableMap(oldenv);
 
     try {
 
@@ -118,6 +119,12 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         // see RakeRunnerConstants.CUSTOM_BUNDLE_FOLDER_PATH.
         final String checkoutDirPath = context.getBuild().getCheckoutDirectory().getCanonicalPath();
         RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, env, checkoutDirPath);
+      }
+
+      for (String ok : oldenv.keySet()) {
+        if (!env.containsKey(ok)) {
+          env.put(ok, "");
+        }
       }
 
       // apply updated env variables to context:

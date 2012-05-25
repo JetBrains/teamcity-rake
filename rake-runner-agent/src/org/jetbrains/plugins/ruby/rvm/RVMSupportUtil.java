@@ -17,12 +17,13 @@
 package org.jetbrains.plugins.ruby.rvm;
 
 import java.io.File;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.agent.BuildProgressLogger;
-import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
+import jetbrains.buildServer.agent.rakerunner.utils.EnvUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
-import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
@@ -69,37 +70,35 @@ public class RVMSupportUtil {
   }
 
   public static void patchEnvForRVMIfNecessary(@NotNull final RubySdk sdk,
-                                               @NotNull final EnvironmentPatchableMap env)
-    throws RakeTasksBuildService.MyBuildFailureException {
+                                               @NotNull final EnvironmentPatchableMap env) {
     if (sdk.isRvmSdk()) {
       patchEnvForRVMIfNecessary((RVMRubySdk)sdk, env);
     }
   }
 
   public static void patchEnvForRVMIfNecessary(@NotNull final RVMRubySdk sdk,
-                                               @NotNull final EnvironmentPatchableMap env)
-    throws RakeTasksBuildService.MyBuildFailureException {
+                                               @NotNull final EnvironmentPatchableMap env) {
+    env.clear();
+    env.putAll(patchEnvForRVMIfNecessary2(sdk.getPresentableName(), env));
+  }
 
-    // patch
-    final LinkedHashSet<String> gemRootsPaths = sdk.isSystem()
-                                                ? new LinkedHashSet<String>()
-                                                : SharedRVMUtil
-                                                  .determineGemRootsPaths(sdk.getInterpreterPath(), sdk.getGemsetName(), false);
+  public static Map<String, String> patchEnvForRVMIfNecessary2(@NotNull final String rvmRubyString,
+                                                               @NotNull final EnvironmentPatchableMap env) {
 
-    try {
-      SharedRVMUtil.patchEnvForRVM(sdk.getInterpreterPath(),
-                                   sdk.getGemsetName(),
-                                   sdk.isSystem(),
-                                   gemRootsPaths,
-                                   env,
-                                   env, // system + buildAgent.config + build properties env. vars
-                                   false,
-                                   File.pathSeparatorChar,
-                                   OSUtil.getPATHEnvVariableKey(),
-                                   getDefaultEnvVarsForRvmEnvPatcher());  // system env. vars
-    } catch (IllegalArgumentException e) {
-      throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage());
+    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
+    assert rvm != null;
+
+    final Map<String, String> defaultEnvs = getDefaultEnvVarsForRvmEnvPatcher();
+    final List<String> restricted = new ArrayList<String>(7);
+    for (String res : SharedRVMUtil.Constants.SYSTEM_RVM_ENVVARS_TO_RESET) {
+      if (!SharedRVMUtil.canOverride(res, env, defaultEnvs)) {
+        restricted.add(res);
+      }
     }
+    final RunnerUtil.Output env1 = RunnerUtil.run(null, env, rvm.getPath() + "/bin/rvm-shell", rvmRubyString, "-c", "env");
+    final Map<String, String> modified = EnvUtil.parse(env1.getStdout());
+    final Map<String, String> merged = EnvUtil.mergeIntoNewEnv(modified, env, restricted);
+    return merged;
   }
 
   @NotNull

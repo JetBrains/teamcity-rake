@@ -44,6 +44,7 @@ public class SharedRVMUtil {
     String GEM_HOME = "GEM_HOME";
     String BUNDLE_PATH = "BUNDLE_PATH";
     String MY_RUBY_HOME = "MY_RUBY_HOME";
+    String IRBRC = "IRBRC";
     String GEMS_ROOT_RELATIVE_PATH = "/gems";
     String RVM_RUBY_STRING = "rvm_ruby_string";
     String RVM_GEMSET = "gemset";
@@ -53,7 +54,8 @@ public class SharedRVMUtil {
       SharedRVMUtil.Constants.GEM_PATH,
       SharedRVMUtil.Constants.BUNDLE_PATH,
       SharedRVMUtil.Constants.MY_RUBY_HOME,
-      SharedRVMUtil.Constants.RVM_GEMSET
+      SharedRVMUtil.Constants.RVM_GEMSET,
+      SharedRVMUtil.Constants.IRBRC
     };
   }
 

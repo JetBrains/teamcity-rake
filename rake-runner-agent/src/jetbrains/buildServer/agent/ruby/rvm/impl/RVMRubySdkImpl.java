@@ -101,6 +101,6 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
   public String getPresentableName() {
     return myGemsetName == null
            ? getName()
-           : getName() + "[" + RVMSupportUtil.getGemsetSeparator() + myGemsetName + "]";
+           : getName() + RVMSupportUtil.getGemsetSeparator() + myGemsetName;
   }
 }

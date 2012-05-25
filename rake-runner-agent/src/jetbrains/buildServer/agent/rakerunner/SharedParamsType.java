@@ -17,7 +17,9 @@
 package jetbrains.buildServer.agent.rakerunner;
 
 import java.io.File;
+import java.util.Map;
 import jetbrains.buildServer.agent.BuildRunnerContext;
+import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
@@ -75,8 +77,11 @@ public enum SharedParamsType {
 
       // at first lets check that it isn't "system" interpreter
       if (RVMSupportUtil.isSystemRuby(sdkName)) {
-        return new RVMRubySdkImpl(findSystemInterpreterPath(context.getBuildParameters().getEnvironmentVariables()), RVM_SYSTEM_INTERPRETER,
-                                  true, null);
+        final EnvironmentPatchableMap env = new EnvironmentPatchableMap(context.getBuildParameters().getEnvironmentVariables());
+        final Map<String, String> patched = RVMSupportUtil.patchEnvForRVMIfNecessary2(sdkName, env);
+        final RVMRubySdkImpl sdk = new RVMRubySdkImpl(findSystemInterpreterPath(patched), RVM_SYSTEM_INTERPRETER, true, null);
+        sdk.setup(patched);
+        return sdk;
       }
 
       // build  dist/gemsets table, match ref with dist. name

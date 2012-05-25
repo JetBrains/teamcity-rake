@@ -175,8 +175,15 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       // (do not do it befor RVM Env patch!!!!!!)
       BundlerUtil.enableBundleExecEmulationIfNeeded(sdk, runParams, buildParams, env, checkoutDirPath);
 
+
       // Result:
-      return new SimpleProgramCommandLine(new HashMap<String, String>(env.getPatched()),
+      final HashMap<String, String> ret = new HashMap<String, String>();
+      for (Map.Entry<String, String> entry : env.getPatched().entrySet()) {
+        if (!StringUtil.isEmptyOrSpaces(entry.getValue())) {
+          ret.put(entry.getKey(), entry.getValue());
+        }
+      }
+      return new SimpleProgramCommandLine(ret,
                                           getWorkingDirectory().getAbsolutePath(),
                                           sdk.getInterpreterPath(),
                                           arguments);
