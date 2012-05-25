@@ -51,7 +51,6 @@
     <props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="manual" id="ui.ruby.configurator.use.rvm:rvm" onclick="${onclick}"/>
     <label for="ui.ruby.configurator.use.rvm:rvm">RVM interpreter:</label>
     <props:hiddenProperty name="ui.ruby.configurator.rvm.path" value=""/>
-    <props:hiddenProperty name="teamcity.ruby.configurator.enabled" value="true"/>
   </th>
   <td>
     <style type="text/css">

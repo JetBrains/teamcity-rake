@@ -26,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 public class RubyEnvConfiguratorConfiguration {
 
   public static enum Type {
-    OFF,
     INTERPRETER_PATH, // null
     RVM, // "manual"
     RVMRC // "rvmrc"

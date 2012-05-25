@@ -19,15 +19,18 @@ package jetbrains.buildServer.agent.ruby.rvm;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.AgentBuildFeature;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.runner.BuildCommandLineProcessor;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
+import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
@@ -47,13 +50,25 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
     if (!SystemInfo.isUnix) {
       return origCommandLine;
     }
-
     final AgentRunningBuild build = runnerContext.getBuild();
-    final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(build.getSharedConfigParameters());
 
-    if (configuration.getType() != RubyEnvConfiguratorConfiguration.Type.RVM &&
-        configuration.getType() != RubyEnvConfiguratorConfiguration.Type.RVMRC) {
+    // check if feature is enabled
+    final Collection<AgentBuildFeature> features =
+      build.getBuildFeaturesOfType(RubyEnvConfiguratorConstants.RUBY_ENV_CONFIGURATOR_FEATURE_TYPE);
+
+    if (features.isEmpty()) {
       return origCommandLine;
+    }
+
+    final Map<String, String> featureParameters = features.iterator().next().getParameters();
+
+    final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(featureParameters);
+
+    switch (configuration.getType()) {
+      case INTERPRETER_PATH:
+        return origCommandLine;
+      case RVM:
+      case RVMRC:
     }
 
     // Lets patch it!

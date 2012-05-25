@@ -16,8 +16,10 @@
 
 package jetbrains.buildServer.agent.feature;
 
+import java.util.Collection;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.AgentBuildFeature;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.BuildRunnerPrecondition;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
@@ -29,6 +31,7 @@ import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
+import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,14 +52,15 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
   }
 
   public void canStart(@NotNull final BuildRunnerContext context) throws RunBuildException {
-    final Map<String, String> configParameters = context.getBuild().getSharedConfigParameters();
-
-    final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(configParameters);
-
-    // check if is enabled
-    if (configuration.getType() == RubyEnvConfiguratorConfiguration.Type.OFF) {
+    // check if feature is enabled
+    final Collection<AgentBuildFeature> features =
+      context.getBuild().getBuildFeaturesOfType(RubyEnvConfiguratorConstants.RUBY_ENV_CONFIGURATOR_FEATURE_TYPE);
+    if (features.isEmpty()) {
       return;
     }
+    final Map<String, String> featureParameters = features.iterator().next().getParameters();
+
+    final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(featureParameters);
 
     @Nullable final InstalledRVM rvm = myRVMDetector.detect(context.getBuildParameters().getEnvironmentVariables());
     RVMPathsSettings.getInstanceEx().initialize(rvm);

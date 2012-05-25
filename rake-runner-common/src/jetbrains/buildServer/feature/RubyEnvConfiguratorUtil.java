@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
  * @author Roman.Chernyatchik
  */
 public class RubyEnvConfiguratorUtil {
-  public final static String RUBY_ENV_CONFIGURATOR_KEY = "teamcity.ruby.configurator.enabled";
   public static final String UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY = "ui.ruby.configurator.fail.build.if.interpreter.not.found";
 
   public static final String UI_RVM_GEMSET_NAME_KEY = "ui.ruby.configurator.rvm.gemset.name";
@@ -71,8 +70,6 @@ public class RubyEnvConfiguratorUtil {
 
   @NotNull
   public static RubyEnvConfiguratorConfiguration.Type getFeatureWorkingType(@NotNull final Map<String, String> params) {
-    if (StringUtil.isEmpty(params.get(RUBY_ENV_CONFIGURATOR_KEY))) return RubyEnvConfiguratorConfiguration.Type.OFF;
-
     final String useRVMType = params.get(UI_USE_RVM_KEY);
     if ("manual".equals(useRVMType)) {
       return RubyEnvConfiguratorConfiguration.Type.RVM;

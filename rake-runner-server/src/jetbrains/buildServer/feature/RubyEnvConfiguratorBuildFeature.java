@@ -16,10 +16,9 @@
 
 package jetbrains.buildServer.feature;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import jetbrains.buildServer.serverSide.*;
+import jetbrains.buildServer.serverSide.BuildFeature;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author Roman.Chernyatchik
  */
-public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements BuildStartContextProcessor {
+public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
   public static final String NOT_SPECIFIED_GOOD = "<i>not specified</i>";
   public static final String NOT_SPECIFIED_ERR = "<strong>NOT SPECIFIED!</strong>";
   private final String myEditUrl;
@@ -41,7 +40,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
   @NotNull
   @Override
   public String getType() {
-    return "ruby.env.configurator";
+    return RubyEnvConfiguratorConstants.RUBY_ENV_CONFIGURATOR_FEATURE_TYPE;
   }
 
   @NotNull
@@ -53,32 +52,6 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature implements Bui
   @Override
   public String getEditParametersUrl() {
     return myEditUrl;
-  }
-
-  public void updateParameters(@NotNull final BuildStartContext context) {
-    final SBuildType buildType = context.getBuild().getBuildType();
-    if (buildType == null) {
-      return;
-    }
-
-    final Collection<SBuildFeatureDescriptor> buildFeatures = buildType.getBuildFeatures();
-    for (SBuildFeatureDescriptor bf : buildFeatures) {
-      if (!buildType.isEnabled(bf.getId())) continue;
-      // if our type
-      if (getType().equals(bf.getType())) {
-        // mark that feature is enabled
-        context.addSharedParameter(RubyEnvConfiguratorUtil.RUBY_ENV_CONFIGURATOR_KEY, Boolean.TRUE.toString());
-
-        // copy feature settings to context
-        for (final Map.Entry<String, String> param : bf.getParameters().entrySet()) {
-          if (param.getValue() != null) {
-            context.addSharedParameter(param.getKey(), param.getValue());
-          }
-        }
-        // multiple such features for build are not allowed
-        break;
-      }
-    }
   }
 
   @Override
