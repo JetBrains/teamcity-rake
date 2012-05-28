@@ -78,8 +78,9 @@ public class RVMSupportUtil {
 
   public static void patchEnvForRVMIfNecessary(@NotNull final RVMRubySdk sdk,
                                                @NotNull final EnvironmentPatchableMap env) {
+    final EnvironmentPatchableMap oldenv = new EnvironmentPatchableMap(env);
     env.clear();
-    env.putAll(patchEnvForRVMIfNecessary2(sdk.getPresentableName(), env));
+    env.putAll(patchEnvForRVMIfNecessary2(sdk.getPresentableName(), oldenv));
   }
 
   public static Map<String, String> patchEnvForRVMIfNecessary2(@NotNull final String rvmRubyString,
@@ -96,6 +97,9 @@ public class RVMSupportUtil {
       }
     }
     final RunnerUtil.Output env1 = RunnerUtil.run(null, env, rvm.getPath() + "/bin/rvm-shell", rvmRubyString, "-c", "env");
+    if (!env1.getStderr().isEmpty()) {
+      throw new RuntimeException("Cannot fetch sdk environment: rvm-shell failed woth output" + env1.getStderr());
+    }
     final Map<String, String> modified = EnvUtil.parse(env1.getStdout());
     final Map<String, String> merged = EnvUtil.mergeIntoNewEnv(modified, env, restricted);
     return merged;

@@ -129,10 +129,10 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     // use rvm
     featureParamsMap.put(RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "manual");
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, "ruby-1.8.7-p352");
+    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, "ruby-1.8.7");
     featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RVM_GEMSET_NAME_KEY, "teamcity");
 
-    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.FeatureAndFakeRvmHome, featureParamsMap);
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
 
     // launch
     finishBuild(startBuild(bt, false));
@@ -146,7 +146,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     assertTrue(sharedParams.isSetted());
     assertEquals(SharedParamsType.RVM, sharedParams.getType());
 
-    assertEquals("ruby-1.8.7-p352", sharedParams.getRVMSdkName());
+    assertEquals("ruby-1.8.7", sharedParams.getRVMSdkName());
     assertEquals("teamcity", sharedParams.getRVMGemsetName());
     assertNull(sharedParams.getInterpreterPath());
     assertNull(sharedParams.getRVMRCPath());
@@ -287,7 +287,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, rvmRubyName);
     featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RVM_GEMSET_NAME_KEY, rvmGemsetName);
 
-    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.FeatureAndFakeRvmHome, featureParamsMap);
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
 
     SBuild build = startBuild(bt, false);
     build = finishBuild(build);
@@ -331,9 +331,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
       final String[] paths = envPath.split(File.pathSeparator);
       Assert.assertTrue(paths.length >= 4);
 
-      Assert.assertTrue(paths[0].matches(rvmHomePath + "/rubies/" + regexRuby + "/bin"), paths[0]);
-      Assert.assertTrue(paths[1].matches(rvmHomePath + "/gems/" + regexRubyAndGemset + "/bin"), paths[1]);
-      Assert.assertTrue(paths[2].matches(rvmHomePath + "/gems/" + regexRubyAndGlobal + "/bin"), paths[2]);
+      Assert.assertTrue(paths[0].matches(rvmHomePath + "/gems/" + regexRubyAndGemset + "/bin"), paths[0]);
+      Assert.assertTrue(paths[1].matches(rvmHomePath + "/gems/" + regexRubyAndGlobal + "/bin"), paths[1]);
+      Assert.assertTrue(paths[2].matches(rvmHomePath + "/rubies/" + regexRuby + "/bin"), paths[2]);
       Assert.assertEquals(paths[3], rvmHomePath + "/bin");
     }
 

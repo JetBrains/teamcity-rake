@@ -17,13 +17,18 @@
 package jetbrains.buildServer.agent.ruby.rvm.impl;
 
 import com.intellij.openapi.util.Pair;
+import java.io.File;
 import java.util.Map;
+import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
+import jetbrains.buildServer.agent.rakerunner.scripting.RvmShellRunner;
+import jetbrains.buildServer.agent.rakerunner.scripting.ShellBasedRubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
 
@@ -102,5 +107,19 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
     return myGemsetName == null
            ? getName()
            : getName() + RVMSupportUtil.getGemsetSeparator() + myGemsetName;
+  }
+
+  @NotNull
+  @Override
+  public RubyScriptRunner getScriptRunner() {
+    //noinspection ConstantConditions
+    return new ShellBasedRubyScriptRunner(new RvmShellRunner(RVMPathsSettings.getInstance().getRVM()) {
+      @Override
+      protected String[] createProcessArguments(final String rvmShellEx, final String workingDirectory, final File scriptFile) {
+        return new String[]{rvmShellEx, getPresentableName(), scriptFile.getAbsolutePath()};
+      }
+    });
+    // TODO: use SRP
+    //return ScriptingRunnersProvider.getRVMDefault().getRubyScriptRunner();
   }
 }

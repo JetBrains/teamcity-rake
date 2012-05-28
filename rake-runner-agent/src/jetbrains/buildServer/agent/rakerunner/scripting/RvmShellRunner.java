@@ -91,8 +91,8 @@ public class RvmShellRunner implements ShellScriptRunner {
       environment1.put("rvm_trust_rvmrcs_flag", "1");
       environment1.put("rvm_path", myRVM.getPath());
 
-      return RunnerUtil
-        .run(workingDirectory, environment1, myRVM.getPath() + "/bin/rvm-shell", "--path", workingDirectory, scriptFile.getAbsolutePath());
+      return RunnerUtil.run(workingDirectory, environment1,
+                            createProcessArguments(myRVM.getPath() + "/bin/rvm-shell", workingDirectory, scriptFile));
     } finally {
       try {
         if (scriptFile != null) {
@@ -101,5 +101,9 @@ public class RvmShellRunner implements ShellScriptRunner {
       } catch (SecurityException ignored) {
       }
     }
+  }
+
+  protected String[] createProcessArguments(final String rvmShellEx, final String workingDirectory, final File scriptFile) {
+    return new String[]{rvmShellEx, "--path", workingDirectory, scriptFile.getAbsolutePath()};
   }
 }
