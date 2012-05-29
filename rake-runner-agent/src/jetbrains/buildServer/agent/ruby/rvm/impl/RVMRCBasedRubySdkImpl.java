@@ -36,14 +36,17 @@ import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
  */
 public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedRubySdk {
 
+  private static final String TEST_RVM_SHELL_SCRIPT = ". $rvm_path/scripts/rvm && rvm rvmrc load";
   private static final Logger LOG = Logger.getInstance(RVMRCBasedRubySdkImpl.class.getName());
+
   private final String myPathToRVMRCFolder;
+  private final ShellBasedRubyScriptRunner myShellBasedRubyScriptRunner;
 
   public static RVMRCBasedRubySdkImpl createAndSetup(@NotNull final String pathToRVMRCFolder,
-                                                     @NotNull final Map<String, String> envVariables)
+                                                     @NotNull final Map<String, String> env)
     throws RakeTasksBuildService.MyBuildFailureException {
     final ShellScriptRunner shellScriptRunner = ScriptingRunnersProvider.getRVMDefault().getShellScriptRunner();
-    final RunnerUtil.Output testRun = shellScriptRunner.run(". $rvm_path/scripts/rvm && rvm rvmrc load", pathToRVMRCFolder, envVariables);
+    final RunnerUtil.Output testRun = shellScriptRunner.run(TEST_RVM_SHELL_SCRIPT, pathToRVMRCFolder, env);
     if (!StringUtil.isEmptyOrSpaces(testRun.getStderr())) {
       StringBuilder sb = new StringBuilder();
       sb.append("Configuring RVM with ").append(pathToRVMRCFolder).append("/.rvmrc failed:");
@@ -51,7 +54,7 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
       sb.append("\nStdErr: ").append(testRun.getStderr());
       throw new RakeTasksBuildService.MyBuildFailureException(sb.toString());
     }
-    final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell(pathToRVMRCFolder, envVariables);
+    final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell(pathToRVMRCFolder, env);
 
     // Constructor params
     final String interpreterPath = info.getSection(RVMInfo.Section.binaries).get("ruby");
@@ -76,6 +79,7 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
                                 final String pathToRVMRCFolder) {
     super(interpreterPath, name, system, gemset);
     myPathToRVMRCFolder = pathToRVMRCFolder;
+    myShellBasedRubyScriptRunner = new ShellBasedRubyScriptRunner(new MyRvmShellRunner());
   }
 
   @Override
@@ -103,21 +107,24 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
   @NotNull
   @Override
   public RubyScriptRunner getScriptRunner() {
-    //noinspection ConstantConditions
-    return new ShellBasedRubyScriptRunner(new RvmShellRunner(RVMPathsSettings.getInstance().getRVM()) {
-      @NotNull
-      @Override
-      public RunnerUtil.Output run(@NotNull final String script,
-                                   @NotNull final String workingDirectory,
-                                   @Nullable final Map<String, String> environment) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("cd ").append(workingDirectory).append('\n');
-        sb.append(script);
+    return myShellBasedRubyScriptRunner;
+  }
 
-        return super.run(sb.toString(), myPathToRVMRCFolder, environment);
-      }
-    });
-    // TODO: use SRP
-    //return ScriptingRunnersProvider.getRVMDefault().getRubyScriptRunner();
+  private class MyRvmShellRunner extends RvmShellRunner {
+    public MyRvmShellRunner() {
+      super(RVMPathsSettings.getRVMNullSafe());
+    }
+
+    @NotNull
+    @Override
+    public RunnerUtil.Output run(@NotNull final String script,
+                                 @NotNull final String workingDirectory,
+                                 @Nullable final Map<String, String> environment) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("cd ").append(workingDirectory).append('\n');
+      sb.append(script);
+
+      return super.run(sb.toString(), myPathToRVMRCFolder, environment);
+    }
   }
 }

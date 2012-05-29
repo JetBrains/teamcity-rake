@@ -116,10 +116,10 @@
       }
     </style>
     <div class="rvm_options">
-      Path to a directory with '.rvmrc' file:
+      Path to a '.rvmrc' file:
       <div class="rvm_options_editor">
         <props:textProperty name="ui.ruby.configurator.rvm.rvmrc.path" style="width:25em;" maxlength="256" className="buildTypeParams"/>
-        <span class="smallNote">Path relative to a checkout directory</span>
+        <span class="smallNote">Path relative to a checkout directory. Leave empty to use ".rvmrc"</span>
       </div>
     </div>
   </td>

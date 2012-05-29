@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
@@ -51,10 +52,7 @@ public class RvmShellRunner implements ShellScriptRunner {
 
   @NotNull
   static RvmShellRunner getRvmShellRunner() {
-    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
-    if (rvm == null) {
-      throw new IllegalArgumentException("RVM unkown.");
-    }
+    final InstalledRVM rvm = RVMPathsSettings.getRVMNullSafe();
     if (ourRvmShellRunner == null || !ourRvmShellRunner.getRVM().equals(rvm)) {
       ourRvmShellRunner = new RvmShellRunner(rvm);
     }
@@ -76,8 +74,8 @@ public class RvmShellRunner implements ShellScriptRunner {
     File scriptFile = null;
     try {
       try {
-        scriptFile = File.createTempFile("rvm_shell", ".sh", directory);
-        jetbrains.buildServer.util.FileUtil.writeFile(scriptFile, script);
+        scriptFile = FileUtil.createTempFile(directory, "rvm_shell", ".sh", true);
+        FileUtil.writeFileAndReportErrors(scriptFile, script);
       } catch (IOException e) {
         LOG.error("Failed to create temp file, error: ", e);
         return new RunnerUtil.Output("", "Failed to create temp file, error: " + e.getMessage());
@@ -96,7 +94,7 @@ public class RvmShellRunner implements ShellScriptRunner {
     } finally {
       try {
         if (scriptFile != null) {
-          scriptFile.delete();
+          FileUtil.delete(scriptFile);
         }
       } catch (SecurityException ignored) {
       }

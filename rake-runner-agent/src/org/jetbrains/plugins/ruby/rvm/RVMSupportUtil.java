@@ -50,10 +50,7 @@ public class RVMSupportUtil {
 
   @NotNull
   public static String suggestInterpretatorPath(@NotNull final String distName) {
-    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
-    if (rvm == null) {
-      throw new IllegalArgumentException("RVM home cannot be unkown here.");
-    }
+    final InstalledRVM rvm = RVMPathsSettings.getRVMNullSafe();
 
     // rvm defines "ruby" symlink for all ruby interpreters
     return rvm.getPath()
@@ -87,8 +84,7 @@ public class RVMSupportUtil {
   public static Map<String, String> patchEnvForRVMIfNecessary2(@NotNull final String rvmRubyString,
                                                                @NotNull final EnvironmentPatchableMap env) {
 
-    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
-    assert rvm != null;
+    final InstalledRVM rvm = RVMPathsSettings.getRVMNullSafe();
 
     final Map<String, String> defaultEnvs = getDefaultEnvVarsForRvmEnvPatcher();
     final List<String> restricted = new ArrayList<String>(7);

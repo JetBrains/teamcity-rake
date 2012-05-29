@@ -56,4 +56,19 @@ public class RVMPathsSettings extends SharedRVMPathsSettings {
   public InstalledRVM getRVM() {
     return myInstalledRVM;
   }
+
+  /**
+   * Null-safe version of (getInstance().getRVM()) for getting current known RVM.
+   * Be sure that RVM known at execution time.
+   * @return known rvm
+   * @throws IllegalStateException if rvm is null
+   */
+  @NotNull
+  public static InstalledRVM getRVMNullSafe() {
+    final InstalledRVM rvm = getInstance().getRVM();
+    if (rvm == null) {
+      throw new IllegalStateException("Unexpected: RVM is null. Cannot be null at that step.");
+    }
+    return rvm;
+  }
 }

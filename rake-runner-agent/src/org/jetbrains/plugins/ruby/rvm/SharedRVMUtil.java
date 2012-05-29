@@ -108,17 +108,6 @@ public class SharedRVMUtil {
     return false;
   }
 
-  public static boolean isRVMInterpreter(@NotNull final String executablePath) {
-    if (!SystemInfo.isUnix) {
-      return false;
-    }
-    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
-    if (rvm == null) {
-      return false;
-    }
-    return rvm.isRVMInterpreter(executablePath);
-  }
-
   public static String getGemsetSeparator() {
     if (SystemInfo.isUnix) {
       // RVM supported on Unix systems
@@ -418,10 +407,7 @@ public class SharedRVMUtil {
 
   @Nullable
   public static Pair<String, String> getRVMGemsRootAndDistName(@NotNull final String executablePath) throws IllegalArgumentException {
-    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
-    if (rvm == null) {
-      return null;
-    }
+    final InstalledRVM rvm = RVMPathsSettings.getRVMNullSafe();
 
     final String rvmHomePath = rvm.getPath();
 

@@ -25,7 +25,6 @@ import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRCBasedRubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRubySdkImpl;
-import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
@@ -102,20 +101,13 @@ public enum SharedParamsType {
     public RubySdk createSdk(@NotNull final BuildRunnerContext context,
                              @NotNull final SharedParams sharedParams)
       throws RakeTasksBuildService.MyBuildFailureException {
-      String rvmrc = StringUtil.emptyIfNull(sharedParams.getRVMRCPath());
-      if (rvmrc.endsWith(".rvmrc")) {
-        rvmrc = rvmrc.substring(0, rvmrc.length() - ".rvmrc".length());
-      }
+      final String rvmrc = StringUtil.emptyIfNull(sharedParams.getRVMRCPath());
+      final String checkoutDir = getCanonicalPath2(context.getBuild().getCheckoutDirectory());
+      final File file = new File(checkoutDir, StringUtil.isEmptyOrSpaces(rvmrc) ? ".rvmrc" : rvmrc);
 
-      final File file;
-      if (!StringUtil.isEmptyOrSpaces(rvmrc) && FileUtil.isAbsolute(rvmrc)) {
-        file = new File(rvmrc + "/.rvmrc");
-      } else {
-        final String checkoutDir = getCanonicalPath2(context.getBuild().getCheckoutDirectory());
-        file = new File(checkoutDir, rvmrc + "/.rvmrc");
-      }
-      if (!jetbrains.buildServer.agent.rakerunner.utils.FileUtil.checkIfFileExists(file)) {
-        throw new RakeTasksBuildService.MyBuildFailureException(".rvmrc file not found. specified path: \"" + file.getPath() + "\"");
+      if (!file.exists() || !file.isFile()) {
+        throw new RakeTasksBuildService.MyBuildFailureException(
+          "RVMRC support: file not found. specified path: \"\" + rvmrc + \"\", calculated path\"" + file.getAbsolutePath() + "\"");
       }
 
       // Create SDK using known .rvmrc file

@@ -41,6 +41,8 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
   private final String myGemsetName;
   @NotNull
   private final String myName;
+  @NotNull
+  private final ShellBasedRubyScriptRunner myRubyScriptRunner;
 
   public RVMRubySdkImpl(@NotNull final String interpreterPath,
                         @NotNull final String name,
@@ -49,6 +51,7 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
     super(interpreterPath, isSystem);
     myGemsetName = gemsetName;
     myName = name;
+    myRubyScriptRunner = new ShellBasedRubyScriptRunner(new MyRvmShellRunner());
 
     // Autofill some parameters
 
@@ -112,14 +115,17 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
   @NotNull
   @Override
   public RubyScriptRunner getScriptRunner() {
-    //noinspection ConstantConditions
-    return new ShellBasedRubyScriptRunner(new RvmShellRunner(RVMPathsSettings.getInstance().getRVM()) {
-      @Override
-      protected String[] createProcessArguments(final String rvmShellEx, final String workingDirectory, final File scriptFile) {
-        return new String[]{rvmShellEx, getPresentableName(), scriptFile.getAbsolutePath()};
-      }
-    });
-    // TODO: use SRP
-    //return ScriptingRunnersProvider.getRVMDefault().getRubyScriptRunner();
+    return myRubyScriptRunner;
+  }
+
+  private class MyRvmShellRunner extends RvmShellRunner {
+    public MyRvmShellRunner() {
+      super(RVMPathsSettings.getRVMNullSafe());
+    }
+
+    @Override
+    protected String[] createProcessArguments(final String rvmShellEx, final String workingDirectory, final File scriptFile) {
+      return new String[]{rvmShellEx, getPresentableName(), scriptFile.getAbsolutePath()};
+    }
   }
 }
