@@ -82,7 +82,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
         break;
       }
       case RVMRC: {
-        displayParameter(result, "Path to folder with '.rvmrc' file", configuration.getRVMRCFilePath(), NOT_SPECIFIED_GOOD);
+        displayParameter(result, "Path to a '.rvmrc' file", configuration.getRVMRCFilePath(), NOT_SPECIFIED_GOOD);
         break;
       }
     }
