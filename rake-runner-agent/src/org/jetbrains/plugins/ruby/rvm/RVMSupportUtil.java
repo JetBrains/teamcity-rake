@@ -27,6 +27,7 @@ import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,8 +98,8 @@ public class RVMSupportUtil {
       }
     }
     final RunnerUtil.Output env1 = RunnerUtil.run(null, env, rvm.getPath() + "/bin/rvm-shell", rvmRubyString, "-c", "env");
-    if (!env1.getStderr().isEmpty()) {
-      throw new RuntimeException("Cannot fetch sdk environment: rvm-shell failed woth output" + env1.getStderr());
+    if (!StringUtil.isEmptyOrSpaces(env1.getStderr())) {
+      throw new RuntimeException("Cannot fetch sdk environment: rvm-shell failed with output" + env1.getStderr());
     }
     final Map<String, String> modified = EnvUtil.parse(env1.getStdout());
     final Map<String, String> merged = EnvUtil.mergeIntoNewEnv(modified, env, restricted);

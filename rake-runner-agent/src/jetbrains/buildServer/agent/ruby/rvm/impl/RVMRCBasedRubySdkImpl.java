@@ -104,20 +104,19 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
   @Override
   public RubyScriptRunner getScriptRunner() {
     //noinspection ConstantConditions
-    return new ShellBasedRubyScriptRunner(new RvmShellRunner(RVMPathsSettings.getInstance().getRVM())) {
+    return new ShellBasedRubyScriptRunner(new RvmShellRunner(RVMPathsSettings.getInstance().getRVM()) {
       @NotNull
       @Override
       public RunnerUtil.Output run(@NotNull final String script,
                                    @NotNull final String workingDirectory,
-                                   @Nullable final Map<String, String> environment,
-                                   @NotNull final String... rubyArgs) {
+                                   @Nullable final Map<String, String> environment) {
         StringBuilder sb = new StringBuilder();
         sb.append("cd ").append(workingDirectory).append('\n');
         sb.append(script);
 
-        return super.run(sb.toString(), myPathToRVMRCFolder, environment, rubyArgs);
+        return super.run(sb.toString(), myPathToRVMRCFolder, environment);
       }
-    };
+    });
     // TODO: use SRP
     //return ScriptingRunnersProvider.getRVMDefault().getRubyScriptRunner();
   }
