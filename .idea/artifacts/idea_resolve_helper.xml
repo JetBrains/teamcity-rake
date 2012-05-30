@@ -4,7 +4,6 @@
     <root id="root">
       <element id="javaee-facet-resources" facet="rake-runner-server/web/Web" />
       <element id="javaee-facet-resources" facet="idea-resolve-helper/web/Web" />
-      <element id="module-output" name="idea-resolve-helper" />
     </root>
   </artifact>
 </component>
