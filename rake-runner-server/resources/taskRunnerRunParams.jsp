@@ -56,7 +56,10 @@
       <label for="custom1">Path to a Rakefile:</label>
     </th>
     <td>
-      <props:textProperty name="build-file-path"  className="longField"/><bs:vcsTree fieldId="build-file-path"/>
+      <div class="completionIconWrapper">
+        <props:textProperty name="build-file-path"  className="longField"/>
+        <bs:vcsTree fieldId="build-file-path"/>
+      </div>
       <span class="error" id="error_build-file-path"></span>
       <span class="smallNote">Enter Rakefile path if you don't want to use a default one. Specified path should be relative to the checkout directory.</span>
     </td>
