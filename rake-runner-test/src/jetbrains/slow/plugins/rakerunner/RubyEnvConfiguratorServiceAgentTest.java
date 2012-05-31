@@ -34,7 +34,6 @@ import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
-import jetbrains.buildServer.feature.RubyEnvConfiguratorUtil;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.util.TestFor;
 import org.jetbrains.annotations.NotNull;
@@ -107,7 +106,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     // set ruby interpreter path
     final String interpreterPath = RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/ruby").getAbsolutePath();
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, interpreterPath);
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RUBY_SDK_PATH_KEY, interpreterPath);
 
     // configure build
     final SBuildType bt = configureFakeBuild(configuration, featureParamsMap);
@@ -128,9 +127,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final HashMap<String, String> featureParamsMap = new HashMap<String, String>();
 
     // use rvm
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "manual");
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, "ruby-1.8.7");
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RVM_GEMSET_NAME_KEY, "teamcity");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "manual");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY, "ruby-1.8.7");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_NAME_KEY, "teamcity");
 
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
 
@@ -168,7 +167,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     final String interpreterPath =
       RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/ruby").getAbsolutePath();
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, interpreterPath);
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RUBY_SDK_PATH_KEY, interpreterPath);
 
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
 
@@ -204,11 +203,11 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     addBuildParamsListener(null, null, null, contextRef);
 
     final HashMap<String, String> featureParamsMap = new HashMap<String, String>();
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, "this path doesn't exist");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RUBY_SDK_PATH_KEY, "this path doesn't exist");
 
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
 
-    // default : RubyEnvConfiguratorUtil.UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY = "false"
+    // default : RubyEnvConfiguratorUtil.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY = "false"
 
     // launch
     final SFinishedBuild build = finishBuild(startBuild(bt, false));
@@ -238,8 +237,8 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     final HashMap<String, String> featureParamsMap = new HashMap<String, String>();
 
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RUBY_SDK_PATH_KEY, "this path doesn't exist");
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY, "true");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RUBY_SDK_PATH_KEY, "this path doesn't exist");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY, "true");
 
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
 
@@ -283,9 +282,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final String rvmRubyName = "ruby-1.8.7";
     final String rvmGemsetName = "teamcity";
 
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "manual");
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RVM_SDK_NAME_KEY, rvmRubyName);
-    featureParamsMap.put(RubyEnvConfiguratorUtil.UI_RVM_GEMSET_NAME_KEY, rvmGemsetName);
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "manual");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY, rvmRubyName);
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_NAME_KEY, rvmGemsetName);
 
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
 
@@ -471,7 +470,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     bt.addBuildParameter(new SimpleParameter(key, value));
   }
 
-  // TODO- UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY
+  // TODO- UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY
 }
 
 

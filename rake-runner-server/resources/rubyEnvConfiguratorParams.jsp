@@ -16,7 +16,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 <%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
-<jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
+
+<%--<jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>--%>
+<%@include file="globalConsts.jsp" %>
+<%@include file="rubyEnvConfiguratorConsts.jsp" %>
 
 <tr>
   <td colspan="2">
@@ -27,30 +30,30 @@
   <th style="width:33%">
     <c:set var="onclick">
       if (this.checked) {
-        $('ui.ruby.configurator.ruby.interpreter.path').focus();
-        $('ui.ruby.configurator.rvm.path').value='';
+      $('${UI_RUBY_SDK_PATH_KEY}').focus();
+      $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value='';
       }
     </c:set>
-    <props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="" id="ui.ruby.configurator.use.rvm:path"
-                               checked="${empty propertiesBean.properties['ui.ruby.configurator.use.rvm']}" onclick="${onclick}"/>
-    <label for="ui.ruby.configurator.use.rvm:path">Ruby interpreter path:</label>
+    <props:radioButtonProperty name="${UI_USE_RVM_KEY}" value="" id="${UI_USE_RVM_KEY_PATH}" onclick="${onclick}"/>
+    <%--checked="${empty propertiesBean.properties[UI_USE_RVM_KEY]}"--%>
+    <label for="${UI_USE_RVM_KEY_PATH}">Ruby interpreter path:</label>
   </th>
   <td>
-    <props:textProperty name="ui.ruby.configurator.ruby.interpreter.path" style="width:25em;" maxlength="256" className="buildTypeParams"/>
-    <span class="smallNote">If not specified the interpreter will be searched in the <span style="font-weight: bold;">PATH</span> environment variable.</span>
+    <props:textProperty name="${UI_RUBY_SDK_PATH_KEY}" style="width:25em;" maxlength="256" className="buildTypeParams"/>
+    <span class="smallNote">If not specified the interpreter will be searched in the <strong>PATH</strong> environment variable.</span>
   </td>
 </tr>
 <tr>
   <th>
     <c:set var="onclick">
       if (this.checked) {
-        $('ui.ruby.configurator.rvm.sdk.name').focus();
-        $('ui.ruby.configurator.rvm.path').value='%env.rvm_path%';
+      $('${UI_RVM_SDK_NAME_KEY}').focus();
+      $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value='%env.rvm_path%';
       }
     </c:set>
-    <props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="manual" id="ui.ruby.configurator.use.rvm:rvm" onclick="${onclick}"/>
-    <label for="ui.ruby.configurator.use.rvm:rvm">RVM interpreter:</label>
-    <props:hiddenProperty name="ui.ruby.configurator.rvm.path" value=""/>
+    <props:radioButtonProperty name="${UI_USE_RVM_KEY}" value="manual" id="${UI_USE_RVM_KEY_RVM}" onclick="${onclick}"/>
+    <label for="${UI_USE_RVM_KEY_RVM}">RVM interpreter:</label>
+    <props:hiddenProperty name="${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}" value=""/>
   </th>
   <td>
     <style type="text/css">
@@ -65,29 +68,29 @@
     <div class="rvm_options">
       Interpreter name:
       <div class="rvm_options_editor">
-        <props:textProperty name="ui.ruby.configurator.rvm.sdk.name" style="width:25em;" maxlength="256" className="buildTypeParams"/>
-        <span class="smallNote">E.g.: <span style="font-weight: bold;">ruby-1.8.7-p249</span>, <span
-            style="font-weight: bold;">jruby-1.4.0</span> or <span style="font-weight: bold;">system</span></span>
+        <props:textProperty name="${UI_RVM_SDK_NAME_KEY}" style="width:25em;" maxlength="256" className="buildTypeParams"/>
+        <span class="error" id="error_${UI_RVM_SDK_NAME_KEY}"></span>
+        <span class="smallNote">E.g.: <strong>ruby-1.8.7-p249</strong>, <strong>jruby-1.4.0</strong> or <strong>system</strong></span>
       </div>
       <script type="text/javascript">
-        if ($('ui.ruby.configurator.use.rvm:path').checked) {
-          $('ui.ruby.configurator.ruby.interpreter.path').focus();
-          $('ui.ruby.configurator.rvm.path').value="";
+        if ($('${UI_USE_RVM_KEY_PATH}').checked) {
+          $('${UI_RUBY_SDK_PATH_KEY}').focus();
+          $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "";
         }
-        if ($('ui.ruby.configurator.use.rvm:rvm').checked) {
-          $('ui.ruby.configurator.rvm.sdk.name').focus();
-          $('ui.ruby.configurator.rvm.path').value="%env.rvm_path%";
+        if ($('${UI_USE_RVM_KEY_RVM}').checked) {
+          $('${UI_RVM_SDK_NAME_KEY}').focus();
+          $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "%env.rvm_path%";
         }
-        if ($('ui.ruby.configurator.use.rvm:rvmrc').checked) {
-          $('ui.ruby.configurator.rvm.rvmrc.path').focus();
-          $('ui.ruby.configurator.rvm.path').value="%env.rvm_path%";
+        if ($('${UI_USE_RVM_KEY_RVMRC}').checked) {
+          $('${UI_RVM_RVMRC_PATH_KEY}').focus();
+          $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "%env.rvm_path%";
         }
       </script>
     </div>
     <div class="rvm_options">
       Gemset:
       <div class="rvm_options_editor">
-        <props:textProperty name="ui.ruby.configurator.rvm.gemset.name" style="width:25em;" maxlength="256" className="buildTypeParams"/>
+        <props:textProperty name="${UI_RVM_GEMSET_NAME_KEY}" style="width:25em;" maxlength="256" className="buildTypeParams"/>
         <span class="smallNote">If not specifed the default gemset will be used.</span>
       </div>
     </div>
@@ -97,34 +100,24 @@
   <th>
     <c:set var="onclick">
       if (this.checked) {
-      $('ui.ruby.configurator.rvm.rvmrc.path').focus();
-      $('ui.ruby.configurator.rvm.path').value='%env.rvm_path%';
+      $('${UI_RVM_RVMRC_PATH_KEY}').focus();
+      $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value='%env.rvm_path%';
       }
     </c:set>
-    <props:radioButtonProperty name="ui.ruby.configurator.use.rvm" value="rvmrc" id="ui.ruby.configurator.use.rvm:rvmrc"
-                               onclick="${onclick}"/>
-    <label for="ui.ruby.configurator.use.rvm:rvmrc">RVM with .rvmrc file:</label>
+    <props:radioButtonProperty name="${UI_USE_RVM_KEY}" value="${MODE_RVMRC}" id="${UI_USE_RVM_KEY_RVMRC}" onclick="${onclick}"/>
+    <label for="${UI_USE_RVM_KEY_RVMRC}">RVM with .rvmrc file:</label>
   </th>
   <td>
-    <style type="text/css">
-      .rvm_options {
-        padding-top: 3px;
-      }
-
-      .rvm_options_editor {
-        padding-top: 2px;
-      }
-    </style>
     <div class="rvm_options">
       Path to a '.rvmrc' file:
       <div class="rvm_options_editor">
-        <props:textProperty name="ui.ruby.configurator.rvm.rvmrc.path" style="width:25em;" maxlength="256" className="buildTypeParams"/>
+        <props:textProperty name="${UI_RVM_RVMRC_PATH_KEY}" style="width:25em;" maxlength="256" className="buildTypeParams"/><bs:vcsTree fieldId="${UI_RVM_RVMRC_PATH_KEY}"/>
         <span class="smallNote">Path relative to a checkout directory. Leave empty to use ".rvmrc"</span>
       </div>
     </div>
   </td>
 </tr>
 <td colspan="2">
-  <props:checkboxProperty name="ui.ruby.configurator.fail.build.if.interpreter.not.found"/>
-  <label for="ui.ruby.configurator.fail.build.if.interpreter.not.found">Fail build if Ruby interpreter wasn't found</label>
+  <props:checkboxProperty name="${UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY}"/>
+  <label for="${UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY}">Fail build if Ruby interpreter wasn't found</label>
 </td>

@@ -17,6 +17,7 @@
 package jetbrains.buildServer.feature;
 
 import java.util.Map;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,13 +49,20 @@ public class RubyEnvConfiguratorConfiguration {
   private final boolean myRVMGemsetCreate;
 
   public RubyEnvConfiguratorConfiguration(final Map<String, String> configParameters) {
-    this.type = RubyEnvConfiguratorUtil.getFeatureWorkingType(configParameters);
-    this.shouldFailBuildIfNoSdkFound = RubyEnvConfiguratorUtil.shouldFailBuildIfNoSdkFound(configParameters);
-    this.myRubySdkPath = RubyEnvConfiguratorUtil.getRubySdkPath(configParameters);
-    this.myRVMSdkName = RubyEnvConfiguratorUtil.getRVMSdkName(configParameters);
-    this.myRVMGemsetName = RubyEnvConfiguratorUtil.getRVMGemsetName(configParameters);
-    this.myRVMRCFilePath = RubyEnvConfiguratorUtil.getRVMRCFilePath(configParameters);
-    this.myRVMGemsetCreate = RubyEnvConfiguratorUtil.isRVMGemsetCreateIfNonExists(configParameters);
+    final String type = configParameters.get(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY);
+    if ("manual".equals(type)) {
+      this.type = Type.RVM;
+    } else if ("rvmrc".equals(type)) {
+      this.type = Type.RVMRC;
+    } else {
+      this.type = Type.INTERPRETER_PATH;
+    }
+    this.shouldFailBuildIfNoSdkFound = Boolean.parseBoolean(configParameters.get(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY));
+    this.myRubySdkPath = StringUtil.nullIfEmpty(configParameters.get(RubyEnvConfiguratorConstants.UI_RUBY_SDK_PATH_KEY));
+    this.myRVMSdkName = StringUtil.nullIfEmpty(configParameters.get(RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY));
+    this.myRVMGemsetName = StringUtil.nullIfEmpty(configParameters.get(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_NAME_KEY));
+    this.myRVMRCFilePath = StringUtil.nullIfEmpty(configParameters.get(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY));
+    this.myRVMGemsetCreate = Boolean.parseBoolean(configParameters.get(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_CREATE_IF_NON_EXISTS));
   }
 
   @NotNull

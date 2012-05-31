@@ -20,9 +20,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 
+<%--<jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>--%>
+<%@include file="globalConsts.jsp" %>
+<%@include file="rakeRunnerConsts.jsp" %>
+
 <%--Default initial settings format version--%>
-<%-- [NB] Config version should be synchronized with RakeRunnerConstants --%>
-<props:hiddenProperty name="ui.rakeRunner.config.version" value="2" />
+<props:hiddenProperty name="${CONFIGURATION_VERSION_PROPERTY}" value="${CONFIGURATION_VERSION_CURRENT}"/>
 
 <style type="text/css">
   .rvm_options {
@@ -48,19 +51,19 @@
     <th>
       <c:set var="onclick">
         if (this.checked) {
-        $('build-file-path').focus();
+        $('${BUILD_FILE_PATH_KEY}').focus();
         }
       </c:set>
-      <props:radioButtonProperty name="use-custom-build-file" value="" id="custom1"
-                                 checked="${empty propertiesBean.properties['use-custom-build-file']}" onclick="${onclick}"/>
+      <props:radioButtonProperty name="${USE_CUSTOM_BUILD_FILE_KEY}" value="" id="custom1"
+                                 checked="${empty propertiesBean.properties[USE_CUSTOM_BUILD_FILE_KEY]}" onclick="${onclick}"/>
       <label for="custom1">Path to a Rakefile:</label>
     </th>
     <td>
       <div class="completionIconWrapper">
-        <props:textProperty name="build-file-path"  className="longField"/>
-        <bs:vcsTree fieldId="build-file-path"/>
+        <props:textProperty name="${BUILD_FILE_PATH_KEY}" className="longField"/>
+        <bs:vcsTree fieldId="${BUILD_FILE_PATH_KEY}"/>
       </div>
-      <span class="error" id="error_build-file-path"></span>
+      <span class="error" id="error_${BUILD_FILE_PATH_KEY}"></span>
       <span class="smallNote">Enter Rakefile path if you don't want to use a default one. Specified path should be relative to the checkout directory.</span>
     </td>
   </tr>
@@ -69,29 +72,31 @@
       <c:set var="onclick">
         if (this.checked) {
         try {
-        BS.MultilineProperties.show('build-file', true);
-        $('build-file').focus();
+        BS.MultilineProperties.show('${BUILD_FILE_KEY}', true);
+        $('${BUILD_FILE_KEY}').focus();
         } catch(e) {}
         }
       </c:set>
-      <props:radioButtonProperty name="use-custom-build-file" value="true" id="custom2" onclick="${onclick}"/>
+      <props:radioButtonProperty name="${USE_CUSTOM_BUILD_FILE_KEY}" value="true" id="custom2" onclick="${onclick}"/>
       <label for="custom2">Rakefile content:</label>
     </th>
     <td>
-      <props:multilineProperty expanded="${propertiesBean.properties['use-custom-build-file'] == true}" name="build-file" rows="10" cols="58" linkTitle="Enter the Rakefile content" onkeydown="$('custom2').checked = true;"  className="longField"/>
-      <span class="error" id="error_build-file"></span>
+      <props:multilineProperty expanded="${propertiesBean.properties[USE_CUSTOM_BUILD_FILE_KEY] == true}" name="${BUILD_FILE_KEY}" rows="10" cols="58"
+                               linkTitle="Enter the Rakefile content"
+                               onkeydown="$('custom2').checked = true;" className="longField"/>
+      <span class="error" id="error_${BUILD_FILE_KEY}"></span>
     </td>
   </tr>
-  <forms:workingDirectory />
+  <forms:workingDirectory/>
   <tr>
-    <th><label for="ui.rakeRunner.rake.tasks.names">Rake tasks: </label></th>
-    <td><props:textProperty name="ui.rakeRunner.rake.tasks.names"  className="longField" maxlength="256"/>
+    <th><label for="${UI_RAKE_TASKS_PROPERTY}">Rake tasks: </label></th>
+    <td><props:textProperty name="${UI_RAKE_TASKS_PROPERTY}" className="longField" maxlength="256"/>
       <span class="smallNote">Enter task names separated by space character if you don't want to use the 'default' task.<br/>E.g. 'test:functionals' or 'mytask:test mytask:test2'.</span>
     </td>
   </tr>
   <tr>
-    <th><label for="ui.rakeRunner.additional.rake.cmd.params">Additional Rake command line parameters: </label></th>
-    <td><props:textProperty name="ui.rakeRunner.additional.rake.cmd.params"  className="longField" expandable="true"/>
+    <th><label for="${UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY}">Additional Rake command line parameters: </label></th>
+    <td><props:textProperty name="${UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY}" className="longField" expandable="true"/>
       <span class="smallNote">If not empty, these parameters will be added to 'rake' command line.</span>
     </td>
   </tr>
@@ -100,51 +105,50 @@
 <l:settingsGroup title="Ruby Interpreter">
   <tr>
     <th>
-      <props:radioButtonProperty name="ui.rakeRunner.ruby.use.mode" value="default" id="ui.rakeRunner.ruby.use.mode:default"/>
-      <label for="ui.rakeRunner.ruby.use.mode:default">Use default Ruby:</label>
+      <props:radioButtonProperty name="${UI_RUBY_USAGE_MODE}" value="${MODE_DEFAULT}" id="${UI_RUBY_USAGE_MODE_DEFAULT}"/>
+      <label for="${UI_RUBY_USAGE_MODE_DEFAULT}">Use default Ruby:</label>
     </th>
     <td>
-    <span class="smallNote">E.g., a Ruby interpreter provided by  <span style="font-weight: bold;">Ruby Environment Configurator</span> build feature. If build feature isn't configured the interpreter will be searched in the <span
-        style="font-weight: bold;">PATH</span> environment variable.</span>
+      <span class="smallNote">E.g., a Ruby interpreter provided by  <strong>Ruby Environment Configurator</strong> build feature. If build feature isn't configured the interpreter
+      will be searched in the <strong>PATH</strong> environment variable.</span>
     </td>
   </tr>
   <tr>
     <th>
       <c:set var="onclick">
         if (this.checked) {
-          $('ui.rakeRunner.ruby.interpreter.path').focus();
+        $('${UI_RUBY_INTERPRETER_PATH}').focus();
         }
       </c:set>
-      <props:radioButtonProperty name="ui.rakeRunner.ruby.use.mode" value="path" id="ui.rakeRunner.ruby.use.mode:path" onclick="${onclick}"/>
-      <label for="ui.rakeRunner.ruby.use.mode:path">Ruby interpreter path:</label>
+      <props:radioButtonProperty name="${UI_RUBY_USAGE_MODE}" value="${MODE_PATH}" id="${UI_RUBY_USAGE_MODE_PATH}" onclick="${onclick}"/>
+      <label for="${UI_RUBY_USAGE_MODE_PATH}">Ruby interpreter path:</label>
     </th>
     <td>
-      <props:textProperty name="ui.rakeRunner.ruby.interpreter.path"  className="longField" maxlength="256"/>
+      <props:textProperty name="${UI_RUBY_INTERPRETER_PATH}" className="longField" maxlength="256"/>
     </td>
   </tr>
   <tr>
     <th>
       <c:set var="onclick">
         if (this.checked) {
-          $('ui.rakeRunner.ruby.rvm.sdk.name').focus();
+        $('${UI_RUBY_RVM_SDK_NAME}').focus();
         }
       </c:set>
-      <props:radioButtonProperty name="ui.rakeRunner.ruby.use.mode" value="rvm" id="ui.rakeRunner.ruby.use.mode:rvm" onclick="${onclick}"/>
-      <label for="ui.rakeRunner.ruby.use.mode:rvm">RVM interpreter:</label>
+      <props:radioButtonProperty name="${UI_RUBY_USAGE_MODE}" value="${MODE_RVM}" id="${UI_RUBY_USAGE_MODE_RVM}" onclick="${onclick}"/>
+      <label for="${UI_RUBY_USAGE_MODE_RVM}">RVM interpreter:</label>
     </th>
     <td>
       <div class="rvm_options">
         Interpreter name:
         <div class="rvm_options_editor">
-          <props:textProperty name="ui.rakeRunner.ruby.rvm.sdk.name"  className="longField" maxlength="256"/>
-          <span class="smallNote">E.g.: <span style="font-weight: bold;">ruby-1.8.7-p249</span>, <span style="font-weight: bold;">jruby-1.4.0</span> or <span
-              style="font-weight: bold;">system</span></span>
+          <props:textProperty name="${UI_RUBY_RVM_SDK_NAME}" className="longField" maxlength="256"/>
+          <span class="smallNote">E.g.: <strong>ruby-1.8.7-p249</strong>, <strong>jruby-1.4.0</strong> or <strong>system</strong></span>
         </div>
       </div>
       <div class="rvm_options">
         Gemset:
         <div class="rvm_options_editor">
-          <props:textProperty name="ui.rakeRunner.ruby.rvm.gemset.name"  className="longField" maxlength="256"/>
+          <props:textProperty name="${UI_RUBY_RVM_GEMSET_NAME}" className="longField" maxlength="256"/>
           <span class="smallNote">If not specifed the default gemset will be used.</span>
         </div>
       </div>
@@ -158,9 +162,10 @@
       <label>Bundler: </label>
     </th>
     <td>
-      <props:checkboxProperty name="ui.rakeRunner.bunlder.exec.enabled"/>
-      <label for="ui.rakeRunner.bunlder.exec.enabled">bundle exec</label>
-      <span class="smallNote">If your project uses <strong>Bundler</strong> gem requirements manager, this option will allow you to launch rake tasks using 'bundle exec' command.</span>
+      <props:checkboxProperty name="${UI_BUNDLE_EXEC_PROPERTY}"/>
+      <label for="${UI_BUNDLE_EXEC_PROPERTY}">bundle exec</label>
+      <span
+          class="smallNote">If your project uses <strong>Bundler</strong> gem requirements manager, this option will allow you to launch rake tasks using 'bundle exec' command.</span>
     </td>
   </tr>
   <tr>
@@ -168,8 +173,8 @@
       <label>Debug: </label>
     </th>
     <td>
-      <props:checkboxProperty name="ui.rakeRunner.rake.trace.invoke.exec.stages.enabled"/>
-      <label for="ui.rakeRunner.rake.trace.invoke.exec.stages.enabled">Track invoke/execute stages</label>
+      <props:checkboxProperty name="${UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED}"/>
+      <label for="${UI_RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED}">Track invoke/execute stages</label>
       <br/>
     </td>
   </tr>
@@ -182,45 +187,43 @@
     </th>
 
     <td>
-      <%-- Test Unit --%>
+        <%-- Test Unit --%>
       <div class="rake_reporter">
-        <props:checkboxProperty name="ui.rakeRunner.frameworks.testunit.enabled"/>
-        <label for="ui.rakeRunner.frameworks.testunit.enabled">Test::Unit</label>
+        <props:checkboxProperty name="${UI_RAKE_TESTUNIT_ENABLED_PROPERTY}"/>
+        <label for="${UI_RAKE_TESTUNIT_ENABLED_PROPERTY}">Test::Unit</label>
       </div>
 
-      <%-- Test-Spec --%>
+        <%-- Test-Spec --%>
       <div class="rake_reporter">
-        <props:checkboxProperty name="ui.rakeRunner.frameworks.testspec.enabled"/>
-        <label for="ui.rakeRunner.frameworks.testspec.enabled">Test-Spec</label>
+        <props:checkboxProperty name="${UI_RAKE_TESTSPEC_ENABLED_PROPERTY}"/>
+        <label for="${UI_RAKE_TESTSPEC_ENABLED_PROPERTY}">Test-Spec</label>
       </div>
 
-      <%-- Shoulda --%>
+        <%-- Shoulda --%>
       <div class="rake_reporter">
-        <props:checkboxProperty name="ui.rakeRunner.frameworks.shoulda.enabled"/>
-        <label for="ui.rakeRunner.frameworks.shoulda.enabled">Shoulda</label>
+        <props:checkboxProperty name="${UI_RAKE_SHOULDA_ENABLED_PROPERTY}"/>
+        <label for="${UI_RAKE_SHOULDA_ENABLED_PROPERTY}">Shoulda</label>
       </div>
 
-      <%-- RSpec --%>
+        <%-- RSpec --%>
       <div class="rake_reporter">
-        <props:checkboxProperty name="ui.rakeRunner.frameworks.rspec.enabled"/>
-        <label for="ui.rakeRunner.frameworks.rspec.enabled">RSpec</label>
+        <props:checkboxProperty name="${UI_RAKE_RSPEC_ENABLED_PROPERTY}"/>
+        <label for="${UI_RAKE_RSPEC_ENABLED_PROPERTY}">RSpec</label>
+
         <div class="rake_reporter_options">
-        <props:textProperty name="ui.rakeRunner.rspec.specoptions"  className="longField" maxlength="256"/>
-        <span class="smallNote">Rake will be invoked with a "SPEC_OPTS={internal options}
-          <span style="font-weight: bold;">{user options}</span>".
-        </span>
+          <props:textProperty name="${UI_RAKE_RSPEC_OPTS_PROPERTY}" className="longField" maxlength="256"/>
+          <span class="smallNote">Rake will be invoked with a "SPEC_OPTS={internal options} <strong>{user options}</strong>".</span>
         </div>
       </div>
 
-      <%-- Cucumber --%>
+        <%-- Cucumber --%>
       <div class="rake_reporter">
-        <props:checkboxProperty name="ui.rakeRunner.frameworks.cucumber.enabled"/>
-        <label for="ui.rakeRunner.frameworks.cucumber.enabled">Cucumber</label>
+        <props:checkboxProperty name="${UI_RAKE_CUCUMBER_ENABLED_PROPERTY}"/>
+        <label for="${UI_RAKE_CUCUMBER_ENABLED_PROPERTY}">Cucumber</label>
+
         <div class="rake_reporter_options">
-          <props:textProperty name="ui.rakeRunner.cucumber.options"  className="longField" maxlength="256"/>
-          <span class="smallNote">Rake will be invoked with a "CUCUMBER_OPTS={internal options}
-            <span style="font-weight: bold;">{user options}</span>".
-          </span>
+          <props:textProperty name="${UI_RAKE_CUCUMBER_OPTS_PROPERTY}" className="longField" maxlength="256"/>
+          <span class="smallNote">Rake will be invoked with a "CUCUMBER_OPTS={internal options} <strong>{user options}</strong>".</span>
         </div>
       </div>
     </td>

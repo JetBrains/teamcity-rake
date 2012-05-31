@@ -14,10 +14,10 @@
   ~ limitations under the License.
   -->
 
-<!--suppress AntResolveInspection -->
 <project name="build hooks" default="replace-tokens-in-teamcity-plugin-xml" basedir=".">
 
   <target name="replace-tokens-in-teamcity-plugin-xml">
+    <!--suppress AntResolveInspection -->
     <property name="home" value="${artifact.output.path}"/>
 
     <echo message="replacing tokens in teamcity-plugin.xml file under ${home}"/>

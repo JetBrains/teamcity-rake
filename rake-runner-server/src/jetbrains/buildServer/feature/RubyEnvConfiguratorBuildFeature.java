@@ -16,9 +16,13 @@
 
 package jetbrains.buildServer.feature;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.serverSide.BuildFeature;
+import jetbrains.buildServer.serverSide.InvalidProperty;
+import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
@@ -107,8 +111,28 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
   public Map<String, String> getDefaultParameters() {
     final Map<String, String> defaults = new HashMap<String, String>(2);
 
-    defaults.put(RubyEnvConfiguratorUtil.UI_FAIL_BUILD_IN_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
-    defaults.put(RubyEnvConfiguratorUtil.UI_USE_RVM_KEY, "manual");
+    defaults.put(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
+    defaults.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "manual");
     return defaults;
+  }
+
+  @Override
+  public PropertiesProcessor getParametersProcessor() {
+    return new PropertiesProcessor() {
+      public Collection<InvalidProperty> process(final Map<String, String> properties) {
+        final Collection<InvalidProperty> ret = new ArrayList<InvalidProperty>(1);
+        final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(properties);
+        switch (configuration.getType()) {
+          case RVM: {
+            if (StringUtil.isEmptyOrSpaces(configuration.getRVMSdkName())) {
+              ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY,
+                                          "RVM interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'."));
+            }
+            break;
+          }
+        }
+        return ret;
+      }
+    };
   }
 }
