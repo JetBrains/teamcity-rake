@@ -16,6 +16,7 @@
 
 package jetbrains.buildServer.agent.feature;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
@@ -40,6 +41,8 @@ import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
  * @author Vladislav.Rassokhin
  */
 public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
+
+  public static final String ENVS_TO_UNSET_PARAM = "teamcity.ruby.env.conf.feature.envs.to.unset";
 
   public RubyEnvConfiguratorService() {
   }
@@ -121,11 +124,13 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, env, checkoutDirPath);
       }
 
-      for (String ok : oldenv.keySet()) {
-        if (!env.containsKey(ok)) {
-          env.put(ok, "");
+      Collection<String> envsToUnset = new ArrayList<String>();
+      for (String key : oldenv.keySet()) {
+        if (!env.containsKey(key)) {
+          envsToUnset.add(key);
         }
       }
+      context.addRunnerParameter(ENVS_TO_UNSET_PARAM, StringUtil.join(envsToUnset, ","));
 
       // apply updated env variables to context:
       for (Map.Entry<String, String> keyAndValue : env.entrySet()) {

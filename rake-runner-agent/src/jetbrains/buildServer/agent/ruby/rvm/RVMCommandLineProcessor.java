@@ -19,14 +19,12 @@ package jetbrains.buildServer.agent.ruby.rvm;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentBuildFeature;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildRunnerContext;
+import jetbrains.buildServer.agent.feature.RubyEnvConfiguratorService;
 import jetbrains.buildServer.agent.runner.BuildCommandLineProcessor;
 import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
@@ -45,12 +43,12 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
   public static final String SCRIPT_PERMISSIONS = "u+x";
 
   @NotNull
-  public ProgramCommandLine process(@NotNull final BuildRunnerContext runnerContext, @NotNull final ProgramCommandLine origCommandLine)
+  public ProgramCommandLine process(@NotNull final BuildRunnerContext context, @NotNull final ProgramCommandLine origCommandLine)
     throws RunBuildException {
     if (!SystemInfo.isUnix) {
       return origCommandLine;
     }
-    final AgentRunningBuild build = runnerContext.getBuild();
+    final AgentRunningBuild build = context.getBuild();
 
     // check if feature is enabled
     final Collection<AgentBuildFeature> features =
@@ -64,38 +62,70 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
 
     final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(featureParameters);
 
-    switch (configuration.getType()) {
-      case INTERPRETER_PATH:
-        return origCommandLine;
-      case RVM:
-      case RVMRC:
+    // Remove some env variables
+    final Map<String, String> environment = new HashMap<String, String>(origCommandLine.getEnvironment());
+    String envsToUnserStr = context.getRunnerParameters().get(RubyEnvConfiguratorService.ENVS_TO_UNSET_PARAM);
+    if (envsToUnserStr != null) {
+      List<String> envs = StringUtil.split(envsToUnserStr, ",");
+      for (String key : envs) {
+        environment.remove(key);
+      }
     }
 
-    // Lets patch it!
+    switch (configuration.getType()) {
+      case INTERPRETER_PATH: {
+        return new ProgramCommandLine() {
+          @NotNull
+          public String getExecutablePath() throws RunBuildException {
+            return origCommandLine.getExecutablePath();
+          }
 
-    final File script = createScriptFile(origCommandLine, build.getAgentTempDirectory());
+          @NotNull
+          public String getWorkingDirectory() throws RunBuildException {
+            return origCommandLine.getWorkingDirectory();
+          }
 
-    return new ProgramCommandLine() {
-      @NotNull
-      public String getExecutablePath() {
-        return CUSTOM_EXECUTABLE;
+          @NotNull
+          public List<String> getArguments() throws RunBuildException {
+            return origCommandLine.getArguments();
+          }
+
+          @NotNull
+          public Map<String, String> getEnvironment() {
+            return environment;
+          }
+        };
       }
+      case RVM:
+      case RVMRC: {
+        // Lets patch it!
+        final File script = createScriptFile(origCommandLine, build.getAgentTempDirectory());
 
-      @NotNull
-      public String getWorkingDirectory() throws RunBuildException {
-        return origCommandLine.getWorkingDirectory();
-      }
+        return new ProgramCommandLine() {
+          @NotNull
+          public String getExecutablePath() {
+            return CUSTOM_EXECUTABLE;
+          }
 
-      @NotNull
-      public List<String> getArguments() {
-        return Collections.singletonList(script.getAbsolutePath());
-      }
+          @NotNull
+          public String getWorkingDirectory() throws RunBuildException {
+            return origCommandLine.getWorkingDirectory();
+          }
 
-      @NotNull
-      public Map<String, String> getEnvironment() throws RunBuildException {
-        return origCommandLine.getEnvironment();
+          @NotNull
+          public List<String> getArguments() {
+            return Collections.singletonList(script.getAbsolutePath());
+          }
+
+          @NotNull
+          public Map<String, String> getEnvironment() {
+            return environment;
+          }
+        };
       }
-    };
+      default:
+        throw new RunBuildException("Unsuported REC configuration type " + configuration.getType());
+    }
   }
 
   private static File createScriptFile(@NotNull final ProgramCommandLine origCommandLine, @NotNull final File directory)
@@ -106,7 +136,7 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
       StringBuilder content = new StringBuilder();
       content.append("cd ").append(origCommandLine.getWorkingDirectory()).append("\n");
       content.append(createOriginalCommandLine(origCommandLine));
-      FileUtil.writeFile(script, content.toString());
+      FileUtil.writeFileAndReportErrors(script, content.toString());
 
       setPermissions(script, SCRIPT_PERMISSIONS); // script needs to be made executable for all (chmod a+x)
     } catch (IOException e) {
