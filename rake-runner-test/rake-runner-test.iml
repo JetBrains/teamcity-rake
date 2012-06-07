@@ -8,24 +8,7 @@
     <orderEntry type="module" module-name="rake-runner-agent" />
     <orderEntry type="module" module-name="rake-runner-common" />
     <orderEntry type="module" module-name="rake-runner-server" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/test-core.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/testng-jdk15.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Test Libs" level="project" />
   </component>
 </module>
 

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Test Libs">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/rake-runner-test/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/rake-runner-test/lib" recursive="false" />
+  </library>
+</component>
