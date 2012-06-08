@@ -1,6 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="RakeRunner Suite : Unix">
   <suite-files>
+    <suite-file path="../server-side.xml"/>
     <suite-file path="ruby-1.8.xml"/>
     <suite-file path="ruby-1.9.xml"/>
     <suite-file path="jruby-1.6.xml"/>

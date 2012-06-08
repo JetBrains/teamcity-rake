@@ -16,12 +16,15 @@
 
 package jetbrains.buildServer.runner.rakerunner;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.runner.BuildFileRunnerConstants;
+import jetbrains.buildServer.serverSide.InvalidProperty;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
@@ -41,8 +44,7 @@ public class RakeRunnerRunType extends RunType {
   @Override
   @Nullable
   public PropertiesProcessor getRunnerPropertiesProcessor() {
-    // Do nothing
-    return null;
+    return new ParametersValidator();
   }
 
   @Override
@@ -130,5 +132,28 @@ public class RakeRunnerRunType extends RunType {
         break;
     }
     return result.toString();
+  }
+
+  static class ParametersValidator implements PropertiesProcessor {
+
+    public Collection<InvalidProperty> process(final Map<String, String> properties) {
+      final Collection<InvalidProperty> ret = new ArrayList<InvalidProperty>(1);
+      final RakeRunnerUtils.RubyConfigMode mode = RakeRunnerUtils.getRubyInterpreterConfigMode(properties);
+      switch (mode) {
+        //case INTERPRETER_PATH: {
+        //  if (StringUtil.isEmpty(RakeRunnerUtils.getRubySdkPath(properties))) {
+        //    ret.add(new InvalidProperty(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, "Interpeter path must be specified."));
+        //  }
+        //  break;
+        //}
+        case RVM: {
+          if (StringUtil.isEmpty(RakeRunnerUtils.getRVMSdkName(properties))) {
+            ret.add(new InvalidProperty(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME, "Interpeter name must be specified."));
+          }
+          break;
+        }
+      }
+      return ret;
+    }
   }
 }

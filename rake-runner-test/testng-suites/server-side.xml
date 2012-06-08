@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="RakeRunner Suite : Server Side">
+  <test name="RakeRunner Suite : Server Side">
+    <classes>
+      <class name="jetbrains.buildServer.feature.RubyEnvConfiguratorBuildFeatureTest"/>
+      <class name="jetbrains.buildServer.runner.rakerunner.RakeRunnerRunTypeTest"/>
+    </classes>
+  </test>
+</suite>

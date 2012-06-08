@@ -119,29 +119,31 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
 
   @Override
   public PropertiesProcessor getParametersProcessor() {
-    return new PropertiesProcessor() {
-      public Collection<InvalidProperty> process(final Map<String, String> properties) {
-        final Collection<InvalidProperty> ret = new ArrayList<InvalidProperty>(1);
-        final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(properties);
-        switch (configuration.getType()) {
-          case RVM: {
-            if (StringUtil.isEmptyOrSpaces(configuration.getRVMSdkName())) {
-              ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY,
-                                          "RVM interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'."));
-            }
-            break;
-          }
-          case RVMRC: {
-            String rvmrcFilePath = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
-            if (!StringUtil.isEmptyOrSpaces(rvmrcFilePath) && !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
-              ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY,
-                                          "RVMRV file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'"));
-            }
+    return new ParametersValidator();
+  }
+
+  static class ParametersValidator implements PropertiesProcessor {
+    public Collection<InvalidProperty> process(final Map<String, String> properties) {
+      final Collection<InvalidProperty> ret = new ArrayList<InvalidProperty>(1);
+      final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(properties);
+      switch (configuration.getType()) {
+        case RVM: {
+          if (StringUtil.isEmptyOrSpaces(configuration.getRVMSdkName())) {
+            ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY,
+                                        "RVM interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'."));
           }
           break;
         }
-        return ret;
+        case RVMRC: {
+          String rvmrcFilePath = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
+          if (!StringUtil.isEmptyOrSpaces(rvmrcFilePath) && !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
+            ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY,
+                                        "RVMRV file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'"));
+          }
+        }
+        break;
       }
-    };
+      return ret;
+    }
   }
 }
