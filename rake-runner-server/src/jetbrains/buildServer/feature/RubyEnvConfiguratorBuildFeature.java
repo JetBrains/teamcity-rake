@@ -16,6 +16,7 @@
 
 package jetbrains.buildServer.feature;
 
+import com.intellij.util.PathUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -130,6 +131,14 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
             }
             break;
           }
+          case RVMRC: {
+            String rvmrcFilePath = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
+            if (!StringUtil.isEmptyOrSpaces(rvmrcFilePath) && !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
+              ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY,
+                                          "RVMRV file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'"));
+            }
+          }
+          break;
         }
         return ret;
       }
