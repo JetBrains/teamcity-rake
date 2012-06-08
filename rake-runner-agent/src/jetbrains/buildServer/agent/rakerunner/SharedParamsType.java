@@ -107,7 +107,7 @@ public enum SharedParamsType {
 
       if (!file.exists() || !file.isFile()) {
         throw new RakeTasksBuildService.MyBuildFailureException(
-          "RVMRC support: file not found. specified path: \"\" + rvmrc + \"\", calculated path\"" + file.getAbsolutePath() + "\"");
+          "RVMRC support: file not found. Specified path: \"" + rvmrc + "\". Resolved path: \"" + file.getAbsolutePath() + "\"");
       }
 
       // Create SDK using known .rvmrc file
