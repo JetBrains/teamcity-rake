@@ -23,6 +23,7 @@ public class RakeRunnerRunTypeTest {
   public void testRVMInterpreterNameValidation() throws Exception {
     assertTrue(isRVMInterpreterNameValid("ruby-1.9.3"));
     assertTrue(isRVMInterpreterNameValid("jruby"));
+    assertTrue(isRVMInterpreterNameValid("%var%"));
     assertFalse(isRVMInterpreterNameValid(""));
     assertFalse(isRVMInterpreterNameValid(null));
   }

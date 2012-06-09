@@ -28,6 +28,7 @@ public class RubyEnvConfiguratorBuildFeatureTest {
     assertTrue(isRVMRCPathValid("some\\path/.rvmrc"));
     assertTrue(isRVMRCPathValid("some/path/.rvmrc"));
     assertTrue(isRVMRCPathValid("some\\path\\.rvmrc"));
+    assertTrue(isRVMRCPathValid("%variable%"));
     assertFalse(isRVMRCPathValid("path/.rvmrc2"));
     assertFalse(isRVMRCPathValid("path\\.omnom"));
     assertFalse(isRVMRCPathValid(".rvmrc2"));
@@ -37,6 +38,7 @@ public class RubyEnvConfiguratorBuildFeatureTest {
   public void testRVMInterpreterNameValidation() throws Exception {
     assertTrue(isRVMInterpreterNameValid("ruby-1.8.7"));
     assertTrue(isRVMInterpreterNameValid("jruby"));
+    assertTrue(isRVMInterpreterNameValid("%variable%"));
     assertFalse(isRVMInterpreterNameValid(""));
     assertFalse(isRVMInterpreterNameValid(null));
   }

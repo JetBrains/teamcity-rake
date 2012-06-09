@@ -16,6 +16,7 @@
 
 package jetbrains.buildServer.agent.feature;
 
+import com.intellij.util.PathUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -150,11 +151,23 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
 
   private void validateConfiguratorParams(@NotNull final RubyEnvConfiguratorConfiguration configuration)
     throws RakeTasksBuildService.MyBuildFailureException {
-    if (configuration.getType() == RubyEnvConfiguratorConfiguration.Type.RVM) {
-      // sdk name
-      if (StringUtil.isEmpty(configuration.getRVMSdkName())) {
-        throw new RakeTasksBuildService.MyBuildFailureException(
-          "RVM interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'.");
+    switch (configuration.getType()) {
+      case RVM: {
+        // sdk name
+        if (StringUtil.isEmpty(configuration.getRVMSdkName())) {
+          throw new RakeTasksBuildService.MyBuildFailureException(
+            "RVM interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'.");
+        }
+        break;
+      }
+      case RVMRC: {
+        String rvmrcFilePath = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
+        if (!StringUtil.isEmptyOrSpaces(rvmrcFilePath) &&
+            !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
+          throw new RakeTasksBuildService.MyBuildFailureException(
+            "RVMRV file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'");
+        }
+        break;
       }
     }
   }
