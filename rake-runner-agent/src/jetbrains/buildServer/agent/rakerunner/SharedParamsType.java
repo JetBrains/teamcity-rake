@@ -17,6 +17,7 @@
 package jetbrains.buildServer.agent.rakerunner;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Map;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
@@ -107,7 +108,8 @@ public enum SharedParamsType {
 
       if (!file.exists() || !file.isFile()) {
         throw new RakeTasksBuildService.MyBuildFailureException(
-          "RVMRC support: file not found. Specified path: \"" + rvmrc + "\". Resolved path: \"" + file.getAbsolutePath() + "\"");
+          "RVMRC support: file not found. Specified path: \"" + rvmrc + "\". Resolved path: \"" + file.getAbsolutePath() + "\"",
+          new FileNotFoundException(rvmrc), false);
       }
 
       // Create SDK using known .rvmrc file

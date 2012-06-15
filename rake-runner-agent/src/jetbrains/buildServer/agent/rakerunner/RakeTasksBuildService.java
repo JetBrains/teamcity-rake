@@ -200,20 +200,21 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
         if (sharedParams.isSetted()) {
           // check that params were applied
           if (!sharedParams.isApplied()) {
-            throw new MyBuildFailureException(
-              "Ruby interpeter is configured outside Rake build runner but configuration settings weren't applied. No sense to launch rake.");
+            throw new InvalidConfigurationException(
+              "Ruby interpeter is configured outside Rake build runner but configuration settings weren't applied. No sense to launch rake.",
+              false);
           }
         }
         break;
       }
       case INTERPRETER_PATH:
         if (StringUtil.isEmpty(RakeRunnerUtils.getRubySdkPath(runParams))) {
-          throw new MyBuildFailureException("Ruby interpeter path isn't specified.");
+          throw new InvalidConfigurationException("Ruby interpeter path isn't specified.", false);
         }
         break;
       case RVM:
         if (StringUtil.isEmpty(RakeRunnerUtils.getRVMSdkName(runParams))) {
-          throw new MyBuildFailureException("RVM Ruby interpeter name isn't specified.");
+          throw new InvalidConfigurationException("RVM Ruby interpeter name isn't specified.", false);
         }
         break;
     }
@@ -399,12 +400,46 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
   public static class MyBuildFailureException extends Exception {
     public MyBuildFailureException(@NotNull final String msg) {
+      this(msg, true);
+    }
+
+    public MyBuildFailureException(@NotNull final String msg, final boolean canBeIgnored) {
       super(msg);
+      myCanBeIgnored = canBeIgnored;
     }
 
     public MyBuildFailureException(@NotNull final String message, final Throwable cause) {
+      this(message, cause, true);
+    }
+
+    public MyBuildFailureException(@NotNull final String message, final Throwable cause, final boolean canBeIgnored) {
       super(message, cause);
+      myCanBeIgnored = canBeIgnored;
+    }
+
+    private final boolean myCanBeIgnored;
+
+    public boolean isCanBeIgnored() {
+      return myCanBeIgnored;
     }
   }
 
+  public static class InvalidConfigurationException extends MyBuildFailureException {
+
+    public InvalidConfigurationException(@NotNull final String msg) {
+      super(msg);
+    }
+
+    public InvalidConfigurationException(@NotNull final String msg, final boolean canBeIgnored) {
+      super(msg, canBeIgnored);
+    }
+
+    public InvalidConfigurationException(@NotNull final String message, final Throwable cause) {
+      super(message, cause);
+    }
+
+    public InvalidConfigurationException(@NotNull final String message, final Throwable cause, final boolean canBeIgnored) {
+      super(message, cause, canBeIgnored);
+    }
+  }
 }

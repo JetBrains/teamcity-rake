@@ -72,12 +72,17 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
     // validate params:
     try {
       validateConfiguratorParams(configuration);
-
-      // try to create sdk, it will validate paths
+    } catch (RakeTasksBuildService.InvalidConfigurationException e) {
+      if (configuration.isShouldFailBuildIfNoSdkFound() || !e.isCanBeIgnored()) {
+        // fail build
+        throw new RunBuildException(e.getMessage());
+      }
+    }
+    // try to create sdk, it will validate paths
+    try {
       sdk = RubySDKUtil.createAndSetupSdk(context.getRunnerParameters(), context);
-
     } catch (RakeTasksBuildService.MyBuildFailureException e) {
-      if (configuration.isShouldFailBuildIfNoSdkFound()) {
+      if (configuration.isShouldFailBuildIfNoSdkFound() || !e.isCanBeIgnored()) {
         // fail build
         throw new RunBuildException(e.getMessage());
       }
@@ -150,13 +155,13 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
   }
 
   private void validateConfiguratorParams(@NotNull final RubyEnvConfiguratorConfiguration configuration)
-    throws RakeTasksBuildService.MyBuildFailureException {
+    throws RakeTasksBuildService.InvalidConfigurationException {
     switch (configuration.getType()) {
       case RVM: {
         // sdk name
         if (StringUtil.isEmpty(configuration.getRVMSdkName())) {
-          throw new RakeTasksBuildService.MyBuildFailureException(
-            "RVM interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'.");
+          throw new RakeTasksBuildService.InvalidConfigurationException(
+            "RVM interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'.", true);
         }
         break;
       }
@@ -164,8 +169,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         String rvmrcFilePath = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
         if (!StringUtil.isEmptyOrSpaces(rvmrcFilePath) &&
             !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
-          throw new RakeTasksBuildService.MyBuildFailureException(
-            "RVMRV file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'");
+          throw new RakeTasksBuildService.InvalidConfigurationException("RVMRV file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'", false);
         }
         break;
       }

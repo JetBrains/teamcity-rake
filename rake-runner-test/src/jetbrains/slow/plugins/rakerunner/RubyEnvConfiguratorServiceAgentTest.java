@@ -35,6 +35,8 @@ import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.serverSide.*;
+import jetbrains.buildServer.util.FileUtil;
+import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.TestFor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -224,8 +226,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     assertTrue(sharedParams.isSetted());
     assertFalse(sharedParams.isApplied());
 
-    Assert.assertTrue(build.getBuildProblems().isEmpty());
-    Assert.assertTrue(build.getStatusDescriptor().isSuccessful());
+    assertSuccessfull(build);
   }
 
   @Test
@@ -257,8 +258,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     assertTrue(sharedParams.isSetted());
     assertFalse(sharedParams.isApplied());
 
-    Assert.assertFalse(build.getBuildProblems().isEmpty());
-    Assert.assertFalse(build.getStatusDescriptor().isSuccessful());
+    assertFailed(build);
   }
 
   @Test(groups = {"unix"})
@@ -366,8 +366,52 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 //    Assert.assertEquals(envs.get("rvm_ruby_string"), "ruby-1.8.7-p249");
 
     // sucessfully finished
-    Assert.assertTrue(build.getBuildProblems().isEmpty());
-    Assert.assertTrue(build.getStatusDescriptor().isSuccessful());
+    assertSuccessfull(build);
+  }
+
+  @Test(groups = {"unix"})
+  public void testRMVRCFilePathValidationOnAgent() throws Exception {
+    if (!SystemInfo.isUnix) {
+      throw new SkipException("Not a UNIX. RVM support is only for Unix. Set 'unix' group to ignore.");
+    }
+
+    assertSuccessfull(runRVMRCBuild(""));
+    assertSuccessfull(runRVMRCBuild(".rvmrc"));
+    assertSuccessfull(runRVMRCBuild("some/path/.rvmrc"));
+    assertFailed(runRVMRCBuild("invalid"));
+  }
+
+  @NotNull
+  private SBuild runRVMRCBuild(@NotNull final String filepath) throws IOException {
+    final HashMap<String, String> featureParamsMap = new HashMap<String, String>();
+
+    // use rvm
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "rvmrc");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY, filepath);
+    getAgentEvents().addListener(new AgentLifeCycleAdapter() {
+      @Override
+      public void beforeRunnerStart(@NotNull final BuildRunnerContext runner) {
+        FileUtil.createIfDoesntExist(new File(runner.getBuild().getCheckoutDirectory(),
+                                              StringUtil.isEmptyOrSpaces(filepath) ? ".rvmrc" : filepath));
+      }
+    });
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
+
+
+    SBuild build = startBuild(bt, false);
+    build = finishBuild(build);
+    dumpBuildLog(build);
+    return build;
+  }
+
+  private void assertFailed(@NotNull final SBuild build) {
+    finishBuild(build); // Just to be sure
+    Assert.assertTrue(build.getBuildStatus().isFailed(), "Build must be failed");
+  }
+
+  private void assertSuccessfull(@NotNull final SBuild build) {
+    finishBuild(build); // Just to be sure
+    Assert.assertTrue(build.getBuildStatus().isSuccessful(), "Build must be successfull");
   }
 
 
@@ -410,7 +454,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   //  Assert.assertTrue(build.getStatusDescriptor().isSuccessful());
   //}
 
-  private SBuildType configureFakeBuild(final FakeBuildConfiguration conf, @NotNull final Map<String, String> featureParamsMap)
+  private SBuildType configureFakeBuild(@NotNull final FakeBuildConfiguration conf, @NotNull final Map<String, String> featureParamsMap)
     throws IOException {
     // create build
     final SBuildType bt = createBuildType();
