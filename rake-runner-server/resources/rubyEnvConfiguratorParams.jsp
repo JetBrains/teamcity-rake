@@ -34,12 +34,11 @@
       $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value='';
       }
     </c:set>
-    <props:radioButtonProperty name="${UI_USE_RVM_KEY}" value="" id="${UI_USE_RVM_KEY_PATH}" onclick="${onclick}"/>
-    <%--checked="${empty propertiesBean.properties[UI_USE_RVM_KEY]}"--%>
+    <props:radioButtonProperty name="${UI_USE_RVM_KEY}" value="" id="${UI_USE_RVM_KEY_PATH}" onclick="${onclick}" checked="${empty propertiesBean.properties[UI_USE_RVM_KEY]}"/>
     <label for="${UI_USE_RVM_KEY_PATH}">Ruby interpreter path:</label>
   </th>
   <td>
-    <props:textProperty name="${UI_RUBY_SDK_PATH_KEY}" style="width:25em;" maxlength="256" className="buildTypeParams"/>
+    <props:textProperty name="${UI_RUBY_SDK_PATH_KEY}" className="longField"/>
     <span class="smallNote">If not specified the interpreter will be searched in the <strong>PATH</strong> environment variable.</span>
   </td>
 </tr>
@@ -58,17 +57,17 @@
   <td>
     <style type="text/css">
       .rvm_options {
-        padding-top: 3px;
+        /*padding-top: 3px;*/
       }
 
       .rvm_options_editor {
-        padding-top: 2px;
+        /*padding-top: 2px;*/
       }
     </style>
     <div class="rvm_options">
       Interpreter name:
       <div class="rvm_options_editor">
-        <props:textProperty name="${UI_RVM_SDK_NAME_KEY}" style="width:25em;" maxlength="256" className="buildTypeParams"/>
+        <props:textProperty name="${UI_RVM_SDK_NAME_KEY}" className="longField"/>
         <span class="error" id="error_${UI_RVM_SDK_NAME_KEY}"></span>
         <span class="smallNote">E.g.: <strong>ruby-1.8.7-p249</strong>, <strong>jruby-1.4.0</strong> or <strong>system</strong></span>
       </div>
@@ -90,7 +89,7 @@
     <div class="rvm_options">
       Gemset:
       <div class="rvm_options_editor">
-        <props:textProperty name="${UI_RVM_GEMSET_NAME_KEY}" style="width:25em;" maxlength="256" className="buildTypeParams"/>
+        <props:textProperty name="${UI_RVM_GEMSET_NAME_KEY}" className="longField"/>
         <span class="smallNote">If not specifed the default gemset will be used.</span>
       </div>
     </div>
@@ -110,10 +109,14 @@
   <td>
     <div class="rvm_options">
       Path to a '.rvmrc' file:
-      <div class="rvm_options_editor">
-        <props:textProperty name="${UI_RVM_RVMRC_PATH_KEY}" style="width:25em;" maxlength="256" className="buildTypeParams"/><bs:vcsTree fieldId="${UI_RVM_RVMRC_PATH_KEY}"/>
-        <span class="smallNote">Path relative to a checkout directory. Leave empty to use ".rvmrc"</span>
-      </div>
+      <nobr>
+        <div class="completionIconWrapper">
+          <props:textProperty name="${UI_RVM_RVMRC_PATH_KEY}" className="longField"/>
+          <bs:vcsTree fieldId="${UI_RVM_RVMRC_PATH_KEY}"/>
+        </div>
+      </nobr>
+      <span class="error" id="error_${UI_RVM_RVMRC_PATH_KEY}"></span>
+      <span class="smallNote">Path relative to a checkout directory. Leave empty to use ".rvmrc"</span>
     </div>
   </td>
 </tr>
