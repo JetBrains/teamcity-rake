@@ -19,7 +19,11 @@
 
 require 'rake'
 require 'rake/testtask'
-require 'rdoc/task'
+begin
+  require 'rdoc/task'
+rescue LoadError
+  require 'rake/rdoctask'
+end
 
 namespace :bundle do
   task :install do
