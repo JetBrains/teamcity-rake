@@ -180,6 +180,15 @@
       <br/>
     </td>
   </tr>
+  <tr>
+    <th>
+      <label for="${UI_RUBY_INTERPRETER_ADDITIONAL_PARAMS}">Additional interpreter parameters:</label>
+    </th>
+    <td>
+      <props:textProperty name="${UI_RUBY_INTERPRETER_ADDITIONAL_PARAMS}" className="longField"/>
+      <span class="smallNote">Additional parameters for interpreter, useful for JRuby interpreters. E.g. <strong>-J-Xmx512m</strong></span>
+    </td>
+  </tr>
 </l:settingsGroup>
 
 <l:settingsGroup title="Tests Reporting">

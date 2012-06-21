@@ -41,6 +41,7 @@ public interface RakeRunnerConstants {
 
   // Additional CMD params
   @NonNls String SERVER_UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY = "ui.rakeRunner.additional.rake.cmd.params";
+  @NonNls String SERVER_UI_RUBY_INTERPRETER_ADDITIONAL_PARAMS = "ui.rakeRunner.ruby.interpreter.additional.params";
 
   // Explicit Ruby interpreter lpath
   @NonNls String SERVER_UI_RUBY_INTERPRETER_PATH = "ui.rakeRunner.ruby.interpreter.path";

@@ -131,6 +131,12 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
         env.put(RAKE_TRACE_INVOKE_EXEC_STAGES_ENABLED_KEY, Boolean.TRUE.toString());
       }
 
+      // Interpreter parameters
+      final String additionalInterpreterParams = runParams.get(SERVER_UI_RUBY_INTERPRETER_ADDITIONAL_PARAMS);
+      if (!TextUtil.isEmptyOrWhitespaced(additionalInterpreterParams)) {
+        addCmdlineArguments(arguments, additionalInterpreterParams);
+      }
+
       // Rake runner script
       final String rakeRunnerPath;
       final String customRakeRunnerScript = buildParams.get(CUSTOM_RAKERUNNER_SCRIPT);
