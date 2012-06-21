@@ -19,11 +19,7 @@
 
 require 'rake'
 require 'rake/testtask'
-if (RUBY_VERSION.to_f != 1.8) then
-  require 'rdoc/task'
-else
-  require 'rake/rdoctask'
-end
+require 'rdoc/task'
 
 namespace :bundle do
   task :install do
