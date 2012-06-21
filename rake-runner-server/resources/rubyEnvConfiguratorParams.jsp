@@ -71,12 +71,12 @@
     <span class="smallNote">If not specifed the default gemset will be used.</span>
   </td>
 </tr>
-<%--<tr id="rec.rvm.gemset.create.container" style="display: none">--%>
-  <%--<td colspan="2">--%>
-    <%--<props:checkboxProperty name="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}"/>--%>
-    <%--<label for="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}">Create gemset if not exist</label>--%>
-  <%--</td>--%>
-<%--</tr>--%>
+<tr id="rec.rvm.gemset.create.container" style="display: none">
+  <td colspan="2">
+    <props:checkboxProperty name="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}"/>
+    <label for="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}">Create gemset if not exist</label>
+  </td>
+</tr>
 <tr id="rec.rvm.rvmrc.container" style="display: none">
   <th>
     <label for="${UI_RVM_RVMRC_PATH_KEY}">Path to a&nbsp;'.rvmrc'&nbsp;file:</label>
@@ -108,7 +108,7 @@
         BS.Util.hide('rec.interpreter.path.container');
         BS.Util.show('rec.rvm.interpreter.container');
         BS.Util.show('rec.rvm.gemset.container');
-        //BS.Util.show('rec.rvm.gemset.create.container');
+        BS.Util.show('rec.rvm.gemset.create.container');
         BS.Util.hide('rec.rvm.rvmrc.container');
 
         $('${UI_RVM_SDK_NAME_KEY}').focus();
@@ -117,7 +117,7 @@
         BS.Util.hide('rec.interpreter.path.container');
         BS.Util.hide('rec.rvm.interpreter.container');
         BS.Util.hide('rec.rvm.gemset.container');
-        //BS.Util.hide('rec.rvm.gemset.create.container');
+        BS.Util.hide('rec.rvm.gemset.create.container');
         BS.Util.show('rec.rvm.rvmrc.container');
 
         $('${UI_RVM_RVMRC_PATH_KEY}').focus();
@@ -126,7 +126,7 @@
         BS.Util.show('rec.interpreter.path.container');
         BS.Util.hide('rec.rvm.interpreter.container');
         BS.Util.hide('rec.rvm.gemset.container');
-        //BS.Util.hide('rec.rvm.gemset.create.container');
+        BS.Util.hide('rec.rvm.gemset.create.container');
         BS.Util.hide('rec.rvm.rvmrc.container');
 
         $('${UI_RUBY_SDK_PATH_KEY}').focus();

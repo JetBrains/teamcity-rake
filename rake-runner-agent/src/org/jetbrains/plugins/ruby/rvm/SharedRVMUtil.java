@@ -65,19 +65,20 @@ public class SharedRVMUtil {
   @Nullable
   public static String determineSuitableRVMSdkDist(@NotNull final String rvmrcSdkRef,
                                                    @Nullable final String rvmrcGemset,
-                                                   @NotNull final RubyDistToGemsetTable distName2GemsetsTable) {
-    for (Map.Entry<String, List<String>> distAndGemsets : distName2GemsetsTable.myRubyDist2Gemset.entrySet()) {
-      final String distName = distAndGemsets.getKey();
-
+                                                   @NotNull final RubyDistToGemsetTable distName2GemsetsTable,
+                                                   final boolean allowGemsetNotExists) {
+    for (String dist : distName2GemsetsTable.getDists()) {
       // check either refName suites dist name or not
-      if (sdkRefMatches(rvmrcSdkRef, distName)) {
-
-        // check gemsets
-        final List<String> gemsets = distAndGemsets.getValue();
-        for (String gemset : gemsets) {
-          if (areGemsetsEqual(rvmrcGemset, gemset)) {
-            return distName;
-          }
+      if (!sdkRefMatches(rvmrcSdkRef, dist)) {
+        continue;
+      }
+      // check gemsets
+      if (allowGemsetNotExists) {
+        return dist;
+      }
+      for (String gemset : distName2GemsetsTable.getGemsets(dist)) {
+        if (areGemsetsEqual(rvmrcGemset, gemset)) {
+          return dist;
         }
       }
     }

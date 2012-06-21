@@ -61,10 +61,12 @@ public class RVMSupportUtil {
   }
 
   @Nullable
-  public static String determineSuitableRVMSdkDist(@NotNull final String uiRubyInterpreterSetting, @Nullable final String rvmGemset) {
+  public static String determineSuitableRVMSdkDist(@NotNull final String uiRubyInterpreterSetting,
+                                                   @Nullable final String rvmGemset,
+                                                   final boolean allowGemsetNotExists) {
     final SharedRVMUtil.RubyDistToGemsetTable table = getInterpreterDistName2GemSetsTable();
 
-    return SharedRVMUtil.determineSuitableRVMSdkDist(uiRubyInterpreterSetting, rvmGemset, table);
+    return SharedRVMUtil.determineSuitableRVMSdkDist(uiRubyInterpreterSetting, rvmGemset, table, allowGemsetNotExists);
   }
 
   public static void patchEnvForRVMIfNecessary(@NotNull final RubySdk sdk,

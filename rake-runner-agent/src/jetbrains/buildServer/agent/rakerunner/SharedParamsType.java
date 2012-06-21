@@ -18,10 +18,14 @@ package jetbrains.buildServer.agent.rakerunner;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.agent.BuildRunnerContext;
+import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingRunnersProvider;
+import jetbrains.buildServer.agent.rakerunner.scripting.ShellScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRCBasedRubySdkImpl;
@@ -86,9 +90,23 @@ public enum SharedParamsType {
 
       // build  dist/gemsets table, match ref with dist. name
       final String gemset = sharedParams.getRVMGemsetName();
-      final String suitableSdk = RVMSupportUtil.determineSuitableRVMSdkDist(sdkName, gemset);
+      final String suitableSdk = RVMSupportUtil.determineSuitableRVMSdkDist(sdkName, gemset, sharedParams.isRVMGemsetCreate());
 
       if (suitableSdk != null) {
+        if (sharedParams.isRVMGemsetCreate() && !StringUtil.isEmptyOrSpaces(gemset)) {
+          List<String> gemsets = RVMSupportUtil.getInterpreterDistName2GemSetsTable().getGemsets(suitableSdk);
+          if (gemset != null && !gemsets.contains(gemset)) {
+            // Creating gemset
+            final ShellScriptRunner scriptRunner = ScriptingRunnersProvider.getRVMDefault().getShellScriptRunner();
+            RunnerUtil.Output output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitableSdk + "@" + gemset,
+                                                        context.getWorkingDirectory().getAbsolutePath(),
+                                                        context.getBuildParameters().getEnvironmentVariables());
+            if (!StringUtil.isEmptyOrSpaces(output.getStderr())) {
+              throw new RakeTasksBuildService.MyBuildFailureException(
+                "Failed to create gemset '" + gemset + "':" + output.getStderr() + "\n" + output.getStdout());
+            }
+          }
+        }
         return new RVMRubySdkImpl(RVMSupportUtil.suggestInterpretatorPath(suitableSdk), suitableSdk, false, gemset);
       }
       final String msg = "Gemset '" + gemset + "' isn't defined for Ruby interpreter '" + sdkName
