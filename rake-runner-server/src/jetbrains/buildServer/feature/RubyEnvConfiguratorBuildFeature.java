@@ -140,7 +140,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
               !rvmrcFilePath.contains("%") &&
               !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
             ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY,
-                                        "RVMRV file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'"));
+                                        "RVMRC file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'"));
           }
         }
         break;

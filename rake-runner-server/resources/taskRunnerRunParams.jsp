@@ -81,7 +81,8 @@
       <label for="custom2">Rakefile content:</label>
     </th>
     <td>
-      <props:multilineProperty expanded="${propertiesBean.properties[USE_CUSTOM_BUILD_FILE_KEY] == true}" name="${BUILD_FILE_KEY}" rows="10" cols="58"
+      <props:multilineProperty expanded="${propertiesBean.properties[USE_CUSTOM_BUILD_FILE_KEY] == true}" name="${BUILD_FILE_KEY}" rows="10"
+                               cols="58"
                                linkTitle="Enter the Rakefile content"
                                onkeydown="$('custom2').checked = true;" className="longField"/>
       <span class="error" id="error_${BUILD_FILE_KEY}"></span>
@@ -90,13 +91,15 @@
   <forms:workingDirectory/>
   <tr>
     <th><label for="${UI_RAKE_TASKS_PROPERTY}">Rake tasks: </label></th>
-    <td><props:textProperty name="${UI_RAKE_TASKS_PROPERTY}" className="longField" maxlength="256"/>
+    <td>
+      <props:textProperty name="${UI_RAKE_TASKS_PROPERTY}" className="longField"/>
       <span class="smallNote">Enter task names separated by space character if you don't want to use the 'default' task.<br/>E.g. 'test:functionals' or 'mytask:test mytask:test2'.</span>
     </td>
   </tr>
   <tr>
     <th><label for="${UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY}">Additional Rake command line parameters: </label></th>
-    <td><props:textProperty name="${UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY}" className="longField" expandable="true"/>
+    <td>
+      <props:textProperty name="${UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY}" className="longField" expandable="true"/>
       <span class="smallNote">If not empty, these parameters will be added to 'rake' command line.</span>
     </td>
   </tr>
@@ -124,7 +127,7 @@
       <label for="${UI_RUBY_USAGE_MODE_PATH}">Ruby interpreter path:</label>
     </th>
     <td>
-      <props:textProperty name="${UI_RUBY_INTERPRETER_PATH}" className="longField" maxlength="256"/>
+      <props:textProperty name="${UI_RUBY_INTERPRETER_PATH}" className="longField"/>
     </td>
   </tr>
   <tr>
@@ -141,14 +144,14 @@
       <div class="rvm_options">
         Interpreter name:
         <div class="rvm_options_editor">
-          <props:textProperty name="${UI_RUBY_RVM_SDK_NAME}" className="longField" maxlength="256"/>
+          <props:textProperty name="${UI_RUBY_RVM_SDK_NAME}" className="longField"/>
           <span class="smallNote">E.g.: <strong>ruby-1.8.7-p249</strong>, <strong>jruby-1.4.0</strong> or <strong>system</strong></span>
         </div>
       </div>
       <div class="rvm_options">
         Gemset:
         <div class="rvm_options_editor">
-          <props:textProperty name="${UI_RUBY_RVM_GEMSET_NAME}" className="longField" maxlength="256"/>
+          <props:textProperty name="${UI_RUBY_RVM_GEMSET_NAME}" className="longField"/>
           <span class="smallNote">If not specifed the default gemset will be used.</span>
         </div>
       </div>
@@ -164,8 +167,7 @@
     <td>
       <props:checkboxProperty name="${UI_BUNDLE_EXEC_PROPERTY}"/>
       <label for="${UI_BUNDLE_EXEC_PROPERTY}">bundle exec</label>
-      <span
-          class="smallNote">If your project uses <strong>Bundler</strong> gem requirements manager, this option will allow you to launch rake tasks using 'bundle exec' command.</span>
+      <span class="smallNote">If your project uses <strong>Bundler</strong> gem requirements manager, this option will allow you to launch rake tasks using 'bundle exec' command.</span>
     </td>
   </tr>
   <tr>
@@ -211,7 +213,7 @@
         <label for="${UI_RAKE_RSPEC_ENABLED_PROPERTY}">RSpec</label>
 
         <div class="rake_reporter_options">
-          <props:textProperty name="${UI_RAKE_RSPEC_OPTS_PROPERTY}" className="longField" maxlength="256"/>
+          <props:textProperty name="${UI_RAKE_RSPEC_OPTS_PROPERTY}" className="longField"/>
           <span class="smallNote">Rake will be invoked with a "SPEC_OPTS={internal options} <strong>{user options}</strong>".</span>
         </div>
       </div>
@@ -222,7 +224,7 @@
         <label for="${UI_RAKE_CUCUMBER_ENABLED_PROPERTY}">Cucumber</label>
 
         <div class="rake_reporter_options">
-          <props:textProperty name="${UI_RAKE_CUCUMBER_OPTS_PROPERTY}" className="longField" maxlength="256"/>
+          <props:textProperty name="${UI_RAKE_CUCUMBER_OPTS_PROPERTY}" className="longField"/>
           <span class="smallNote">Rake will be invoked with a "CUCUMBER_OPTS={internal options} <strong>{user options}</strong>".</span>
         </div>
       </div>
