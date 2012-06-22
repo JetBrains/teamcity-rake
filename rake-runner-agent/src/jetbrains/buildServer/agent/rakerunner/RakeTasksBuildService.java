@@ -23,9 +23,7 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.agent.ruby.RubySdk;
-import jetbrains.buildServer.agent.runner.BuildServiceAdapter;
-import jetbrains.buildServer.agent.runner.ProgramCommandLine;
-import jetbrains.buildServer.agent.runner.SimpleProgramCommandLine;
+import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.runner.BuildFileRunnerUtil;
@@ -272,6 +270,21 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       jetbrains.buildServer.util.FileUtil.delete(file);
     }
     myFilesToDelete.clear();
+  }
+
+  @NotNull
+  @Override
+  public List<ProcessListener> getListeners() {
+    return Collections.<ProcessListener>singletonList(new LoggingProcessListener(getLogger()) {
+      @Override
+      public void onErrorOutput(@NotNull final String text) {
+        if (text.trim().startsWith("org.jruby.exceptions.RaiseException: (SystemExit) exit")) {
+          super.onStandardOutput(text);
+        } else {
+          super.onErrorOutput(text);
+        }
+      }
+    });
   }
 
   @NotNull
