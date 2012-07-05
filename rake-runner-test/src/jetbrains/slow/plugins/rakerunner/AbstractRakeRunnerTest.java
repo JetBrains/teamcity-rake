@@ -286,14 +286,14 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
         } else {
           // In case we located at least one attribute ('Multiple attribute message')
           try {
-            final Map<String, String> attributes = StringUtil.stringToProperties(text, StringUtil.STD_ESCAPER, false);
+            final Map<String, String> attributes = StringUtil.stringToProperties(text, StringUtil.STD_ESCAPER2, false);
             final ArrayList<String> keys = new ArrayList<String>(attributes.keySet());
             reorderAttributes(keys);
             final Map<String, String> orderedAttributes = new LinkedHashMap<String, String>();
             for (String key : keys) {
               orderedAttributes.put(key, attributes.get(key));
             }
-            final String s = StringUtil.propertiesToString(orderedAttributes, StringUtil.STD_ESCAPER);
+            final String s = StringUtil.propertiesToString(orderedAttributes, StringUtil.STD_ESCAPER2);
 
             String newline = prefix + s + line.substring(line.lastIndexOf(']'));
             lines[i] = newline;
