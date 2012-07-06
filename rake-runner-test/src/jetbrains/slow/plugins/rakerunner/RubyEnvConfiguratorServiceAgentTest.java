@@ -450,7 +450,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   //  Assert.assertNull(envs.get("rvm_ruby_string"));
   //
   //  // sucessfully finished
-  //  Assert.assertTrue(build.getBuildProblems().isEmpty());
+  //  Assert.assertTrue(build.getFailureReasons().isEmpty());
   //  Assert.assertTrue(build.getStatusDescriptor().isSuccessful());
   //}
 
