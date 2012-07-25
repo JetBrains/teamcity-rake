@@ -68,7 +68,7 @@
   </th>
   <td>
     <props:textProperty name="${UI_RVM_GEMSET_NAME_KEY}" className="longField"/>
-    <span class="smallNote">If not specifed the default gemset will be used.</span>
+    <span class="smallNote">If not specified the default gemset will be used.</span>
   </td>
 </tr>
 <tr id="rec.rvm.gemset.create.container" style="display: none">

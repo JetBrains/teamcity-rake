@@ -108,53 +108,48 @@
 <l:settingsGroup title="Ruby Interpreter">
   <tr>
     <th>
-      <props:radioButtonProperty name="${UI_RUBY_USAGE_MODE}" value="${MODE_DEFAULT}" id="${UI_RUBY_USAGE_MODE_DEFAULT}"/>
-      <label for="${UI_RUBY_USAGE_MODE_DEFAULT}">Use default Ruby:</label>
+      Mode:
     </th>
     <td>
-      <span class="smallNote">E.g., a Ruby interpreter provided by  <strong>Ruby Environment Configurator</strong> build feature. If build feature isn't configured the interpreter
+      <c:set var="modeSelected" value="${propertiesBean.properties[UI_RUBY_USAGE_MODE]}"/>
+      <props:selectProperty name="${UI_RUBY_USAGE_MODE}" onchange="BS.RakeRunner.onModeChanged()">
+        <props:option value="${MODE_DEFAULT}" currValue="${modeSelected}">Default</props:option>
+        <props:option value="${MODE_PATH}" currValue="${modeSelected}">Path to interpreter</props:option>
+        <props:option value="${MODE_RVM}" currValue="${modeSelected}">RVM interpreter</props:option>
+      </props:selectProperty>
+    </td>
+  </tr>
+  <tr id="rr.default.mode.container" style="display: none">
+    <td colspan="2">
+      <span class="smallNote">E.g., a Ruby interpreter provided by <strong>Ruby Environment Configurator</strong><bs:help file="Ruby+Environment+Configurator"/> build feature. If build feature isn't configured the interpreter
       will be searched in the <strong>PATH</strong> environment variable.</span>
     </td>
   </tr>
-  <tr>
+  <tr id="rr.interpreter.mode.container" style="display: none">
     <th>
-      <c:set var="onclick">
-        if (this.checked) {
-        $('${UI_RUBY_INTERPRETER_PATH}').focus();
-        }
-      </c:set>
-      <props:radioButtonProperty name="${UI_RUBY_USAGE_MODE}" value="${MODE_PATH}" id="${UI_RUBY_USAGE_MODE_PATH}" onclick="${onclick}"/>
-      <label for="${UI_RUBY_USAGE_MODE_PATH}">Ruby interpreter path:</label>
+      <label for="${UI_RUBY_INTERPRETER_PATH}">Path to interpreter:</label>
     </th>
     <td>
       <props:textProperty name="${UI_RUBY_INTERPRETER_PATH}" className="longField"/>
     </td>
   </tr>
-  <tr>
+  <tr id="rr.rvm.mode.interpreter.container" style="display: none">
     <th>
-      <c:set var="onclick">
-        if (this.checked) {
-        $('${UI_RUBY_RVM_SDK_NAME}').focus();
-        }
-      </c:set>
-      <props:radioButtonProperty name="${UI_RUBY_USAGE_MODE}" value="${MODE_RVM}" id="${UI_RUBY_USAGE_MODE_RVM}" onclick="${onclick}"/>
-      <label for="${UI_RUBY_USAGE_MODE_RVM}">RVM interpreter:</label>
+      <label for="${UI_RUBY_RVM_SDK_NAME}">RVM Interpreter: <l:star/></label>
     </th>
     <td>
-      <div class="rvm_options">
-        Interpreter name:
-        <div class="rvm_options_editor">
-          <props:textProperty name="${UI_RUBY_RVM_SDK_NAME}" className="longField"/>
-          <span class="smallNote">E.g.: <strong>ruby-1.8.7-p249</strong>, <strong>jruby-1.4.0</strong> or <strong>system</strong></span>
-        </div>
-      </div>
-      <div class="rvm_options">
-        Gemset:
-        <div class="rvm_options_editor">
-          <props:textProperty name="${UI_RUBY_RVM_GEMSET_NAME}" className="longField"/>
-          <span class="smallNote">If not specifed the default gemset will be used.</span>
-        </div>
-      </div>
+      <props:textProperty name="${UI_RUBY_RVM_SDK_NAME}" className="longField"/>
+      <span class="error" id="error_${UI_RUBY_RVM_SDK_NAME}"></span>
+      <span class="smallNote">E.g.: <strong>ruby-1.8.7-p249</strong>, <strong>jruby-1.4.0</strong> or <strong>system</strong></span>
+    </td>
+  </tr>
+  <tr id="rr.rvm.mode.gemset.container" style="display: none">
+  <th>
+      <label for="${UI_RUBY_RVM_GEMSET_NAME}">RVM Gemset:</label>
+    </th>
+    <td>
+      <props:textProperty name="${UI_RUBY_RVM_GEMSET_NAME}" className="longField"/>
+      <span class="smallNote">If not specified the default gemset will be used.</span>
     </td>
   </tr>
 </l:settingsGroup>
@@ -240,3 +235,37 @@
     </td>
   </tr>
 </l:settingsGroup>
+
+<script type="text/javascript">
+  BS.RakeRunner = {
+    onModeChanged:function () {
+      var sel = $('${UI_RUBY_USAGE_MODE}');
+      var selectedValue = sel[sel.selectedIndex].value;
+      if ('${MODE_DEFAULT}' == selectedValue) {
+        BS.Util.show('rr.default.mode.container');
+        BS.Util.hide('rr.interpreter.mode.container');
+        BS.Util.hide('rr.rvm.mode.interpreter.container');
+        BS.Util.hide('rr.rvm.mode.gemset.container');
+
+      } else if ('${MODE_PATH}' == selectedValue) {
+        BS.Util.hide('rr.default.mode.container');
+        BS.Util.show('rr.interpreter.mode.container');
+        BS.Util.hide('rr.rvm.mode.interpreter.container');
+        BS.Util.hide('rr.rvm.mode.gemset.container');
+
+        $('${UI_RUBY_INTERPRETER_PATH}').focus();
+      } else if ('${MODE_RVM}' == selectedValue) {
+        BS.Util.hide('rr.default.mode.container');
+        BS.Util.hide('rr.interpreter.mode.container');
+        BS.Util.show('rr.rvm.mode.interpreter.container');
+        BS.Util.show('rr.rvm.mode.gemset.container');
+
+        $('${UI_RUBY_RVM_SDK_NAME}').focus();
+      } else {
+        // OMG!!!
+      }
+      BS.VisibilityHandlers.updateVisibility('mainContent');
+    }
+  };
+  BS.RakeRunner.onModeChanged();
+</script>
