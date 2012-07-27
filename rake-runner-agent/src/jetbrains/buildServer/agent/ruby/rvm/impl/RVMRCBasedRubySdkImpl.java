@@ -17,9 +17,12 @@
 package jetbrains.buildServer.agent.ruby.rvm.impl;
 
 import com.intellij.openapi.diagnostic.Logger;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.scripting.*;
+import jetbrains.buildServer.agent.rakerunner.utils.EnvUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
@@ -36,13 +39,34 @@ import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
  */
 public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedRubySdk {
 
-  private static final String TEST_RVM_SHELL_SCRIPT = ". $rvm_path/scripts/rvm && rvm rvmrc load";
+  private static final String TEST_RVM_SHELL_SCRIPT = ". $rvm_path/scripts/rvm && rvm current";
   private static final Logger LOG = Logger.getInstance(RVMRCBasedRubySdkImpl.class.getName());
+  private static final Map<SdkDescriptor, RVMRCBasedRubySdkImpl> ourCache = new HashMap<SdkDescriptor, RVMRCBasedRubySdkImpl>();
 
+  @NotNull
   private final String myPathToRVMRCFolder;
   private final ShellBasedRubyScriptRunner myShellBasedRubyScriptRunner;
 
-  public static RVMRCBasedRubySdkImpl createAndSetup(@NotNull final String pathToRVMRCFolder,
+  public static void cache(final RVMRCBasedRubySdkImpl sdk, final Map<String, String> env) {
+    ourCache.put(new SdkDescriptor(sdk.myPathToRVMRCFolder, env), sdk);
+  }
+
+  public static void clearCache() {
+    ourCache.clear();
+  }
+
+  public static RVMRCBasedRubySdkImpl getOrCreate(@NotNull final String pathToRVMRCFolder, @NotNull final Map<String, String> env)
+    throws RakeTasksBuildService.MyBuildFailureException {
+    final RVMRCBasedRubySdkImpl cached = ourCache.get(new SdkDescriptor(pathToRVMRCFolder, env));
+    if (cached != null) {
+      return cached;
+    }
+    final RVMRCBasedRubySdkImpl sdk = createAndSetup(pathToRVMRCFolder, Collections.unmodifiableMap(env));
+    cache(sdk, env);
+    return sdk;
+  }
+
+  private static RVMRCBasedRubySdkImpl createAndSetup(@NotNull final String pathToRVMRCFolder,
                                                      @NotNull final Map<String, String> env)
     throws RakeTasksBuildService.MyBuildFailureException {
     final ShellScriptRunner shellScriptRunner = ScriptingRunnersProvider.getRVMDefault().getShellScriptRunner();
@@ -62,21 +86,25 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
     final String name = info.getInterpreterName();
     final boolean isSystem = RVMSupportUtil.RVM_SYSTEM_INTERPRETER.equals(name);
 
-    LOG.debug("Configuring interpreter with .rvmrc");
-    LOG.debug("Interpreter Path is " + interpreterPath);
-    LOG.debug("Gemset is " + gemset);
-    LOG.debug("Name is " + name);
-    LOG.debug("IsSystem = " + isSystem);
-    LOG.debug("PathToRVMRCFolder = " + pathToRVMRCFolder);
+    if (LOG.isDebugEnabled()) {
+      StringBuilder sb = new StringBuilder();
+      sb.append("\n\t").append("Configuring interpreter with .rvmrc");
+      sb.append("\n\t").append("Interpreter Path is ").append(interpreterPath);
+      sb.append("\n\t").append("Gemset is ").append(gemset);
+      sb.append("\n\t").append("Name is ").append(name);
+      sb.append("\n\t").append("IsSystem = ").append(isSystem);
+      sb.append("\n\t").append("PathToRVMRCFolder = ").append(pathToRVMRCFolder);
+      LOG.debug(sb.toString());
+    }
 
     return new RVMRCBasedRubySdkImpl(interpreterPath, name, isSystem, gemset, pathToRVMRCFolder);
   }
 
   private RVMRCBasedRubySdkImpl(@NotNull final String interpreterPath,
-                                final String name,
+                                @NotNull final String name,
                                 final boolean system,
-                                final String gemset,
-                                final String pathToRVMRCFolder) {
+                                @Nullable final String gemset,
+                                @NotNull final String pathToRVMRCFolder) {
     super(interpreterPath, name, system, gemset);
     myPathToRVMRCFolder = pathToRVMRCFolder;
     myShellBasedRubyScriptRunner = new ShellBasedRubyScriptRunner(new MyRvmShellRunner());
@@ -108,6 +136,35 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
   @Override
   public RubyScriptRunner getScriptRunner() {
     return myShellBasedRubyScriptRunner;
+  }
+
+  private static final class SdkDescriptor {
+    private final String myPathToRVMRCFolder;
+    private final Map<String, String> myEnv;
+
+    private SdkDescriptor(@NotNull final String pathToRVMRCFolder, @NotNull final Map<String, String> env) {
+      myPathToRVMRCFolder = pathToRVMRCFolder;
+      myEnv = EnvUtil.getCompactEnvMap(env);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+
+      final SdkDescriptor that = (SdkDescriptor)o;
+
+      return myPathToRVMRCFolder.equals(that.myPathToRVMRCFolder) && myEnv.equals(that.myEnv);
+    }
+
+    @Override
+    public int hashCode() {
+      return 31 * myPathToRVMRCFolder.hashCode() + myEnv.hashCode();
+    }
   }
 
   private class MyRvmShellRunner extends RvmShellRunner {

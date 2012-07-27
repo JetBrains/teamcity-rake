@@ -131,8 +131,7 @@ public enum SharedParamsType {
       }
 
       // Create SDK using known .rvmrc file
-      return RVMRCBasedRubySdkImpl
-        .createAndSetup(file.getParentFile().getAbsolutePath(), context.getBuildParameters().getEnvironmentVariables());
+      return RVMRCBasedRubySdkImpl.getOrCreate(file.getParentFile().getAbsolutePath(), context.getBuildParameters().getEnvironmentVariables());
     }
   };
 

@@ -16,15 +16,16 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import jetbrains.buildServer.util.CollectionsUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vladislav.Rassokhin
  */
 public class EnvUtil {
+  private static final Set<String> IGNORING_ENV_KEYS = CollectionsUtil.setOf("PWD", "OLDPWD");
+
   @NotNull
   public static Map<String, String> parse(@NotNull final String stdout) {
     final HashMap<String, String> map = new HashMap<String, String>();
@@ -38,6 +39,7 @@ public class EnvUtil {
     return map;
   }
 
+  @NotNull
   public static Map<String, String> mergeIntoNewEnv(@NotNull final Map<String, String> modified,
                                                     @NotNull final Map<String, String> original,
                                                     @NotNull final Collection<String> restricted) {
@@ -61,5 +63,12 @@ public class EnvUtil {
       }
     }
     return map;
+  }
+
+  @NotNull
+  public static Map<String, String> getCompactEnvMap(@NotNull final Map<String, String> a) {
+    final Map<String, String> na = new TreeMap<String, String>(a);
+    na.keySet().removeAll(IGNORING_ENV_KEYS);
+    return na;
   }
 }

@@ -46,8 +46,8 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   private final Set<File> myFilesToDelete = new HashSet<File>();
   private final String RSPEC_RUNNER_OPTIONS_REQUIRE_KEY = "--require";
   private final String RSPEC_RUNNER_OPTIONS_FORMATTER_PATH = "teamcity/spec/runner/formatter/teamcity/formatter";
-  private final String RSPEC_RUNNERR_OPTIONS_FORMATTER_KEY = "--format";
-  private final String RSPEC_RUNNERR_OPTIONS_FORMATTER_CLASS = "Spec::Runner::Formatter::TeamcityFormatter";
+  private final String RSPEC_RUNNER_OPTIONS_FORMATTER_KEY = "--format";
+  private final String RSPEC_RUNNER_OPTIONS_FORMATTER_CLASS = "Spec::Runner::Formatter::TeamcityFormatter";
 
   private final String CUCUMBER_RUNNER_OPTIONS_EXPAND_KEY = "--expand";
   private final String CUCUMBER_RUNNER_OPTIONS_FORMAT_KEY = "--format";
@@ -175,8 +175,8 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       // cucumber
       env.putAll(attachCucumberFormatterIfNeeded(runParams));
 
-      // Bunlde exec emulation:
-      // (do not do it befor RVM Env patch!!!!!!)
+      // Bundle exec emulation:
+      // (do not do it before RVM Env patch!!!!!!)
       BundlerUtil.enableBundleExecEmulationIfNeeded(sdk, runParams, buildParams, env, checkoutDirPath);
 
 
@@ -205,7 +205,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
           // check that params were applied
           if (!sharedParams.isApplied()) {
             throw new InvalidConfigurationException(
-              "Ruby interpeter is configured outside Rake build runner but configuration settings weren't applied. No sense to launch rake.",
+              "Ruby interpreter is configured outside Rake build runner but configuration settings weren't applied. No sense to launch rake.",
               false);
           }
         }
@@ -213,12 +213,12 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       }
       case INTERPRETER_PATH:
         if (StringUtil.isEmpty(RakeRunnerUtils.getRubySdkPath(runParams))) {
-          throw new InvalidConfigurationException("Ruby interpeter path isn't specified.", false);
+          throw new InvalidConfigurationException("Ruby interpreter path isn't specified.", false);
         }
         break;
       case RVM:
         if (StringUtil.isEmpty(RakeRunnerUtils.getRVMSdkName(runParams))) {
-          throw new InvalidConfigurationException("RVM Ruby interpeter name isn't specified.", false);
+          throw new InvalidConfigurationException("RVM Ruby interpreter name isn't specified.", false);
         }
         break;
     }
@@ -300,8 +300,8 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       }
       buff.append(RSPEC_RUNNER_OPTIONS_REQUIRE_KEY).append(' ');
       buff.append(RSPEC_RUNNER_OPTIONS_FORMATTER_PATH).append(' ');
-      buff.append(RSPEC_RUNNERR_OPTIONS_FORMATTER_KEY).append(' ');
-      buff.append(RSPEC_RUNNERR_OPTIONS_FORMATTER_CLASS);
+      buff.append(RSPEC_RUNNER_OPTIONS_FORMATTER_KEY).append(' ');
+      buff.append(RSPEC_RUNNER_OPTIONS_FORMATTER_CLASS);
 
       final String specOpts = buff.toString();
 
@@ -354,7 +354,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
     final StringBuilder buff = new StringBuilder();
 
-    // common part - for rake taks and tests
+    // common part - for rake tasks and tests
     buff.append(RubyProjectSourcesUtil.getLoadPath_PatchRoot_Common());
 
     // Enable Test::Unit patch for : test::unit, test::spec and shoulda frameworks

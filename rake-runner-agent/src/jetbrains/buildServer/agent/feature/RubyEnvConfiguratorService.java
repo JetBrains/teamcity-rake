@@ -21,17 +21,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.AgentBuildFeature;
-import jetbrains.buildServer.agent.BuildRunnerContext;
-import jetbrains.buildServer.agent.BuildRunnerPrecondition;
+import jetbrains.buildServer.agent.*;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.SharedParams;
 import jetbrains.buildServer.agent.rakerunner.SharedParamsType;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRCBasedRubySdkImpl;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
+import jetbrains.buildServer.util.EventDispatcher;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
@@ -45,7 +45,13 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
 
   public static final String ENVS_TO_UNSET_PARAM = "teamcity.ruby.env.conf.feature.envs.to.unset";
 
-  public RubyEnvConfiguratorService() {
+  public RubyEnvConfiguratorService(@NotNull final EventDispatcher<AgentLifeCycleListener> dispatcher) {
+    dispatcher.addListener(new AgentLifeCycleAdapter() {
+      @Override
+      public void buildFinished(@NotNull final AgentRunningBuild build, @NotNull final BuildFinishedStatus buildStatus) {
+        RVMRCBasedRubySdkImpl.clearCache();
+      }
+    });
   }
 
   public void canStart(@NotNull final BuildRunnerContext context) throws RunBuildException {
@@ -93,14 +99,17 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
     }
 
     // validation has passed. let's path environment
-    patchRunnerEnvironment(context, sdk, configuration, sharedParams);
+    final EnvironmentPatchableMap newEnv = patchRunnerEnvironment(context, sdk, configuration, sharedParams);
     sharedParams.applyToContext(context);
+    if (sdk instanceof RVMRCBasedRubySdkImpl) {
+      RVMRCBasedRubySdkImpl.cache((RVMRCBasedRubySdkImpl)sdk, newEnv);
+    }
   }
 
-  protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
-                                        @NotNull final RubySdk sdk,
-                                        @NotNull final RubyEnvConfiguratorConfiguration configuration,
-                                        @NotNull final SharedParams sharedParams) throws RunBuildException {
+  protected EnvironmentPatchableMap patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
+                                                           @NotNull final RubySdk sdk,
+                                                           @NotNull final RubyEnvConfiguratorConfiguration configuration,
+                                                           @NotNull final SharedParams sharedParams) throws RunBuildException {
 
     // editable env variables
     final Map<String, String> oldenv = context.getBuildParameters().getEnvironmentVariables();
@@ -143,9 +152,9 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         context.addEnvironmentVariable(keyAndValue.getKey(), keyAndValue.getValue());
       }
 
-      // succes, mark that shared params were succesfully applied
+      // success, mark that shared params were successfully applied
       sharedParams.setApplied(true);
-
+      return env;
     } catch (RakeTasksBuildService.MyBuildFailureException e) {
       // only show error msg, it is user-friendly
       throw new RunBuildException(e.getMessage());
@@ -169,7 +178,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         String rvmrcFilePath = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
         if (!StringUtil.isEmptyOrSpaces(rvmrcFilePath) &&
             !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
-          throw new RakeTasksBuildService.InvalidConfigurationException("RVMRV file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'", false);
+          throw new RakeTasksBuildService.InvalidConfigurationException("RVMRC file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'", false);
         }
         break;
       }

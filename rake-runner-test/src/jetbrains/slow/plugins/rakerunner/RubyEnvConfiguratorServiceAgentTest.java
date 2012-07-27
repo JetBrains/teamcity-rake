@@ -30,11 +30,13 @@ import jetbrains.buildServer.agent.feature.RubyEnvConfiguratorService;
 import jetbrains.buildServer.agent.impl.SpringContextFixture;
 import jetbrains.buildServer.agent.rakerunner.SharedParams;
 import jetbrains.buildServer.agent.rakerunner.SharedParamsType;
+import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.serverSide.*;
+import jetbrains.buildServer.util.EventDispatcher;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.TestFor;
@@ -94,13 +96,14 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final AtomicBoolean patcherEnabled = new AtomicBoolean(false);
 
     getExtensionHolder().registerExtension(BuildRunnerPrecondition.class, "aaa",
-                                           new RubyEnvConfiguratorService() {
+                                           new RubyEnvConfiguratorService(EventDispatcher.create(AgentLifeCycleListener.class)) {
                                              @Override
-                                             protected void patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
-                                                                                   @NotNull final RubySdk sdk,
-                                                                                   @NotNull final RubyEnvConfiguratorConfiguration configuration,
-                                                                                   @NotNull final SharedParams sharedParams) {
+                                             protected EnvironmentPatchableMap patchRunnerEnvironment(@NotNull final BuildRunnerContext context,
+                                                                                                      @NotNull final RubySdk sdk,
+                                                                                                      @NotNull final RubyEnvConfiguratorConfiguration configuration,
+                                                                                                      @NotNull final SharedParams sharedParams) {
                                                patcherEnabled.set(true);
+                                               return null;
                                              }
                                            });
 
