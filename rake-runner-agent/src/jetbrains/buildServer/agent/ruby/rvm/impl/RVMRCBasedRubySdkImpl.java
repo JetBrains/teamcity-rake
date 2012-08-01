@@ -39,7 +39,7 @@ import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
  */
 public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedRubySdk {
 
-  private static final String TEST_RVM_SHELL_SCRIPT = ". $rvm_path/scripts/rvm && rvm current";
+  private static final String TEST_RVM_SHELL_SCRIPT = ". $rvm_path/scripts/rvm && cd %s && rvm current";
   private static final Logger LOG = Logger.getInstance(RVMRCBasedRubySdkImpl.class.getName());
   private static final Map<SdkDescriptor, RVMRCBasedRubySdkImpl> ourCache = new HashMap<SdkDescriptor, RVMRCBasedRubySdkImpl>();
 
@@ -70,7 +70,7 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl implements RVMRCBasedR
                                                      @NotNull final Map<String, String> env)
     throws RakeTasksBuildService.MyBuildFailureException {
     final ShellScriptRunner shellScriptRunner = ScriptingRunnersProvider.getRVMDefault().getShellScriptRunner();
-    final RunnerUtil.Output testRun = shellScriptRunner.run(TEST_RVM_SHELL_SCRIPT, pathToRVMRCFolder, env);
+    final RunnerUtil.Output testRun = shellScriptRunner.run(String.format(TEST_RVM_SHELL_SCRIPT, pathToRVMRCFolder), pathToRVMRCFolder, env);
     if (!StringUtil.isEmptyOrSpaces(testRun.getStderr())) {
       StringBuilder sb = new StringBuilder();
       sb.append("Configuring RVM with ").append(pathToRVMRCFolder).append("/.rvmrc failed:");
