@@ -25,7 +25,7 @@ for i in `ls -d */ | grep -v vendor`; do
 
 
     echo "##teamcity[blockOpened name='Creating gemset |'$sdk@$rrprefix$i|'']"
-    rvm use "$RR_RUBY_VERSION@$rrprefix$i" --create
+    rvm use "$sdk@$rrprefix$i" --create
     echo "##teamcity[blockClosed name='Creating gemset |'$sdk@$rrprefix$i|'']"
 
     echo "##teamcity[blockOpened name='Execute Bundler']"
