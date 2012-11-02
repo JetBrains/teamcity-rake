@@ -21,13 +21,12 @@ import com.intellij.execution.process.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.CharsetToolkit;
-import jetbrains.buildServer.log.LogInitializer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import jetbrains.buildServer.log.LogInitializer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
 

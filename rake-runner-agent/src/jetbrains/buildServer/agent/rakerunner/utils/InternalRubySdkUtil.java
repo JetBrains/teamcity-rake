@@ -16,6 +16,7 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
+import java.io.File;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildRunnerContext;
@@ -28,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.openapi.util.io.FileUtil.getTempDirectory;
-import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 
 /**
  * @author Roman.Chernyatchik
@@ -52,7 +52,10 @@ public class InternalRubySdkUtil {
 
     // Final check that interpreter file exists
     try {
-      checkInterpreterPathValid(sdk.getInterpreterPath());
+      final File executable = sdk.getRubyExecutable();
+      if (!executable.exists()) {
+        throwInterpreterDoesntExistError(executable.getAbsolutePath());
+      }
     } catch (SecurityException e) {
       //unknown error
       throw new RunBuildException(e.getMessage(), e);
@@ -62,13 +65,13 @@ public class InternalRubySdkUtil {
   }
 
   public static void checkInterpreterPathValid(@Nullable final String path) throws RakeTasksBuildService.MyBuildFailureException {
-    if (path == null || StringUtil.isEmptyOrSpaces(path) || !FileUtil.checkIfExists(path)) {
+    if (path == null || StringUtil.isEmptyOrSpaces(path) || !FileUtil2.checkIfExists(path)) {
       throwInterpreterDoesntExistError(path);
     }
   }
 
   @NotNull
-  public static String findSystemInterpreterPath(@NotNull final Map<String, String> envVariables)
+  public static File findSystemInterpreterExecutablePath(@NotNull final Map<String, String> envVariables)
     throws RakeTasksBuildService.MyBuildFailureException {
     // find in $PATH
     final String path = OSUtil.findRubyInterpreterInPATH(envVariables);
@@ -77,13 +80,9 @@ public class InternalRubySdkUtil {
       throw new RakeTasksBuildService.MyBuildFailureException("Unable to find Ruby interpreter in PATH.");
     }
 
-    return path;
+    return new File(path);
   }
 
-  //@Nullable
-  //public static String getGemsetName(final Map<String, String> runParameters) {
-  //  return StringUtil.trimAndNull(runParameters.get(SharedRubyEnvSettings.SHARED_RUBY_RVM_GEMSET_NAME));
-  //}
 
   @NotNull
   private static <T> T throwInterpreterDoesntExistError(@Nullable final String rubyInterpreterPath)
@@ -94,31 +93,6 @@ public class InternalRubySdkUtil {
     throw new RakeTasksBuildService.MyBuildFailureException(msg);
   }
 
-  //@Nullable
-  //static String determineGemset(@NotNull final String rubyInterpreterPath,
-  //                              @NotNull final Map<String, String> runParameters)
-  //  throws RakeTasksBuildService.MyBuildFailureException {
-  //
-  //  // RVM - determine gemset
-  //  final String rvmGemset = getGemsetName(runParameters);
-  //
-  //  if (rvmGemset == null) {
-  //    return rvmGemset;
-  //  }
-  //
-  //  // validate
-  //  final boolean isValid = RVMSupportUtil.isGemsetExists(rvmGemset, rubyInterpreterPath);
-  //  if (!isValid) {
-  //    final String gemsets = RVMSupportUtil.dumpAvailableGemsets(rubyInterpreterPath);
-  //    final String msg = "Gemset '" + rvmGemset + "' isn't defined for ruby interpreter '"
-  //                       + rubyInterpreterPath
-  //                       + "'. Please create the gemset at first.\n"
-  //                       + (gemsets == null ? "" : "\nAvailable gemsets: " + gemsets);
-  //    throw new RakeTasksBuildService.MyBuildFailureException(msg);
-  //  }
-  //  return rvmGemset;
-  //}
-
   public static boolean isRuby19Interpreter(@NotNull final RubySdk sdk,
                                             @Nullable final Map<String, String> env) {
     final RunnerUtil.Output rubyVersionResult = sdk.getScriptRunner().run(RUBY_VERSION_SCRIPT, getTempDirectory(), env);
@@ -128,8 +102,7 @@ public class InternalRubySdkUtil {
 
   public static boolean isJRubyInterpreter(@NotNull final RubySdk sdk,
                                            @Nullable final Map<String, String> env) {
-    final String interpPath = toSystemIndependentName(sdk.getInterpreterPath());
-    if (interpPath.endsWith("/jruby")) {
+    if (sdk.getRubyExecutable().getName().startsWith("jruby")) {
       return true;
     }
     final RunnerUtil.Output rubyPlatformResult = sdk.getScriptRunner().run(RUBY_PLATFORM_SCRIPT, getTempDirectory(), env);

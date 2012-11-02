@@ -32,11 +32,11 @@ import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRCBasedRubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRubySdkImpl;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
-import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil.getCanonicalPath2;
-import static jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil.findSystemInterpreterPath;
-import static org.jetbrains.plugins.ruby.rvm.RVMSupportUtil.RVM_SYSTEM_INTERPRETER;
+import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil2.getCanonicalPath2;
+import static jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil.findSystemInterpreterExecutablePath;
 
 /**
  * @author Vladislav.Rassokhin
@@ -57,7 +57,7 @@ public enum SharedParamsType {
     public RubySdk createSdk(@NotNull final BuildRunnerContext context,
                              @NotNull final SharedParams sharedParams)
       throws RakeTasksBuildService.MyBuildFailureException {
-      return new RubySdkImpl(findSystemInterpreterPath(context.getBuildParameters().getEnvironmentVariables()), true);
+      return new RubySdkImpl(findSystemInterpreterExecutablePath(context.getBuildParameters().getEnvironmentVariables()), true);
     }
   },
   INTERPRETER_PATH("intpath") {
@@ -68,7 +68,7 @@ public enum SharedParamsType {
       throws RakeTasksBuildService.MyBuildFailureException {
       final String path = StringUtil.emptyIfNull(sharedParams.getInterpreterPath());
       InternalRubySdkUtil.checkInterpreterPathValid(path);
-      return new RubySdkImpl(path, false);
+      return new RubySdkImpl(new File(path), false);
     }
   },
   RVM("rvmsdk") {
@@ -83,22 +83,22 @@ public enum SharedParamsType {
       if (RVMSupportUtil.isSystemRuby(sdkName)) {
         final EnvironmentPatchableMap env = new EnvironmentPatchableMap(context.getBuildParameters().getEnvironmentVariables());
         final Map<String, String> patched = RVMSupportUtil.patchEnvForRVMIfNecessary2(sdkName, env);
-        final RVMRubySdkImpl sdk = new RVMRubySdkImpl(findSystemInterpreterPath(patched), RVM_SYSTEM_INTERPRETER, true, null);
+        final RubySdk sdk = new RubySdkImpl(findSystemInterpreterExecutablePath(patched), true);
         sdk.setup(patched);
         return sdk;
       }
 
       // build  dist/gemsets table, match ref with dist. name
       final String gemset = sharedParams.getRVMGemsetName();
-      final String suitableSdk = RVMSupportUtil.determineSuitableRVMSdkDist(sdkName, gemset, sharedParams.isRVMGemsetCreate());
+      final String suitableSdkName = RVMSupportUtil.determineSuitableRVMSdkDist(sdkName, gemset, sharedParams.isRVMGemsetCreate());
 
-      if (suitableSdk != null) {
+      if (suitableSdkName != null) {
         if (sharedParams.isRVMGemsetCreate() && !StringUtil.isEmptyOrSpaces(gemset)) {
-          List<String> gemsets = RVMSupportUtil.getInterpreterDistName2GemSetsTable().getGemsets(suitableSdk);
+          List<String> gemsets = RVMSupportUtil.getInterpreterDistName2GemSetsTable().getGemsets(suitableSdkName);
           if (gemset != null && !gemsets.contains(gemset)) {
             // Creating gemset
             final ShellScriptRunner scriptRunner = ScriptingRunnersProvider.getRVMDefault().getShellScriptRunner();
-            RunnerUtil.Output output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitableSdk + "@" + gemset,
+            RunnerUtil.Output output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitableSdkName + "@" + gemset,
                                                         context.getWorkingDirectory().getAbsolutePath(),
                                                         context.getBuildParameters().getEnvironmentVariables());
             if (!StringUtil.isEmptyOrSpaces(output.getStderr())) {
@@ -107,7 +107,12 @@ public enum SharedParamsType {
             }
           }
         }
-        return new RVMRubySdkImpl(RVMSupportUtil.suggestInterpretatorPath(suitableSdk), suitableSdk, false, gemset);
+        final File home = RVMPathsSettings.getRVMNullSafe().getHomeForVersionName(suitableSdkName);
+        if (home == null) {
+          throw new RakeTasksBuildService.MyBuildFailureException(
+            String.format("Cannot find home path for RVM SDK with name %s", suitableSdkName));
+        }
+        return new RVMRubySdkImpl(home, suitableSdkName, gemset);
       }
       final String msg = "Gemset '" + gemset + "' isn't defined for Ruby interpreter '" + sdkName
                          + "' or the interpreter doesn't exist or isn't a file or isn't a valid RVM interpreter name.";
@@ -131,7 +136,8 @@ public enum SharedParamsType {
       }
 
       // Create SDK using known .rvmrc file
-      return RVMRCBasedRubySdkImpl.getOrCreate(file.getParentFile().getAbsolutePath(), context.getBuildParameters().getEnvironmentVariables());
+      return RVMRCBasedRubySdkImpl
+        .getOrCreate(file.getParentFile().getAbsolutePath(), context.getBuildParameters().getEnvironmentVariables());
     }
   };
 

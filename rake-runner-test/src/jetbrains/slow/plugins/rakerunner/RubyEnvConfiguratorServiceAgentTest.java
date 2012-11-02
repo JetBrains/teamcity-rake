@@ -79,14 +79,14 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   }
 
   @Test
-  public void testRunnerPathingEnabled() throws IOException {
+  public void testRunnerPatchingEnabled() throws IOException {
     final boolean patcherEnabled = runCmdlinePatcherTest(FakeBuildConfiguration.Feature);
 
     Assert.assertTrue(patcherEnabled, "RubyEnvConfiguratorService should be enabled");
   }
 
   @Test
-  public void testRunnerPathingDisabled() throws IOException {
+  public void testRunnerPatchingDisabled() throws IOException {
     final boolean patcherEnabled = runCmdlinePatcherTest(FakeBuildConfiguration.Nothing);
 
     Assert.assertFalse(patcherEnabled, "RubyEnvConfiguratorService should not be enabled");
@@ -116,7 +116,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     // configure build
     final SBuildType bt = configureFakeBuild(configuration, featureParamsMap);
 
-    // launch buld
+    // launch build
     finishBuild(startBuild(bt, false));
     return patcherEnabled.get();
   }
@@ -229,7 +229,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     assertTrue(sharedParams.isSetted());
     assertFalse(sharedParams.isApplied());
 
-    assertSuccessfull(build);
+    assertSuccessful(build);
   }
 
   @Test
@@ -314,7 +314,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     final String envGemPath = envs.get("GEM_PATH");
     {
-      Assert.assertNotNull(envGemPath, "GEM_PATH not setted");
+      Assert.assertNotNull(envGemPath, "GEM_PATH not set");
       final String[] paths = envGemPath.split(File.pathSeparator);
       Assert.assertEquals(2, paths.length);
 
@@ -329,7 +329,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     final String envPath = envs.get("PATH");
     {
-      Assert.assertNotNull(envPath, "PATH not setted");
+      Assert.assertNotNull(envPath, "PATH not set");
       final String[] paths = envPath.split(File.pathSeparator);
       Assert.assertTrue(paths.length >= 4);
 
@@ -368,8 +368,8 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 //    Assert.assertEquals(envs.get("BUNDLE_PATH"), rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity");
 //    Assert.assertEquals(envs.get("rvm_ruby_string"), "ruby-1.8.7-p249");
 
-    // sucessfully finished
-    assertSuccessfull(build);
+    // successfully finished
+    assertSuccessful(build);
   }
 
   @Test(groups = {"unix"})
@@ -378,24 +378,24 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
       throw new SkipException("Not a UNIX. RVM support is only for Unix. Set 'unix' group to ignore.");
     }
 
-    assertSuccessfull(runRVMRCBuild(""));
-    assertSuccessfull(runRVMRCBuild(".rvmrc"));
-    assertSuccessfull(runRVMRCBuild("some/path/.rvmrc"));
+    assertSuccessful(runRVMRCBuild(""));
+    assertSuccessful(runRVMRCBuild(".rvmrc"));
+    assertSuccessful(runRVMRCBuild("some/path/.rvmrc"));
     assertFailed(runRVMRCBuild("invalid"));
   }
 
   @NotNull
-  private SBuild runRVMRCBuild(@NotNull final String filepath) throws IOException {
+  private SBuild runRVMRCBuild(@NotNull final String path) throws IOException {
     final HashMap<String, String> featureParamsMap = new HashMap<String, String>();
 
     // use rvm
     featureParamsMap.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "rvmrc");
-    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY, filepath);
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY, path);
     getAgentEvents().addListener(new AgentLifeCycleAdapter() {
       @Override
       public void beforeRunnerStart(@NotNull final BuildRunnerContext runner) {
         FileUtil.createIfDoesntExist(new File(runner.getBuild().getCheckoutDirectory(),
-                                              StringUtil.isEmptyOrSpaces(filepath) ? ".rvmrc" : filepath));
+                                              StringUtil.isEmptyOrSpaces(path) ? ".rvmrc" : path));
       }
     });
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
@@ -412,9 +412,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     Assert.assertTrue(build.getBuildStatus().isFailed(), "Build must be failed");
   }
 
-  private void assertSuccessfull(@NotNull final SBuild build) {
+  private void assertSuccessful(@NotNull final SBuild build) {
     finishBuild(build); // Just to be sure
-    Assert.assertTrue(build.getBuildStatus().isSuccessful(), "Build must be successfull");
+    Assert.assertTrue(build.getBuildStatus().isSuccessful(), "Build must be successful");
   }
 
 
@@ -452,7 +452,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   //  Assert.assertNull(envs.get("BUNDLE_PATH"));
   //  Assert.assertNull(envs.get("rvm_ruby_string"));
   //
-  //  // sucessfully finished
+  //  // successfully finished
   //  Assert.assertTrue(build.getFailureReasons().isEmpty());
   //  Assert.assertTrue(build.getStatusDescriptor().isSuccessful());
   //}

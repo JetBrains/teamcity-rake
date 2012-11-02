@@ -27,6 +27,7 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.SdkUtil;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.VersionComparatorUtil;
 import org.jetbrains.annotations.NotNull;
@@ -63,7 +64,7 @@ public class RubySDKUtil {
       final String gemsFolderPath = toSystemIndependentName(gemPath + File.separatorChar + "gems");
 
       // gem path file may not exist
-      if (!FileUtil.checkIfDirExists(gemsFolderPath)) {
+      if (!FileUtil2.checkIfDirExists(gemsFolderPath)) {
         continue;
       }
 
@@ -147,9 +148,7 @@ public class RubySDKUtil {
   private static RubySdk setupSdk(@NotNull final BuildRunnerContext context,
                                   @NotNull final RubySdk sdk) {
 
-    if (!sdk.isSetupCompleted()) {
-      sdk.setup(context.getBuildParameters().getEnvironmentVariables());
-    }
+    sdk.setup(context.getBuildParameters().getEnvironmentVariables());
     return sdk;
   }
 
@@ -160,7 +159,7 @@ public class RubySDKUtil {
                                                          @Nullable final String checkoutDirPath)
     throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
-    if (sdk.isRvmSdk() && !sdk.isSystem()) {
+    if (SdkUtil.isRvmSdk(sdk) && !sdk.isSystem()) {
       // do nothing
       return;
     }
@@ -171,8 +170,7 @@ public class RubySDKUtil {
     final StringBuilder patchedPath = new StringBuilder();
 
     // sdk bin folder
-    final String interpreterPath = sdk.getInterpreterPath();
-    final File sdkBinFolder = new File(interpreterPath).getParentFile();
+    final File sdkBinFolder = sdk.getRubyExecutable().getParentFile();
     if (sdkBinFolder != null) {
       try {
         patchedPath.append(jetbrains.buildServer.util.FileUtil.toSystemDependentName(sdkBinFolder.getCanonicalPath()));

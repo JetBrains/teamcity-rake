@@ -119,7 +119,7 @@ public class TestUnitUtil {
 
       if (testUnitGemPath != null) {
         final String fullScriptPath = testUnitGemPath + File.separatorChar + "lib" + File.separatorChar + scriptPath;
-        if (FileUtil.checkIfExists(fullScriptPath)) {
+        if (FileUtil2.checkIfExists(fullScriptPath)) {
           return fullScriptPath;
         } else {
 
@@ -132,11 +132,11 @@ public class TestUnitUtil {
       } else {
         // test-unit gem not found
         if (forcedTestUnitGemVersion != null) {
-          // not "built-in", but something specifed
+          // not "built-in", but something specified
           final String msg = "test-unit gem with version '"
                              + forcedTestUnitGemVersion
                              + "' wasn't found in Gem paths of Ruby SDK with interpreter: '"
-                             + sdk.getPresentableName()
+                             + sdk.getName()
                              + "'.\n"
                              + "Gem paths:\n"
                              + (bundlerGemRoot == null ? sdk.getGemPathsFetchLog().getStdout() : bundlerGemRoot);
@@ -159,24 +159,22 @@ public class TestUnitUtil {
 
 
     // General error message
-    final boolean isRuby19 = sdk.isRuby19();
-    final String msg = (forceUseBuiltInTestUnit ? "You asked TC to use built-in Test::Unit test framework, but file '"
-                                                : "File '")
-                       + scriptPath
-                       + "' wasn't found in Gem paths and in $LOAD_PATH of Ruby SDK with interpreter: '"
-                       + sdk.getPresentableName()
-                       + "'.\n"
-                       + (isRuby19
-                          ? "Rake runner detected that your are using Ruby 1.9. So please install 'test-unit' gem because simplified Test::Unit framework, which is bundled in Ruby 1.9, doesn't support pluggable test reporters.\n"
-                          : "")
-                       + "\n"
-                       + "Gem paths:\n"
-                       + gemPathsLog.getStdout()
-                       + "\n"
-                       + "\n"
-                       + "$LOAD_PATH:\n"
-                       + loadPathsLog.getStdout();
-    throw new RakeTasksBuildService.MyBuildFailureException(msg);
+    final StringBuilder msg = new StringBuilder();
+    if (forceUseBuiltInTestUnit) {
+      msg.append("You asked TC to use built-in Test::Unit test framework, but file '");
+    } else {
+      msg.append("File '");
+    }
+    msg.append(scriptPath).append("' wasn't found in Gem paths and in $LOAD_PATH of " +
+                                  "Ruby SDK with interpreter: '").append(sdk.getName()).append("'.\n");
+    if (sdk.isRuby19()) {
+      msg.append("Rake runner detected that your are using Ruby 1.9. " +
+                 "So please install 'test-unit' gem because simplified Test::Unit framework, " +
+                 "which is bundled in Ruby 1.9, doesn't support pluggable test reporters.\n");
+    }
+    msg.append("\nGem paths:\n").append(gemPathsLog.getStdout()).append("\n\n");
+    msg.append("$LOAD_PATH:\n").append(loadPathsLog.getStdout());
+    throw new RakeTasksBuildService.MyBuildFailureException(msg.toString());
   }
 
   @Nullable
@@ -185,7 +183,7 @@ public class TestUnitUtil {
     final String[] loadPaths = sdk.getLoadPath();
     for (String path : loadPaths) {
       final String fullScriptPath = toSystemIndependentName(path + File.separatorChar + relativeScriptPath);
-      if (FileUtil.checkIfExists(fullScriptPath)) {
+      if (FileUtil2.checkIfExists(fullScriptPath)) {
         return fullScriptPath;
       }
     }

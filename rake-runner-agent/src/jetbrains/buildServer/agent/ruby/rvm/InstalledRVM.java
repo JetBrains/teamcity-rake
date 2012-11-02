@@ -17,11 +17,15 @@
 package jetbrains.buildServer.agent.ruby.rvm;
 
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.util.*;
-import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
+import jetbrains.buildServer.agent.ruby.RubyVersionManager;
+import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
 
 import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_GEMS_FOLDER_NAME;
@@ -30,7 +34,8 @@ import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_
 /**
  * @author Vladislav.Rassokhin
  */
-public class InstalledRVM {
+public class InstalledRVM extends RubyVersionManager {
+  public static final String NAME = "rvm";
   @NotNull
   private final String myPath;
   @NotNull
@@ -46,6 +51,34 @@ public class InstalledRVM {
     return myType;
   }
 
+  @NotNull
+  @Override
+  public File getHome() {
+    return new File(getPath());
+  }
+
+  @NotNull
+  @Override
+  public File getRubiesFolder() {
+    return new File(getHome(), SharedRVMUtil.Constants.RVM_RUBIES_FOLDER_NAME);
+  }
+
+  @Nullable
+  public File getHomeForVersionName(@NotNull final String name) {
+    final List<File> rubies = FileUtil.getSubDirectories(getRubiesFolder());
+    for (File file : rubies) {
+      if (file.getName().equalsIgnoreCase(name)) {
+        return file;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public boolean isSupportedByOs() {
+    return SystemInfo.isUnix;
+  }
+
   public enum Type {
     Local,
     Global,
@@ -53,6 +86,7 @@ public class InstalledRVM {
   }
 
   public InstalledRVM(final @NotNull String path, final @NotNull Type type) {
+    super(NAME);
     this.myPath = path;
     this.myType = type;
     determineRVMConfigData();
@@ -80,17 +114,12 @@ public class InstalledRVM {
     return output.getStdout();
   }
 
-  public boolean isRVMInterpreter(@NotNull final String executablePath) {
-    // TODO: check via already fetched sdk names
-    return executablePath.startsWith(getPath() + "/" + SharedRVMUtil.Constants.RVM_RUBIES_FOLDER_NAME);
-  }
-
   @NotNull
   public SharedRVMUtil.RubyDistToGemsetTable getInterpreterDistName2GemSetsTable() {
     final String rubyGemsFolderPath = getGemsFolderPath();
     final String rubySdksRootPath = getSdksRootPath();
 
-    if (!FileUtil.checkIfDirExists(rubyGemsFolderPath) || !FileUtil.checkIfDirExists(rubySdksRootPath)) {
+    if (!FileUtil2.checkIfDirExists(rubyGemsFolderPath) || !FileUtil2.checkIfDirExists(rubySdksRootPath)) {
       return SharedRVMUtil.RubyDistToGemsetTable.emptyTable();
     }
 
@@ -112,26 +141,28 @@ public class InstalledRVM {
 
     // 1. scan .rvm/gems directory and find all existing (sdk, gemset) pairs
     final File[] files = rubyGemsFolder.listFiles();
-    if (files != null) for (File folder : files) {
-      // ignore ordnary files
-      if (!folder.isDirectory()) {
-        continue;
-      }
+    if (files != null) {
+      for (File folder : files) {
+        // ignore ordinary files
+        if (!folder.isDirectory()) {
+          continue;
+        }
 
-      // 2. Register if folder is a valid gempath for some sdk
-      SharedRVMUtil.registerGemset(folder.getName(), isRVMDistCond, rubyDist2Gemset);
+        // 2. Register if folder is a valid gempath for some sdk
+        SharedRVMUtil.registerGemset(folder.getName(), isRVMDistCond, rubyDist2Gemset);
+      }
     }
 
     return rubyDist2Gemset;
   }
 
   private String getSdksRootPath() {
-    // TODO: detect via environmert (may be non stadart or using mixed installation)
+    // TODO: detect via environment (may be non standard or using mixed installation)
     return getPath() + File.separatorChar + RVM_RUBIES_FOLDER_NAME;
   }
 
   private String getGemsFolderPath() {
-    // TODO: detect via environmert (may be non stadart or using mixed installation)
+    // TODO: detect via environment (may be non standard or using mixed installation)
     return getPath() + File.separatorChar + RVM_GEMS_FOLDER_NAME;
   }
 }

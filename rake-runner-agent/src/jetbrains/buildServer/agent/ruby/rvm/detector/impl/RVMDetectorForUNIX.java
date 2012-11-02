@@ -17,7 +17,7 @@
 package jetbrains.buildServer.agent.ruby.rvm.detector.impl;
 
 import java.util.Map;
-import jetbrains.buildServer.agent.rakerunner.utils.FileUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
@@ -84,7 +84,7 @@ public class RVMDetectorForUNIX extends RVMDetector {
       final String rvmExecPath = knowRvmHomePath + RVM_BIN_FOLDER_RELATIVE_PATH + "/rvm";
 
       try {
-        if (FileUtil.checkIfExists(rvmExecPath)) {
+        if (FileUtil2.checkIfExists(rvmExecPath)) {
           // rvm installation detected!
           // Checking we have permissions
           if (InstalledRVM.executeCommandLine(rvmExecPath, "-v").contains("rvm")) {
@@ -110,7 +110,7 @@ public class RVMDetectorForUNIX extends RVMDetector {
 
     final String path = home + "/" + SharedRVMUtil.Constants.LOCAL_RVM_HOME_FOLDER_NAME;
     final String rvmExecPath = path + SharedRVMUtil.Constants.RVM_BIN_FOLDER_RELATIVE_PATH + "/rvm";
-    if (FileUtil.checkIfExists(rvmExecPath)) {
+    if (FileUtil2.checkIfExists(rvmExecPath)) {
       return path;
     }
 

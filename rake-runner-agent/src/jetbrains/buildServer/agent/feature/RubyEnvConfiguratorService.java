@@ -28,6 +28,7 @@ import jetbrains.buildServer.agent.rakerunner.SharedParamsType;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.SdkUtil;
 import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRCBasedRubySdkImpl;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
@@ -102,7 +103,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
     final EnvironmentPatchableMap newEnv = patchRunnerEnvironment(context, sdk, configuration, sharedParams);
     sharedParams.applyToContext(context);
     if (sdk instanceof RVMRCBasedRubySdkImpl) {
-      RVMRCBasedRubySdkImpl.cache((RVMRCBasedRubySdkImpl)sdk, newEnv);
+      RVMRCBasedRubySdkImpl.cache(sdk, newEnv, ((RVMRCBasedRubySdkImpl)sdk).getPathToRVMRCFolder());
     }
   }
 
@@ -112,8 +113,8 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
                                                            @NotNull final SharedParams sharedParams) throws RunBuildException {
 
     // editable env variables
-    final Map<String, String> oldenv = context.getBuildParameters().getEnvironmentVariables();
-    final EnvironmentPatchableMap env = new EnvironmentPatchableMap(oldenv);
+    final Map<String, String> old = context.getBuildParameters().getEnvironmentVariables();
+    final EnvironmentPatchableMap env = new EnvironmentPatchableMap(old);
 
     try {
 
@@ -121,12 +122,12 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
       RVMSupportUtil.inspectCurrentEnvironment(env, sdk, context.getBuild().getBuildLogger());
 
       // Save patched env variables to runnerEnvParams
-      if (sdk.isRvmSdk() && !sdk.isSystem()) {
+      if (SdkUtil.isRvmSdk(sdk) && !sdk.isSystem()) {
         // true rvm sdk
         RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, env);
       } else {
         // fake or non-rvm sdk
-        if (sdk.isRvmSdk()) {
+        if (SdkUtil.isRvmSdk(sdk)) {
           RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, env);
         }
 
@@ -140,7 +141,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
       }
 
       Collection<String> envsToUnset = new ArrayList<String>();
-      for (String key : oldenv.keySet()) {
+      for (String key : old.keySet()) {
         if (!env.containsKey(key)) {
           envsToUnset.add(key);
         }
@@ -178,7 +179,8 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         String rvmrcFilePath = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
         if (!StringUtil.isEmptyOrSpaces(rvmrcFilePath) &&
             !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
-          throw new RakeTasksBuildService.InvalidConfigurationException("RVMRC file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'", false);
+          throw new RakeTasksBuildService.InvalidConfigurationException(
+            "RVMRC file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'", false);
         }
         break;
       }

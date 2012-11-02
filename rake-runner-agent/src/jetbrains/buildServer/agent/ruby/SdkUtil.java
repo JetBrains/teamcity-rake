@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.ruby.rvm;
+package jetbrains.buildServer.agent.ruby;
 
-import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vladislav.Rassokhin
  */
-public interface RVMRubySdk extends RubySdk {
+public class SdkUtil {
+
+  public static boolean isRvmSdk(@NotNull final RubySdk sdk) {
+    return sdk instanceof RVMRubySdk;
+  }
 }

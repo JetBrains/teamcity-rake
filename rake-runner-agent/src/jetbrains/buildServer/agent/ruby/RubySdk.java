@@ -16,23 +16,32 @@
 
 package jetbrains.buildServer.agent.ruby;
 
+import java.io.File;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Roman.Chernyatchik
  * @author Vladislav.Rassokhin
  */
 public interface RubySdk {
-  @NotNull
-  String getInterpreterPath();
+  @Nullable
+  File getHome();
 
   @NotNull
-  String getPresentableName();
+  File getRubyExecutable();
 
-  boolean isRvmSdk();
+  @Nullable
+  RubyVersionManager getVersionManager();
+
+  @Nullable
+  String getGemset();
+
+  @NotNull
+  String getName();
 
   boolean isSystem();
 
@@ -46,16 +55,7 @@ public interface RubySdk {
   @NotNull
   String[] getLoadPath();
 
-  boolean isSetupCompleted();
-
   void setup(@NotNull final Map<String, String> env);
-
-  //ProgramCommandLine createProgramCommandLineForScript(@NotNull final String workingDirectory,
-  //                                                     @NotNull final String[] rubyArgs,
-  //                                                     @Nullable final Map<String, String> buildConfEnvironment,
-  //                                                     @NotNull final String scriptSource,
-  //                                                     @NotNull final String... scriptArgs)
-  //  throws RakeTasksBuildService.MyBuildFailureException;
 
   @NotNull
   RunnerUtil.Output getGemPathsFetchLog();

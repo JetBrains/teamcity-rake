@@ -16,7 +16,6 @@
 
 package org.jetbrains.plugins.ruby.rvm;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +24,11 @@ import jetbrains.buildServer.agent.rakerunner.utils.EnvUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.SdkUtil;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
-import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_FOLDER_NAME;
 
 /**
  * @author Roman.Chernyatchik
@@ -48,18 +45,6 @@ public class RVMSupportUtil {
     return SharedRVMUtil.RubyDistToGemsetTable.emptyTable();
   }
 
-  @NotNull
-  public static String suggestInterpretatorPath(@NotNull final String distName) {
-    final InstalledRVM rvm = RVMPathsSettings.getRVMNullSafe();
-
-    // rvm defines "ruby" symlink for all ruby interpreters
-    return rvm.getPath()
-           + File.separator + RVM_RUBIES_FOLDER_NAME
-           + File.separator + distName
-           + File.separator + "bin"
-           + File.separator + "ruby";
-  }
-
   @Nullable
   public static String determineSuitableRVMSdkDist(@NotNull final String uiRubyInterpreterSetting,
                                                    @Nullable final String rvmGemset,
@@ -71,16 +56,11 @@ public class RVMSupportUtil {
 
   public static void patchEnvForRVMIfNecessary(@NotNull final RubySdk sdk,
                                                @NotNull final EnvironmentPatchableMap env) {
-    if (sdk.isRvmSdk()) {
-      patchEnvForRVMIfNecessary((RVMRubySdk)sdk, env);
+    if (SdkUtil.isRvmSdk(sdk)) {
+      final EnvironmentPatchableMap old = new EnvironmentPatchableMap(env);
+      env.clear();
+      env.putAll(patchEnvForRVMIfNecessary2(sdk.getName(), old));
     }
-  }
-
-  public static void patchEnvForRVMIfNecessary(@NotNull final RVMRubySdk sdk,
-                                               @NotNull final EnvironmentPatchableMap env) {
-    final EnvironmentPatchableMap oldenv = new EnvironmentPatchableMap(env);
-    env.clear();
-    env.putAll(patchEnvForRVMIfNecessary2(sdk.getPresentableName(), oldenv));
   }
 
   public static Map<String, String> patchEnvForRVMIfNecessary2(@NotNull final String rvmRubyString,
@@ -114,10 +94,10 @@ public class RVMSupportUtil {
                                                @NotNull final BuildProgressLogger logger) {
     // Diagnostic check:
 
-    if (sdk.isRvmSdk()) {
+    if (SdkUtil.isRvmSdk(sdk)) {
       // rvm sdk
 
-      // RVM support can ovveride only "default" process values. Build env vars and agent env. vars
+      // RVM support can override only "default" process values. Build env vars and agent env. vars
       // wont be overriden. Thus lets check which potentially dangerous environment variables
       // won't be overriden and inform user about them
 

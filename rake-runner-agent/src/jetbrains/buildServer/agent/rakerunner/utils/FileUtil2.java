@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Roman.Chernyatchik
  */
-public class FileUtil {
+public class FileUtil2 {
   /**
    * @param path Path to check
    * @return true, if path exists and is directory
@@ -76,12 +76,4 @@ public class FileUtil {
     }
   }
 
-  public static String getCheckoutDirectoryPath(final BuildParametersMap buildParameters)
-    throws RakeTasksBuildService.MyBuildFailureException {
-    final String checkoutDir = buildParameters.getSystemProperties().get(AgentRuntimeProperties.BUILD_CHECKOUT_DIR);
-    if (StringUtil.isEmptyOrSpaces(checkoutDir) || !checkIfDirExists(checkoutDir)) {
-      throw new RakeTasksBuildService.MyBuildFailureException("Cannot determine \"system.teamcity.build.checkoutDir\"");
-    }
-    return checkoutDir;
-  }
 }

@@ -56,7 +56,7 @@ public class ProcessBasedRubyScriptRunner implements RubyScriptRunner {
 
       //Args
       final String[] args = new String[2 + rubyArgs.length];
-      args[0] = mySdk.getInterpreterPath();
+      args[0] = mySdk.getRubyExecutable().getAbsolutePath();
       System.arraycopy(rubyArgs, 0, args, 1, rubyArgs.length);
       args[rubyArgs.length + 1] = scriptFile.getPath();
 

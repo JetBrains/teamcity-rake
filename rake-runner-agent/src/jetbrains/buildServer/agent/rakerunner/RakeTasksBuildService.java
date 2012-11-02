@@ -23,6 +23,7 @@ import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.SdkUtil;
 import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
@@ -35,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
-import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil.getCanonicalPath;
+import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil2.getCanonicalPath;
 import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
 
 /**
@@ -100,7 +101,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
         // (if defaults were set by smb else we cannot check them)
         RVMSupportUtil.inspectCurrentEnvironment(env, sdk, getBuild().getBuildLogger());
 
-        if (sdk.isRvmSdk()) {
+        if (SdkUtil.isRvmSdk(sdk)) {
           // Patch env for RVM
           RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, env);
 
@@ -189,7 +190,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
       }
       return new SimpleProgramCommandLine(ret,
                                           getWorkingDirectory().getAbsolutePath(),
-                                          sdk.getInterpreterPath(),
+                                          sdk.getRubyExecutable().getAbsolutePath(),
                                           arguments);
     } catch (MyBuildFailureException e) {
       throw new RunBuildException(e.getMessage(), e);

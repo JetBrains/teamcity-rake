@@ -16,6 +16,8 @@
 
 package jetbrains.buildServer.agent.ruby.impl;
 
+import com.intellij.openapi.util.SystemInfo;
+import java.io.File;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.scripting.ProcessBasedRubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
@@ -23,7 +25,9 @@ import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
+import jetbrains.buildServer.agent.ruby.RubyVersionManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Roman.Chernyatchik
@@ -31,8 +35,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public class RubySdkImpl implements RubySdk {
 
-  private final String myInterpreterPath;
+  @Nullable
+  private final File myHome;
+  @NotNull
+  private final File myExecutablePath;
   private final boolean myIsSystem;
+  @NotNull
+  private final String myRubyName;
 
   private boolean myIsRuby19;
   private boolean myIsJRuby;
@@ -42,9 +51,56 @@ public class RubySdkImpl implements RubySdk {
   private RunnerUtil.Output myLoadPathsLog;
   private boolean myIsSetupCompleted = false;
 
-  public RubySdkImpl(@NotNull final String interpreterPath, boolean isSystem) {
-    myInterpreterPath = interpreterPath;
+  public RubySdkImpl(@SuppressWarnings("NullableProblems") @NotNull final File home,
+                     @SuppressWarnings("NullableProblems") @Nullable final File executable) {
+    myHome = home;
+    myIsSystem = false;
+    myRubyName = defineName(myHome.getName().toLowerCase(), true);
+
+    if (executable != null) {
+      myExecutablePath = executable;
+    } else {
+      StringBuilder executableName = new StringBuilder(myRubyName);
+      if (SystemInfo.isWindows) {
+        executableName.append(".exe");
+      }
+      myExecutablePath = new File(myHome, "bin" + File.separator + executableName.toString());
+    }
+  }
+
+  public RubySdkImpl(@NotNull final File executable, boolean isSystem) {
+    myHome = null;
+    myExecutablePath = executable;
     myIsSystem = isSystem;
+    myRubyName = defineName(myExecutablePath.getName().toLowerCase(), false);
+  }
+
+  public interface RubyNames {
+    String RUBY = "ruby";
+    String MACRUBY = "macruby";
+    String RBX = "rbx";
+    String REE = "ree";
+    String JRUBY = "jruby";
+    String IRONRUBY = "ir";
+    String MAGLEV = "maglev";
+  }
+
+  @NotNull
+  private String defineName(@NotNull final String name, boolean isThrow) {
+    if (name.startsWith(RubyNames.RUBY) || name.startsWith(RubyNames.REE) || name.startsWith(RubyNames.MACRUBY) ||
+        name.startsWith(RubyNames.RBX) || name.matches("^\\d.*")) {
+      return RubyNames.RUBY;
+    } else if (name.startsWith(RubyNames.JRUBY)) {
+      return RubyNames.JRUBY;
+    } else if (name.startsWith(RubyNames.IRONRUBY)) {
+      return RubyNames.IRONRUBY;
+    } else if (name.startsWith(RubyNames.MAGLEV)) {
+      return "maglev-ruby";
+    } else if (isThrow) {
+      throw new IllegalStateException(String.format("Unsupported Ruby SDK name '%s'", name));
+    } else {
+      return name;
+    }
   }
 
   @NotNull
@@ -80,45 +136,6 @@ public class RubySdkImpl implements RubySdk {
     return myLoadPaths;
   }
 
-  //public ProgramCommandLine createProgramCommandLineForScript(@NotNull final String workingDirectory,
-  //                                                            @NotNull final String[] rubyArgs,
-  //                                                            @Nullable final Map<String, String> buildConfEnvironment,
-  //                                                            @NotNull final String scriptFilePath,
-  //                                                            @NotNull final String... scriptArgs)
-  //  throws RakeTasksBuildService.MyBuildFailureException {
-  //  final List<String> arguments = new ArrayList<String>();
-  //  HashMap<String, String> processEnv = new HashMap<String, String>();
-  //  if (buildConfEnvironment != null) {
-  //    processEnv.putAll(buildConfEnvironment);
-  //  }
-  //
-  //  try {
-  //    //// Writing source to the temp file
-  //    //File scriptFile = File.createTempFile("script", ".rb");
-  //    //FileUtil.writeFile(scriptFile, scriptSource);
-  //    //// Autodelete file on exit
-  //    //FileUtil.writeFile(scriptFile, getRemoveFileRubyScript(scriptFile));
-  //
-  //    //Args
-  //    Collections.addAll(arguments, rubyArgs);
-  //    arguments.add(scriptFilePath);
-  //    Collections.addAll(arguments, scriptArgs);
-  //
-  //    // Env
-  //    // TODO: replace it
-  //    RVMSupportUtil.patchEnvForRVMIfNecessary(this, processEnv);
-  //
-  //    return new SimpleProgramCommandLine(processEnv, workingDirectory, getInterpreterPath(), arguments);
-  //  } catch (Exception e) {
-  //    throw new RakeTasksBuildService.MyBuildFailureException(e.getMessage());
-  //  }
-  //}
-
-  //TODO: move to appropriate place
-  //private static String getRemoveFileRubyScript(final File scriptFilePath) {
-  //  return "\n\n\nFile.delete('" + scriptFilePath.getAbsolutePath() + "')\n\n";
-  //}
-
   public void setIsRuby19(final boolean isRuby19) {
     myIsRuby19 = isRuby19;
   }
@@ -138,34 +155,37 @@ public class RubySdkImpl implements RubySdk {
     myLoadPaths = TextUtil.splitByLines(loadPathsLog.getStdout());
   }
 
-  @NotNull
-  public String getInterpreterPath() {
-    return myInterpreterPath;
+  @Nullable
+  public File getHome() {
+    return myHome;
   }
 
-  public boolean isRvmSdk() {
-    return false;
+  @NotNull
+  public File getRubyExecutable() {
+    return myExecutablePath;
   }
 
   public boolean isSystem() {
     return myIsSystem;
   }
 
+  @Nullable
+  public RubyVersionManager getVersionManager() {
+    return null;
+  }
+
+  @Nullable
+  public String getGemset() {
+    return null;
+  }
+
   @NotNull
-  public String getPresentableName() {
-    return myInterpreterPath;
-  }
-
-  public boolean isSetupCompleted() {
-    return myIsSetupCompleted;
-  }
-
-  public void setIsSetupCompleted(final boolean isSetupCompleted) {
-    myIsSetupCompleted = isSetupCompleted;
+  public String getName() {
+    return myHome != null ? myHome.getName() : myExecutablePath.getAbsolutePath();
   }
 
   public void setup(@NotNull final Map<String, String> env) {
-    if (isSetupCompleted()) {
+    if (myIsSetupCompleted) {
       return;
     }
 
@@ -182,6 +202,6 @@ public class RubySdkImpl implements RubySdk {
     setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, env));
 
     // Set setup completed
-    setIsSetupCompleted(true);
+    myIsSetupCompleted = true;
   }
 }

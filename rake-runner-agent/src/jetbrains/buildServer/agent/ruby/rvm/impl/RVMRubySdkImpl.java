@@ -16,21 +16,17 @@
 
 package jetbrains.buildServer.agent.ruby.rvm.impl;
 
-import com.intellij.openapi.util.Pair;
 import java.io.File;
-import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.RvmShellRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShellBasedRubyScriptRunner;
-import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
+import jetbrains.buildServer.agent.ruby.RubyVersionManager;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
-import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
 
 /**
  * @author Vladislav.Rassokhin
@@ -38,78 +34,46 @@ import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
 public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
 
   @Nullable
-  private final String myGemsetName;
+  private final String myGemset;
   @NotNull
   private final String myName;
   @NotNull
   private final ShellBasedRubyScriptRunner myRubyScriptRunner;
 
-  public RVMRubySdkImpl(@NotNull final String interpreterPath,
-                        @NotNull final String name,
-                        final boolean isSystem,
-                        @Nullable final String gemsetName) {
-    super(interpreterPath, isSystem);
-    myGemsetName = gemsetName;
+
+  public RVMRubySdkImpl(@NotNull final File home, @NotNull final String name, @Nullable final String gemset) {
+    super(home, null);
     myName = name;
-    myRubyScriptRunner = new ShellBasedRubyScriptRunner(new MyRvmShellRunner());
-
-    // Autofill some parameters
-
-    // get Gem Paths
-    final Pair<String, String> gemPaths = SharedRVMUtil.getMainAndGlobalGemPaths(getInterpreterPath(), getGemsetName());
-    if (gemPaths == null) {
-      setGemPathsLog(new RunnerUtil.Output("", "Cannot determine RVM ruby gempaths for sdk '" + getPresentableName() + "'"));
-    } else {
-      StringBuilder sb = new StringBuilder();
-      sb.append(gemPaths.first).append('\n');
-      sb.append(gemPaths.second).append('\n');
-      setGemPathsLog(new RunnerUtil.Output(sb.toString(), ""));
-    }
+    myGemset = gemset;
+    myRubyScriptRunner = new ShellBasedRubyScriptRunner(new RvmShellRunner(RVMPathsSettings.getRVMNullSafe()) {
+      @NotNull
+      @Override
+      protected String[] createProcessArguments(@NotNull final String rvmShellEx,
+                                                @NotNull final String workingDirectory,
+                                                @NotNull final File scriptFile) {
+        return new String[]{rvmShellEx, getName(), scriptFile.getAbsolutePath()};
+      }
+    });
   }
 
+  @NotNull
   @Override
-  public void setup(@NotNull final Map<String, String> env) {
-    if (isSetupCompleted()) {
-      return;
-    }
-    if (!this.isSystem()) {
-      // language level
-      setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(this, env));
-
-      // language level
-      setIsJRuby(InternalRubySdkUtil.isJRubyInterpreter(this, env));
-
-      // load path
-      setLoadPathsLog(InternalRubySdkUtil.getLoadPaths(this, env));
-
-      // Other already initialized
-      setIsSetupCompleted(true);
-    } else {
-      super.setup(env);
-    }
+  public RubyVersionManager getVersionManager() {
+    return RVMPathsSettings.getRVMNullSafe();
   }
 
   @Nullable
-  public String getGemsetName() {
-    return myGemsetName;
+  @Override
+  public String getGemset() {
+    return myGemset;
   }
 
   @NotNull
+  @Override
   public String getName() {
-    return myName;
-  }
-
-  @Override
-  public final boolean isRvmSdk() {
-    return true;
-  }
-
-  @Override
-  @NotNull
-  public String getPresentableName() {
-    return myGemsetName == null
-           ? getName()
-           : getName() + RVMSupportUtil.getGemsetSeparator() + myGemsetName;
+    return myGemset == null
+           ? myName
+           : myName + RVMSupportUtil.getGemsetSeparator() + myGemset;
   }
 
   @NotNull
@@ -118,14 +82,4 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
     return myRubyScriptRunner;
   }
 
-  private class MyRvmShellRunner extends RvmShellRunner {
-    public MyRvmShellRunner() {
-      super(RVMPathsSettings.getRVMNullSafe());
-    }
-
-    @Override
-    protected String[] createProcessArguments(final String rvmShellEx, final String workingDirectory, final File scriptFile) {
-      return new String[]{rvmShellEx, getPresentableName(), scriptFile.getAbsolutePath()};
-    }
-  }
 }

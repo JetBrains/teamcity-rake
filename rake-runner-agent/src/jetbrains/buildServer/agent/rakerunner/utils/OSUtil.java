@@ -138,7 +138,7 @@ public class OSUtil {
       //tokens - are pathes with system-dependent slashes
       while (st.hasMoreTokens()) {
         final String possible_path = st.nextToken() + INDEPENDENT_PATH_SEPARATOR + exeName;
-        if (FileUtil.checkIfExists(possible_path)) {
+        if (FileUtil2.checkIfExists(possible_path)) {
           return possible_path;
         }
       }
@@ -182,6 +182,6 @@ public class OSUtil {
   @Nullable
   public static String getUserHomeFolder() {
     final String home = System.getProperty("user.home");
-    return FileUtil.checkIfDirExists(home) ? home : null;
+    return FileUtil2.checkIfDirExists(home) ? home : null;
   }
 }

@@ -16,10 +16,9 @@
 
 package jetbrains.buildServer.agent.ruby.rvm;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.EnumMap;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * "rvm info" for one interpreter

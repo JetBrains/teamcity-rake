@@ -34,7 +34,7 @@ public class RVMPathsSettings extends SharedRVMPathsSettings {
   @Nullable
   private InstalledRVM myInstalledRVM;
 
-  public RVMPathsSettings(RVMDetector detector) {
+  public RVMPathsSettings(@NotNull final RVMDetector detector) {
     myDetector = detector;
     ourInstance = this;
   }
@@ -60,6 +60,7 @@ public class RVMPathsSettings extends SharedRVMPathsSettings {
   /**
    * Null-safe version of (getInstance().getRVM()) for getting current known RVM.
    * Be sure that RVM known at execution time.
+   *
    * @return known rvm
    * @throws IllegalStateException if rvm is null
    */

@@ -101,7 +101,10 @@ public class RvmShellRunner implements ShellScriptRunner {
     }
   }
 
-  protected String[] createProcessArguments(final String rvmShellEx, final String workingDirectory, final File scriptFile) {
+  @NotNull
+  protected String[] createProcessArguments(@NotNull final String rvmShellEx,
+                                            @NotNull final String workingDirectory,
+                                            @NotNull final File scriptFile) {
     return new String[]{rvmShellEx, "--path", workingDirectory, scriptFile.getAbsolutePath()};
   }
 }
