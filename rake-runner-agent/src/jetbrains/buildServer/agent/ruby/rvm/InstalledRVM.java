@@ -109,7 +109,7 @@ public class InstalledRVM extends RubyVersionManager {
   }
 
   @NotNull
-  public static String executeCommandLine(String... query) {
+  public static String executeCommandLine(@NotNull final String... query) {
     final RunnerUtil.Output output = RunnerUtil.run(null, null, query);
     return output.getStdout();
   }

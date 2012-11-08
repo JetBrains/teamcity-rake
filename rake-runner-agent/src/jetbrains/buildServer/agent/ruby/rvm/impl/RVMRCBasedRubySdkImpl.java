@@ -95,7 +95,7 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl {
         LOG.debug(sb.toString());
       }
 
-      return new RubySdkImpl(new File(executablePath), true);
+      return new RVMRubySdkImpl(new File(executablePath));
     } else {
       final String gemset = info.getSection(RVMInfo.Section.environment).get("gemset");
 

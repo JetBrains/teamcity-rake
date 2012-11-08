@@ -18,6 +18,7 @@ package jetbrains.buildServer.agent.rakerunner;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.agent.BuildRunnerContext;
@@ -28,15 +29,20 @@ import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
+import jetbrains.buildServer.agent.ruby.rbenv.InstalledRbEnv;
+import jetbrains.buildServer.agent.ruby.rbenv.RbEnvPathsSettings;
+import jetbrains.buildServer.agent.ruby.rbenv.RbEnvRubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRCBasedRubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRubySdkImpl;
+import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
 import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil2.getCanonicalPath2;
-import static jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil.findSystemInterpreterExecutablePath;
+import static jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil.findSystemInterpreterExecutable;
+import static jetbrains.buildServer.agent.ruby.rbenv.Constants.RBENV_VERSION_ENV_VARIABLE;
 
 /**
  * @author Vladislav.Rassokhin
@@ -57,7 +63,7 @@ public enum SharedParamsType {
     public RubySdk createSdk(@NotNull final BuildRunnerContext context,
                              @NotNull final SharedParams sharedParams)
       throws RakeTasksBuildService.MyBuildFailureException {
-      return new RubySdkImpl(findSystemInterpreterExecutablePath(context.getBuildParameters().getEnvironmentVariables()), true);
+      return new RubySdkImpl(findSystemInterpreterExecutable(context.getBuildParameters().getEnvironmentVariables()), true);
     }
   },
   INTERPRETER_PATH("intpath") {
@@ -83,7 +89,7 @@ public enum SharedParamsType {
       if (RVMSupportUtil.isSystemRuby(sdkName)) {
         final EnvironmentPatchableMap env = new EnvironmentPatchableMap(context.getBuildParameters().getEnvironmentVariables());
         final Map<String, String> patched = RVMSupportUtil.patchEnvForRVMIfNecessary2(sdkName, env);
-        final RubySdk sdk = new RubySdkImpl(findSystemInterpreterExecutablePath(patched), true);
+        final RubySdk sdk = new RVMRubySdkImpl(findSystemInterpreterExecutable(patched));
         sdk.setup(patched);
         return sdk;
       }
@@ -138,6 +144,77 @@ public enum SharedParamsType {
       // Create SDK using known .rvmrc file
       return RVMRCBasedRubySdkImpl
         .getOrCreate(file.getParentFile().getAbsolutePath(), context.getBuildParameters().getEnvironmentVariables());
+    }
+  },
+  RBENV("rbenv") {
+    @NotNull
+    @Override
+    public RubySdk createSdk(@NotNull final BuildRunnerContext context,
+                             @NotNull final SharedParams sharedParams)
+      throws RakeTasksBuildService.MyBuildFailureException {
+      final InstalledRbEnv rbEnv = RbEnvPathsSettings.getInstance().getRbEnv();
+      if (rbEnv == null) {
+        throw new RakeTasksBuildService.MyBuildFailureException("Cannot find rbenv. Please check that it installed on agent", false);
+      }
+
+      final String version = StringUtil.emptyIfNull(sharedParams.getRbEnvVersion());
+
+      if ("system".equals(version)) {
+        final EnvironmentPatchableMap env = new EnvironmentPatchableMap(context.getBuildParameters().getEnvironmentVariables());
+        env.put(RBENV_VERSION_ENV_VARIABLE, version);
+        final File executable = findSystemInterpreterExecutable(env);
+        return new RubySdkImpl(executable, true);
+      } else {
+        if (!rbEnv.isVersionInstalled(version)) {
+          throw new RakeTasksBuildService.MyBuildFailureException(
+            "Specified Ruby interpreter version '" + version + "' isn't installed in rbenv");
+        }
+        return new RbEnvRubySdk(rbEnv.getInterpreterHome(version), version, rbEnv);
+      }
+    }
+  },
+  RBENV_FILE("rbenv_file") {
+    @NotNull
+    @Override
+    public RubySdk createSdk(@NotNull final BuildRunnerContext context,
+                             @NotNull final SharedParams sharedParams)
+      throws RakeTasksBuildService.MyBuildFailureException {
+      final InstalledRbEnv rbEnv = RbEnvPathsSettings.getInstance().getRbEnv();
+      if (rbEnv == null) {
+        throw new RakeTasksBuildService.MyBuildFailureException("Cannot find rbenv. Please check that it installed on agent", false);
+      }
+
+      final String filePath = StringUtil.emptyIfNull(sharedParams.getRbEnvVersionFile());
+      final String checkoutDir = getCanonicalPath2(context.getBuild().getCheckoutDirectory());
+      final File file = new File(checkoutDir, StringUtil.isEmptyOrSpaces(filePath) ? ".rbenv-version" : filePath);
+
+      final String version;
+      try {
+        final List<String> strings = FileUtil.readFile(file);
+        if (strings.isEmpty()) {
+          throw new RakeTasksBuildService.MyBuildFailureException(
+            "Rbenv support: local version file is empty. Specified path: \"" + filePath + "\". Resolved path: \"" +
+            file.getAbsolutePath() + "\"", false);
+        }
+        version = StringUtil.emptyIfNull(StringUtil.trim(strings.iterator().next()));
+      } catch (IOException e) {
+        throw new RakeTasksBuildService.MyBuildFailureException(
+          "Rbenv support: local version file file not found. Specified path: \"" + filePath + "\". Resolved path: \"" +
+          file.getAbsolutePath() + "\"", e, false);
+      }
+
+      if ("system".equals(version)) {
+        final EnvironmentPatchableMap env = new EnvironmentPatchableMap(context.getBuildParameters().getEnvironmentVariables());
+        env.put(RBENV_VERSION_ENV_VARIABLE, version);
+        final File executable = findSystemInterpreterExecutable(env);
+        return new RubySdkImpl(executable, true);
+      } else {
+        if (!rbEnv.isVersionInstalled(version)) {
+          throw new RakeTasksBuildService.MyBuildFailureException(
+            "Specified Ruby interpreter version '" + version + "' isn't installed in rbenv");
+        }
+        return new RbEnvRubySdk(rbEnv.getInterpreterHome(version), version, rbEnv);
+      }
     }
   };
 

@@ -96,6 +96,8 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
           }
         };
       }
+      case RBENV:
+      case RBENV_FILE:
       case RVM:
       case RVMRC: {
         // Lets patch it!
@@ -124,7 +126,7 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
         };
       }
       default:
-        throw new RunBuildException("Unsuported REC configuration type " + configuration.getType());
+        throw new RunBuildException("Unsupported REC configuration type " + configuration.getType());
     }
   }
 

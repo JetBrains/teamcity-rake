@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.ruby;
+package jetbrains.buildServer.agent.ruby.rbenv.detector;
 
-import jetbrains.buildServer.agent.ruby.rbenv.RbEnvRubySdk;
-import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
+import com.intellij.openapi.util.SystemInfo;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Vladislav.Rassokhin
  */
-public class SdkUtil {
+public class RbEnvDetectorFactory {
 
-  public static boolean isRvmSdk(@NotNull final RubySdk sdk) {
-    return sdk instanceof RVMRubySdk;
+  @NotNull
+  public RbEnvDetector createDetector() {
+    return SystemInfo.isUnix ? new RbEnvDetectorForUNIX() : new RbEnvDetectorForUnsupportedOS();
   }
-  public static boolean isRbEnvSdk(@NotNull final RubySdk sdk) {
-    return sdk instanceof RbEnvRubySdk;
-  }
+
 }

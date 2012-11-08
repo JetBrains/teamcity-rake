@@ -55,6 +55,20 @@ public class RVMRubySdkImpl extends RubySdkImpl implements RVMRubySdk {
       }
     });
   }
+  public RVMRubySdkImpl(@NotNull final File executable) {
+    super(executable, true);
+    myName = RVMSupportUtil.RVM_SYSTEM_INTERPRETER;
+    myGemset = null;
+    myRubyScriptRunner = new ShellBasedRubyScriptRunner(new RvmShellRunner(RVMPathsSettings.getRVMNullSafe()) {
+      @NotNull
+      @Override
+      protected String[] createProcessArguments(@NotNull final String rvmShellEx,
+                                                @NotNull final String workingDirectory,
+                                                @NotNull final File scriptFile) {
+        return new String[]{rvmShellEx, getName(), scriptFile.getAbsolutePath()};
+      }
+    });
+  }
 
   @NotNull
   @Override

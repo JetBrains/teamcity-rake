@@ -32,8 +32,19 @@
   <bean id="agentRVMDetector"
         class="jetbrains.buildServer.agent.ruby.rvm.detector.AgentRVMDetector"/>
   <bean id="rvmPathSettings"
-        class="org.jetbrains.plugins.ruby.rvm.RVMPathsSettings">
-  </bean>
+        class="org.jetbrains.plugins.ruby.rvm.RVMPathsSettings"/>
+
+  <!-- rbenv detector -->
+  <bean id="rbenvDetectorFactory"
+        class="jetbrains.buildServer.agent.ruby.rbenv.detector.RbEnvDetectorFactory"/>
+  <bean id="rbenvDetector"
+        class="jetbrains.buildServer.agent.ruby.rbenv.detector.RbEnvDetector"
+        factory-bean="rbenvDetectorFactory"
+        factory-method="createDetector"/>
+  <bean id="agentRbenvDetector"
+        class="jetbrains.buildServer.agent.ruby.rbenv.detector.AgentRbEnvDetector"/>
+  <bean id="rbenvPathSettings"
+        class="jetbrains.buildServer.agent.ruby.rbenv.RbEnvPathsSettings"/>
 
   <!-- Ruby Environment Configurator  feature -->
   <bean id="rubyRuntimeContextFeature"

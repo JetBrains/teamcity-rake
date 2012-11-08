@@ -71,7 +71,7 @@ public class InternalRubySdkUtil {
   }
 
   @NotNull
-  public static File findSystemInterpreterExecutablePath(@NotNull final Map<String, String> envVariables)
+  public static File findSystemInterpreterExecutable(@NotNull final Map<String, String> envVariables)
     throws RakeTasksBuildService.MyBuildFailureException {
     // find in $PATH
     final String path = OSUtil.findRubyInterpreterInPATH(envVariables);

@@ -29,6 +29,8 @@ import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.SdkUtil;
+import jetbrains.buildServer.agent.ruby.rbenv.RbEnvPathsSettings;
+import jetbrains.buildServer.agent.ruby.rbenv.RbEnvRubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.impl.RVMRCBasedRubySdkImpl;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
@@ -67,6 +69,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
     final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(featureParameters);
 
     RVMPathsSettings.getInstanceEx().initialize(context.getBuildParameters().getEnvironmentVariables());
+    RbEnvPathsSettings.getInstance().initialize(context.getBuildParameters().getEnvironmentVariables());
 
     final SharedParams sharedParams = new SharedParams();
 
@@ -131,6 +134,10 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
           RVMSupportUtil.patchEnvForRVMIfNecessary(sdk, env);
         }
 
+        if (SdkUtil.isRbEnvSdk(sdk)) {
+          ((RbEnvRubySdk)sdk).patchEnvironment(env);
+        }
+
         final Map<String, String> runParams = context.getRunnerParameters();
         final Map<String, String> buildParams = context.getBuildParameters().getAllParameters();
 
@@ -184,6 +191,22 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         }
         break;
       }
+      case RBENV: {
+        if (StringUtil.isEmpty(configuration.getRbEnvVersion())) {
+          throw new RakeTasksBuildService.InvalidConfigurationException(
+            "RbEnv interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'.", true);
+        }
+        break;
+      }
+      case RBENV_FILE: {
+        String path = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
+        if (!StringUtil.isEmptyOrSpaces(path) &&
+            !PathUtil.getFileName(path).equals(".rbenv-version")) {
+          throw new RakeTasksBuildService.InvalidConfigurationException(
+            "Rbenv local version file name must be '.rbenv-version'. Other names doesn't supported by rbenv", false);
+        }
+        break;
+      }
     }
   }
 
@@ -209,6 +232,16 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         // .rvmrc path
         shared.setRVMRCPath(configuration.getRVMRCFilePath());
         shared.setType(SharedParamsType.RVMRC);
+        break;
+      }
+      case RBENV: {
+        shared.setRbEnvVersion(configuration.getRbEnvVersion());
+        shared.setType(SharedParamsType.RBENV);
+        break;
+      }
+      case RBENV_FILE: {
+        shared.setRbEnvVersionFile(configuration.getRbEnvVersionFile());
+        shared.setType(SharedParamsType.RBENV_FILE);
         break;
       }
     }

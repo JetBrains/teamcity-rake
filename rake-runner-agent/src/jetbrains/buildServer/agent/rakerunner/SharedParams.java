@@ -32,6 +32,8 @@ public class SharedParams implements SharedRubyEnvSettings {
   @Nullable private String myRVMSdkName;
   @Nullable private String myRVMGemsetName;
   @Nullable private String myRVMRCPath;
+  @Nullable private String myRbEnvVersion;
+  @Nullable private String myRbEnvVersionFile;
   private boolean myRVMGemsetCreate;
   private boolean isApplied = false;
 
@@ -56,6 +58,14 @@ public class SharedParams implements SharedRubyEnvSettings {
       }
       case RVMRC: {
         params.put(SHARED_RUBY_RVM_RVMRC_PATH, getRVMRCPath());
+        break;
+      }
+      case RBENV: {
+        params.put(SHARED_RUBY_RBENV_VERSION_NAME, getRbEnvVersion());
+        break;
+      }
+      case RBENV_FILE: {
+        params.put(SHARED_RUBY_RBENV_FILE_PATH, getRbEnvVersionFile());
         break;
       }
       case DEFAULT: {
@@ -83,6 +93,14 @@ public class SharedParams implements SharedRubyEnvSettings {
       }
       case RVMRC: {
         context.addRunnerParameter(SHARED_RUBY_RVM_RVMRC_PATH, StringUtil.emptyIfNull(getRVMRCPath()));
+        break;
+      }
+      case RBENV: {
+        context.addRunnerParameter(SHARED_RUBY_RBENV_VERSION_NAME, StringUtil.emptyIfNull(getRbEnvVersion()));
+        break;
+      }
+      case RBENV_FILE: {
+        context.addRunnerParameter(SHARED_RUBY_RBENV_FILE_PATH, StringUtil.emptyIfNull(getRbEnvVersionFile()));
         break;
       }
       case DEFAULT: {
@@ -160,6 +178,7 @@ public class SharedParams implements SharedRubyEnvSettings {
     return myRVMGemsetCreate;
   }
 
+  @NotNull
   public static SharedParams fromRunParameters(@NotNull final Map<String, String> runParams) {
     SharedParams shared = new SharedParams();
     shared.setApplied(Boolean.valueOf(runParams.get(SHARED_RUBY_PARAMS_ARE_APPLIED)));
@@ -169,6 +188,8 @@ public class SharedParams implements SharedRubyEnvSettings {
     shared.setRVMGemsetName(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RVM_GEMSET_NAME)));
     shared.setRVMRCPath(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RVM_RVMRC_PATH)));
     shared.setRVMGemsetCreate(Boolean.valueOf(runParams.get(SHARED_RUBY_RVM_GEMSET_CREATE)));
+    shared.setRbEnvVersion(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RBENV_VERSION_NAME)));
+    shared.setRbEnvVersionFile(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RBENV_FILE_PATH)));
     return shared;
   }
 
@@ -183,5 +204,23 @@ public class SharedParams implements SharedRubyEnvSettings {
       }
     }
     return SharedParamsType.NOT_SETTED;
+  }
+
+  @Nullable
+  public String getRbEnvVersion() {
+    return myRbEnvVersion;
+  }
+
+  public void setRbEnvVersion(@Nullable final String rbEnvVersion) {
+    myRbEnvVersion = rbEnvVersion;
+  }
+
+  @Nullable
+  public String getRbEnvVersionFile() {
+    return myRbEnvVersionFile;
+  }
+
+  public void setRbEnvVersionFile(@Nullable final String rbEnvVersionFile) {
+    myRbEnvVersionFile = rbEnvVersionFile;
   }
 }

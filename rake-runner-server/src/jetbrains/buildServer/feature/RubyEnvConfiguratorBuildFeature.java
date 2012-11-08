@@ -90,6 +90,14 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
         displayParameter(result, "Path to a '.rvmrc' file", configuration.getRVMRCFilePath(), NOT_SPECIFIED_GOOD);
         break;
       }
+      case RBENV: {
+        displayParameter(result, "rbenv interpreter", configuration.getRbEnvVersion(), NOT_SPECIFIED_ERR);
+        break;
+      }
+      case RBENV_FILE: {
+        displayParameter(result, "Path to a '.rbenv-version' file", configuration.getRbEnvVersionFile(), NOT_SPECIFIED_GOOD);
+        break;
+      }
     }
 
     if (configuration.isShouldFailBuildIfNoSdkFound()) {
@@ -142,8 +150,25 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
             ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY,
                                         "RVMRC file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'"));
           }
+          break;
         }
-        break;
+        case RBENV: {
+          if (StringUtil.isEmptyOrSpaces(configuration.getRbEnvVersion())) {
+            ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RBENV_VERSION_NAME_KEY,
+                                        "RbEnv interpreter name cannot be empty."));
+          }
+          break;
+        }
+        case RBENV_FILE: {
+          final String filePath = StringUtil.emptyIfNull(configuration.getRbEnvVersionFile());
+          if (!StringUtil.isEmptyOrSpaces(filePath) &&
+              !filePath.contains("%") &&
+              !PathUtil.getFileName(filePath).equals(".rvmrc")) {
+            ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY,
+                                        "RbEnv file name must be '.rbenv-version'. Other names doesn't supported by rbenv"));
+          }
+          break;
+        }
       }
       return ret;
     }

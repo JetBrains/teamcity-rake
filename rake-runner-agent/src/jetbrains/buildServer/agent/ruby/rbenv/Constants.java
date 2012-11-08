@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package jetbrains.buildServer.agent.ruby;
-
-import jetbrains.buildServer.agent.ruby.rbenv.RbEnvRubySdk;
-import jetbrains.buildServer.agent.ruby.rvm.RVMRubySdk;
-import org.jetbrains.annotations.NotNull;
+package jetbrains.buildServer.agent.ruby.rbenv;
 
 /**
  * @author Vladislav.Rassokhin
  */
-public class SdkUtil {
-
-  public static boolean isRvmSdk(@NotNull final RubySdk sdk) {
-    return sdk instanceof RVMRubySdk;
-  }
-  public static boolean isRbEnvSdk(@NotNull final RubySdk sdk) {
-    return sdk instanceof RbEnvRubySdk;
-  }
+public interface Constants {
+  static final String CONF_PARAMETER_PREFIX = "rbenv.";
+  static final String CONF_RBENV_RUBIES_LIST = CONF_PARAMETER_PREFIX + "versions.list";
+  static final String RBENV_ROOT_ENV_VARIABLE = "RBENV_ROOT";
+  static final String RBENV_VERSION_ENV_VARIABLE = "RBENV_VERSION";
 }

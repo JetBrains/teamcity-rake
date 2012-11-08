@@ -24,6 +24,7 @@ import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.utils.*;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.SdkUtil;
+import jetbrains.buildServer.agent.ruby.rbenv.RbEnvPathsSettings;
 import jetbrains.buildServer.agent.runner.*;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
@@ -59,6 +60,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   @Override
   public ProgramCommandLine makeProgramCommandLine() throws RunBuildException {
     RVMPathsSettings.getInstanceEx().initialize(getBuildParameters().getEnvironmentVariables());
+    RbEnvPathsSettings.getInstance().initialize(getBuildParameters().getEnvironmentVariables());
 
     List<String> arguments = new ArrayList<String>();
     final Map<String, String> runParams = new HashMap<String, String>(getRunnerParameters());

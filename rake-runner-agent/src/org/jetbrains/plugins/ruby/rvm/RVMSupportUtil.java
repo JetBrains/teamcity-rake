@@ -108,7 +108,7 @@ public class RVMSupportUtil {
           final String value = envParams.get(envVarName);
           // info msg - most likely user understand what he is doing.
           logger.warning("Environment variable '" + envVarName + "' has predefined value '" + value +
-                         "'. It may affect runtime build behaviour because TeamCity RVM support wont override it.");
+                         "'. It may affect runtime build behaviour because TeamCity RVM support won't override it.");
         }
       }
     } else {
@@ -129,7 +129,7 @@ public class RVMSupportUtil {
           final String value = envParams.get(envVarName);
           // warning - most likely user doesn't understand what he is doing.
           logger.warning("Environment variable '" + envVarName + "' has predefined value '" + value +
-                         "'. It may affect runtime build behaviour because TeamCity Ruby support wont override it.");
+                         "'. It may affect runtime build behaviour because TeamCity Ruby support won't override it.");
         }
       }
     }

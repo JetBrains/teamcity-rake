@@ -18,6 +18,10 @@
 
 <c:set var="UI_RVM_RVMRC_PATH_KEY" value="<%=RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY%>"/>
 
-<c:set var="UI_INNER_RVM_EXIST_REQUIRMENT_KEY" value="<%=RubyEnvConfiguratorConstants.UI_INNER_RVM_EXIST_REQUIRMENT_KEY%>"/>
+<c:set var="UI_RBENV_VERSION_NAME_KEY" value="<%=RubyEnvConfiguratorConstants.UI_RBENV_VERSION_NAME_KEY%>"/>
+<c:set var="UI_RBENV_FILE_PATH_KEY" value="<%=RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY%>"/>
+
+<c:set var="UI_INNER_RVM_EXIST_REQUIRMENT_KEY" value="<%=RubyEnvConfiguratorConstants.UI_INNER_RVM_EXIST_REQUIREMENT_KEY%>"/>
+<c:set var="UI_INNER_RBENV_EXIST_REQUIRMENT_KEY" value="<%=RubyEnvConfiguratorConstants.UI_INNER_RBENV_EXIST_REQUIREMENT_KEY%>"/>
 
 <c:set var="UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY" value="<%=RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY%>"/>

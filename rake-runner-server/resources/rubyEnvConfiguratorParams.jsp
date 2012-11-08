@@ -39,9 +39,14 @@
                     currValue="${modeSelected}">RVM interpreter</props:option>
       <props:option value="rvmrc"
                     currValue="${modeSelected}">RVM with .rvmrc file</props:option>
+      <props:option value="rbenv"
+                    currValue="${modeSelected}">rbenv interpreter</props:option>
+      <props:option value="rbenv_file"
+                    currValue="${modeSelected}">rbenv with .rbenv-version file</props:option>
     </props:selectProperty>
   </td>
   <props:hiddenProperty name="${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}" value=""/>
+  <props:hiddenProperty name="${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}" value=""/>
 </tr>
 <tr id="rec.interpreter.path.container" style="display: none">
   <th>
@@ -92,6 +97,33 @@
     <span class="smallNote">Path relative to a checkout directory. Leave empty to use ".rvmrc"</span>
   </td>
 </tr>
+<tr id="rec.rbenv.version.container" style="display: none">
+  <th>
+    <label for="${UI_RBENV_VERSION_NAME_KEY}">Interpreter
+      <version></version>
+      : <l:star/></label>
+  </th>
+  <td>
+    <props:textProperty name="${UI_RBENV_VERSION_NAME_KEY}" className="longField"/>
+    <span class="error" id="error_${UI_RBENV_VERSION_NAME_KEY}"></span>
+    <span class="smallNote">E.g.: <strong>1.9.3-p286</strong> or <strong>jruby-1.7.0</strong></span>
+  </td>
+</tr>
+<tr id="rec.rbenv.file.container" style="display: none">
+  <th>
+    <label for="${UI_RBENV_FILE_PATH_KEY}">Path to a&nbsp;'.rbenv-version'&nbsp;file:</label>
+  </th>
+  <td>
+    <nobr>
+      <div class="completionIconWrapper">
+        <props:textProperty name="${UI_RBENV_FILE_PATH_KEY}" className="longField"/>
+        <bs:vcsTree fieldId="${UI_RBENV_FILE_PATH_KEY}"/>
+      </div>
+    </nobr>
+    <span class="error" id="error_${UI_RBENV_FILE_PATH_KEY}"></span>
+    <span class="smallNote">Path relative to a checkout directory. Leave empty to use ".rbenv-version"</span>
+  </td>
+</tr>
 <tr>
   <td colspan="2">
     <props:checkboxProperty name="${UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY}"/>
@@ -110,27 +142,60 @@
         BS.Util.show('rec.rvm.gemset.container');
         BS.Util.show('rec.rvm.gemset.create.container');
         BS.Util.hide('rec.rvm.rvmrc.container');
+        BS.Util.hide('rec.rbenv.version.container');
+        BS.Util.hide('rec.rbenv.file.container');
 
         $('${UI_RVM_SDK_NAME_KEY}').focus();
         $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "%env.rvm_path%";
+        $('${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}').value = "";
       } else if ('rvmrc' == selectedValue) {
         BS.Util.hide('rec.interpreter.path.container');
         BS.Util.hide('rec.rvm.interpreter.container');
         BS.Util.hide('rec.rvm.gemset.container');
         BS.Util.hide('rec.rvm.gemset.create.container');
         BS.Util.show('rec.rvm.rvmrc.container');
+        BS.Util.hide('rec.rbenv.version.container');
+        BS.Util.hide('rec.rbenv.file.container');
 
         $('${UI_RVM_RVMRC_PATH_KEY}').focus();
         $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "%env.rvm_path%";
+        $('${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}').value = "";
+      } else if ('rbenv' == selectedValue) {
+        BS.Util.hide('rec.interpreter.path.container');
+        BS.Util.hide('rec.rvm.interpreter.container');
+        BS.Util.hide('rec.rvm.gemset.container');
+        BS.Util.hide('rec.rvm.gemset.create.container');
+        BS.Util.hide('rec.rvm.rvmrc.container');
+        BS.Util.show('rec.rbenv.version.container');
+        BS.Util.hide('rec.rbenv.file.container');
+
+        $('${UI_RBENV_VERSION_NAME_KEY}').focus();
+        $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "";
+        $('${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}').value = "%env.RBENV_ROOT%";
+      } else if ('rbenv_file' == selectedValue) {
+        BS.Util.hide('rec.interpreter.path.container');
+        BS.Util.hide('rec.rvm.interpreter.container');
+        BS.Util.hide('rec.rvm.gemset.container');
+        BS.Util.hide('rec.rvm.gemset.create.container');
+        BS.Util.hide('rec.rvm.rvmrc.container');
+        BS.Util.hide('rec.rbenv.version.container');
+        BS.Util.show('rec.rbenv.file.container');
+
+        $('${UI_RBENV_FILE_PATH_KEY}').focus();
+        $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "";
+        $('${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}').value = "%env.RBENV_ROOT%";
       } else {
         BS.Util.show('rec.interpreter.path.container');
         BS.Util.hide('rec.rvm.interpreter.container');
         BS.Util.hide('rec.rvm.gemset.container');
         BS.Util.hide('rec.rvm.gemset.create.container');
         BS.Util.hide('rec.rvm.rvmrc.container');
+        BS.Util.hide('rec.rbenv.version.container');
+        BS.Util.hide('rec.rbenv.file.container');
 
         $('${UI_RUBY_SDK_PATH_KEY}').focus();
         $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "";
+        $('${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}').value = "";
       }
       BS.VisibilityHandlers.updateVisibility('mainContent');
     }
