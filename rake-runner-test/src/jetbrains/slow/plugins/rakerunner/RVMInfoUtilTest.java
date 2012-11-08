@@ -9,10 +9,9 @@ import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
 import jetbrains.buildServer.agent.ruby.rvm.util.RVMInfoUtil;
 import jetbrains.buildServer.util.TestFor;
-import junit.framework.Assert;
-import junit.framework.TestCase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -20,7 +19,8 @@ import org.testng.annotations.Test;
  */
 @TestFor(testForClass = {RVMInfoUtil.class})
 @Test(groups = {"unix"})
-public class RVMInfoUtilTest extends TestCase {
+public class RVMInfoUtilTest {
+
   @Test(groups = {"unix"})
   public void testParsingOk() throws Exception {
     final String myCurrentName = "ruby-1.9.3-p194@rails";
@@ -56,9 +56,9 @@ public class RVMInfoUtilTest extends TestCase {
       setupScriptingFactory(myCurrentName, infoMap);
 
       final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell("any", null);
-      Assert.assertEquals("ruby-1.9.3-p194", info.getInterpreterName());
+      Assert.assertEquals(info.getInterpreterName(), "ruby-1.9.3-p194");
       for (RVMInfo.Section section : RVMInfo.Section.values()) {
-        Assert.assertNotNull("section '" + section + "' doesn't exist", info.getSection(section));
+        Assert.assertNotNull(info.getSection(section), "section '" + section + "' doesn't exist");
       }
     } finally {
       ScriptingRunnersProvider.setRVMDefault(ScriptingRunnersProvider.RVM_SHELL_BASED_SCRIPTING_RUNNERS_PROVIDER);
@@ -84,14 +84,14 @@ public class RVMInfoUtilTest extends TestCase {
                                        @Nullable final Map<String, String> environment) {
             final String[] strings = script.split(" ");
             Assert.assertTrue(strings.length >= 2);
-            Assert.assertEquals("Must starts with 'rvm'", "rvm", strings[0]);
+            Assert.assertEquals(strings[0], "rvm", "Must starts with 'rvm'");
             if ("current".equals(strings[1])) {
               return new RunnerUtil.Output(currentOutput, "");
             } else if ("info".equals(strings[1])) {
               final String type = strings[2];
               Assert.assertNotNull(type);
               final String ret = infoMap.get(type);
-              Assert.assertNotNull("Not found: " + type, ret);
+              Assert.assertNotNull(ret, "Not found: " + type);
               return new RunnerUtil.Output(ret, "");
             } else {
               Assert.fail("Mock does not supports command '" + script + "'");

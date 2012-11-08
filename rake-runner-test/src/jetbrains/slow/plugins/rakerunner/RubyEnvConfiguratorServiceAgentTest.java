@@ -68,13 +68,6 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   protected void setUp1() throws Throwable {
     super.setUp1();
 
-    getAgentEvents().addListener(new AgentLifeCycleAdapter() {
-      @Override
-      public void beforeRunnerStart(@NotNull final BuildRunnerContext runner) {
-        runner.getBuild().getBuildLogger().message("message");
-      }
-    });
-
     createNonBlockingBuildRunner(RUN_TYPE);
   }
 
@@ -226,9 +219,6 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     assertTrue(sharedParams.isSetted());
     assertFalse(sharedParams.isApplied());
 
-    assertTrue(sharedParams.isSetted());
-    assertFalse(sharedParams.isApplied());
-
     assertSuccessful(build);
   }
 
@@ -254,9 +244,6 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     Assert.assertNotNull(params);
 
     SharedParams sharedParams = SharedParams.fromRunParameters(params);
-
-    assertTrue(sharedParams.isSetted());
-    assertFalse(sharedParams.isApplied());
 
     assertTrue(sharedParams.isSetted());
     assertFalse(sharedParams.isApplied());
@@ -516,8 +503,6 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
                                  @NotNull final String value) {
     bt.addBuildParameter(new SimpleParameter(key, value));
   }
-
-  // TODO- UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY
 }
 
 
