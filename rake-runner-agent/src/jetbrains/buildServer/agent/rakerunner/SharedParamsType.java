@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.agent.BuildRunnerContext;
-import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingRunnersProvider;
+import jetbrains.buildServer.agent.rakerunner.scripting.ShShellScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShellScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
@@ -103,7 +103,7 @@ public enum SharedParamsType {
           List<String> gemsets = RVMSupportUtil.getInterpreterDistName2GemSetsTable().getGemsets(suitableSdkName);
           if (gemset != null && !gemsets.contains(gemset)) {
             // Creating gemset
-            final ShellScriptRunner scriptRunner = ScriptingRunnersProvider.getRVMDefault().getShellScriptRunner();
+            final ShellScriptRunner scriptRunner = new ShShellScriptRunner();
             RunnerUtil.Output output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitableSdkName + "@" + gemset,
                                                         context.getWorkingDirectory().getAbsolutePath(),
                                                         context.getBuildParameters().getEnvironmentVariables());
