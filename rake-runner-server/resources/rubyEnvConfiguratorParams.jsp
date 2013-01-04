@@ -79,7 +79,7 @@
 <tr id="rec.rvm.gemset.create.container" style="display: none">
   <td colspan="2">
     <props:checkboxProperty name="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}"/>
-    <label for="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}">Create gemset if not exist</label>
+    <label for="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}">Create gemset if does not exist</label>
   </td>
 </tr>
 <tr id="rec.rvm.rvmrc.container" style="display: none">

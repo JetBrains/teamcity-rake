@@ -82,7 +82,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
         displayParameter(result, "RVM gemset", configuration.getRVMGemsetName(), NOT_SPECIFIED_GOOD);
 
         if (configuration.isRVMGemsetCreate()) {
-          result.append("<li>Create gemset if not exist</li>");
+          result.append("<li>Create gemset if does not exist</li>");
         }
         break;
       }
