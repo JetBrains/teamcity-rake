@@ -152,7 +152,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
         case RVMRC: {
           String rvmrcFilePath = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
           if (!StringUtil.isEmptyOrSpaces(rvmrcFilePath) &&
-              !rvmrcFilePath.contains("%") &&
+              !StringUtil.hasParameterReferences(rvmrcFilePath) &&
               !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
             ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY,
                                         "file name must be '.rvmrc'. RVM does not support other names"));
@@ -169,7 +169,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
         case RBENV_FILE: {
           final String filePath = StringUtil.emptyIfNull(configuration.getRbEnvVersionFile());
           if (!StringUtil.isEmptyOrSpaces(filePath) &&
-              !filePath.contains("%") &&
+              !StringUtil.hasParameterReferences(filePath) &&
               !PathUtil.getFileName(filePath).equals(".rbenv-version")) {
             ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY,
                                         "file name must be '.rbenv-version'. rbenv does not support other names"));
