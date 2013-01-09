@@ -55,6 +55,9 @@ public class RubyEnvConfiguratorConfiguration {
 
   public RubyEnvConfiguratorConfiguration(final Map<String, String> configParameters) {
     final String type = configParameters.get(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY);
+    if ("unspecified".equals(type)) {
+      throw new IllegalStateException(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY + " must be specified");
+    }
     if ("manual".equals(type)) {
       this.type = Type.RVM;
     } else if ("rvmrc".equals(type)) {

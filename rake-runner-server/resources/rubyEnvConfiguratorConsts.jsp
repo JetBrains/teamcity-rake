@@ -3,12 +3,6 @@
 
 
 <c:set var="UI_USE_RVM_KEY" value="<%=RubyEnvConfiguratorConstants.UI_USE_RVM_KEY%>"/>
-<c:set var="MODE_PATH" value="path"/>
-<c:set var="MODE_RVM" value="rvm"/>
-<c:set var="MODE_RVMRC" value="rvmrc"/>
-<c:set var="UI_USE_RVM_KEY_PATH" value="${UI_USE_RVM_KEY}:${MODE_PATH}"/>
-<c:set var="UI_USE_RVM_KEY_RVM" value="${UI_USE_RVM_KEY}:${MODE_RVM}"/>
-<c:set var="UI_USE_RVM_KEY_RVMRC" value="${UI_USE_RVM_KEY}:${MODE_RVMRC}"/>
 
 <c:set var="UI_RUBY_SDK_PATH_KEY" value="<%=RubyEnvConfiguratorConstants.UI_RUBY_SDK_PATH_KEY%>"/>
 

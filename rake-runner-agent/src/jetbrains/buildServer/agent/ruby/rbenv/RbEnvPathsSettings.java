@@ -53,8 +53,8 @@ public class RbEnvPathsSettings {
   }
 
   /**
-   * Null-safe version of (getInstance().getRbEnv()) for getting current known RbEnv.
-   * Be sure that RbEnv known at execution time.
+   * Null-safe version of (getInstance().getRbEnv()) for getting current known rbenv.
+   * Be sure that rbenv known at execution time.
    *
    * @return known rvm
    * @throws IllegalStateException if rvm is null
@@ -63,7 +63,7 @@ public class RbEnvPathsSettings {
   public static InstalledRbEnv getRbEnvNullSafe() {
     final InstalledRbEnv rvm = getInstance().getRbEnv();
     if (rvm == null) {
-      throw new IllegalStateException("Unexpected: RbEnv is null. Cannot be null at that step.");
+      throw new IllegalStateException("Unexpected: rbenv is null. Cannot be null at that step.");
     }
     return rvm;
   }

@@ -187,14 +187,14 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         if (!StringUtil.isEmptyOrSpaces(rvmrcFilePath) &&
             !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
           throw new RakeTasksBuildService.InvalidConfigurationException(
-            "RVMRC file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'", false);
+            "RVMRC file name must be '.rvmrc'. RVM does not support other names", false);
         }
         break;
       }
       case RBENV: {
         if (StringUtil.isEmpty(configuration.getRbEnvVersion())) {
           throw new RakeTasksBuildService.InvalidConfigurationException(
-            "RbEnv interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'.", true);
+            "rbenv interpreter name cannot be empty. If you want to use system ruby interpreter please enter 'system'.", true);
         }
         break;
       }
@@ -203,7 +203,7 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         if (!StringUtil.isEmptyOrSpaces(path) &&
             !PathUtil.getFileName(path).equals(".rbenv-version")) {
           throw new RakeTasksBuildService.InvalidConfigurationException(
-            "Rbenv local version file name must be '.rbenv-version'. Other names doesn't supported by rbenv", false);
+            "local version file name must be '.rbenv-version'. rbenv does not support other names", false);
         }
         break;
       }

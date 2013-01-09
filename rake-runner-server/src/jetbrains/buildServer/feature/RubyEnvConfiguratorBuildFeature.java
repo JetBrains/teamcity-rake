@@ -118,10 +118,13 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
 
   @Override
   public Map<String, String> getDefaultParameters() {
-    final Map<String, String> defaults = new HashMap<String, String>(2);
+    final Map<String, String> defaults = new HashMap<String, String>(5);
 
+    defaults.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "unspecified");
+    defaults.put(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY, ".rvmrc");
+    defaults.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_CREATE_IF_NON_EXISTS, Boolean.TRUE.toString());
+    defaults.put(RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY, ".rbenv-version");
     defaults.put(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
-    defaults.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "manual");
     return defaults;
   }
 
@@ -133,6 +136,10 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
   static class ParametersValidator implements PropertiesProcessor {
     public Collection<InvalidProperty> process(final Map<String, String> properties) {
       final Collection<InvalidProperty> ret = new ArrayList<InvalidProperty>(1);
+      if ("unspecified".equalsIgnoreCase(properties.get(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY))) {
+        ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "Please select one"));
+        return ret;
+      }
       final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(properties);
       switch (configuration.getType()) {
         case RVM: {
@@ -148,14 +155,14 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
               !rvmrcFilePath.contains("%") &&
               !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
             ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY,
-                                        "RVMRC file name must be '.rvmrc'. Other names doesn't supported by 'rvm-shell'"));
+                                        "file name must be '.rvmrc'. RVM does not support other names"));
           }
           break;
         }
         case RBENV: {
           if (StringUtil.isEmptyOrSpaces(configuration.getRbEnvVersion())) {
             ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RBENV_VERSION_NAME_KEY,
-                                        "RbEnv interpreter name cannot be empty."));
+                                        "rbenv interpreter name cannot be empty."));
           }
           break;
         }
@@ -163,9 +170,9 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
           final String filePath = StringUtil.emptyIfNull(configuration.getRbEnvVersionFile());
           if (!StringUtil.isEmptyOrSpaces(filePath) &&
               !filePath.contains("%") &&
-              !PathUtil.getFileName(filePath).equals(".rvmrc")) {
+              !PathUtil.getFileName(filePath).equals(".rbenv-version")) {
             ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY,
-                                        "RbEnv file name must be '.rbenv-version'. Other names doesn't supported by rbenv"));
+                                        "file name must be '.rbenv-version'. rbenv does not support other names"));
           }
           break;
         }
