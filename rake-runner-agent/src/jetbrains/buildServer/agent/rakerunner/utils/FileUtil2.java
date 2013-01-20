@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2012 JetBrains s.r.o.
+ * Copyright 2000-2013 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,7 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 import java.io.File;
 import java.io.IOException;
 import jetbrains.buildServer.RunBuildException;
-import jetbrains.buildServer.agent.AgentRuntimeProperties;
-import jetbrains.buildServer.agent.BuildParametersMap;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
-import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
