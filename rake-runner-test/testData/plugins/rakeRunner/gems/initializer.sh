@@ -19,8 +19,10 @@ for i in `ls -d */ | grep -v vendor`; do
 
 
     echo "##teamcity[blockOpened name='Copying cache']"
-    mkdir -p vendor/cache
-    cp -rv ../vendor/cache/* vendor/cache/
+    #mkdir -p vendor/cache
+    #[[ -d ../vendor/cache/ ]] && cp -vu ../vendor/cache/* vendor/cache/
+    [[ ! -d ../vendor ]] && mkdir ../vendor;
+    ln -s ../vendor vendor
     echo "##teamcity[blockClosed name='Copying cache']"
 
 
@@ -38,10 +40,12 @@ for i in `ls -d */ | grep -v vendor`; do
     echo "##teamcity[blockClosed name='Execute Bundler']"
 
     echo "##teamcity[blockOpened name='Updating cache']"
-    bundle pack
-    mv -v vendor/cache/* ../vendor/cache/
-    rm -rf vendor
+    bundle package --no-prune
+    #[[ ! -d ../vendor/cache/ ]] && mkdir -p ../vendor/cache/
+    #cp -vu vendor/cache/* ../vendor/cache/
+    unlink vendor
     echo "##teamcity[blockClosed name='Updating cache']"
+    rm Gemfile.lock
 
     echo "##teamcity[blockClosed name='Processing $i']"
     popd > /dev/null
@@ -51,7 +55,7 @@ echo "##teamcity[blockClosed name='Creating Gemsets for |'$sdk|'']"
 
 
 if [ $# -eq 0 ]; then
-    warn "You must pass at least one ruby version as script parameter"
+    echo "You must pass at least one ruby version as script parameter" >&2
     echo "##teamcity[message text='No ruby versions to proceed' errorDetails='You must pass at least one ruby version as script parameter' status='ERROR']"
     exit 1
 fi

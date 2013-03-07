@@ -24,7 +24,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractTestUnitTest extends AbstractBundlerBasedRakeRunnerTest {
   public static final String APP_TESTUNIT = "app_testunit";
-  public static final String TEST_UNIT_TRUNK = "test-unit-trunk";
+
+  protected AbstractTestUnitTest(@NotNull final String ruby, @NotNull final String gemfile) {
+    super(ruby, gemfile);
+  }
 
   @NotNull
   @Override
@@ -32,20 +35,8 @@ public abstract class AbstractTestUnitTest extends AbstractBundlerBasedRakeRunne
     return APP_TESTUNIT;
   }
 
-  @NotNull
   @Override
-  protected String getBundlerGemfileName() {
-    return TEST_UNIT_TRUNK;
-  }
-
-  @NotNull
-  @Override
-  protected String getRVMGemsetName() {
-    return TEST_UNIT_TRUNK;
-  }
-
-  @Override
-  protected void setUp2() throws Throwable {
+  protected void beforeMethod2() throws Throwable {
     activateTestFramework(SupportedTestFramework.TEST_UNIT);
   }
 }

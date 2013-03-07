@@ -16,18 +16,25 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import org.jetbrains.annotations.NotNull;
+import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
  * @author Vladislav.Rassokhin
  */
-@Test(groups = {"all", "slow"})
+@Test
 public class TestUnitMessagesTest extends AbstractTestUnitTest {
 
+  @Factory(dataProvider = "test-unit", dataProviderClass = BundlerBasedTestsDataProvider.class)
+  public TestUnitMessagesTest(@NotNull final String ruby, @NotNull final String testunit) {
+    super(ruby, testunit);
+  }
+
   @Override
-  protected void setUp2() throws Throwable {
-    super.setUp2();
+  protected void beforeMethod2() throws Throwable {
+    super.beforeMethod2();
     setMessagesTranslationEnabled(false);
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
   }

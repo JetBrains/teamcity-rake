@@ -1,7 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="RakeRunner Suite : Windows Ruby 1.9">
-  <parameter name="ruby.version" value="ruby-1.9"/>
-  <test name="RakeRunner Suite : Windows Ruby 1.9">
+<suite name="RakeRunner Suite : Windows">
+  <suite-files>
+    <suite-file path="server-side.xml"/>
+  </suite-files>
+  <test name="RakeRunner Suite : Windows">
     <groups>
       <run>
         <exclude name="unix"/>

@@ -18,7 +18,6 @@
 # @date: 27.12.2007
 
 require 'rake'
-require 'rspec/core/rake_task'
 
 namespace :bundle do
   task :install do
@@ -28,7 +27,10 @@ namespace :bundle do
   end
 end
 
+
+
 begin
+require 'rspec/core/rake_task'
 #############################################
 Dir["tasks/**/*.rake"].sort.each {|ext| load ext}
 rescue LoadError

@@ -24,8 +24,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractShouldaTest extends AbstractBundlerBasedRakeRunnerTest {
 
-  public static final String SHOULDA_TRUNK = "shoulda-trunk";
   public static final String APP_SHOULDA = "app_shoulda";
+
+  protected AbstractShouldaTest(@NotNull final String ruby, @NotNull final String gemfile) {
+    super(ruby, gemfile);
+  }
 
   @NotNull
   @Override
@@ -33,20 +36,8 @@ public abstract class AbstractShouldaTest extends AbstractBundlerBasedRakeRunner
     return APP_SHOULDA;
   }
 
-  @NotNull
   @Override
-  protected String getBundlerGemfileName() {
-    return SHOULDA_TRUNK;
-  }
-
-  @NotNull
-  @Override
-  protected String getRVMGemsetName() {
-    return SHOULDA_TRUNK;
-  }
-
-  @Override
-  protected void setUp2() throws Throwable {
+  protected void beforeMethod2() throws Throwable {
     activateTestFramework(SupportedTestFramework.SHOULDA, SupportedTestFramework.TEST_UNIT);
   }
 }

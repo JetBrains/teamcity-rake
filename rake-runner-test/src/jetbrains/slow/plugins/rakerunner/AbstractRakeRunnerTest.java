@@ -17,10 +17,6 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
-import java.io.File;
-import java.text.ParseException;
-import java.util.*;
-import java.util.regex.Pattern;
 import jetbrains.buildServer.PartialBuildMessagesChecker;
 import jetbrains.buildServer.RunnerTest2Base;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
@@ -32,12 +28,22 @@ import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.serverSide.buildLog.LogMessage;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
+import org.testng.ITest;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.*;
+import java.util.regex.Pattern;
 
 import static jetbrains.buildServer.messages.serviceMessages.ServiceMessage.SERVICE_MESSAGE_START;
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
@@ -45,14 +51,24 @@ import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 /**
  * @author Roman Chernyatchik
  */
-public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
+public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements ITest {
+
+  static {
+    final Logger logger = Logger.getLogger("jetbrains.slow.plugins.rakerunner");
+    logger.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
+    logger.setLevel(Level.WARN);
+  }
 
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
   private boolean myShouldTranslateMessages = false;
   private String myRubyVersion;
-  private String myGemfileName;
   private final Set<String> myFilesToDelete = new HashSet<String>();
+  private static File ourTempsContainerDir;
+  private File myWorkingDirectory;
 
+  protected AbstractRakeRunnerTest() {
+    setName(this.getClass().getSimpleName());
+  }
 
   @Override
   @NotNull
@@ -60,7 +76,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     return RakeRunnerConstants.RUNNER_TYPE;
   }
 
-  @BeforeMethod(dependsOnMethods = "setRubyVersion")
+  @BeforeMethod
   @Override
   protected void setUp1() throws Throwable {
     super.setUp1();
@@ -81,19 +97,25 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     }
 
     getBuildType().addRunParameter(
-      new SimpleParameter(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY, RakeRunnerConstants.CURRENT_CONFIG_VERSION));
+        new SimpleParameter(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY, RakeRunnerConstants.CURRENT_CONFIG_VERSION));
   }
 
-  @BeforeMethod
-  @Parameters({"ruby.version"})
-  protected void setRubyVersion(@NotNull final String rubyVersion) throws Throwable {
+  protected void setRubyVersion(@NotNull final String rubyVersion) {
     myRubyVersion = rubyVersion;
+  }
+
+  protected String getRubyVersion() {
+    return myRubyVersion;
   }
 
   protected void setMessagesTranslationEnabled(boolean enabled) {
     //TODO: Do not use this to disable service messages translation
     myFixture.getSingletonService(BuildMessagesProcessor.class).setTranslationEnabled(enabled);
     myShouldTranslateMessages = enabled;
+  }
+
+  protected boolean getMessagesTranslationEnabled() {
+    return myShouldTranslateMessages;
   }
 
   private void setInterpreterPath() {
@@ -120,9 +142,8 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     RakeRunnerTestUtil.useRVMGemSet(gemset, getBuildType());
   }
 
-  protected void useBundleGemfile(@NotNull final String gemfileFolder) {
-    myGemfileName = gemfileFolder;
-    RakeRunnerTestUtil.useBundleExec(getBuildType());
+  protected void setUseBundle(final boolean use) {
+    RakeRunnerTestUtil.useBundleExec(getBuildType(), use);
   }
 
   @Override
@@ -133,6 +154,17 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   @Override
   protected String getTestDataSuffixPath() {
     return "plugins/rakeRunner/";
+  }
+
+  public static File getTempsContainerDir() throws IOException {
+    if (ourTempsContainerDir == null) {
+      synchronized (AbstractRakeRunnerTest.class) {
+        if (ourTempsContainerDir == null) {
+          ourTempsContainerDir = FileUtil.createEmptyDir(RakeRunnerTestUtil.getTestDataItemPath("temp-container"));
+        }
+      }
+    }
+    return ourTempsContainerDir;
   }
 
   protected void setTaskNames(final String task_names) {
@@ -158,39 +190,40 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
     initAndDoTest(task_full_name, null, shouldPass, testDataApp);
   }
 
-  @SuppressWarnings("ResultOfMethodCallIgnored")
   protected void initAndDoTest(final String task_full_name,
                                @Nullable final String result_file_suffix,
                                final boolean shouldPass,
                                final String testDataApp) throws Throwable {
 
-    final String workingDirectory = getTestDataPath(testDataApp).getAbsolutePath();
-    if (myGemfileName != null) {
-      // Copy Gemfile
-      final File gemfile = new File(workingDirectory, "Gemfile");
-      FileUtil.copy(new File(getTestDataPath("gemfiles"), myGemfileName), gemfile);
-      myFilesToDelete.add(gemfile.getAbsolutePath());
-      myFilesToDelete.add(gemfile.getAbsolutePath() + ".lock");
-      getBuildType().addBuildParameter(new SimpleParameter(RakeRunnerConstants.CUSTOM_GEMFILE_RELATIVE_PATH, gemfile.getAbsolutePath()));
-    }
-    addRunParameter(AgentRuntimeProperties.BUILD_WORKING_DIR, workingDirectory);
+    final File workingDirectory = getTestDataPath(testDataApp).getAbsoluteFile();
+    initAndDoTest(task_full_name, result_file_suffix, shouldPass, testDataApp, workingDirectory);
+  }
+
+  protected void initAndDoTest(final String task_full_name,
+                               @Nullable final String result_file_suffix,
+                               boolean shouldPass,
+                               @NotNull final String testDataApp,
+                               @NotNull final File workingDirectory) throws Throwable {
+    myWorkingDirectory = workingDirectory;
+    addRunParameter(AgentRuntimeProperties.BUILD_WORKING_DIR, workingDirectory.getAbsolutePath());
+//    addRunParameter(AgentRuntimeProperties.BUILD_CHECKOUT_DIR, workingDirectory.getAbsolutePath());
     setTaskNames(task_full_name);
 
     final String resultFileName = result_file_suffix == null
-                                  ? null
-                                  : testDataApp + "/results/"
-                                    + task_full_name.replace(":", "/")
-                                    + result_file_suffix
-                                    // lets automatically expect "_log"
-                                    // suffix to each translated result (build log) file
-                                    + (myShouldTranslateMessages ? "_log" : "");
+        ? null
+        : testDataApp + "/results/"
+        + task_full_name.replace(":", "/")
+        + result_file_suffix
+        // lets automatically expect "_log"
+        // suffix to each translated result (build log) file
+        + (myShouldTranslateMessages ? "_log" : "");
     doTest(resultFileName);
     final List<LogMessage> errorMessages = getLastFinishedBuild().getBuildLog().getErrorMessages();
     assertEquals(errorMessages.toString(), shouldPass, !getLastFinishedBuild().getBuildStatus().isFailed());
   }
 
 
-  @AfterClass
+  @AfterMethod(alwaysRun = true)
   public void removeBundleFiles() throws Throwable {
     for (final String path : myFilesToDelete) {
       FileUtil.delete(new File(path));
@@ -309,7 +342,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
 
   private static void reorderAttributes(final List<String> foundAttrs) {
     final String[] sequence = {"name", "captureStandardOutput", "locationHint", "message", "details", "error",
-      "text", "status", "errorDetails", "type", "duration", "timestamp"
+        "text", "status", "errorDetails", "type", "duration", "timestamp"
     };
     int ii = 0;
     for (String attrName : sequence) {
@@ -362,6 +395,49 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base {
   protected String doRunnerSpecificReplacement(final String expected) {
     String msg = expected.replaceAll("[0-9]{4}-[0-9]{2}-[0-9]{2}('T'|T)[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}[+\\-]{1}[0-9]+", "##TIME##");
     msg = msg.replaceAll("duration ?= ?'[0-9]+'", "duration='##DURATION##'");
+    if (myWorkingDirectory != null) {
+      final String rel = FileUtil.getRelativePath(getCurrentDir().getAbsoluteFile(), myWorkingDirectory.getAbsoluteFile());
+      if (rel != null) {
+        msg = msg.replaceAll(Pattern.quote(rel), "##WORKING_DIR##");
+      }
+    }
     return msg;
   }
+
+  protected void doPrepareGemset(@NotNull final String gemsetFullName, @NotNull final Logger LOG, @NotNull final File gemfile) throws IOException {
+    if (!SystemInfo.isUnix) {
+      return;
+    }
+    final File cacheDir = getTestDataPath("gems/vendor/cache");
+    FileUtil.createDir(cacheDir);
+    final File workingDirectory = gemfile.getParentFile();
+    final File localCacheDir = new File(workingDirectory, "vendor/cache");
+    FileUtil.createDir(localCacheDir);
+    FileUtil.copyDir(cacheDir, localCacheDir);
+    RunCommandsHelper.runBashScript(LOG, workingDirectory,
+        "source " + getTestDataPath("gems/checkRVMCommand.sh").getAbsolutePath(),
+        "checkRVMCommand",
+        String.format("rvm use \"%s\" --create", gemsetFullName),
+        "gem which bundler || gem install bundler",
+        "bundle install --local || (rm Gemfile.lock; bundle install)",
+        "bundle package --no-prune"
+    );
+    FileUtil.copyDir(localCacheDir, cacheDir);
+  }
+
+  public String getTestName() {
+    final String base = getClass().getName();
+    final List<String> parametersList = getTestNameParametersList();
+    if (parametersList.isEmpty()) {
+      return base;
+    }
+    return base + "(" + StringUtil.join(",", parametersList) + ")";
+  }
+
+  @NotNull
+  protected List<String> getTestNameParametersList() {
+    return new ArrayList<String>(Arrays.asList(myRubyVersion));
+  }
+
+
 }

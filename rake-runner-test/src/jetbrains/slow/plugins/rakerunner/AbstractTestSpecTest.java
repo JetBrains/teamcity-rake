@@ -24,7 +24,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractTestSpecTest extends AbstractBundlerBasedRakeRunnerTest {
   public static final String APP_TESTSPEC = "app_testspec";
-  public static final String TEST_SPEC_TRUNK = "test-spec-trunk";
+
+  protected AbstractTestSpecTest(@NotNull final String ruby, @NotNull final String gemfile) {
+    super(ruby, gemfile);
+  }
 
   @NotNull
   @Override
@@ -32,20 +35,8 @@ public abstract class AbstractTestSpecTest extends AbstractBundlerBasedRakeRunne
     return APP_TESTSPEC;
   }
 
-  @NotNull
   @Override
-  protected String getBundlerGemfileName() {
-    return TEST_SPEC_TRUNK;
-  }
-
-  @NotNull
-  @Override
-  protected String getRVMGemsetName() {
-    return TEST_SPEC_TRUNK;
-  }
-
-  @Override
-  protected void setUp2() throws Throwable {
+  protected void beforeMethod2() throws Throwable {
     setMessagesTranslationEnabled(true);
     activateTestFramework(SupportedTestFramework.TEST_SPEC, SupportedTestFramework.TEST_UNIT);
   }

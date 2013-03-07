@@ -16,13 +16,21 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import org.jetbrains.annotations.NotNull;
+import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
+ * @author Vladislav.Rassokhin
  */
-@Test(groups = {"all", "slow"})
+@Test
 public class RSpecBuildLogTest extends AbstractRSpecTest {
+  @Factory(dataProvider = "rspec", dataProviderClass = BundlerBasedTestsDataProvider.class)
+  @TestWithGemfiles("rspec-trunk")
+  public RSpecBuildLogTest(@NotNull final String ruby, @NotNull final String gemfile) {
+    super(ruby, gemfile);
+  }
 
   public void testSpecPassed() throws Throwable {
     doTestWithoutLogCheck("stat:passed", true);

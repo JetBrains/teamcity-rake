@@ -16,26 +16,90 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import com.intellij.openapi.util.SystemInfo;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.SimpleParameter;
+import jetbrains.buildServer.util.FileUtil;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Vladislav.Rassokhin
  */
 public abstract class AbstractBundlerBasedRakeRunnerTest extends AbstractRakeRunnerTest {
+  private static final Logger LOG;
 
-  public static final String BUNDLE_INSTALL_TASK = "bundle:install";
+  static {
+    LOG = Logger.getLogger(AbstractBundlerBasedRakeRunnerTest.class);
+    LOG.setLevel(Level.DEBUG);
+  }
 
-  @BeforeMethod(dependsOnMethods = {"setUp1"})
-  protected final void runBundleInstall() throws Throwable {
-    getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, Boolean.FALSE.toString()));
-    try {
-      initAndDoTest(BUNDLE_INSTALL_TASK, null, true, getTestDataApp());
-    } finally {
-      getBuildType().addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, Boolean.TRUE.toString()));
+  private final String myBundlerGemfileName;
+  private final String myRVMGemsetName;
+  private File myWorkingDirectory;
+  private File myGemfile;
+
+  protected AbstractBundlerBasedRakeRunnerTest(@NotNull final String ruby, @NotNull final String gemfileName) {
+    setRubyVersion(ruby);
+    myBundlerGemfileName = gemfileName;
+    myRVMGemsetName = gemfileName;
+  }
+
+  @BeforeClass
+  protected final void doPrepareWorkingDir() throws Throwable {
+    myWorkingDirectory = FileUtil.createTempDirectory(getTestDataApp(), "", getTempsContainerDir());
+    myWorkingDirectory.deleteOnExit();
+    // Copy Gemfile
+    myGemfile = copyGemfileToWorkingDirectory(myWorkingDirectory, myBundlerGemfileName);
+
+
+    // Copy test data
+    final File source = getTestDataPath(getTestDataApp());
+    FileUtil.copyDir(source, myWorkingDirectory);
+  }
+
+  private File copyGemfileToWorkingDirectory(@NotNull final File workingDirectory, @NotNull final String gemset) throws java.io.IOException {
+    final File gemfile = new File(workingDirectory, "Gemfile");
+    FileUtil.copy(new File(new File(getTestDataPath("gems"), gemset), "Gemfile"), gemfile);
+    return gemfile;
+  }
+
+  @BeforeClass(dependsOnMethods = {"doPrepareWorkingDir"})
+  protected final void doPrepareEnvironment() throws Throwable {
+    if (SystemInfo.isUnix) {
+      final String gemsetFullName = getRubyVersion() + "@" + myRVMGemsetName;
+      doPrepareGemset(gemsetFullName, LOG, myGemfile);
+      gemsetToDelete.add(gemsetFullName);
+    } else if (SystemInfo.isWindows) {
+//      final File interpreter = RakeRunnerTestUtil.getWindowsInterpreterExecutableFile(getRubyVersion());
+//      final File bin = interpreter.getParentFile();
+//      RunCommandsHelper.runExecutable(LOG, bin.getAbsolutePath() + "/gem.bat", myWorkingDirectory, "install", "bundler");
+//      RunCommandsHelper.runExecutable(LOG, bin.getAbsolutePath() + "/bundle.bat", myWorkingDirectory, "install");
+    }
+  }
+
+  private static final Set<String> gemsetToDelete = new HashSet<String>();
+
+  @AfterSuite(alwaysRun = true, enabled = false)
+  public void removeGemsets() throws Throwable {
+    if (SystemInfo.isUnix) {
+      for (String gemset : gemsetToDelete) {
+        RunCommandsHelper.runBashScript(LOG, myWorkingDirectory,
+            "source " + getTestDataPath("gems/checkRVMCommand.sh").getAbsolutePath(),
+            "checkRVMCommand",
+            String.format("rvm gemset delete \"%s\" --force", gemset)
+        );
+      }
     }
   }
 
@@ -48,39 +112,47 @@ public abstract class AbstractBundlerBasedRakeRunnerTest extends AbstractRakeRun
     super.setUp1();
     setMessagesTranslationEnabled(true);
     useRVMGemSet(getRVMGemsetName());
-    useBundleGemfile(getBundlerGemfileName());
-    setUp2();
+    setUseBundle(true);
+    getBuildType().addBuildParameter(new SimpleParameter(RakeRunnerConstants.CUSTOM_GEMFILE_RELATIVE_PATH, myGemfile.getAbsolutePath()));
+    beforeMethod2();
   }
 
   @NotNull
   protected abstract String getTestDataApp();
 
   @NotNull
-  protected abstract String getBundlerGemfileName();
-
-  @NotNull
-  protected abstract String getRVMGemsetName();
+  protected String getRVMGemsetName() {
+    return myRVMGemsetName;
+  }
 
   /**
    * Use instead of setUp1
    */
-  protected void setUp2() throws Throwable {
+  protected void beforeMethod2() throws Throwable {
   }
 
   protected void initAndDoTest(@NotNull final String taskName, final boolean shouldPass) throws Throwable {
-    super.initAndDoTest(taskName, shouldPass, getTestDataApp());
+    initAndDoTest(taskName, "", shouldPass, getTestDataApp(), myWorkingDirectory);
   }
 
   protected void initAndDoTest(@NotNull final String taskName, @Nullable final String resultFileSuffix, final boolean shouldPass)
-    throws Throwable {
-    super.initAndDoTest(taskName, resultFileSuffix, shouldPass, getTestDataApp());
+      throws Throwable {
+    initAndDoTest(taskName, resultFileSuffix, shouldPass, getTestDataApp(), myWorkingDirectory);
   }
 
   protected void initAndDoRealTest(@NotNull final String taskName, final boolean shouldPass) throws Throwable {
-    initAndDoRealTest(taskName, shouldPass, getTestDataApp());
+    initAndDoTest(taskName, "_real", shouldPass, getTestDataApp(), myWorkingDirectory);
   }
 
   protected void doTestWithoutLogCheck(@NotNull final String task_full_name, final boolean shouldPass) throws Throwable {
-    super.doTestWithoutLogCheck(task_full_name, shouldPass, getTestDataApp());
+    initAndDoTest(task_full_name, null, shouldPass, getTestDataApp(), myWorkingDirectory);
+  }
+
+  @NotNull
+  @Override
+  protected List<String> getTestNameParametersList() {
+    final List<String> list = super.getTestNameParametersList();
+    list.add(myBundlerGemfileName);
+    return list;
   }
 }

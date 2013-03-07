@@ -16,14 +16,15 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import java.io.File;
-import java.io.FileFilter;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.serverSide.BuildTypeSettings;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.FileFilter;
 
 /**
  * @author Roman.Chernyatchik
@@ -58,6 +59,14 @@ public class RakeRunnerTestUtil {
 
   static public void setInterpreterPath(@NotNull final BuildTypeSettings bt, @NotNull final String prefix)
     throws InterpreterNotFoundException {
+    final File interpreter = getWindowsInterpreterExecutableFile(prefix);
+    bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreter.getAbsolutePath()));
+    bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
+        RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
+  }
+
+  @NotNull
+  public static File getWindowsInterpreterExecutableFile(final String prefix) throws InterpreterNotFoundException {
     String interpretersStoragePath = System.getProperty(INTERPRETERS_STORAGE_PATH_PROPERTY);
     if (StringUtil.isEmptyOrSpaces(interpretersStoragePath)) {
       throw new InterpreterNotFoundException("Cannot found interpreters storage location. Please specify \"" +
@@ -66,7 +75,7 @@ public class RakeRunnerTestUtil {
 
     File storageDir = new File(interpretersStoragePath);
     final File[] acceptablePaths = storageDir.listFiles(new FileFilter() {
-      public boolean accept(final File pathname) {
+      public boolean accept(@NotNull final File pathname) {
         return pathname.isDirectory() && pathname.getName().startsWith(prefix);
       }
     });
@@ -78,16 +87,11 @@ public class RakeRunnerTestUtil {
       throw new InterpreterNotFoundException(
         "There more than one interpreter path with prefix \"" + prefix + "\", founded " + acceptablePaths.length + " path");
     }
-    final String interpreterPath = acceptablePaths[0].getAbsolutePath() + "/bin/" + (prefix.startsWith("jruby") ? "jruby.bat" : "ruby.exe");
     File interpreter = new File(acceptablePaths[0], "/bin/" + (prefix.startsWith("jruby") ? "jruby.bat" : "ruby.exe"));
-    if (interpreter.exists() && interpreter.isFile()) {
-
-      bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreter.getAbsolutePath()));
-      bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
-                                             RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
-    } else {
+    if (!interpreter.exists() || !interpreter.isFile()) {
       throw new InterpreterNotFoundException("Founded path is not exist \"" + interpreter.getAbsolutePath() + "\"");
     }
+    return interpreter;
   }
 
   static public void setRVMConfiguration(@NotNull final BuildTypeSettings bt, @NotNull final String rubySdkName) {
@@ -112,7 +116,7 @@ public class RakeRunnerTestUtil {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME, GEMSET_PREFIX + gemset));
   }
 
-  static public void useBundleExec(@NotNull final BuildTypeSettings bt) {
-    bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, Boolean.TRUE.toString()));
+  static public void useBundleExec(@NotNull final BuildTypeSettings bt, boolean value) {
+    bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, Boolean.toString(value)));
   }
 }

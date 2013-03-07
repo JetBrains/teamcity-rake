@@ -16,13 +16,20 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import org.jetbrains.annotations.NotNull;
+import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
 
 /**
  * @author Roman Chernyatchik
  */
-@Test(groups = {"all", "slow"})
+@Test
 public class TestUnitBuildLogTest extends AbstractTestUnitTest {
+
+  @Factory(dataProvider = "test-unit", dataProviderClass = BundlerBasedTestsDataProvider.class)
+  public TestUnitBuildLogTest(@NotNull final String ruby, @NotNull final String testunit) {
+    super(ruby, testunit);
+  }
 
   public void testTestPassed() throws Throwable {
     doTestWithoutLogCheck("stat:passed", true);

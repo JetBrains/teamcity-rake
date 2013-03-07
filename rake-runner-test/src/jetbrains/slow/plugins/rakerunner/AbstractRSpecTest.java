@@ -24,11 +24,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractRSpecTest extends AbstractBundlerBasedRakeRunnerTest {
 
-  public static final String RSPEC_TRUNK = "rspec-trunk";
   public static final String APP_RSPEC = "app_rspec";
 
+  protected AbstractRSpecTest(@NotNull final String ruby, @NotNull final String gemfile) {
+    super(ruby, gemfile);
+  }
+
   @Override
-  protected void setUp2() throws Throwable {
+  protected void beforeMethod2() throws Throwable {
     setMessagesTranslationEnabled(true);
     activateTestFramework(SupportedTestFramework.RSPEC);
   }
@@ -37,17 +40,5 @@ public abstract class AbstractRSpecTest extends AbstractBundlerBasedRakeRunnerTe
   @Override
   protected String getTestDataApp() {
     return APP_RSPEC;
-  }
-
-  @NotNull
-  @Override
-  protected String getBundlerGemfileName() {
-    return RSPEC_TRUNK;
-  }
-
-  @NotNull
-  @Override
-  protected String getRVMGemsetName() {
-    return RSPEC_TRUNK;
   }
 }

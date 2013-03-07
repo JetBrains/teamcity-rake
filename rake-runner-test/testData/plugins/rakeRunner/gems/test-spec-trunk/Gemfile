@@ -1,8 +1,8 @@
 source "http://rubygems.org"
 gem "rake"
 
-if (RUBY_VERSION.to_f == 1.9) then
-  p "Founded 1.9 ruby, requiring 'test-unit' gem"
+if (RUBY_VERSION.to_f != 1.8) then
+  p "Founded #{RUBY_VERSION.to_f} ruby, requiring 'test-unit' gem"
   gem "test-unit"
 end
 

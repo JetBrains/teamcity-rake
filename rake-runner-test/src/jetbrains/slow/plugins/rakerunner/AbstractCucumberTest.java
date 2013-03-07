@@ -26,7 +26,11 @@ import org.jetbrains.annotations.NotNull;
 public abstract class AbstractCucumberTest extends AbstractBundlerBasedRakeRunnerTest {
 
   public static final String APP_CUCUMBER = "app_cucumber";
-  public static final String CUCUMBER_TRUNK = "cucumber-trunk";
+
+
+  protected AbstractCucumberTest(@NotNull final String ruby, @NotNull final String gemfile) {
+    super(ruby, gemfile);
+  }
 
   @NotNull
   @Override
@@ -34,20 +38,8 @@ public abstract class AbstractCucumberTest extends AbstractBundlerBasedRakeRunne
     return APP_CUCUMBER;
   }
 
-  @NotNull
   @Override
-  protected String getBundlerGemfileName() {
-    return CUCUMBER_TRUNK;
-  }
-
-  @NotNull
-  @Override
-  protected String getRVMGemsetName() {
-    return CUCUMBER_TRUNK;
-  }
-
-  @Override
-  protected void setUp2() throws Throwable {
+  protected void beforeMethod2() throws Throwable {
     setMessagesTranslationEnabled(true);
     activateTestFramework(SupportedTestFramework.CUCUMBER);
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
