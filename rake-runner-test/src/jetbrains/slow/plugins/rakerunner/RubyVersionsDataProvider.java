@@ -62,12 +62,9 @@ public class RubyVersionsDataProvider {
   public static Set<String> getRubyVersionsLinuxSet() {
     return new HashSet<String>() {
       {
-//        add("ruby-2.0.0-p0");
         add("ruby-1.8.7");
         add("ruby-1.9.2");
-        //add("ruby-1.9.3");
-        //add("jruby-1.6.8");
-        //add("jruby-1.7.1");
+        add("jruby");
       }
     };
   }
