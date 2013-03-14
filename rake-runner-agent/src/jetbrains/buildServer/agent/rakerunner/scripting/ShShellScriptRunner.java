@@ -4,6 +4,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
@@ -16,9 +18,9 @@ public class ShShellScriptRunner implements ShellScriptRunner {
   private static final Logger LOG = Logger.getInstance(ShShellScriptRunner.class.getName());
 
   @NotNull
-  public RunnerUtil.Output run(@NotNull final String script,
-                               @NotNull final String workingDirectory,
-                               @Nullable final Map<String, String> environment) {
+  public ExecResult run(@NotNull final String script,
+                        @NotNull final String workingDirectory,
+                        @Nullable final Map<String, String> environment) {
     final File directory = new File(workingDirectory);
     File scriptFile = null;
     try {
@@ -33,12 +35,14 @@ public class ShShellScriptRunner implements ShellScriptRunner {
         }
       } catch (IOException e) {
         LOG.error("Failed to create temp file, error: ", e);
-        return new RunnerUtil.Output("", "Failed to create temp file, error: " + e.getMessage());
+        final ExecResult result = new ExecResult();
+        result.setStderr("Failed to create temp file, error: " + e.getMessage());
+        result.setException(e);
+        return result;
       }
-      final RunnerUtil.Output run = RunnerUtil.run(workingDirectory, environment, "/bin/sh", scriptFile.getAbsolutePath());
+      final ExecResult run = RunnerUtil.run(workingDirectory, environment, "/bin/sh", scriptFile.getAbsolutePath());
       if (LOG.isDebugEnabled()) {
-        LOG.debug("Script stdout:" + run.getStdout());
-        LOG.debug("Script stderr:" + run.getStderr());
+        LOG.debug("Script ExecResult:" + run);
       }
       return run;
     } finally {

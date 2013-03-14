@@ -16,17 +16,12 @@
 
 package jetbrains.buildServer.agent.rakerunner;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShShellScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShellScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
 import jetbrains.buildServer.agent.ruby.rbenv.InstalledRbEnv;
@@ -39,6 +34,12 @@ import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil2.getCanonicalPath2;
 import static jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil.findSystemInterpreterExecutable;
@@ -104,12 +105,12 @@ public enum SharedParamsType {
           if (gemset != null && !gemsets.contains(gemset)) {
             // Creating gemset
             final ShellScriptRunner scriptRunner = new ShShellScriptRunner();
-            RunnerUtil.Output output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitableSdkName + "@" + gemset,
-                                                        context.getWorkingDirectory().getAbsolutePath(),
-                                                        context.getBuildParameters().getEnvironmentVariables());
-            if (!StringUtil.isEmptyOrSpaces(output.getStderr())) {
-              throw new RakeTasksBuildService.MyBuildFailureException(
-                "Failed to create gemset '" + gemset + "':" + output.getStderr() + "\n" + output.getStdout());
+            final ExecResult output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitableSdkName + "@" + gemset,
+                context.getWorkingDirectory().getAbsolutePath(),
+                context.getBuildParameters().getEnvironmentVariables());
+            //noinspection ThrowableResultOfMethodCallIgnored
+            if (output.getExitCode() != 0 || output.getException() != null) {
+              throw new RakeTasksBuildService.MyBuildFailureException("Failed to create gemset '" + gemset + "':" + output);
             }
           }
         }

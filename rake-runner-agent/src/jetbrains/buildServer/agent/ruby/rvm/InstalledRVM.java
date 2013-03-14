@@ -20,6 +20,8 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.util.*;
+
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubyVersionManager;
@@ -110,7 +112,7 @@ public class InstalledRVM extends RubyVersionManager {
 
   @NotNull
   public static String executeCommandLine(@NotNull final String... query) {
-    final RunnerUtil.Output output = RunnerUtil.run(null, null, query);
+    final ExecResult output = RunnerUtil.run(null, null, query);
     return output.getStdout();
   }
 

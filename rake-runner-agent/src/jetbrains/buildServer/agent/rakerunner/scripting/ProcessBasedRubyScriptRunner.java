@@ -17,15 +17,17 @@
 package jetbrains.buildServer.agent.rakerunner.scripting;
 
 import com.intellij.openapi.diagnostic.Logger;
-import java.io.File;
-import java.io.PrintStream;
-import java.util.Map;
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
+
+import java.io.File;
+import java.io.PrintStream;
+import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
@@ -41,11 +43,11 @@ public class ProcessBasedRubyScriptRunner implements RubyScriptRunner {
   private final RubySdk mySdk;
 
   @NotNull
-  public RunnerUtil.Output run(@NotNull final String script,
-                               @NotNull final String workingDirectory,
-                               @Nullable final Map<String, String> environment,
-                               @NotNull final String... rubyArgs) {
-    RunnerUtil.Output result = null;
+  public ExecResult run(@NotNull final String script,
+                        @NotNull final String workingDirectory,
+                        @Nullable final Map<String, String> environment,
+                        @NotNull final String... rubyArgs) {
+    ExecResult result = null;
     File scriptFile = null;
     try {
       // Writing source to the temp file
@@ -74,7 +76,6 @@ public class ProcessBasedRubyScriptRunner implements RubyScriptRunner {
       }
     }
 
-    //noinspection ConstantConditions
     return result;
   }
 }

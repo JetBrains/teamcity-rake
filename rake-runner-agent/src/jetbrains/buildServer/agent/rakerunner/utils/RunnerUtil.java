@@ -17,16 +17,14 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.*;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.Key;
-import com.intellij.openapi.vfs.CharsetToolkit;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-import jetbrains.buildServer.log.LogInitializer;
+import jetbrains.buildServer.ExecResult;
+import jetbrains.buildServer.SimpleCommandLineProcessRunner;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
 
@@ -35,7 +33,6 @@ import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
  * @author Vladislav.Rassokhin
  */
 public class RunnerUtil {
-  private static final Logger LOG = Logger.getInstance(RunnerUtil.class.getName());
 
   /**
    * Sync process execution.
@@ -43,65 +40,14 @@ public class RunnerUtil {
    * @param workingDir  working directory or null, if no special needed
    * @param environment additional environment for process
    * @param command     Command to execute
-   * @return Output process output
+   * @return ExitResult process execution result
    */
   @NotNull
-  public static Output run(@Nullable final String workingDir,
-                           @Nullable final Map<String, String> environment,
-                           @NotNull final String... command) {
+  public static ExecResult run(@Nullable final String workingDir,
+                               @Nullable final Map<String, String> environment,
+                               @NotNull final String... command) {
     // executing
-    final StringBuilder out = new StringBuilder();
-    final StringBuilder err = new StringBuilder();
-    Process process = createProcess(workingDir, environment, command);
-    if (process != null) {
-      ProcessHandler osProcessHandler = new OSProcessHandler(process, TextUtil.concat(command)) {
-        private final Charset DEFAULT_SYSTEM_CHARSET = CharsetToolkit.getDefaultSystemCharset();
-
-        @Override
-        public Charset getCharset() {
-          return DEFAULT_SYSTEM_CHARSET;
-        }
-      };
-      osProcessHandler.addProcessListener(new OutputListener(out, err));
-      osProcessHandler.startNotify();
-      osProcessHandler.waitFor();
-    }
-    return new Output(out.toString(), err.toString());
-  }
-
-  /**
-   * Creates add by command and working directory
-   *
-   * @param workingDir  working directory or null, if no special needed
-   * @param environment additional environment for process
-   * @param command     command line
-   * @return see above
-   */
-  @Nullable
-  public static Process createProcess(@Nullable final String workingDir,
-                                      @Nullable final Map<String, String> environment,
-                                      @NotNull final String... command) {
-    Process process = null;
-
-    final String[] arguments;
-    if (command.length > 1) {
-      arguments = new String[command.length - 1];
-      System.arraycopy(command, 1, arguments, 0, command.length - 1);
-    } else {
-      arguments = new String[0];
-    }
-
-    final GeneralCommandLine cmdLine = createAndSetupCmdLine(workingDir, environment, command[0], arguments);
-    try {
-      process = cmdLine.createProcess();
-    } catch (Exception e) {
-      if (!LogInitializer.isUnitTest()) {
-        LOG.error(e.getMessage(), e);
-      } else {
-        LOG.warn(e.getMessage(), e);
-      }
-    }
-    return process;
+    return SimpleCommandLineProcessRunner.runCommand(createCommandLine(workingDir, environment, command), null);
   }
 
   /**
@@ -113,67 +59,30 @@ public class RunnerUtil {
    * @param arguments      Process commandLine
    * @return process builder
    */
-  public static GeneralCommandLine createAndSetupCmdLine(@Nullable final String workingDir,
-                                                         @Nullable final Map<String, String> environment,
-                                                         @NotNull final String executablePath,
-                                                         @NotNull final String... arguments) {
-    final GeneralCommandLine cmdLine = new GeneralCommandLine();
+  @NotNull
+  public static GeneralCommandLine createCommandLine(@Nullable final String workingDir,
+                                                     @Nullable final Map<String, String> environment,
+                                                     @NotNull final String... command) {
+    if (command.length == 0) {
+      throw new IllegalArgumentException("At least executable path in 'command' argument required");
+    }
+    if (StringUtil.isEmptyOrSpaces(command[0])) {
+      throw new IllegalArgumentException("First string in 'command' argument (executable path) must not be empty");
+    }
 
-    cmdLine.setExePath(toSystemDependentName(executablePath));
+    final GeneralCommandLine cl = new GeneralCommandLine();
+
+    cl.setExePath(toSystemDependentName(command[0]));
     if (workingDir != null) {
-      cmdLine.setWorkDirectory(toSystemDependentName(workingDir));
+      cl.setWorkDirectory(toSystemDependentName(workingDir));
     }
-    cmdLine.addParameters(arguments);
-
-    // set env params
-    if (environment != null) {
-      final Map<String, String> envParams = new HashMap<String, String>();
-      envParams.putAll(environment);
-      cmdLine.setEnvParams(envParams);
+    for (int i = 1; i < command.length; i++) {
+      cl.addParameter(command[i]);
     }
 
-    return cmdLine;
+    cl.setEnvParams(environment != null ? new HashMap<String, String>(environment) : null);
+
+    return cl;
   }
 
-  public static class Output {
-    @NotNull
-    private final String myStdout;
-    @NotNull
-    private final String myStderr;
-
-    public Output(@NotNull final String stdout, @NotNull final String stderr) {
-      this.myStdout = stdout;
-      this.myStderr = stderr;
-    }
-
-    @NotNull
-    public String getStdout() {
-      return myStdout;
-    }
-
-    @NotNull
-    public String getStderr() {
-      return myStderr;
-    }
-  }
-
-  public static class OutputListener extends ProcessAdapter {
-    private final StringBuilder out;
-    private final StringBuilder err;
-
-    public OutputListener(@NotNull final StringBuilder out, @NotNull final StringBuilder err) {
-      this.out = out;
-      this.err = err;
-    }
-
-    @Override
-    public void onTextAvailable(final ProcessEvent event, final Key outputType) {
-      if (outputType == ProcessOutputTypes.STDOUT) {
-        out.append(event.getText());
-      }
-      if (outputType == ProcessOutputTypes.STDERR) {
-        err.append(event.getText());
-      }
-    }
-  }
 }

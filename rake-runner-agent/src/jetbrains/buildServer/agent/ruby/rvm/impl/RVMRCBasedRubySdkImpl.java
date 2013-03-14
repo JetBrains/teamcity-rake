@@ -17,22 +17,22 @@
 package jetbrains.buildServer.agent.ruby.rvm.impl;
 
 import com.intellij.openapi.diagnostic.Logger;
-import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.scripting.*;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
 import jetbrains.buildServer.agent.ruby.rvm.util.RVMInfoUtil;
-import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Vladislav.Rassokhin
@@ -69,13 +69,12 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl {
   private static RubySdk createAndSetup(@NotNull final String pathToRVMRCFolder, @NotNull final Map<String, String> env)
     throws RakeTasksBuildService.MyBuildFailureException {
     final ShellScriptRunner shellScriptRunner = ScriptingRunnersProvider.getRVMDefault().getShellScriptRunner();
-    final RunnerUtil.Output testRun =
-      shellScriptRunner.run(String.format(TEST_RVM_SHELL_SCRIPT, pathToRVMRCFolder), pathToRVMRCFolder, env);
-    if (!StringUtil.isEmptyOrSpaces(testRun.getStderr())) {
+    final ExecResult testRun = shellScriptRunner.run(String.format(TEST_RVM_SHELL_SCRIPT, pathToRVMRCFolder), pathToRVMRCFolder, env);
+    //noinspection ThrowableResultOfMethodCallIgnored
+    if (testRun.getExitCode() != 0 || testRun.getException() != null) {
       StringBuilder sb = new StringBuilder();
       sb.append("Configuring RVM with ").append(pathToRVMRCFolder).append("/.rvmrc failed:");
-      sb.append("\nStdOut: ").append(testRun.getStdout());
-      sb.append("\nStdErr: ").append(testRun.getStderr());
+      sb.append(testRun.toString());
       throw new RakeTasksBuildService.MyBuildFailureException(sb.toString());
     }
     final RVMInfo info = RVMInfoUtil.gatherInfoUnderRvmShell(pathToRVMRCFolder, env);
@@ -170,9 +169,9 @@ public class RVMRCBasedRubySdkImpl extends RVMRubySdkImpl {
 
     @NotNull
     @Override
-    public RunnerUtil.Output run(@NotNull final String script,
-                                 @NotNull final String workingDirectory,
-                                 @Nullable final Map<String, String> environment) {
+    public ExecResult run(@NotNull final String script,
+                          @NotNull final String workingDirectory,
+                          @Nullable final Map<String, String> environment) {
       StringBuilder sb = new StringBuilder();
       sb.append("cd ").append(workingDirectory).append('\n');
       sb.append(script);

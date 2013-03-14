@@ -17,7 +17,8 @@
 package jetbrains.buildServer.agent.rakerunner.scripting;
 
 import java.util.Map;
-import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
+
+import jetbrains.buildServer.ExecResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,8 +28,8 @@ import org.jetbrains.annotations.Nullable;
 public interface RubyScriptRunner extends ScriptRunner {
 
   @NotNull
-  RunnerUtil.Output run(@NotNull final String script,
-                        @NotNull final String workingDirectory,
-                        @Nullable final Map<String, String> environment,
-                        @NotNull final String... rubyArgs);
+  ExecResult run(@NotNull final String script,
+                 @NotNull final String workingDirectory,
+                 @Nullable final Map<String, String> environment,
+                 @NotNull final String... rubyArgs);
 }

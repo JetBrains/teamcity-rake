@@ -18,6 +18,8 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import java.io.File;
 import java.util.Map;
+
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
@@ -95,7 +97,7 @@ public class InternalRubySdkUtil {
 
   public static boolean isRuby19Interpreter(@NotNull final RubySdk sdk,
                                             @Nullable final Map<String, String> env) {
-    final RunnerUtil.Output rubyVersionResult = sdk.getScriptRunner().run(RUBY_VERSION_SCRIPT, getTempDirectory(), env);
+    final ExecResult rubyVersionResult = sdk.getScriptRunner().run(RUBY_VERSION_SCRIPT, getTempDirectory(), env);
     final String stdOut = rubyVersionResult.getStdout();
     return stdOut.contains("1.9.");
   }
@@ -105,13 +107,13 @@ public class InternalRubySdkUtil {
     if (sdk.getRubyExecutable().getName().startsWith("jruby")) {
       return true;
     }
-    final RunnerUtil.Output rubyPlatformResult = sdk.getScriptRunner().run(RUBY_PLATFORM_SCRIPT, getTempDirectory(), env);
+    final ExecResult rubyPlatformResult = sdk.getScriptRunner().run(RUBY_PLATFORM_SCRIPT, getTempDirectory(), env);
     final String stdOut = rubyPlatformResult.getStdout();
     return stdOut.contains("java");
   }
 
-  public static RunnerUtil.Output getLoadPaths(@NotNull final RubySdk sdk,
-                                               @Nullable final Map<String, String> env) {
+  public static ExecResult getLoadPaths(@NotNull final RubySdk sdk,
+                                        @Nullable final Map<String, String> env) {
     // LOAD_PATH way
     if (sdk.isRuby19()) {
       // filter gem paths in case of Ruby 1.9 (use --disable-gems)
@@ -121,8 +123,8 @@ public class InternalRubySdkUtil {
     }
   }
 
-  public static RunnerUtil.Output getGemPaths(@NotNull final RubySdk sdk,
-                                              @Nullable final Map<String, String> env) {
+  public static ExecResult getGemPaths(@NotNull final RubySdk sdk,
+                                       @Nullable final Map<String, String> env) {
     return sdk.getScriptRunner().run(RubySDKUtil.GET_GEM_PATHS_SCRIPT, getTempDirectory(), env);
   }
 }

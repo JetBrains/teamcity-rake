@@ -1,11 +1,9 @@
 package jetbrains.slow.plugins.rakerunner;
 
-import java.util.HashMap;
-import java.util.Map;
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.ScriptingRunnersProvider;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShellScriptRunner;
-import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.rvm.RVMInfo;
 import jetbrains.buildServer.agent.ruby.rvm.util.RVMInfoUtil;
 import jetbrains.buildServer.util.TestFor;
@@ -13,6 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Vladislav.Rassokhin
@@ -79,20 +80,26 @@ public class RVMInfoUtilTest {
       public ShellScriptRunner getShellScriptRunner() {
         return new ShellScriptRunner() {
           @NotNull
-          public RunnerUtil.Output run(@NotNull final String script,
-                                       @NotNull final String workingDirectory,
-                                       @Nullable final Map<String, String> environment) {
+          public ExecResult run(@NotNull final String script,
+                                @NotNull final String workingDirectory,
+                                @Nullable final Map<String, String> environment) {
             final String[] strings = script.split(" ");
             Assert.assertTrue(strings.length >= 2);
             Assert.assertEquals(strings[0], "rvm", "Must starts with 'rvm'");
             if ("current".equals(strings[1])) {
-              return new RunnerUtil.Output(currentOutput, "");
+              final ExecResult result = new ExecResult();
+              result.setExitCode(0);
+              result.setStdout(currentOutput);
+              return result;
             } else if ("info".equals(strings[1])) {
               final String type = strings[2];
               Assert.assertNotNull(type);
               final String ret = infoMap.get(type);
               Assert.assertNotNull(ret, "Not found: " + type);
-              return new RunnerUtil.Output(ret, "");
+              final ExecResult result = new ExecResult();
+              result.setExitCode(0);
+              result.setStdout(ret);
+              return result;
             } else {
               Assert.fail("Mock does not supports command '" + script + "'");
               return null;

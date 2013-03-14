@@ -17,12 +17,7 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.Pair;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
@@ -32,6 +27,13 @@ import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.VersionComparatorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 
@@ -123,11 +125,12 @@ public class RubySDKUtil {
     return !StringUtil.isEmpty(customGemVersionProperty) ? customGemVersionProperty.trim() : null;
   }
 
-  public static void failIfWithErrors(@NotNull final RunnerUtil.Output result)
-    throws RakeTasksBuildService.MyBuildFailureException {
+  public static void failIfWithErrors(@NotNull final ExecResult result)
+      throws RakeTasksBuildService.MyBuildFailureException {
     // script wasn't found in LOAD_PATH:
-    if (!StringUtil.isEmpty(result.getStderr())) {
-      throw new RakeTasksBuildService.MyBuildFailureException(result.getStdout() + "\n" + result.getStderr());
+    //noinspection ThrowableResultOfMethodCallIgnored
+    if (result.getExitCode() != 0 || result.getException() != null) {
+      throw new RakeTasksBuildService.MyBuildFailureException(result.toString());
     }
 
     if (result.getStdout().contains("JAVA_HOME")) {

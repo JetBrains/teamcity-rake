@@ -16,9 +16,7 @@
 
 package org.jetbrains.plugins.ruby.rvm;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
@@ -26,9 +24,12 @@ import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.SdkUtil;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
-import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
@@ -75,8 +76,9 @@ public class RVMSupportUtil {
         restricted.add(res);
       }
     }
-    final RunnerUtil.Output env1 = RunnerUtil.run(null, env, rvm.getPath() + "/bin/rvm-shell", rvmRubyString, "-c", "env");
-    if (!StringUtil.isEmptyOrSpaces(env1.getStderr())) {
+    final ExecResult env1 = RunnerUtil.run(null, env, rvm.getPath() + "/bin/rvm-shell", rvmRubyString, "-c", "env");
+    //noinspection ThrowableResultOfMethodCallIgnored
+    if (env1.getExitCode() != 0 || env1.getException() != null) {
       throw new RuntimeException("Cannot fetch sdk environment: rvm-shell failed with output" + env1.getStderr());
     }
     final Map<String, String> modified = EnvUtil.parse(env1.getStdout());

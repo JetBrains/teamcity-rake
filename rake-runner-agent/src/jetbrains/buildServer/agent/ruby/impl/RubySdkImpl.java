@@ -19,10 +19,11 @@ package jetbrains.buildServer.agent.ruby.impl;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.util.Map;
+
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.scripting.ProcessBasedRubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
-import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.rakerunner.utils.TextUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.RubyVersionManager;
@@ -47,8 +48,8 @@ public class RubySdkImpl implements RubySdk {
   private boolean myIsJRuby;
   private String[] myGemPaths;
   private String[] myLoadPaths;
-  private RunnerUtil.Output myGemPathsLog;
-  private RunnerUtil.Output myLoadPathsLog;
+  private ExecResult myGemPathsLog;
+  private ExecResult myLoadPathsLog;
   private boolean myIsSetupCompleted = false;
 
   public RubySdkImpl(@SuppressWarnings("NullableProblems") @NotNull final File home,
@@ -117,12 +118,12 @@ public class RubySdkImpl implements RubySdk {
   }
 
   @NotNull
-  public RunnerUtil.Output getGemPathsFetchLog() {
+  public ExecResult getGemPathsFetchLog() {
     return myGemPathsLog;
   }
 
   @NotNull
-  public RunnerUtil.Output getLoadPathsFetchLog() {
+  public ExecResult getLoadPathsFetchLog() {
     return myLoadPathsLog;
   }
 
@@ -144,13 +145,13 @@ public class RubySdkImpl implements RubySdk {
     myIsJRuby = isJRuby;
   }
 
-  public void setGemPathsLog(final RunnerUtil.Output gemPathsLog) {
+  public void setGemPathsLog(final ExecResult gemPathsLog) {
     myGemPathsLog = gemPathsLog;
     myGemPaths = TextUtil.splitByLines(gemPathsLog.getStdout());
 
   }
 
-  public void setLoadPathsLog(final RunnerUtil.Output loadPathsLog) {
+  public void setLoadPathsLog(final ExecResult loadPathsLog) {
     myLoadPathsLog = loadPathsLog;
     myLoadPaths = TextUtil.splitByLines(loadPathsLog.getStdout());
   }

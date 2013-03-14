@@ -19,6 +19,8 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 import com.intellij.openapi.util.Pair;
 import java.io.File;
 import java.util.Map;
+
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.ruby.RubySdk;
@@ -152,9 +154,9 @@ public class TestUnitUtil {
     }
 
     // If stderr isn't empty / JAVA_HOME error
-    final RunnerUtil.Output gemPathsLog = sdk.getGemPathsFetchLog();
+    final ExecResult gemPathsLog = sdk.getGemPathsFetchLog();
     RubySDKUtil.failIfWithErrors(gemPathsLog);
-    final RunnerUtil.Output loadPathsLog = sdk.getLoadPathsFetchLog();
+    final ExecResult loadPathsLog = sdk.getLoadPathsFetchLog();
     RubySDKUtil.failIfWithErrors(loadPathsLog);
 
 

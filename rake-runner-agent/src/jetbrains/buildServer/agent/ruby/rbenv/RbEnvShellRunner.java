@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShellScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.util.FileUtil;
@@ -39,9 +41,9 @@ public abstract class RbEnvShellRunner implements ShellScriptRunner {
   }
 
   @NotNull
-  public RunnerUtil.Output run(@NotNull final String script,
-                               @NotNull final String workingDirectory,
-                               @Nullable final Map<String, String> environment) {
+  public ExecResult run(@NotNull final String script,
+                        @NotNull final String workingDirectory,
+                        @Nullable final Map<String, String> environment) {
     final File directory = new File(workingDirectory);
     File scriptFile = null;
     try {
@@ -50,7 +52,10 @@ public abstract class RbEnvShellRunner implements ShellScriptRunner {
         FileUtil.writeFileAndReportErrors(scriptFile, script);
       } catch (IOException e) {
         LOG.error("Failed to create temp file, error: ", e);
-        return new RunnerUtil.Output("", "Failed to create temp file, error: " + e.getMessage());
+        final ExecResult result = new ExecResult();
+        result.setStderr("Failed to create temp file, error: " + e.getMessage());
+        result.setException(e);
+        return result;
       }
 
       // Patching environment

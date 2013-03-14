@@ -16,12 +16,13 @@
 
 package jetbrains.buildServer.agent.ruby;
 
-import java.io.File;
-import java.util.Map;
+import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.scripting.RubyScriptRunner;
-import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
@@ -58,10 +59,10 @@ public interface RubySdk {
   void setup(@NotNull final Map<String, String> env);
 
   @NotNull
-  RunnerUtil.Output getGemPathsFetchLog();
+  ExecResult getGemPathsFetchLog();
 
   @NotNull
-  RunnerUtil.Output getLoadPathsFetchLog();
+  ExecResult getLoadPathsFetchLog();
 
   @NotNull
   RubyScriptRunner getScriptRunner();
