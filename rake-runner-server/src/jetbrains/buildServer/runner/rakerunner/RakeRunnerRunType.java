@@ -80,11 +80,13 @@ public class RakeRunnerRunType extends RunType {
     return map;
   }
 
+  @NotNull
   @Override
   public String getDescription() {
     return RakeRunnerBundle.RUNNER_DESCRIPTION;
   }
 
+  @NotNull
   @Override
   public String getDisplayName() {
     return RakeRunnerBundle.RUNNER_DISPLAY_NAME;
