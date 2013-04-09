@@ -14,8 +14,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author Vladislav.Rassokhin
  */
-public class ShShellScriptRunner implements ShellScriptRunner {
-  private static final Logger LOG = Logger.getInstance(ShShellScriptRunner.class.getName());
+public class BashShellScriptRunner implements ShellScriptRunner {
+  private static final Logger LOG = Logger.getInstance(BashShellScriptRunner.class.getName());
 
   @NotNull
   public ExecResult run(@NotNull final String script,
@@ -40,7 +40,7 @@ public class ShShellScriptRunner implements ShellScriptRunner {
         result.setException(e);
         return result;
       }
-      final ExecResult run = RunnerUtil.run(workingDirectory, environment, "/bin/sh", scriptFile.getAbsolutePath());
+      final ExecResult run = RunnerUtil.run(workingDirectory, environment, "/bin/bash", scriptFile.getAbsolutePath());
       if (LOG.isDebugEnabled()) {
         LOG.debug("Script ExecResult:" + run);
       }
