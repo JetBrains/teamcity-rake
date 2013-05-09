@@ -16,15 +16,14 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import java.io.File;
+import java.io.FileFilter;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
-import jetbrains.buildServer.serverSide.BuildTypeSettings;
+import jetbrains.buildServer.serverSide.BuildTypeEx;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.io.FileFilter;
 
 /**
  * @author Roman.Chernyatchik
@@ -48,7 +47,7 @@ public class RakeRunnerTestUtil {
     return new File(TESTDATA_PATH + fileOrFolderRelativePath);
   }
 
-  static public void setInterpreterPath(@NotNull final BuildTypeSettings bt) {
+  static public void setInterpreterPath(@NotNull final BuildTypeEx bt) {
     String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
     if (!StringUtil.isEmpty(interpreterPath)) {
       bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreterPath));
@@ -57,7 +56,7 @@ public class RakeRunnerTestUtil {
     }
   }
 
-  static public void setInterpreterPath(@NotNull final BuildTypeSettings bt, @NotNull final String prefix)
+  static public void setInterpreterPath(@NotNull final BuildTypeEx bt, @NotNull final String prefix)
     throws InterpreterNotFoundException {
     final File interpreter = getWindowsInterpreterExecutableFile(prefix);
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreter.getAbsolutePath()));
@@ -94,29 +93,29 @@ public class RakeRunnerTestUtil {
     return interpreter;
   }
 
-  static public void setRVMConfiguration(@NotNull final BuildTypeSettings bt, @NotNull final String rubySdkName) {
+  static public void setRVMConfiguration(@NotNull final BuildTypeEx bt, @NotNull final String rubySdkName) {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
                                            RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
     useRVMRubySDK(rubySdkName, bt);
     useRVMGemSet(DEFAULT_GEMSET_NAME, bt);
   }
 
-  static public void setRVMConfiguration(@NotNull final BuildTypeSettings bt) {
+  static public void setRVMConfiguration(@NotNull final BuildTypeEx bt) {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
                                            RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
     useRVMRubySDK(System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY), bt);
     useRVMGemSet(DEFAULT_GEMSET_NAME, bt);
   }
 
-  static public void useRVMRubySDK(@NotNull final String sdkname, @NotNull final BuildTypeSettings bt) {
+  static public void useRVMRubySDK(@NotNull final String sdkname, @NotNull final BuildTypeEx bt) {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME, sdkname));
   }
 
-  static public void useRVMGemSet(@NotNull final String gemset, @NotNull final BuildTypeSettings bt) {
+  static public void useRVMGemSet(@NotNull final String gemset, @NotNull final BuildTypeEx bt) {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME, GEMSET_PREFIX + gemset));
   }
 
-  static public void useBundleExec(@NotNull final BuildTypeSettings bt, boolean value) {
+  static public void useBundleExec(@NotNull final BuildTypeEx bt, boolean value) {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, Boolean.toString(value)));
   }
 }
