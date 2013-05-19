@@ -419,7 +419,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
         "checkRVMCommand",
         String.format("rvm use \"%s\" --create", gemsetFullName),
         "gem which bundler || gem install bundler",
-        "bundle install --local || (rm Gemfile.lock; bundle install)",
+        "bundle install --local || (rm -f Gemfile.lock; bundle install)",
         "bundle package --no-prune"
     );
     FileUtil.copyDir(localCacheDir, cacheDir);
