@@ -13,7 +13,7 @@ gem install bundler
 function initializeRubySdk {
 local sdk=$1
 echo "##teamcity[blockOpened name='Creating Gemsets for |'$sdk|'']"
-for i in `ls -d */ | grep -v vendor`; do
+for i in `ls -d */ | grep -v vendor | sed 's|/$||'`; do
     pushd $i > /dev/null
     echo "##teamcity[blockOpened name='Processing $i']"
 

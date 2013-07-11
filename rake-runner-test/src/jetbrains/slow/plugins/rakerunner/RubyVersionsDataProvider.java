@@ -20,6 +20,7 @@ import com.google.common.collect.Sets;
 import com.intellij.openapi.util.SystemInfo;
 import jetbrains.buildServer.util.CollectionsUtil;
 import jetbrains.buildServer.util.Converter;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.DataProvider;
 
@@ -60,13 +61,18 @@ public class RubyVersionsDataProvider {
 
   @NotNull
   public static Set<String> getRubyVersionsLinuxSet() {
-    return new HashSet<String>() {
-      {
-        add("ruby-1.8.7");
-        add("ruby-1.9.2");
-        add("jruby");
-      }
-    };
+    final String property = System.getProperty("ruby.testing.versions", null);
+    if (property == null) {
+      return new HashSet<String>() {
+        {
+          add("ruby-1.8.7");
+          add("ruby-1.9.2");
+          add("jruby");
+        }
+      };
+    }
+    final List<String> rubies = StringUtil.split(property, " ");
+    return new HashSet<String>(rubies);
   }
 
   @NotNull
