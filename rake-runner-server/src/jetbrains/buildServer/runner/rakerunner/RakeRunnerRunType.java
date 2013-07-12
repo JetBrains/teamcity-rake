@@ -150,7 +150,7 @@ public class RakeRunnerRunType extends RunType {
         //}
         case RVM: {
           if (StringUtil.isEmpty(RakeRunnerUtils.getRVMSdkName(properties))) {
-            ret.add(new InvalidProperty(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME, "Interpeter name must be specified."));
+            ret.add(new InvalidProperty(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME, "The interpeter name must be specified."));
           }
           break;
         }
