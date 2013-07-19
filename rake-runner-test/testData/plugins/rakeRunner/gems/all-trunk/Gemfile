@@ -5,7 +5,7 @@ gem "cucumber"
 gem "rspec"
 
 require 'rubygems'
-current = Gem::Version.create(RUBY_VERSION)
+current = Gem::Version.create(RUBY_VERSION * 1)
 
 if (current >= Gem::Version.create('1.9')) then
   gem "test-unit"
