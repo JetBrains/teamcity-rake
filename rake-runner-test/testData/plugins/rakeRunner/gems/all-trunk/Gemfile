@@ -4,13 +4,21 @@ gem "rake"
 gem "cucumber"
 gem "rspec"
 
-if (RUBY_VERSION.to_f != 1.8) then
+require 'rubygems'
+current = Gem::Version.create(RUBY_VERSION)
+
+if (current >= Gem::Version.create('1.9')) then
   gem "test-unit"
 end
 
 # shoulda-mathcers 2.1.0 does not supports ruby-1.8.7
-if (RUBY_VERSION.to_f == 1.8) then
+if (current < Gem::Version.create('1.9')) then
   gem 'shoulda-matchers', '<2.1'
+end
+
+# activesupport 4.0.0 requires at least 1.9.3
+if (current < Gem::Version.create('1.9.3')) then
+  gem 'activesupport', '<4'
 end
 
 gem "test-spec"
