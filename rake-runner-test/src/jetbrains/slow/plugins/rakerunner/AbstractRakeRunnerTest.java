@@ -21,11 +21,15 @@ import jetbrains.buildServer.PartialBuildMessagesChecker;
 import jetbrains.buildServer.RunnerTest2Base;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
+import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.BuildMessagesProcessor;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.serverSide.RunningBuildEx;
+import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.ShortStatistics;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.serverSide.buildLog.LogMessage;
+import jetbrains.buildServer.serverSide.impl.beans.BuildTypeContextsImpl;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.apache.log4j.ConsoleAppender;
@@ -109,8 +113,17 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
   }
 
   protected void setMessagesTranslationEnabled(boolean enabled) {
-    //TODO: Do not use this to disable service messages translation
-    myFixture.getSingletonService(BuildMessagesProcessor.class).setTranslationEnabled(enabled);
+    final BuildTypeContextsImpl context = myFixture.getSingletonService(BuildTypeContextsImpl.class);
+    final BuildMessagesProcessor current = context.getBuildMessagesProcessor();
+    if (enabled) {
+      if (current instanceof AsIsBuildMessagesProcessor) {
+        context.setBuildMessagesProcessor(new BuildMessagesProcessor(getServer()));
+      }
+    } else {
+      if (!(current instanceof AsIsBuildMessagesProcessor)) {
+        context.setBuildMessagesProcessor(new AsIsBuildMessagesProcessor(getServer()));
+      }
+    }
     myShouldTranslateMessages = enabled;
   }
 
@@ -423,6 +436,11 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
         "bundle package --no-prune"
     );
     FileUtil.copyDir(localCacheDir, cacheDir);
+    try {
+      System.out.println("Actual Gemfile.lock:");
+      System.out.println(FileUtil.readText(new File(gemfile.getParent(), "Gemfile.lock")));
+    } catch (Exception ignored) {
+    }
   }
 
   public String getTestName() {
@@ -439,5 +457,18 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     return new ArrayList<String>(Arrays.asList(myRubyVersion));
   }
 
+  /**
+   * BuildMessagesProcessor which do nothing
+   */
+  private static class AsIsBuildMessagesProcessor extends BuildMessagesProcessor {
+    public AsIsBuildMessagesProcessor(SBuildServer server) {
+      super(server);
+    }
 
+    @NotNull
+    @Override
+    public List<BuildMessage1> translateMessages(@NotNull final List<BuildMessage1> initial, @NotNull final RunningBuildEx runningBuild) {
+      return initial;
+    }
+  }
 }
