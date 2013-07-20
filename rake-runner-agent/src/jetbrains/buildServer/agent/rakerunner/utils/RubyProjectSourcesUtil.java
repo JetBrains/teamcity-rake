@@ -49,8 +49,12 @@ public class RubyProjectSourcesUtil {
       File jarFile = new File(jarPath);
       rubySourcesDir = new File(jarFile.getParentFile(), RUBY_SOURCES_SUBDIR);
     } else {
-      // some old code, not sure that it is needed
-      rubySourcesDir = new File("svnrepo/rake-runner/lib/rb");
+      // Used in tests
+      File test = new File("lib/rb");
+      if (!test.exists()) {
+        test = new File("svnrepo/rake-runner/lib/rb");
+      }
+      rubySourcesDir = test;
     }
 
     try {

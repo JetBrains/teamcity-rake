@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Roman.Chernyatchik
  */
 public class RakeRunnerTestUtil {
-  public static final String TESTDATA_PATH = "svnrepo/rake-runner/rake-runner-test/testData/";
+  public static final String TESTDATA_PATH = "rake-runner-test/testData/";
   public static final String INTERPRETER_PATH_PROPERTY = "rake-runner.ruby.interpreter.path";
   public static final String INTERPRETERS_STORAGE_PATH_PROPERTY = "rake-runner.ruby.interpreters.storage.path";
   public static final String RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY = "rake-runner.testing.ruby.version";
@@ -44,7 +44,12 @@ public class RakeRunnerTestUtil {
 
   @NotNull
   static File getTestDataItemPath(@NotNull final String fileOrFolderRelativePath) {
-    return new File(TESTDATA_PATH + fileOrFolderRelativePath);
+    // In case of standalone tests run
+    if (new File("").getAbsoluteFile().getName().equals("rake-runner")) {
+      return new File(TESTDATA_PATH + fileOrFolderRelativePath);
+    }
+    // Full BuildServer tests
+    return new File("svnrepo/rake-runner/" + TESTDATA_PATH + fileOrFolderRelativePath);
   }
 
   static public void setInterpreterPath(@NotNull final BuildTypeEx bt) {
