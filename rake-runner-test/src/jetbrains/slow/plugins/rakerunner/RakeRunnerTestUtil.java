@@ -44,12 +44,12 @@ public class RakeRunnerTestUtil {
 
   @NotNull
   static File getTestDataItemPath(@NotNull final String fileOrFolderRelativePath) {
-    // In case of standalone tests run
-    if (new File("").getAbsoluteFile().getName().equals("rake-runner")) {
-      return new File(TESTDATA_PATH + fileOrFolderRelativePath);
+    if (new File("svnrepo").getAbsoluteFile().exists()) {
+      // Full BuildServer tests
+      return new File("svnrepo/rake-runner/" + TESTDATA_PATH + fileOrFolderRelativePath);
     }
-    // Full BuildServer tests
-    return new File("svnrepo/rake-runner/" + TESTDATA_PATH + fileOrFolderRelativePath);
+    // In case of standalone tests run
+    return new File(TESTDATA_PATH + fileOrFolderRelativePath);
   }
 
   static public void setInterpreterPath(@NotNull final BuildTypeEx bt) {
