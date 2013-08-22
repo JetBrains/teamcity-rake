@@ -20,7 +20,11 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.containers.HashMap;
 import java.util.*;
+
+import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.util.CollectionsUtil;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.util.filters.Filter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,26 +69,53 @@ public class SharedRVMUtil {
                                                    @Nullable final String rvmrcGemset,
                                                    @NotNull final RubyDistToGemsetTable distName2GemsetsTable,
                                                    final boolean allowGemsetNotExists) {
-    for (String dist : distName2GemsetsTable.getDists()) {
-      // check either refName suites dist name or not
-      if (!sdkRefMatches(rvmrcSdkRef, dist)) {
-        continue;
-      }
+    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
+    if (rvm == null) {
+      throw new IllegalStateException("IntalledRVM cannot be null here");
+    }
+    final String resolved = rvm.getDistrForName(rvmrcSdkRef);
+    final Set<String> installed = rvm.getInstalledRubies();
+    if (installed.contains(resolved)) {
       // check gemsets
       if (allowGemsetNotExists) {
-        return dist;
+        return resolved;
       }
-      for (String gemset : distName2GemsetsTable.getGemsets(dist)) {
+      for (String gemset : distName2GemsetsTable.getGemsets(resolved)) {
         if (areGemsetsEqual(rvmrcGemset, gemset)) {
-          return dist;
+          return resolved;
+        }
+      }
+    } else {
+      // RVM cannot resolve such name into interpreter name
+      // May be caused by RVM update (when installed 'ruby-1.8.7-pX' and requested '1.8.7' resolved into 'ruby-1.8.7-pY' by RVM)
+      // In such case we can try to resolve manually, but should TODO: notify user.
+
+      // Reverse ordered installed interpreters (from higher version to old)
+      final SortedSet<String> ordered = new TreeSet<String>(installed).descendingSet();
+      final List<String> possible = CollectionsUtil.filterCollection(ordered, new Filter<String>() {
+        public boolean accept(@NotNull final String data) {
+          // check either refName suites dist name or not
+          return sdkRefMatchesManual(rvmrcSdkRef, data);
+        }
+      });
+      // First try more suitable interpreter
+      for (String dist : possible) {
+        // check gemsets
+        if (allowGemsetNotExists) {
+          return resolved;
+        }
+        for (String gemset : distName2GemsetsTable.getGemsets(dist)) {
+          if (areGemsetsEqual(rvmrcGemset, gemset)) {
+            return dist;
+          }
         }
       }
     }
     return null;
   }
 
-  public static boolean sdkRefMatches(@NotNull final String sdkRef,
-                                      @NotNull final String distName) {
+  public static boolean sdkRefMatchesManual(@NotNull final String sdkRef,
+                                            @NotNull final String distName) {
     // starts with
     // e.g. [ruby-1.8.7] and [ruby-1.8.7-p249, ruby-1.8.7, ruby-1.8.7-2010.01]
     // TODO [romeo]: rvm use jruby will chose jruby with highest version!

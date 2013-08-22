@@ -43,7 +43,7 @@ public class RakeRunnerTestUtil {
   }
 
   @NotNull
-  static File getTestDataItemPath(@NotNull final String fileOrFolderRelativePath) {
+  public static File getTestDataItemPath(@NotNull final String fileOrFolderRelativePath) {
     if (new File("svnrepo").getAbsoluteFile().exists()) {
       // Full BuildServer tests
       return new File("svnrepo/rake-runner/" + TESTDATA_PATH + fileOrFolderRelativePath);

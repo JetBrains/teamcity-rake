@@ -20,12 +20,19 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubyVersionManager;
+import jetbrains.buildServer.agent.ruby.rvm.util.RVMUtil;
+import jetbrains.buildServer.util.CollectionsUtil;
+import jetbrains.buildServer.util.Converter;
 import jetbrains.buildServer.util.FileUtil;
+import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.util.filters.Filter;
+import jetbrains.buildServer.util.impl.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
@@ -111,7 +118,7 @@ public class InstalledRVM extends RubyVersionManager {
   }
 
   @NotNull
-  public static String executeCommandLine(@NotNull final String... query) {
+  public String executeCommandLine(@NotNull final String... query) {
     final ExecResult output = RunnerUtil.run(null, null, query);
     return output.getStdout();
   }
@@ -166,5 +173,99 @@ public class InstalledRVM extends RubyVersionManager {
   private String getGemsFolderPath() {
     // TODO: detect via environment (may be non standard or using mixed installation)
     return getPath() + File.separatorChar + RVM_GEMS_FOLDER_NAME;
+  }
+
+  @NotNull
+  public SortedSet<String> getInstalledRubies() {
+    return myInstalledRubies.getValue();
+  }
+
+  @Nullable
+  public String getDefualtInterpreter() {
+    return myDefualtInterpreter.getValue();
+  }
+
+  private final Lazy<SortedSet<String>> myInstalledRubies = new Lazy<SortedSet<String>>() {
+    @Nullable
+    @Override
+    protected SortedSet<String> createValue() {
+      final String stdout = executeCommandLine(getExecutablePath(), "list", "strings");
+      List<String> split = StringUtil.split(stdout, true, '\n', '\r');
+      split = CollectionsUtil.convertCollection(split, new Converter<String, String>() {
+        public String createFrom(@NotNull final String source) {
+          return source.trim();
+        }
+      });
+      split = CollectionsUtil.filterCollection(split, new Filter<String>() {
+        public boolean accept(@NotNull final String data) {
+          return !data.contains(" ");
+        }
+      });
+      return new TreeSet<String>(split);
+    }
+  };
+
+  private final Lazy<String> myDefualtInterpreter = new Lazy<String>() {
+    @Nullable
+    @Override
+    protected String createValue() {
+      // Also in ~/.rvm/config/alias
+      final String stdout = executeCommandLine(getExecutablePath(), "list", "default", "string");
+      final List<String> split = StringUtil.split(stdout, true, '\n', '\r');
+      if (split.isEmpty()) {
+        return null;
+      }
+      return split.iterator().next();
+    }
+  };
+
+  private final Lazy<Map<Pattern, String>> myNamesResolvingReference = new Lazy<Map<Pattern, String>>() {
+    @Nullable
+    @Override
+    protected Map<Pattern, String> createValue() {
+      final Map<Pattern, String> map = new LinkedHashMap<Pattern, String>();
+      // References from all known repositories ('rvm list known')
+      {
+        final String stdout = executeCommandLine(getExecutablePath(), "list", "known");
+        map.putAll(RVMUtil.convertListKnownIntoResolvingMap(stdout));
+      }
+
+      // Reference for default one ('rvm list default string')
+      {
+        final String value = getDefualtInterpreter();
+        if (value != null) {
+          map.put(Pattern.compile(Pattern.quote("default")), value);
+        }
+      }
+
+      // Ensure there are references for installed interpreters (at least add them in full form)
+      {
+        final SortedSet<String> installed = getInstalledRubies();
+        for (String s : installed) {
+          map.put(Pattern.compile(Pattern.quote(s)), s);
+        }
+      }
+
+      return map;
+    }
+  };
+
+  /**
+   * @param name
+   * @return null when cannot convert to properly name
+   */
+  @Nullable
+  public String getDistrForName(@NotNull final String name) {
+    final Map<Pattern, String> map = myNamesResolvingReference.getValue();
+    return getDistrForNameFromMap(name, map);
+  }
+
+  public static String getDistrForNameFromMap(final String name, final Map<Pattern, String> map) {
+    for (Map.Entry<Pattern, String> entry : map.entrySet()) {
+      if (entry.getKey().matcher(name).matches()) {
+        return entry.getValue();
+      }
+    }
+    return null;
   }
 }

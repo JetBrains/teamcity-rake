@@ -11,6 +11,8 @@
     </groups>
     <packages>
       <package name="jetbrains.slow.plugins.rakerunner"/>
+      <package name="org.jetbrains.plugins.ruby.rvm"/>
+      <package name="jetbrains.buildServer.agent.ruby.rvm"/>
     </packages>
   </test>
 </suite>
