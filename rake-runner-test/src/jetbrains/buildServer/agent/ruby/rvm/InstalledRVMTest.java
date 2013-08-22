@@ -79,7 +79,11 @@ public class InstalledRVMTest {
       {"1.8.7", "1.8.7"},
       {"\n1.8.7\ndropped string\n", "1.8.7"},
       {"1.8.7\ndropped string\n", "1.8.7"},
-      {"ruby-1.9.3-p448\n\n", "ruby-1.9.3-p448"}
+      {"ruby-1.9.3-p448\n\n", "ruby-1.9.3-p448"},
+      {"Warning! GARBAGE GARBAGE,\n" +
+       "         GARBAGE: 'rvm use ruby-1.9.3-p448'.\n" +
+       "basename: missing operand\n" +
+       "Try 'basename --help' for more information.\n", null},
     };
   }
 

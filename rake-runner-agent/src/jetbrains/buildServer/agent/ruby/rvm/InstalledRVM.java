@@ -211,7 +211,18 @@ public class InstalledRVM extends RubyVersionManager {
     protected String createValue() {
       // Also in ~/.rvm/config/alias
       final String stdout = executeCommandLine(getExecutablePath(), "list", "default", "string");
-      final List<String> split = StringUtil.split(stdout, true, '\n', '\r');
+      List<String> split = StringUtil.split(stdout, true, '\n', '\r');
+      // Filter garbage
+      split = CollectionsUtil.convertCollection(split, new Converter<String, String>() {
+        public String createFrom(@NotNull final String source) {
+          return source.trim();
+        }
+      });
+      split = CollectionsUtil.filterCollection(split, new Filter<String>() {
+        public boolean accept(@NotNull final String data) {
+          return !data.contains(" ");
+        }
+      });
       if (split.isEmpty()) {
         return null;
       }

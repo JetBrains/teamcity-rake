@@ -18,7 +18,7 @@ public class RVMUtil {
     final List<String> list = CollectionsUtil.filterCollection(Arrays.asList(stdout.split("\n")), new Filter<String>() {
       public boolean accept(@NotNull final String data) {
         final String trim = data.trim();
-        return !trim.isEmpty() && !trim.startsWith("#");
+        return !trim.isEmpty() && !trim.startsWith("#") && !trim.contains(" ");
       }
     });
 

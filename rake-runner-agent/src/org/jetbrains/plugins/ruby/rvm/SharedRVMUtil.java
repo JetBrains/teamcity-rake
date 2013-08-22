@@ -17,6 +17,7 @@
 package org.jetbrains.plugins.ruby.rvm;
 
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.containers.HashMap;
 import java.util.*;
@@ -64,27 +65,24 @@ public class SharedRVMUtil {
   private SharedRVMUtil() {
   }
 
-  @Nullable
-  public static String determineSuitableRVMSdkDist(@NotNull final String rvmrcSdkRef,
-                                                   @Nullable final String rvmrcGemset,
-                                                   @NotNull final RubyDistToGemsetTable distName2GemsetsTable,
-                                                   final boolean allowGemsetNotExists) {
-    final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
-    if (rvm == null) {
-      throw new IllegalStateException("IntalledRVM cannot be null here");
-    }
+  @NotNull
+  public static Pair<String, String> determineSuitableRVMSdkDist(@NotNull final String rvmrcSdkRef,
+                                                                 @Nullable final String rvmrcGemset,
+                                                                 @NotNull final RubyDistToGemsetTable distName2GemsetsTable) {
+    final InstalledRVM rvm = RVMPathsSettings.getRVMNullSafe();
     final String resolved = rvm.getDistrForName(rvmrcSdkRef);
+    if (resolved == null) {
+      return Pair.create(null,null);
+    }
     final Set<String> installed = rvm.getInstalledRubies();
     if (installed.contains(resolved)) {
       // check gemsets
-      if (allowGemsetNotExists) {
-        return resolved;
-      }
       for (String gemset : distName2GemsetsTable.getGemsets(resolved)) {
         if (areGemsetsEqual(rvmrcGemset, gemset)) {
-          return resolved;
+          return Pair.create(resolved, gemset);
         }
       }
+      return Pair.create(resolved, null);
     } else {
       // RVM cannot resolve such name into interpreter name
       // May be caused by RVM update (when installed 'ruby-1.8.7-pX' and requested '1.8.7' resolved into 'ruby-1.8.7-pY' by RVM)
@@ -101,17 +99,15 @@ public class SharedRVMUtil {
       // First try more suitable interpreter
       for (String dist : possible) {
         // check gemsets
-        if (allowGemsetNotExists) {
-          return resolved;
-        }
         for (String gemset : distName2GemsetsTable.getGemsets(dist)) {
           if (areGemsetsEqual(rvmrcGemset, gemset)) {
-            return dist;
+            return Pair.create(dist, gemset);
           }
         }
+        return Pair.create(dist, null);
       }
     }
-    return null;
+    return Pair.create(null,null);
   }
 
   public static boolean sdkRefMatchesManual(@NotNull final String sdkRef,
@@ -179,8 +175,8 @@ public class SharedRVMUtil {
 
   public static boolean areGemsetsEqual(@Nullable final String gemset1,
                                         @Nullable final String gemset2) {
-    return (gemset1 == null && gemset2 == null)               // if gemset is default (null)
-           || (gemset1 != null && gemset1.equals(gemset2));      // or custom
+    // if gemset is default (null) or custom
+    return StringUtil.areEqual(gemset1, gemset2);
   }
 
   public static boolean canOverride(@NotNull final String envVariable,

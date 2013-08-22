@@ -16,6 +16,7 @@
 
 package jetbrains.buildServer.agent.rakerunner;
 
+import com.intellij.openapi.util.Pair;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.scripting.BashShellScriptRunner;
@@ -97,33 +98,34 @@ public enum SharedParamsType {
 
       // build  dist/gemsets table, match ref with dist. name
       final String gemset = sharedParams.getRVMGemsetName();
-      final String suitableSdkName = RVMSupportUtil.determineSuitableRVMSdkDist(sdkName, gemset, sharedParams.isRVMGemsetCreate());
+      final Pair<String, String> suitable = RVMSupportUtil.determineSuitableRVMSdkDist(sdkName, gemset, sharedParams.isRVMGemsetCreate());
 
-      if (suitableSdkName != null) {
-        if (sharedParams.isRVMGemsetCreate() && !StringUtil.isEmptyOrSpaces(gemset)) {
-          List<String> gemsets = RVMSupportUtil.getInterpreterDistName2GemSetsTable().getGemsets(suitableSdkName);
-          if (gemset != null && !gemsets.contains(gemset)) {
+      if (suitable.first == null) {
+        throw new RakeTasksBuildService.MyBuildFailureException(String.format("RVM interpreter '%s' doesn't exist " +
+          "or isn't a file or isn't a valid RVM interpreter name.", sdkName));
+      } else {
+        if (suitable.second == null && !StringUtil.isEmptyOrSpaces(gemset)) {
+          if (sharedParams.isRVMGemsetCreate()) {
             // Creating gemset
             final ShellScriptRunner scriptRunner = new BashShellScriptRunner();
-            final ExecResult output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitableSdkName + "@" + gemset,
-                context.getWorkingDirectory().getAbsolutePath(),
-                context.getBuildParameters().getEnvironmentVariables());
+            final ExecResult output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitable + "@" + gemset,
+              context.getWorkingDirectory().getAbsolutePath(),
+              context.getBuildParameters().getEnvironmentVariables());
             //noinspection ThrowableResultOfMethodCallIgnored
             if (output.getExitCode() != 0 || output.getException() != null) {
               throw new RakeTasksBuildService.MyBuildFailureException("Failed to create gemset '" + gemset + "':" + output);
             }
+          } else {
+            throw new RakeTasksBuildService.MyBuildFailureException(String.format("Gemset '%s' isn't defined for RVM interpreter '%s'. " +
+              "You may enable 'Create gemset if not exist' option in Ruby Environment Configurator build feature.", gemset, sdkName));
           }
         }
-        final File home = RVMPathsSettings.getRVMNullSafe().getHomeForVersionName(suitableSdkName);
+        final File home = RVMPathsSettings.getRVMNullSafe().getHomeForVersionName(suitable.first);
         if (home == null) {
-          throw new RakeTasksBuildService.MyBuildFailureException(
-            String.format("Cannot find home path for RVM SDK with name %s", suitableSdkName));
+          throw new RakeTasksBuildService.MyBuildFailureException(String.format("Cannot find home path for RVM SDK with name %s", suitable));
         }
-        return new RVMRubySdkImpl(home, suitableSdkName, gemset);
+        return new RVMRubySdkImpl(home, suitable.first, suitable.second);
       }
-      final String msg = "Gemset '" + gemset + "' isn't defined for Ruby interpreter '" + sdkName
-                         + "' or the interpreter doesn't exist or isn't a file or isn't a valid RVM interpreter name.";
-      throw new RakeTasksBuildService.MyBuildFailureException(msg);
     }
   },
   RVMRC("rvmrc") {

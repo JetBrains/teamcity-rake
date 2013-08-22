@@ -16,6 +16,7 @@
 
 package org.jetbrains.plugins.ruby.rvm;
 
+import com.intellij.openapi.util.Pair;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvUtil;
@@ -46,13 +47,18 @@ public class RVMSupportUtil {
     return SharedRVMUtil.RubyDistToGemsetTable.emptyTable();
   }
 
-  @Nullable
-  public static String determineSuitableRVMSdkDist(@NotNull final String uiRubyInterpreterSetting,
-                                                   @Nullable final String rvmGemset,
-                                                   final boolean allowGemsetNotExists) {
+  /**
+   * Returns suitable pair (interpreter,gemset)
+   * OR (interpreter,null) if (rvmGemset is null) or (no such gemset)
+   * OR (null,null) otherwise
+   */
+  @NotNull
+  public static Pair<String, String> determineSuitableRVMSdkDist(@NotNull final String interpreter,
+                                                                 @Nullable final String gemset,
+                                                                 final boolean allowGemsetNotExists) {
     final SharedRVMUtil.RubyDistToGemsetTable table = getInterpreterDistName2GemSetsTable();
 
-    return SharedRVMUtil.determineSuitableRVMSdkDist(uiRubyInterpreterSetting, rvmGemset, table, allowGemsetNotExists);
+    return SharedRVMUtil.determineSuitableRVMSdkDist(interpreter, gemset, table);
   }
 
   public static void patchEnvForRVMIfNecessary(@NotNull final RubySdk sdk,
