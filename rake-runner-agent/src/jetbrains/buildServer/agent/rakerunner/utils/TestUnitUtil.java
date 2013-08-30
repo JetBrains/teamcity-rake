@@ -18,10 +18,10 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.Pair;
 import java.io.File;
-import java.util.Map;
 
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.rakerunner.ModifiableRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
@@ -47,24 +47,18 @@ public class TestUnitUtil {
 
   @NotNull
   public static String getSDKTestUnitAutoRunnerScriptPath(@NotNull final RubySdk sdk,
-                                                          @NotNull final Map<String, String> runParams,
-                                                          @NotNull final Map<String, String> buildParameters,
-                                                          @NotNull final Map<String, String> runnerEnvParams,
-                                                          @NotNull final String checkoutDirPath)
+                                                          @NotNull final ModifiableRunnerContext context)
     throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
-    return findTestUnitScript(sdk, AUTORUNNER_SCRIPT_PATH, runParams, buildParameters, runnerEnvParams, checkoutDirPath);
+    return findTestUnitScript(sdk, AUTORUNNER_SCRIPT_PATH, context);
   }
 
   @NotNull
   public static String getSDKTestUnitTestRunnerMediatorScriptPath(@NotNull final RubySdk sdk,
-                                                                  @NotNull final Map<String, String> runParams,
-                                                                  @NotNull final Map<String, String> buildParameters,
-                                                                  @NotNull final Map<String, String> runnerEnvParams,
-                                                                  @NotNull final String checkoutDirPath)
+                                                                  @NotNull final ModifiableRunnerContext context)
     throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
-    return findTestUnitScript(sdk, TESTRUNNERMEDIATOR_SCRIPT_PATH, runParams, buildParameters, runnerEnvParams, checkoutDirPath);
+    return findTestUnitScript(sdk, TESTRUNNERMEDIATOR_SCRIPT_PATH, context);
   }
 
   @Nullable
@@ -88,16 +82,13 @@ public class TestUnitUtil {
   @NotNull
   public static String findTestUnitScript(@NotNull final RubySdk sdk,
                                           @NotNull final String scriptPath,
-                                          @NotNull final Map<String, String> runParams,
-                                          @NotNull final Map<String, String> buildParameters,
-                                          @NotNull final Map<String, String> runnerEnvParams,
-                                          @NotNull final String checkoutDirPath)
-    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+                                          @NotNull final ModifiableRunnerContext context)
+  throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     // At first let's try to find script in "test-unit" gem
     // then in sdk load path
 
-    final String forcedTestUnitGemVersion = RubySDKUtil.getForcedGemVersion(TEST_UNIT_GEM_VERSION_PROPERTY, buildParameters);
+    final String forcedTestUnitGemVersion = RubySDKUtil.getForcedGemVersion(TEST_UNIT_GEM_VERSION_PROPERTY, context.getBuildParameters());
 
     // if option is "built-in" let's use built-in Test::Unit in Ruby 1.8.x sdk
     // else use custom gem version
@@ -105,10 +96,7 @@ public class TestUnitUtil {
     if (!forceUseBuiltInTestUnit) {
 
       // use bundler gems root if it is defined! (i.e. we use bundle exec emulation with custom gem paths)
-      final String bundlerGemRoot = BundlerUtil.determineGemsRootsAccordingToBundlerSettings(sdk,
-                                                                                             runParams, buildParameters,
-                                                                                             runnerEnvParams,
-                                                                                             checkoutDirPath);
+      final String bundlerGemRoot = BundlerUtil.determineGemsRootsAccordingToBundlerSettings(sdk, context);
       final String[] gemPaths = bundlerGemRoot == null ? sdk.getGemPaths() : new String[]{bundlerGemRoot};
 
       // If user overrides bundler.path sys var or uses project custom bundle..

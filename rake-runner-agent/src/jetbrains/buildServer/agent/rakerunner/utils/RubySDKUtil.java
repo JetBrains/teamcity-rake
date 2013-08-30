@@ -20,6 +20,7 @@ import com.intellij.openapi.util.Pair;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildRunnerContext;
+import jetbrains.buildServer.agent.rakerunner.ModifiableRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.SdkUtil;
@@ -156,11 +157,8 @@ public class RubySDKUtil {
   }
 
   public static void patchPathEnvForNonRvmOrSystemRvmSdk(@NotNull final RubySdk sdk,
-                                                         @NotNull final Map<String, String> runParams,
-                                                         @NotNull final Map<String, String> buildParams,
-                                                         @NotNull final Map<String, String> runnerEnvParams,
-                                                         @Nullable final String checkoutDirPath)
-    throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
+                                                         @NotNull final ModifiableRunnerContext context)
+  throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
     if (SdkUtil.isRvmSdk(sdk) && !sdk.isSystem()) {
       // do nothing
@@ -184,10 +182,7 @@ public class RubySDKUtil {
 
     // gempath bin folders
     // use bundler gems root if it is defined! (i.e. we use bundle exec emulation with custom gem paths)
-    final String bundlerGemRoot = BundlerUtil.determineGemsRootsAccordingToBundlerSettings(sdk,
-                                                                                           runParams, buildParams,
-                                                                                           runnerEnvParams,
-                                                                                           checkoutDirPath);
+    final String bundlerGemRoot = BundlerUtil.determineGemsRootsAccordingToBundlerSettings(sdk, context);
     final String[] gemPaths = bundlerGemRoot == null ? sdk.getGemPaths() : new String[]{bundlerGemRoot};
     // add to path
     for (String gemPath : gemPaths) {
@@ -196,6 +191,6 @@ public class RubySDKUtil {
     }
 
     // add old $PATH
-    OSUtil.prependToPATHEnvVariable(patchedPath.toString(), runnerEnvParams);
+    OSUtil.prependToPATHEnvVariable(patchedPath.toString(), context.getEnvParameters());
   }
 }

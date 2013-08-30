@@ -17,11 +17,11 @@
 package jetbrains.buildServer.agent.feature;
 
 import com.intellij.util.PathUtil;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.*;
+import jetbrains.buildServer.agent.rakerunner.ModifiableRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.SharedParams;
 import jetbrains.buildServer.agent.rakerunner.SharedParamsType;
@@ -116,8 +116,8 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
                                                            @NotNull final SharedParams sharedParams) throws RunBuildException {
 
     // editable env variables
-    final Map<String, String> old = context.getBuildParameters().getEnvironmentVariables();
-    final EnvironmentPatchableMap env = new EnvironmentPatchableMap(old);
+    final ModifiableRunnerContext mc = new ModifiableRunnerContext(context);
+    final EnvironmentPatchableMap env = mc.getEnvParameters();
 
     try {
 
@@ -138,22 +138,11 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
           ((RbEnvRubySdk)sdk).patchEnvironment(env);
         }
 
-        final Map<String, String> runParams = context.getRunnerParameters();
-        final Map<String, String> buildParams = context.getBuildParameters().getAllParameters();
-
-        // if checkout dir isn't ok for bundler path here, user may specify it using system property
         // see RakeRunnerConstants.CUSTOM_BUNDLE_FOLDER_PATH.
-        final String checkoutDirPath = context.getBuild().getCheckoutDirectory().getCanonicalPath();
-        RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, env, checkoutDirPath);
+        RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, mc);
       }
 
-      Collection<String> envsToUnset = new ArrayList<String>();
-      for (String key : old.keySet()) {
-        if (!env.containsKey(key)) {
-          envsToUnset.add(key);
-        }
-      }
-      context.addRunnerParameter(ENVS_TO_UNSET_PARAM, StringUtil.join(envsToUnset, ","));
+      context.addRunnerParameter(ENVS_TO_UNSET_PARAM, StringUtil.join(env.getRemovedKeys(), ","));
 
       // apply updated env variables to context:
       for (Map.Entry<String, String> keyAndValue : env.entrySet()) {

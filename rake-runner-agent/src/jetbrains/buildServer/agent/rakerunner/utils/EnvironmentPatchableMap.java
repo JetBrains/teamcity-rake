@@ -17,10 +17,9 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.util.containers.HashMap;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
 
 /**
  * @author Vladislav.Rassokhin
@@ -28,7 +27,7 @@ import java.util.Set;
 public class EnvironmentPatchableMap implements Map<String, String> {
 
   public EnvironmentPatchableMap(final Map<String, String> baseEnv) {
-    myBaseEnvironment = Collections.unmodifiableMap(baseEnv);
+    myBaseEnvironment = Collections.unmodifiableMap(new HashMap<String, String>(baseEnv));
     myPatchedEnvironment = new HashMap<String, String>();
     myPatchedEnvironment.putAll(baseEnv);
     //myOperationsList = new ArrayList<Operation>();
@@ -46,6 +45,20 @@ public class EnvironmentPatchableMap implements Map<String, String> {
    */
   public Map<String, String> getPatched() {
     return this;
+  }
+
+  /**
+   * @return set of removed keys (exist in base and not exist in pathced)
+   */
+  @NotNull
+  public Set<String> getRemovedKeys() {
+    final Set<String> removed = new HashSet<String>(Math.max(0, getBase().size() - size()));
+    for (String key : getBase().keySet()) {
+      if (!containsKey(key)) {
+        removed.add(key);
+      }
+    }
+    return removed;
   }
 
   //private class Operation {

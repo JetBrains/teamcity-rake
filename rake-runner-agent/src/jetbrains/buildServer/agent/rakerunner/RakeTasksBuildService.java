@@ -37,7 +37,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 
-import static jetbrains.buildServer.agent.rakerunner.utils.FileUtil2.getCanonicalPath;
 import static jetbrains.buildServer.runner.BuildFileRunnerConstants.BUILD_FILE_PATH_KEY;
 
 /**
@@ -62,19 +61,18 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
     RVMPathsSettings.getInstanceEx().initialize(getBuildParameters().getEnvironmentVariables());
     RbEnvPathsSettings.getInstance().initialize(getBuildParameters().getEnvironmentVariables());
 
-    List<String> arguments = new ArrayList<String>();
-    final Map<String, String> runParams = new HashMap<String, String>(getRunnerParameters());
-    final Map<String, String> buildParams = new HashMap<String, String>(getBuildParameters().getAllParameters());
-
-    // apply options converter
-    SupportedTestFramework.convertOptionsIfNecessary(runParams);
+    final List<String> arguments = new ArrayList<String>();
+    final BuildRunnerContext context = getRunnerContext();
+    final ModifiableRunnerContext mc = new ModifiableRunnerContext(context);
 
     // runParams - all server-ui options
     // buildParams - system properties (system.*), environment vars (env.*)
+    final Map<String, String> runParams = mc.getRunnerParameters();
+    final Map<String, String> buildParams = mc.getBuildParameters();
+    final EnvironmentPatchableMap env = mc.getEnvParameters();
 
-    //final Map<String, String> runnerEnvParams = new HashMap<String, String>(getEnvironmentVariables);
-    final EnvironmentPatchableMap env = new EnvironmentPatchableMap(getEnvironmentVariables());
-    final BuildRunnerContext context = getRunnerContext();
+    // apply options converter
+    SupportedTestFramework.convertOptionsIfNecessary(runParams);
 
     final File buildFile = getBuildFile(runParams);
 
@@ -90,10 +88,9 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       shared.applyToParameters(runParams);
 
-      final String checkoutDirPath = getCanonicalPath(getCheckoutDirectory());
-
       // Sdk
       final RubySdk sdk = RubySDKUtil.createAndSetupSdk(runParams, context);
+
 
       if (!(interpreterConfigMode == RakeRunnerUtils.RubyConfigMode.DEFAULT && rubyEnvAlreadyConfigured)) {
         // 1. default, but build feature wasn't configured
@@ -109,18 +106,18 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
           if (sdk.isSystem()) {
             // Also Patch path for fake RVM
-            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, env, checkoutDirPath);
+            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, mc);
           }
         } else {
           if (interpreterConfigMode == RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH) {
             // non-rvm sdk
-            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, runParams, buildParams, env, checkoutDirPath);
+            RubySDKUtil.patchPathEnvForNonRvmOrSystemRvmSdk(sdk, mc);
           }
         }
       }
 
       // loadpath patch for test runners
-      addTestRunnerPatchFiles(sdk, runParams, buildParams, env, checkoutDirPath);
+      addTestRunnerPatchFiles(sdk, mc);
 
       // attached frameworks info
       if (SupportedTestFramework.isAnyFrameworkActivated(runParams)) {
@@ -180,7 +177,7 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       // Bundle exec emulation:
       // (do not do it before RVM Env patch!!!!!!)
-      BundlerUtil.enableBundleExecEmulationIfNeeded(sdk, runParams, buildParams, env, checkoutDirPath);
+      BundlerUtil.enableBundleExecEmulationIfNeeded(sdk, mc);
 
 
       // Result:
@@ -191,9 +188,9 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
         }
       }
       return new SimpleProgramCommandLine(ret,
-                                          getWorkingDirectory().getAbsolutePath(),
-                                          sdk.getRubyExecutable().getAbsolutePath(),
-                                          arguments);
+        getWorkingDirectory().getAbsolutePath(),
+        sdk.getRubyExecutable().getAbsolutePath(),
+        arguments);
     } catch (MyBuildFailureException e) {
       throw new RunBuildException(e.getMessage(), e);
     }
@@ -348,12 +345,10 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
   }
 
   private void addTestRunnerPatchFiles(@NotNull final RubySdk sdk,
-                                       @NotNull final Map<String, String> runParams,
-                                       @NotNull final Map<String, String> buildParams,
-                                       @NotNull final Map<String, String> runnerEnvParams,
-                                       @NotNull final String checkoutDirPath)
-    throws MyBuildFailureException, RunBuildException {
-
+                                       @NotNull final ModifiableRunnerContext context)
+  throws MyBuildFailureException, RunBuildException {
+    final Map<String, String> runParams = context.getRunnerParameters();
+    final Map<String, String> runnerEnvParams = context.getEnvParameters();
 
     final StringBuilder buff = new StringBuilder();
 
@@ -374,10 +369,10 @@ public class RakeTasksBuildService extends BuildServiceAdapter implements RakeRu
 
       // due to patching loadpath we replace original autorunner but it is used buy our tests runner
       runnerEnvParams.put(ORIGINAL_SDK_AUTORUNNER_PATH_KEY,
-                          TestUnitUtil.getSDKTestUnitAutoRunnerScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
+        TestUnitUtil.getSDKTestUnitAutoRunnerScriptPath(sdk, context));
       runnerEnvParams.put(ORIGINAL_SDK_TESTRUNNERMEDIATOR_PATH_KEY,
                           TestUnitUtil
-                            .getSDKTestUnitTestRunnerMediatorScriptPath(sdk, runParams, buildParams, runnerEnvParams, checkoutDirPath));
+                            .getSDKTestUnitTestRunnerMediatorScriptPath(sdk, context));
 
       // [optional] inform user if minitest framework detected
       final String minitestPath =

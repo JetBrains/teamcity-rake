@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jetbrains.buildServer.RunBuildException;
+import jetbrains.buildServer.agent.rakerunner.ModifiableRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.agent.ruby.RubySdk;
@@ -80,82 +81,72 @@ public class BundlerUtil {
   }
 
   public static void enableBundleExecEmulationIfNeeded(@NotNull final RubySdk sdk,
-                                                       @NotNull final Map<String, String> runParams,
-                                                       @NotNull final Map<String, String> buildParams,
-                                                       @NotNull final Map<String, String> runnerEnvParams,
-                                                       @NotNull final String checkoutDirPath)
-    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+                                                       @NotNull final ModifiableRunnerContext context)
+  throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
-    if (!isBundleExecEmulationEnabled(runParams)) {
+    if (!isBundleExecEmulationEnabled(context.getRunnerParameters())) {
       return;
     }
 
-    final String bundlerGemRootPath = findBundlerGemRoot(sdk, buildParams);
+    final String bundlerGemRootPath = findBundlerGemRoot(sdk, context.getBuildParameters());
 
     // BUNDLE_BIN_PATH env variable
-    setBundleBinPath(runnerEnvParams, bundlerGemRootPath);
+    setBundleBinPath(context.getEnvParameters(), bundlerGemRootPath);
 
     // BUNDLE_GEM_FILE env variable
-    final String gemFilePath = determineGemfilePath(buildParams, runnerEnvParams, checkoutDirPath);
-    runnerEnvParams.put(BUNDLE_GEMFILE_ENV_VAR, gemFilePath);
+    final String gemFilePath = determineGemfilePath(context);
+    context.getEnvParameters().put(BUNDLE_GEMFILE_ENV_VAR, gemFilePath);
 
     // Add BUNDLE_PATH/.../bin to PATH
-    addCustomBundleGemsBinFolderToPath(sdk, buildParams, runnerEnvParams, checkoutDirPath, gemFilePath);
+    addCustomBundleGemsBinFolderToPath(sdk, context, gemFilePath);
 
     // RUBYLIB: Let's add bundler setup script to loadpath
-    addBundlerSetupScriptToLoadPath(runnerEnvParams, bundlerGemRootPath);
+    addBundlerSetupScriptToLoadPath(context.getEnvParameters(), bundlerGemRootPath);
 
     // RUBYOPT: attach bundler using its bundler/setup script
-    attachBundler(runParams, runnerEnvParams);
+    attachBundler(context.getRunnerParameters(), context.getEnvParameters());
   }
 
 
   @Nullable
   public static String determineGemsRootsAccordingToBundlerSettings(@NotNull final RubySdk sdk,
-                                                                    @NotNull final Map<String, String> runParams,
-                                                                    @NotNull final Map<String, String> buildParams,
-                                                                    @NotNull final Map<String, String> runnerEnvParams,
-                                                                    @Nullable final String checkoutDirPath)
-    throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
+                                                                    @NotNull final ModifiableRunnerContext context)
+  throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
-    if (!isBundleExecEmulationEnabled(runParams)) {
+    if (!isBundleExecEmulationEnabled(context.getRunnerParameters())) {
       return null;
     }
 
-    final String customBundleFolderPath = buildParams.get(RakeRunnerConstants.CUSTOM_BUNDLE_FOLDER_PATH);
+    final String customBundleFolderPath = context.getBuildParameters().get(RakeRunnerConstants.CUSTOM_BUNDLE_FOLDER_PATH);
     if (!StringUtil.isEmpty(customBundleFolderPath)) {
-      return getCustomBundlerGemsRoot(sdk, checkoutDirPath, customBundleFolderPath);
+      return getCustomBundlerGemsRoot(sdk, context.getCheckoutDirectory(), customBundleFolderPath);
     } else {
-      if (checkoutDirPath == null) {
-        return null;
-      }
       // lets ignore default user-home based .bundler, seems it isn't used on run-time
-      final String gemfilePath = determineGemfilePath(buildParams, runnerEnvParams, checkoutDirPath);
+      final String gemfilePath = determineGemfilePath(context);
       return getBundlerGemsDirFromConfig(sdk, gemfilePath);
     }
   }
 
   private static void addCustomBundleGemsBinFolderToPath(@NotNull final RubySdk sdk,
-                                                         @NotNull final Map<String, String> buildParams,
-                                                         @NotNull final Map<String, String> runnerEnvParams,
-                                                         @Nullable final String checkoutDirPath,
+                                                         @NotNull final ModifiableRunnerContext context,
                                                          @NotNull final String gemfilePath)
     throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
     String bundlerGemsRoot;
-    final String customBundleFolderPath = buildParams.get(RakeRunnerConstants.CUSTOM_BUNDLE_FOLDER_PATH);
+    final String customBundleFolderPath = context.getBuildParameters().get(RakeRunnerConstants.CUSTOM_BUNDLE_FOLDER_PATH);
+    final Map<String, String> env = context.getEnvParameters();
     if (!StringUtil.isEmpty(customBundleFolderPath)) {
-      bundlerGemsRoot = getCustomBundlerGemsRoot(sdk, checkoutDirPath, customBundleFolderPath);
+      bundlerGemsRoot = getCustomBundlerGemsRoot(sdk, context.getCheckoutDirectory(), customBundleFolderPath);
       // just to copy behaviour when this BUNDLE_PATH is specified in config
-      //runnerEnvParams.put(GEM_HOME, bundlerGemsRoot);
-      runnerEnvParams.put(BUNDLE_PATH_ENV_VAR, bundlerGemsRoot);
+      //env.put(GEM_HOME, bundlerGemsRoot);
+      env.put(BUNDLE_PATH_ENV_VAR, bundlerGemsRoot);
     } else {
       // more correct is to determine relatively to gemfile:
       // gemfile path is already determined
       bundlerGemsRoot = getBundlerGemsDirFromConfig(sdk, gemfilePath);
       if (bundlerGemsRoot != null) {
         // bundler sets GEM_HOME according bundle_path if it is specified in config
-        runnerEnvParams.put(GEM_HOME, bundlerGemsRoot);
+        env.put(GEM_HOME, bundlerGemsRoot);
       } else {
         // ~/.bundle or ~/.bundler
         // don't change GEM_HOME
@@ -166,7 +157,7 @@ public class BundlerUtil {
     if (bundlerGemsRoot != null) {
       final String bundlerGemsBinFolder = FileUtil.toSystemDependentName(bundlerGemsRoot) + File.separator + "bin";
 
-      OSUtil.prependToPATHEnvVariable(bundlerGemsBinFolder, runnerEnvParams);
+      OSUtil.prependToPATHEnvVariable(bundlerGemsBinFolder, env);
     }
   }
 
@@ -231,21 +222,25 @@ public class BundlerUtil {
   }
 
   @NotNull
-  public static String determineGemfilePath(@NotNull final Map<String, String> buildParams,
-                                            @NotNull final Map<String, String> runnerEnvParams,
-                                            @NotNull final String checkoutDirPath) throws RakeTasksBuildService.MyBuildFailureException {
+  public static String determineGemfilePath(@NotNull final ModifiableRunnerContext context) throws RakeTasksBuildService.MyBuildFailureException {
+    final Map<String, String> runnerEnvParams = context.getEnvParameters();
+    final Map<String, String> buildParams = context.getBuildParameters();
     final String userDefinedGemFilePath = runnerEnvParams.get(BUNDLE_GEMFILE_ENV_VAR);
     if (!StringUtil.isEmpty(userDefinedGemFilePath)) {
       return userDefinedGemFilePath;
     }
 
+    final boolean oldResolve = ConfigurationParamsUtil.isParameterEnabled(buildParams, RakeRunnerConstants.GEMFILE_RESOLVE_IN_CHECKOUT_DIRECTORY);
+    final String resolvingBaseDirectory = oldResolve ? context.getCheckoutDirectory() : context.getWorkingDirectory();
+
     final String customGemFilePath = buildParams.get(CUSTOM_GEMFILE_RELATIVE_PATH);
+    String gemfilePath;
     if (!StringUtil.isEmpty(customGemFilePath)) {
       if (FileUtil.isAbsolute(customGemFilePath)) {
         return customGemFilePath;
       }
-      // use custom runner
-      final String gemfilePath = checkoutDirPath + File.separator + customGemFilePath;
+      // use custom
+      gemfilePath = resolvingBaseDirectory + File.separator + customGemFilePath;
       if (checkIfExists(gemfilePath)) {
         return gemfilePath;
       }
@@ -255,14 +250,19 @@ public class BundlerUtil {
       // default one
       final String[] gemFileNames = new String[]{"Gemfile", "GemFile", "gemfile"};
       for (String name : gemFileNames) {
-        final String gemfilePath = checkoutDirPath + File.separator + name;
+        gemfilePath = resolvingBaseDirectory + File.separator + name;
         if (checkIfExists(gemfilePath)) {
           return gemfilePath;
         }
       }
-      final String msg = "Cannot find Gemfile in checkout directory : '" + checkoutDirPath
-                         + "'. If Gemfile is located in other directory please specify Gemfile relative path using system property: " +
-                         CUSTOM_GEMFILE_RELATIVE_PATH;
+      final String pattern = "Cannot find Gemfile in %s directory : '%s'. \n" +
+        "If Gemfile is located in other directory please specify Gemfile relative path using system property: " + CUSTOM_GEMFILE_RELATIVE_PATH;
+      String msg;
+      if (oldResolve) {
+        msg = String.format(pattern, "checkout", context.getCheckoutDirectory());
+      } else {
+        msg = String.format(pattern, "working", context.getWorkingDirectory());
+      }
       throw new RakeTasksBuildService.MyBuildFailureException(msg);
     }
   }

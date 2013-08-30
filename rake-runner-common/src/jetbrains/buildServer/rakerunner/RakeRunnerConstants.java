@@ -100,6 +100,7 @@ public interface RakeRunnerConstants {
   // Bundler
   @NonNls String CUSTOM_GEMFILE_RELATIVE_PATH = "system.teamcity.rake.runner.custom.gemfile";
   @NonNls String CUSTOM_BUNDLE_FOLDER_PATH = "system.teamcity.rake.runner.custom.bundle.path";
+  @NonNls String GEMFILE_RESOLVE_IN_CHECKOUT_DIRECTORY = "system.teamcity.rake.runner.bundle.resolve.in.checkout.dir";
 
   // Rake
   @NonNls String RAKE_CMDLINE_OPTIONS_RAKEFILE = "--rakefile";
