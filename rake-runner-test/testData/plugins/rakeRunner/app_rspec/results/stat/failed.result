@@ -16,9 +16,9 @@
 --1--3 examples, 3 failures, 0 passed NORMAL
 --1--Finished in ##TIME## NORMAL
 
---1--##teamcity[message text='RuntimeError:
+--0--##teamcity[message text='RuntimeError:
 --1--##teamcity[blockClosed name='Execute stat:failed' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
---1--##teamcity[message text='Rake aborted!' status='ERROR' timestamp='##TIME##'] NORMAL
+--0--##teamcity[message text='Rake aborted!' status='ERROR' timestamp='##TIME##'] NORMAL
 
 --2--##teamcity[testSuiteStarted name='Spec failed' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
 --2--##teamcity[testSuiteFinished name='Spec failed' timestamp='##TIME##'] NORMAL
