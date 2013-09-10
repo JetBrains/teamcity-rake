@@ -173,7 +173,8 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     if (ourTempsContainerDir == null) {
       synchronized (AbstractRakeRunnerTest.class) {
         if (ourTempsContainerDir == null) {
-          ourTempsContainerDir = FileUtil.createEmptyDir(RakeRunnerTestUtil.getTestDataItemPath("temp-container"));
+          ourTempsContainerDir = FileUtil.createTempDirectory("rake-runner-temp-container", null);
+          //ourTempsContainerDir = FileUtil.createEmptyDir(RakeRunnerTestUtil.getTestDataItemPath("temp-container"));
         }
       }
     }

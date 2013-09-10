@@ -1,0 +1,5 @@
+source "http://rubygems.org"
+gem "rake"
+
+puts "GEMFILE_DIRECTORY=" + File.dirname(__FILE__)
+
