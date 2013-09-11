@@ -15,7 +15,6 @@ import org.testng.annotations.Test;
  * @author Vladislav Rassokhin (vlad.rassokhin@gmail.com)
  */
 @TestFor(testForClass = BundlerUtil.class)
-@Test(groups = "unix")
 public class BundlerUtilTest extends AbstractRakeRunnerTest {
   private File myCheckoutDirectory;
   private File wd1;
