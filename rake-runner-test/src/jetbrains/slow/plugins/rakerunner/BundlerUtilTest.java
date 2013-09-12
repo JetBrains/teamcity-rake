@@ -48,6 +48,7 @@ public class BundlerUtilTest extends AbstractRakeRunnerTest {
   @Override
   protected final void setUp1() throws Throwable {
     super.setUp1();
+    useRVMGemSet("");
     setUseBundle(true);
     setPartialMessagesChecker();
     getBuildType().setCheckoutDirectory(myCheckoutDirectory.getAbsolutePath());
