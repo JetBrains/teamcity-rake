@@ -1,4 +1,4 @@
---1--##teamcity[testSuiteStarted name='Spec passed' locationHint='file:##BASE_DIR##/##WORKING_DIR##/spec/statistics/passed/passed1_spec.rb:4' timestamp='##TIME##'] NORMAL
---1--##teamcity[testStarted name='Spec passed should passed11' captureStandardOutput='true' locationHint='file:##BASE_DIR##/##WORKING_DIR##/spec/statistics/passed/passed1_spec.rb:6' timestamp='##TIME##'] NORMAL
---1--##teamcity[testSuiteStarted name='Spec passed' locationHint='file:##BASE_DIR##/##WORKING_DIR##/spec/statistics/passed/passed2_spec.rb:4' timestamp='##TIME##'] NORMAL
---1--##teamcity[testStarted name='Spec passed should passed2' captureStandardOutput='true' locationHint='file:##BASE_DIR##/##WORKING_DIR##/spec/statistics/passed/passed2_spec.rb:6' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testSuiteStarted name='Spec passed' locationHint='file:##WORKING_DIR##/spec/statistics/passed/passed1_spec.rb:4' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Spec passed should passed11' captureStandardOutput='true' locationHint='file:##WORKING_DIR##/spec/statistics/passed/passed1_spec.rb:6' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testSuiteStarted name='Spec passed' locationHint='file:##WORKING_DIR##/spec/statistics/passed/passed2_spec.rb:4' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testStarted name='Spec passed should passed2' captureStandardOutput='true' locationHint='file:##WORKING_DIR##/spec/statistics/passed/passed2_spec.rb:6' timestamp='##TIME##'] NORMAL

@@ -18,6 +18,8 @@ package jetbrains.slow.plugins.rakerunner;
 
 import java.io.File;
 import java.io.FileFilter;
+
+import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.serverSide.BuildTypeEx;
@@ -52,12 +54,27 @@ public class RakeRunnerTestUtil {
     return new File(TESTDATA_PATH + fileOrFolderRelativePath);
   }
 
-  static public void setInterpreterPath(@NotNull final BuildTypeEx bt) {
+  static public void setInterpreterPath(@NotNull final BuildTypeEx bt) throws InterpreterNotFoundException {
     String interpreterPath = System.getProperty(INTERPRETER_PATH_PROPERTY);
-    if (!StringUtil.isEmpty(interpreterPath)) {
+    if (StringUtil.isEmpty(interpreterPath)) {
+      for (String prefix : RubyVersionsDataProvider.getRubyVersionsWindowsSet()) {
+        try {
+          final File file = getWindowsInterpreterExecutableFile(prefix);
+          interpreterPath = file.getAbsolutePath();
+        } catch (InterpreterNotFoundException ignore) {
+        }
+      }
+    }
+    if (StringUtil.isEmpty(interpreterPath)) {
+      interpreterPath = OSUtil.findRubyInterpreterInPATH(System.getenv());
+    }
+    if (StringUtil.isEmpty(interpreterPath)) {
+      throw new InterpreterNotFoundException("Cannot find interpreter in PATH, by property '" + INTERPRETER_PATH_PROPERTY +
+        "' and in storage '" + INTERPRETERS_STORAGE_PATH_PROPERTY + "'");
+    } else {
       bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH, interpreterPath));
       bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
-                                             RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
+        RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH.getModeValueString()));
     }
   }
 
@@ -70,7 +87,7 @@ public class RakeRunnerTestUtil {
   }
 
   @NotNull
-  public static File getWindowsInterpreterExecutableFile(final String prefix) throws InterpreterNotFoundException {
+  public static File getWindowsInterpreterExecutableFile(@NotNull final String prefix) throws InterpreterNotFoundException {
     String interpretersStoragePath = System.getProperty(INTERPRETERS_STORAGE_PATH_PROPERTY);
     if (StringUtil.isEmptyOrSpaces(interpretersStoragePath)) {
       throw new InterpreterNotFoundException("Cannot found interpreters storage location. Please specify \"" +

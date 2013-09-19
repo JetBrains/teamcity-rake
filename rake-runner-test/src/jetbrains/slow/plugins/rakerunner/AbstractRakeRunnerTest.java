@@ -131,7 +131,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     return myShouldTranslateMessages;
   }
 
-  private void setInterpreterPath() {
+  private void setInterpreterPath() throws RakeRunnerTestUtil.InterpreterNotFoundException {
     RakeRunnerTestUtil.setInterpreterPath(getBuildType());
   }
 
@@ -412,7 +412,11 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     if (myWorkingDirectory != null) {
       final String rel = FileUtil.getRelativePath(getCurrentDir().getAbsoluteFile(), myWorkingDirectory.getAbsoluteFile());
       if (rel != null) {
-        msg = msg.replaceAll(Pattern.quote(rel), "##WORKING_DIR##");
+        if (rel.startsWith("..")) {
+          msg = replacePath(msg, myWorkingDirectory.getAbsoluteFile(), "##WORKING_DIR##");
+        } else {
+          msg = msg.replaceAll(Pattern.quote(rel), "##WORKING_DIR##");
+        }
       }
     }
     return msg;
@@ -455,6 +459,9 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
 
   @NotNull
   protected List<String> getTestNameParametersList() {
+    if (myRubyVersion == null) {
+      return new ArrayList<String>();
+    }
     return new ArrayList<String>(Arrays.asList(myRubyVersion));
   }
 
