@@ -14,6 +14,5 @@
 --1--2 tests, 0 assertions, 0 failures, 2 errors
 --1--Test suite finished: ##TIME## NORMAL
 
---1--##teamcity[message text='RuntimeError: Command failed with status
 --1--##teamcity[blockClosed name='Execute stat:error' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
 --1--##teamcity[message text='Rake aborted!' status='ERROR' timestamp='##TIME##'] NORMAL
