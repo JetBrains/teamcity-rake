@@ -47,12 +47,12 @@ public class OSUtil {
     }
   }
 
-  private static final String RUBY_EXE_WIN = "ruby.exe";
-  private static final String RUBY_EXE_WIN_BAT = "ruby.bat";
-  private static final String RUBY_EXE_UNIX = "ruby";
-  private static final String JRUBY_EXE_WIN = "jruby.exe";
-  private static final String JRUBY_EXE_WIN_BAT = "jruby.bat";
-  private static final String JRUBY_EXE_UNIX = "jruby";
+  public static final String RUBY_EXE_WIN = "ruby.exe";
+  public static final String RUBY_EXE_WIN_BAT = "ruby.bat";
+  public static final String RUBY_EXE_UNIX = "ruby";
+  public static final String JRUBY_EXE_WIN = "jruby.exe";
+  public static final String JRUBY_EXE_WIN_BAT = "jruby.bat";
+  public static final String JRUBY_EXE_UNIX = "jruby";
 
   public static void appendToRUBYLIBEnvVariable(@NotNull final String additionalPath,
                                                 @NotNull final Map<String, String> envMap) {

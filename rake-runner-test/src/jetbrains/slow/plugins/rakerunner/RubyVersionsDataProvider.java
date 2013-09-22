@@ -18,16 +18,20 @@ package jetbrains.slow.plugins.rakerunner;
 
 import com.google.common.collect.Sets;
 import com.intellij.openapi.util.SystemInfo;
-import jetbrains.buildServer.util.CollectionsUtil;
-import jetbrains.buildServer.util.Converter;
-import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
+import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
+import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.agent.ruby.rvm.detector.impl.RVMDetectorForUNIX;
+import jetbrains.buildServer.util.*;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.testng.annotations.DataProvider;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.util.*;
 
 /**
  * @author Vladislav.Rassokhin
@@ -62,21 +66,42 @@ public class RubyVersionsDataProvider {
   @NotNull
   public static Set<String> getRubyVersionsLinuxSet() {
     final String property = System.getProperty("ruby.testing.versions", null);
-    if (property == null) {
-      return new HashSet<String>() {
-        {
-          add("ruby-1.8.7");
-          add("ruby-1.9.2");
-          add("jruby");
-        }
-      };
+    if (property != null) {
+      final List<String> rubies = StringUtil.split(property, " ");
+      return new HashSet<String>(rubies);
     }
-    final List<String> rubies = StringUtil.split(property, " ");
-    return new HashSet<String>(rubies);
+    if (StringUtil.isTrue(System.getProperty("rake.runnner.tests.use.all.rvm.interpreters"))) {
+      final InstalledRVM rvm = new RVMDetectorForUNIX().detect(System.getenv());
+      if (rvm != null) {
+        return rvm.getInstalledRubies();
+      }
+    }
+    return new HashSet<String>() {
+      {
+        add("ruby-1.8.7");
+        add("ruby-1.9.2");
+        add("jruby");
+      }
+    };
   }
 
   @NotNull
   public static Set<String> getRubyVersionsWindowsSet() {
+    final String storage = System.getProperty(RakeRunnerTestUtil.INTERPRETERS_STORAGE_PATH_PROPERTY);
+    if (storage != null && FileUtil2.checkIfDirExists(storage)) {
+      final File[] interpreters = new File(storage).listFiles(new FileFilter() {
+        public boolean accept(@NotNull final File file) {
+          return file.isDirectory() && isInterpreterDirectory(file);
+        }
+      });
+      if (interpreters != null && interpreters.length > 0) {
+        return CollectionsUtil.convertSet(Arrays.asList(interpreters), new Converter<String, File>() {
+          public String createFrom(@NotNull final File source) {
+            return source.getName();
+          }
+        });
+      }
+    }
     return new HashSet<String>() {
       {
         add("ruby-1.8.7");
@@ -84,6 +109,34 @@ public class RubyVersionsDataProvider {
         add("jruby-1.6.4");
       }
     };
+  }
+
+  @Contract("null -> false")
+  private static boolean isInterpreterDirectory(@Nullable final File directory) {
+    if (directory == null || !directory.exists() || !directory.isDirectory()) {
+      return false;
+    }
+    final File bin = new File(directory, "bin");
+    if (!bin.exists() || !bin.isDirectory()) {
+      return false;
+    }
+    final HashSet<String> probablyNames = new HashSet<String>() {{
+      if (SystemInfo.isWindows) {
+        add(OSUtil.RUBY_EXE_WIN);
+        add(OSUtil.RUBY_EXE_WIN_BAT);
+        add(OSUtil.JRUBY_EXE_WIN);
+        add(OSUtil.JRUBY_EXE_WIN_BAT);
+      } else {
+        add(OSUtil.JRUBY_EXE_UNIX);
+        add(OSUtil.RUBY_EXE_UNIX);
+      }
+    }};
+    final File[] files = FileUtil.listFiles(bin, new FilenameFilter() {
+      public boolean accept(@NotNull final File dir, @NotNull final String name) {
+        return probablyNames.contains(name);
+      }
+    });
+    return files.length > 0;
   }
 
   @NotNull

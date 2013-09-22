@@ -18,6 +18,7 @@ package jetbrains.slow.plugins.rakerunner;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Set;
 
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
@@ -125,7 +126,16 @@ public class RakeRunnerTestUtil {
   static public void setRVMConfiguration(@NotNull final BuildTypeEx bt) {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
                                            RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
-    useRVMRubySDK(System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY), bt);
+    String property = System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY);
+    if (StringUtil.isEmptyOrSpaces(property)) {
+      final Set<String> set = RubyVersionsDataProvider.getRubyVersionsLinuxSet();
+      if (!set.isEmpty()) {
+        property = set.iterator().next();
+      } else {
+        throw new IllegalStateException("Required at least one interpreter");
+      }
+    }
+    useRVMRubySDK(property, bt);
     useRVMGemSet(DEFAULT_GEMSET_NAME, bt);
   }
 

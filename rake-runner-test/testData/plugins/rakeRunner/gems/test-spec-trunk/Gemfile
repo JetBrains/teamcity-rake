@@ -1,8 +1,11 @@
 source "http://rubygems.org"
 gem "rake"
 
-if (RUBY_VERSION.to_f != 1.8) then
-  p "Founded #{RUBY_VERSION.to_f} ruby, requiring 'test-unit' gem"
+require 'rubygems'
+current = Gem::Version.create(RUBY_VERSION * 1)
+
+if (current >= Gem::Version.create('1.9')) then
+  p "Founded #{current} ruby, requiring 'test-unit' gem"
   gem "test-unit"
 end
 
