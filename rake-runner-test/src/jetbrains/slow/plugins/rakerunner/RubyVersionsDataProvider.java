@@ -82,7 +82,7 @@ public class RubyVersionsDataProvider {
             m.put(s, ruby);
           }
         }
-        return new HashSet<String>(m.values());
+        return new TreeSet<String>(m.values());
       }
     }
     return new HashSet<String>() {
