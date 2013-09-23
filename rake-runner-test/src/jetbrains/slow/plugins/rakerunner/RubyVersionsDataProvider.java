@@ -73,7 +73,16 @@ public class RubyVersionsDataProvider {
     if (StringUtil.isTrue(System.getProperty("rake.runnner.tests.use.all.rvm.interpreters"))) {
       final InstalledRVM rvm = new RVMDetectorForUNIX().detect(System.getenv());
       if (rvm != null) {
-        return rvm.getInstalledRubies();
+        final SortedSet<String> rubies = rvm.getInstalledRubies();
+        // Use latest patchversion
+        final Map<String, String> m = new HashMap<String, String>();
+        for (String ruby : rubies) {
+          final String s = ruby.replaceAll("\\-p\\d+", "");
+          if (VersionComparatorUtil.compare(m.get(s), ruby) < 0) {
+            m.put(s, ruby);
+          }
+        }
+        return new HashSet<String>(m.values());
       }
     }
     return new HashSet<String>() {

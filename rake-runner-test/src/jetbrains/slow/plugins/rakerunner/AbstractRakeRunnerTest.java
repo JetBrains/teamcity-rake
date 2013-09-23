@@ -462,7 +462,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     if (myRubyVersion == null) {
       return new ArrayList<String>();
     }
-    return new ArrayList<String>(Arrays.asList(myRubyVersion));
+    return new ArrayList<String>(Arrays.asList(myRubyVersion.replaceAll("\\-p\\d+", "")));
   }
 
   /**
