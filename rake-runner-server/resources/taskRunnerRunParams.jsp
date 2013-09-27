@@ -88,7 +88,7 @@
       <span class="error" id="error_${BUILD_FILE_KEY}"></span>
     </td>
   </tr>
-  <forms:workingDirectory/>
+  <props:workingDirectory />
   <tr>
     <th><label for="${UI_RAKE_TASKS_PROPERTY}">Rake tasks: </label></th>
     <td>
