@@ -96,7 +96,7 @@
       <span class="smallNote">Enter task names separated by space character if you don't want to use the 'default' task.<br/>E.g. 'test:functionals' or 'mytask:test mytask:test2'.</span>
     </td>
   </tr>
-  <tr>
+  <tr class="advancedSetting">
     <th><label for="${UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY}">Additional Rake command line parameters: </label></th>
     <td>
       <props:textProperty name="${UI_RAKE_ADDITIONAL_CMD_PARAMS_PROPERTY}" className="longField" expandable="true"/>
@@ -112,8 +112,8 @@
     </th>
     <td>
       <c:set var="modeSelected" value="${propertiesBean.properties[UI_RUBY_USAGE_MODE]}"/>
-      <props:selectProperty name="${UI_RUBY_USAGE_MODE}" onchange="BS.RakeRunner.onModeChanged()">
-        <props:option value="${MODE_DEFAULT}" currValue="${modeSelected}">Default</props:option>
+      <props:selectProperty name="${UI_RUBY_USAGE_MODE}" onchange="BS.RakeRunner.onModeChanged()" enableFilter="true">
+        <props:option value="${MODE_DEFAULT}" currValue="${modeSelected}">&lt;Default&gt;</props:option>
         <props:option value="${MODE_PATH}" currValue="${modeSelected}">Path to interpreter</props:option>
         <props:option value="${MODE_RVM}" currValue="${modeSelected}">RVM interpreter</props:option>
       </props:selectProperty>
@@ -165,7 +165,7 @@
       <span class="smallNote">If your project uses <strong>Bundler</strong> gem requirements manager, this option will allow you to launch rake tasks using 'bundle exec' command.</span>
     </td>
   </tr>
-  <tr>
+  <tr class="advancedSetting">
     <th>
       <label>Debug: </label>
     </th>
@@ -175,7 +175,7 @@
       <br/>
     </td>
   </tr>
-  <tr>
+  <tr class="advancedSetting">
     <th>
       <label for="${UI_RUBY_INTERPRETER_ADDITIONAL_PARAMS}">Additional interpreter parameters:</label>
     </th>
