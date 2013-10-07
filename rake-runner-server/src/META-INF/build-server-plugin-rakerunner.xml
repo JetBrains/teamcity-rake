@@ -21,4 +21,5 @@
 
   <bean id="rakeRunnerRunType" class="jetbrains.buildServer.runner.rakerunner.RakeRunnerRunType"/>
   <bean class="jetbrains.buildServer.feature.RubyEnvConfiguratorBuildFeature"/>
+  <bean class="jetbrains.buildServer.runner.rakerunner.RakeRunnerDiscoveryExtension"/>
 </beans>
