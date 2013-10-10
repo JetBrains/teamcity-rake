@@ -17,12 +17,14 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.SimpleCommandLineProcessRunner;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +35,7 @@ import static com.intellij.openapi.util.io.FileUtil.toSystemDependentName;
  * @author Vladislav.Rassokhin
  */
 public class RunnerUtil {
+  private static final Logger LOG = Logger.getInstance(RunnerUtil.class.getName());
 
   /**
    * Sync process execution.
@@ -47,7 +50,14 @@ public class RunnerUtil {
                                @Nullable final Map<String, String> environment,
                                @NotNull final String... command) {
     // executing
-    return SimpleCommandLineProcessRunner.runCommand(createCommandLine(workingDir, environment, command), null);
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("Running " + Arrays.asList(command) + " in " + workingDir + " with env " + environment);
+    }
+    final ExecResult result = SimpleCommandLineProcessRunner.runCommand(createCommandLine(workingDir, environment, command), null);
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("Result is " + result);
+    }
+    return result;
   }
 
   /**

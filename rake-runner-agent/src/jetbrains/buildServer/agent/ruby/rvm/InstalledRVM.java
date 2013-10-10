@@ -16,12 +16,9 @@
 
 package jetbrains.buildServer.agent.ruby.rvm;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
-import java.io.File;
-import java.util.*;
-import java.util.regex.Pattern;
-
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
@@ -37,6 +34,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.SharedRVMUtil;
 
+import java.io.File;
+import java.util.*;
+import java.util.regex.Pattern;
+
 import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_GEMS_FOLDER_NAME;
 import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_FOLDER_NAME;
 
@@ -45,6 +46,7 @@ import static org.jetbrains.plugins.ruby.rvm.SharedRVMUtil.Constants.RVM_RUBIES_
  */
 public class InstalledRVM extends RubyVersionManager {
   public static final String NAME = "rvm";
+  private static final Logger LOG = Logger.getInstance(InstalledRVM.class.getName());
   @NotNull
   private final String myPath;
   @NotNull
@@ -120,6 +122,11 @@ public class InstalledRVM extends RubyVersionManager {
   @NotNull
   public String executeCommandLine(@NotNull final String... query) {
     final ExecResult output = RunnerUtil.run(null, null, query);
+    if (output.getExitCode() != 0 || output.getException() != null || !output.getStderr().isEmpty()) {
+      LOG.warn("Running " + Arrays.asList(query) + " returned strange result " + output);
+    } else if (LOG.isDebugEnabled()) {
+      LOG.debug("Running " + Arrays.asList(query) + " exited with result" + output);
+    }
     return output.getStdout();
   }
 
