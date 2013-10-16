@@ -108,7 +108,7 @@ public enum SharedParamsType {
           if (sharedParams.isRVMGemsetCreate()) {
             // Creating gemset
             final ShellScriptRunner scriptRunner = new BashShellScriptRunner();
-            final ExecResult output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitable + "@" + gemset,
+            final ExecResult output = scriptRunner.run(". $rvm_path/scripts/rvm && rvm use --create " + suitable.first + "@" + gemset,
               context.getWorkingDirectory().getAbsolutePath(),
               context.getBuildParameters().getEnvironmentVariables());
             //noinspection ThrowableResultOfMethodCallIgnored
@@ -122,7 +122,7 @@ public enum SharedParamsType {
         }
         final File home = RVMPathsSettings.getRVMNullSafe().getHomeForVersionName(suitable.first);
         if (home == null) {
-          throw new RakeTasksBuildService.MyBuildFailureException(String.format("Cannot find home path for RVM SDK with name %s", suitable));
+          throw new RakeTasksBuildService.MyBuildFailureException(String.format("Cannot find home path for RVM SDK with name %s", suitable.first));
         }
         return new RVMRubySdkImpl(home, suitable.first, suitable.second);
       }
