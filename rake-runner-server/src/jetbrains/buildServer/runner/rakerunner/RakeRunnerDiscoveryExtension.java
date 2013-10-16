@@ -33,12 +33,7 @@ import java.util.*;
  * @since 8.1
  */
 public class RakeRunnerDiscoveryExtension extends BreadthFirstRunnerDiscoveryExtension {
-  private static final int MAX_DEPTH = 2;
   private static final Set<String> KNOWN_RAKEFILE_NAMES = CollectionsUtil.setOf("Rakefile", "rakefile", "Rakefile.rb", "rakefile.rb");
-
-  protected RakeRunnerDiscoveryExtension() {
-    super(MAX_DEPTH);
-  }
 
   @NotNull
   @Override
