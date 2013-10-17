@@ -82,7 +82,7 @@ public class BundlerUtil {
 
   public static void enableBundleExecEmulationIfNeeded(@NotNull final RubySdk sdk,
                                                        @NotNull final ModifiableRunnerContext context)
-  throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
+    throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
 
     if (!isBundleExecEmulationEnabled(context.getRunnerParameters())) {
       return;
@@ -111,7 +111,7 @@ public class BundlerUtil {
   @Nullable
   public static String determineGemsRootsAccordingToBundlerSettings(@NotNull final RubySdk sdk,
                                                                     @NotNull final ModifiableRunnerContext context)
-  throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
+    throws RunBuildException, RakeTasksBuildService.MyBuildFailureException {
 
     if (!isBundleExecEmulationEnabled(context.getRunnerParameters())) {
       return null;
@@ -256,7 +256,7 @@ public class BundlerUtil {
         }
       }
       final String pattern = "Cannot find Gemfile in %s directory : '%s'. \n" +
-        "If Gemfile is located in other directory please specify Gemfile relative path using system property: " + CUSTOM_GEMFILE_RELATIVE_PATH;
+                             "If Gemfile is located in other directory please specify Gemfile relative path using system property: " + CUSTOM_GEMFILE_RELATIVE_PATH;
       String msg;
       if (oldResolve) {
         msg = String.format(pattern, "checkout", context.getCheckoutDirectory());
@@ -320,8 +320,7 @@ public class BundlerUtil {
    *
    * @param buildParameters Build params
    * @return Directory full path
-   * @throws jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService.MyBuildFailureException
-   *          If gem root wasn't found
+   * @throws jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService.MyBuildFailureException If gem root wasn't found
    */
   @NotNull
   private static String findBundlerGemRoot(@NotNull final RubySdk sdk,
@@ -334,13 +333,13 @@ public class BundlerUtil {
     final String forcedBundlerGemVersion = RubySDKUtil.getForcedGemVersion(BUNDLER_GEM_VERSION_PROPERTY, buildParameters);
 
     // P.S: we are not interested to search bundler gem in bundler git paths or in "frozen" bundler paths
-    final Pair<String, String> pathAndVersion = RubySDKUtil.findGemRootFolderAndVersion(BUNDLER_GEM_NAME,
-                                                                                        sdk.getGemPaths(),
-                                                                                        forcedBundlerGemVersion);
-    final String bundlerGemPath = pathAndVersion.first;
+    final Pair<String, String> gemInfo = RubySDKUtil.findGemRootFolderAndVersion(BUNDLER_GEM_NAME,
+                                                                                 sdk.getGemPaths(),
+                                                                                 forcedBundlerGemVersion);
 
 
-    if (bundlerGemPath != null) {
+    if (gemInfo != null) {
+      final String bundlerGemPath = gemInfo.first;
       if (checkIfExists(bundlerGemPath)) {
         return bundlerGemPath;
       } else {

@@ -24,15 +24,17 @@ import jetbrains.buildServer.agent.rakerunner.ModifiableRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.SdkUtil;
+import jetbrains.buildServer.util.CollectionsUtil;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.VersionComparatorUtil;
+import jetbrains.buildServer.util.filters.Filter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,22 +50,39 @@ public class RubySDKUtil {
   public static final String GET_GEM_PATHS_SCRIPT = "require 'rubygems'; puts Gem.path";
 
 
-  @NotNull
+  /**
+   * Returns pair of gem path and version or null if not found
+   */
+  @Nullable
   public static Pair<String, String> findGemRootFolderAndVersion(@NotNull final String gemName,
                                                                  @NotNull final String[] gemPaths,
                                                                  @Nullable final String forcedGemVersion)
     throws RakeTasksBuildService.MyBuildFailureException {
 
-    String ourGemVersion = null;
-    String ourGemPath = null;
+    final List<Pair<String, String>> gems = findGemsByName(gemName, gemPaths);
+
+    if (forcedGemVersion != null) {
+      return CollectionsUtil.findFirst(gems, new Filter<Pair<String, String>>() {
+        public boolean accept(@NotNull final Pair<String, String> data) {
+          return forcedGemVersion.equals(data.second);
+        }
+      });
+    }
+    if (gems.isEmpty()) {
+      return null;
+    }
+    return Collections.max(gems, new GemInfoPairComparator());
+  }
+
+  @NotNull
+  public static List<Pair<String, String>> findGemsByName(@NotNull final String gemName,
+                                                          @NotNull final String[] gemPaths)
+    throws RakeTasksBuildService.MyBuildFailureException {
+
+    final List<Pair<String, String>> found = new ArrayList<Pair<String, String>>();
 
     // look for our gem in gem paths
     for (String gemPath : gemPaths) {
-      if (forcedGemVersion != null && ourGemPath != null) {
-        // our gem was found in previous gems path
-        break;
-      }
-
       final String gemsFolderPath = toSystemIndependentName(gemPath + File.separatorChar + "gems");
 
       // gem path file may not exist
@@ -97,25 +116,10 @@ public class RubySDKUtil {
         }
         version = matcher.group();
 
-        if (forcedGemVersion != null) {
-          // forced version
-          if (version.equals(forcedGemVersion)) {
-            // success!
-            ourGemVersion = version;
-            ourGemPath = gem.getPath();
-            break;
-          }
-        } else {
-          // determine latest version
-          if (ourGemVersion == null || VersionComparatorUtil.compare(ourGemVersion, version) < 0) {
-            ourGemVersion = version;
-            ourGemPath = gem.getPath();
-          }
-        }
+        found.add(new Pair<String, String>(gem.getPath(), version));
       }
     }
-
-    return new Pair<String, String>(ourGemPath, ourGemVersion);
+    return found;
   }
 
   @Nullable
@@ -192,5 +196,11 @@ public class RubySDKUtil {
 
     // add old $PATH
     OSUtil.prependToPATHEnvVariable(patchedPath.toString(), context.getEnvParameters());
+  }
+
+  public static class GemInfoPairComparator implements Comparator<Pair<String, String>> {
+    public int compare(@NotNull final Pair<String, String> o1, @NotNull final Pair<String, String> o2) {
+      return VersionComparatorUtil.compare(o1.second, o2.second);
+    }
   }
 }

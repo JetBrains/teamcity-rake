@@ -18,13 +18,16 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.Pair;
 import java.io.File;
-
+import java.util.Collections;
+import java.util.List;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.ModifiableRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.util.CollectionsUtil;
+import jetbrains.buildServer.util.filters.Filter;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -101,21 +104,34 @@ public class TestUnitUtil {
 
       // If user overrides bundler.path sys var or uses project custom bundle..
       // we need to look for test-unit gems in "frozen" paths
-      final Pair<String, String> pathAndVersion = RubySDKUtil.findGemRootFolderAndVersion(TEST_UNIT_GEM_NAME,
-                                                                                          gemPaths,
-                                                                                          forcedTestUnitGemVersion);
-      final String testUnitGemPath = pathAndVersion.first;
-      final String testUnitGemVersion = pathAndVersion.second;
+      final Pair<String, String> gemInfo;
+      if (forcedTestUnitGemVersion != null) {
+        gemInfo = RubySDKUtil.findGemRootFolderAndVersion(TEST_UNIT_GEM_NAME,
+                                                          gemPaths,
+                                                          forcedTestUnitGemVersion);
+      } else {
+        List<Pair<String, String>> gems = RubySDKUtil.findGemsByName(TEST_UNIT_GEM_NAME, gemPaths);
+        gems = CollectionsUtil.filterCollection(gems, new Filter<Pair<String, String>>() {
+          public boolean accept(@NotNull final Pair<String, String> data) {
+            // Ruby-2.0.0 with test-unit compatibility layer using minitest
+            return !data.second.equals("2.0.0.0");
+          }
+        });
+        gemInfo = gems.isEmpty() ? null : Collections.max(gems, new RubySDKUtil.GemInfoPairComparator());
+      }
 
-      if (testUnitGemPath != null) {
-        final String fullScriptPath = testUnitGemPath + File.separatorChar + "lib" + File.separatorChar + scriptPath;
+
+      if (gemInfo != null) {
+        final String path = gemInfo.first;
+        final String version = gemInfo.second;
+        final String fullScriptPath = path + File.separatorChar + "lib" + File.separatorChar + scriptPath;
         if (FileUtil2.checkIfExists(fullScriptPath)) {
           return fullScriptPath;
         } else {
 
           // Error: Script wasn't found in test-unit gem
-          final String msg = "Rake runner isn't compatible with your'" + TEST_UNIT_GEM_NAME + "-" + testUnitGemVersion
-                             + "'(" + testUnitGemPath + ") gem. Please submit a feature request.";
+          final String msg = "Rake runner isn't compatible with your'" + TEST_UNIT_GEM_NAME + "-" + version
+                             + "'(" + path + ") gem. Please submit a feature request.";
           throw new RakeTasksBuildService.MyBuildFailureException(msg);
         }
 
