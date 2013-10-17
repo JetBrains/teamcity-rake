@@ -7,6 +7,8 @@ import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.TestFor;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -16,6 +18,13 @@ import org.testng.annotations.Test;
  */
 @TestFor(testForClass = BundlerUtil.class)
 public class BundlerUtilTest extends AbstractRakeRunnerTest {
+  private static final Logger LOG;
+
+  static {
+    LOG = Logger.getLogger(BundlerUtilTest.class);
+    LOG.setLevel(Level.DEBUG);
+  }
+
   private File myCheckoutDirectory;
   private File wd1;
   private File wd2;
@@ -52,6 +61,7 @@ public class BundlerUtilTest extends AbstractRakeRunnerTest {
     setUseBundle(true);
     setPartialMessagesChecker();
     getBuildType().setCheckoutDirectory(myCheckoutDirectory.getAbsolutePath());
+    doInstallBundlerGem(LOG);
   }
 
 

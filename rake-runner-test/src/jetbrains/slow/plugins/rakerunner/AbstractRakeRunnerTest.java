@@ -448,6 +448,21 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     }
   }
 
+  protected void doInstallBundlerGem(@NotNull final Logger LOG) throws IOException {
+    if (!SystemInfo.isUnix) {
+      return;
+    }
+
+    final String sdk = getRunnerParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME);
+    final String gs = getRunnerParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME);
+    RunCommandsHelper.runBashScript(LOG, getTestDataPath("gems/checkRVMCommand.sh").getParentFile(),
+                                    "source " + getTestDataPath("gems/checkRVMCommand.sh").getAbsolutePath(),
+                                    "checkRVMCommand",
+                                    StringUtil.isEmptyOrSpaces(gs) ? String.format("rvm use \"%s\"", sdk) : String.format("rvm use \"%s\" --create", sdk + "@" + gs),
+                                    "gem which bundler || gem install bundler"
+    );
+  }
+
   public String getTestName() {
     final String base = getClass().getName();
     final List<String> parametersList = getTestNameParametersList();
