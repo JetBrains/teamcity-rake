@@ -28,7 +28,7 @@ public class InstalledRVMTest {
 
   private Map<Pattern, String> myMap;
 
-  private Map<String, String> myCustomContents = new HashMap<String, String>();
+  private final Map<String, String> myCustomContents = new HashMap<String, String>();
   private InstalledRVM myMockedRVM;
 
   @BeforeClass
