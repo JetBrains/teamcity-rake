@@ -88,8 +88,7 @@ public class RVMSupportUtil {
       throw new RuntimeException("Cannot fetch sdk environment: rvm-shell failed with output" + env1.getStderr());
     }
     final Map<String, String> modified = EnvUtil.parse(env1.getStdout());
-    final Map<String, String> merged = EnvUtil.mergeIntoNewEnv(modified, env, restricted);
-    return merged;
+    return EnvUtil.mergeIntoNewEnv(modified, env, restricted);
   }
 
   @NotNull
