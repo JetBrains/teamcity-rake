@@ -20,8 +20,8 @@ import com.intellij.openapi.util.io.FileUtil;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.runner.BuildFileRunnerConstants;
-import jetbrains.buildServer.serverSide.BreadthFirstRunnerDiscoveryExtension;
-import jetbrains.buildServer.serverSide.DiscoveredBuildRunner;
+import jetbrains.buildServer.serverSide.discovery.BreadthFirstRunnerDiscoveryExtension;
+import jetbrains.buildServer.serverSide.discovery.DiscoveredObject;
 import jetbrains.buildServer.util.CollectionsUtil;
 import jetbrains.buildServer.util.browser.Element;
 import org.jetbrains.annotations.NotNull;
@@ -37,8 +37,8 @@ public class RakeRunnerDiscoveryExtension extends BreadthFirstRunnerDiscoveryExt
 
   @NotNull
   @Override
-  protected List<DiscoveredBuildRunner> discoverRunnersInDirectory(@NotNull final Element dir, @NotNull final List<Element> files) {
-    final ArrayList<DiscoveredBuildRunner> discovered = new ArrayList<DiscoveredBuildRunner>();
+  protected List<DiscoveredObject> discoverRunnersInDirectory(@NotNull final Element dir, @NotNull final List<Element> files) {
+    final ArrayList<DiscoveredObject> discovered = new ArrayList<DiscoveredObject>();
     final List<Element> rakefiles = new LinkedList<Element>();
     Element gemfile = null;
     for (Element file : files) {
@@ -56,7 +56,7 @@ public class RakeRunnerDiscoveryExtension extends BreadthFirstRunnerDiscoveryExt
       if (gemfile != null) {
         params.put(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, Boolean.TRUE.toString());
       }
-      discovered.add(new DiscoveredBuildRunner(RakeRunnerConstants.RUNNER_TYPE, params, description));
+      discovered.add(new DiscoveredObject(RakeRunnerConstants.RUNNER_TYPE, params));
     }
     return discovered;
   }

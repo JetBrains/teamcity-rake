@@ -17,10 +17,11 @@
 package jetbrains.buildServer.runner.rakerunner;
 
 import com.intellij.util.containers.ArrayListSet;
+import jetbrains.MockBuildType;
 import jetbrains.buildServer.BaseTestCase;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.runner.BuildFileRunnerConstants;
-import jetbrains.buildServer.serverSide.DiscoveredBuildRunner;
+import jetbrains.buildServer.serverSide.discovery.DiscoveredObject;
 import jetbrains.buildServer.util.CollectionsUtil;
 import jetbrains.buildServer.util.browser.FileSystemBrowser;
 import jetbrains.slow.plugins.rakerunner.RakeRunnerTestUtil;
@@ -45,7 +46,7 @@ public class RakeRunnerDiscoveryExtensionTest extends BaseTestCase {
   public void test_rakefile_detected() throws Exception {
     final File root = RakeRunnerTestUtil.getTestDataItemPath("discovery/nur-rake");
     final FileSystemBrowser browser = new FileSystemBrowser(root);
-    final List<DiscoveredBuildRunner> discovered = myRakeRunnerDiscovery.discover(browser);
+    final List<DiscoveredObject> discovered = myRakeRunnerDiscovery.discover(new MockBuildType(), browser);
     assertNotNull(discovered);
     assertEquals(1, discovered.size());
 
@@ -57,12 +58,12 @@ public class RakeRunnerDiscoveryExtensionTest extends BaseTestCase {
   public void test_two_rakefiles_detected() throws Exception {
     final File root = RakeRunnerTestUtil.getTestDataItemPath("discovery/rake-and-rake");
     final FileSystemBrowser browser = new FileSystemBrowser(root);
-    final List<DiscoveredBuildRunner> discovered = myRakeRunnerDiscovery.discover(browser);
+    final List<DiscoveredObject> discovered = myRakeRunnerDiscovery.discover(new MockBuildType(), browser);
     assertNotNull(discovered);
     assertEquals(2, discovered.size());
 
     final Set<String> rakefiles = new ArrayListSet<String>();
-    for (DiscoveredBuildRunner runner : discovered) {
+    for (DiscoveredObject runner : discovered) {
       rakefiles.add(runner.getParameters().get(BuildFileRunnerConstants.BUILD_FILE_PATH_KEY));
     }
     assertEquals(2, rakefiles.size());
@@ -73,7 +74,7 @@ public class RakeRunnerDiscoveryExtensionTest extends BaseTestCase {
   public void test_rakefile_and_gemfile_detected() throws Exception {
     final File root = RakeRunnerTestUtil.getTestDataItemPath("discovery/rake-and-bundler");
     final FileSystemBrowser browser = new FileSystemBrowser(root);
-    final List<DiscoveredBuildRunner> discovered = myRakeRunnerDiscovery.discover(browser);
+    final List<DiscoveredObject> discovered = myRakeRunnerDiscovery.discover(new MockBuildType(), browser);
     assertNotNull(discovered);
     assertEquals(1, discovered.size());
 
