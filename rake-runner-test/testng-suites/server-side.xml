@@ -3,6 +3,7 @@
   <test name="RakeRunner Suite : Server Side">
     <classes>
       <class name="jetbrains.buildServer.feature.RubyEnvConfiguratorBuildFeatureTest"/>
+      <class name="jetbrains.buildServer.feature.RubyEnvConfiguratorDiscoveryExtensionTest"/>
       <class name="jetbrains.buildServer.runner.rakerunner.RakeRunnerRunTypeTest"/>
       <class name="jetbrains.buildServer.runner.rakerunner.RakeRunnerDiscoveryExtensionTest"/>
     </classes>
