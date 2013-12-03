@@ -42,7 +42,6 @@
 
   .rake_reporter_options {
     padding-top: 2px;
-    padding-left: 17px;
   }
 </style>
 
@@ -112,7 +111,7 @@
     </th>
     <td>
       <c:set var="modeSelected" value="${propertiesBean.properties[UI_RUBY_USAGE_MODE]}"/>
-      <props:selectProperty name="${UI_RUBY_USAGE_MODE}" onchange="BS.RakeRunner.onModeChanged()" enableFilter="true">
+      <props:selectProperty name="${UI_RUBY_USAGE_MODE}" onchange="BS.RakeRunner.onModeChanged()" enableFilter="true" className="normalField">
         <props:option value="${MODE_DEFAULT}" currValue="${modeSelected}">&lt;Default&gt;</props:option>
         <props:option value="${MODE_PATH}" currValue="${modeSelected}">Path to interpreter</props:option>
         <props:option value="${MODE_RVM}" currValue="${modeSelected}">RVM interpreter</props:option>
