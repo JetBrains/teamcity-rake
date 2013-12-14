@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.BuildTypeSettings;
-import jetbrains.buildServer.serverSide.discovery.BuildFeatureDiscoveryExtension;
 import jetbrains.buildServer.serverSide.discovery.DiscoveredObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
