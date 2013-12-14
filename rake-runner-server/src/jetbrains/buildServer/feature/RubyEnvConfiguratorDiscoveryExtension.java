@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @since 8.1
  */
-public class RubyEnvConfiguratorDiscoveryExtension implements BuildFeatureDiscoveryExtension {
+public class RubyEnvConfiguratorDiscoveryExtension /*implements BuildFeatureDiscoveryExtension*/ {
   @Nullable
   public List<DiscoveredObject> discover(@NotNull final BuildTypeSettings settings) {
     if (!settings.getBuildFeaturesOfType(RubyEnvConfiguratorConstants.RUBY_ENV_CONFIGURATOR_FEATURE_TYPE).isEmpty()) return null;
