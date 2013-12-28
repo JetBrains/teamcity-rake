@@ -150,6 +150,22 @@
     <span class="smallNote">Path relative to a checkout directory. Leave empty to use ".rvmrc"</span>
   </td>
 </tr>
+<tr class="rec-container" id="rec-rvm-container-ruby-version">
+  <td colspan="1" class="rec-td-text-short">
+    <forms:radioButton name="REC_RVM_MODE" onclick="BS.RubyEC.onFormChange()" value="ruby_version" id="rvm_ruby_version"/>
+    <label for="rvm_manual" class="nobr">Path to a directory with '.ruby-version' and '.ruby-gemset'&nbsp;files:</label>
+  </td>
+  <td colspan="2" class="rec-td-field-long">
+    <nobr>
+      <div class="completionIconWrapper" style="width:100%;">
+        <props:textProperty name="${UI_RVM_RUBY_VERSION_PATH_KEY}" className="longField" style="width:100%;"/>
+        <bs:vcsTree fieldId="${UI_RVM_RUBY_VERSION_PATH_KEY}"/>
+      </div>
+    </nobr>
+    <span class="error" id="error_${UI_RVM_RUBY_VERSION_PATH_KEY}"></span>
+    <span class="smallNote">Path relative to a checkout directory. Leave empty to use checkout directory</span>
+  </td>
+</tr>
 
 <%-- rbenv --%>
 <tr class="rec-container rec-rbenv" id="rec-rbenv-container-manual">
@@ -252,6 +268,7 @@
     rvm: {
       manual: "manual",
       rvmrc: "rvmrc",
+      ruby_version: "ruby_version",
       getMode: function () {
         return $j('input[name=REC_RVM_MODE]:checked').val();
       },
@@ -279,6 +296,9 @@
       } else if ('rvmrc' == value) {
         this.mode.setMode(this.mode.rvm);
         this.rvm.setMode(this.rvm.rvmrc);
+      } else if ('rvm_ruby_version' == value) {
+        this.mode.setMode(this.mode.rvm);
+        this.rvm.setMode(this.rvm.ruby_version);
       } else if ('rbenv' == value) {
         this.mode.setMode(this.mode.rbenv);
         this.rbenv.setMode(this.rbenv.manual);
@@ -306,6 +326,7 @@
           BS.Util.show('rec-rvm-container-manual-2');
           BS.Util.show('rec-rvm-container-manual-3');
           BS.Util.show('rec-rvm-container-rvmrc');
+          BS.Util.show('rec-rvm-container-rec-rvm-container-ruby-version');
 
           this.setRVMRequirement();
           switch (rvm) {
@@ -316,6 +337,10 @@
             case this.rvm.rvmrc:
               ow.val('rvmrc');
               $('${UI_RVM_RVMRC_PATH_KEY}').focus();
+              break;
+            case this.rvm.ruby_version:
+              ow.val('rvm_ruby_version');
+              $('${UI_RVM_RUBY_VERSION_PATH_KEY}').focus();
               break;
             default :
               // Do nothing, nothing selected

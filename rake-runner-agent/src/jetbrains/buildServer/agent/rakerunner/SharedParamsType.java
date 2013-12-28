@@ -149,6 +149,36 @@ public enum SharedParamsType {
         .getOrCreate(file.getParentFile().getAbsolutePath(), context.getBuildParameters().getEnvironmentVariables());
     }
   },
+  RVM_RUBY_VERSION("rvm_ruby_version") {
+    @NotNull
+    @Override
+    public RubySdk createSdk(@NotNull final BuildRunnerContext context,
+                             @NotNull final SharedParams sharedParams)
+      throws RakeTasksBuildService.MyBuildFailureException {
+      final String path = StringUtil.emptyIfNull(sharedParams.getRVMRubyVersionPath());
+      final File checkoutDir = context.getBuild().getCheckoutDirectory();
+
+      final File p;
+      if (StringUtil.isEmpty(path)) {
+        p = checkoutDir.getAbsoluteFile();
+      } else {
+        p = new File(checkoutDir, path).getAbsoluteFile();
+      }
+
+      final File version = new File(p, ".ruby-version");
+
+      if (!version.exists() || !version.isFile()) {
+        throw new RakeTasksBuildService.MyBuildFailureException(
+          "RVM support: .ruby-version file not found in folder: \"" + path + "\". (Resolved folder: \"" + p.getAbsolutePath() + "\")",
+          new FileNotFoundException(version.getAbsolutePath()), false);
+      }
+
+      //final File gemset = new File(p, ".ruby-gemset");
+
+      // Create SDK
+      return RVMRCBasedRubySdkImpl.getOrCreate(p.getAbsolutePath(), context.getBuildParameters().getEnvironmentVariables());
+    }
+  },
   RBENV("rbenv") {
     @NotNull
     @Override

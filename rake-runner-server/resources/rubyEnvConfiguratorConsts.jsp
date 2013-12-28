@@ -12,6 +12,8 @@
 
 <c:set var="UI_RVM_RVMRC_PATH_KEY" value="<%=RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY%>"/>
 
+<c:set var="UI_RVM_RUBY_VERSION_PATH_KEY" value="<%=RubyEnvConfiguratorConstants.UI_RVM_RUBY_VERSION_PATH_KEY%>"/>
+
 <c:set var="UI_RBENV_VERSION_NAME_KEY" value="<%=RubyEnvConfiguratorConstants.UI_RBENV_VERSION_NAME_KEY%>"/>
 <c:set var="UI_RBENV_FILE_PATH_KEY" value="<%=RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY%>"/>
 

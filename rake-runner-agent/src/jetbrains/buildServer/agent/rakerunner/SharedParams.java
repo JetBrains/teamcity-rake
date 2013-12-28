@@ -36,6 +36,7 @@ public class SharedParams implements SharedRubyEnvSettings {
   @Nullable private String myRbEnvVersionFile;
   private boolean myRVMGemsetCreate;
   private boolean isApplied = false;
+  @Nullable private String myRVMRubyVersionPath;
 
 
   @NotNull
@@ -222,5 +223,14 @@ public class SharedParams implements SharedRubyEnvSettings {
 
   public void setRbEnvVersionFile(@Nullable final String rbEnvVersionFile) {
     myRbEnvVersionFile = rbEnvVersionFile;
+  }
+
+  @Nullable
+  public String getRVMRubyVersionPath() {
+    return myRVMRubyVersionPath;
+  }
+
+  public void setRVMRubyVersionPath(@Nullable final String path) {
+    myRVMRubyVersionPath = path;
   }
 }

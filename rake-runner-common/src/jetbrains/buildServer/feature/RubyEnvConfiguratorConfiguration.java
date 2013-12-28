@@ -30,6 +30,7 @@ public class RubyEnvConfiguratorConfiguration {
     INTERPRETER_PATH, // null
     RVM, // "manual"
     RVMRC, // "rvmrc"
+    RVM_RUBY_VERSION, // "rvm_ruby_version"
     RBENV, // "rbenv"
     RBENV_FILE, // ".rbenv-version"
   }
@@ -50,6 +51,8 @@ public class RubyEnvConfiguratorConfiguration {
 
   private final boolean myRVMGemsetCreate;
 
+  @Nullable private final String myRVMRubyVersionPath;
+
   @Nullable private final String myRbEnvVersion;
   @Nullable private final String myRbEnvVersionFile;
 
@@ -62,6 +65,8 @@ public class RubyEnvConfiguratorConfiguration {
       this.type = Type.RVM;
     } else if ("rvmrc".equals(type)) {
       this.type = Type.RVMRC;
+    } else if ("rvm_ruby_version".equals(type)) {
+      this.type = Type.RVM_RUBY_VERSION;
     } else if ("rbenv".equals(type)) {
       this.type = Type.RBENV;
     } else if ("rbenv_file".equals(type)) {
@@ -78,6 +83,7 @@ public class RubyEnvConfiguratorConfiguration {
     this.myRVMGemsetCreate = Boolean.parseBoolean(configParameters.get(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_CREATE_IF_NON_EXISTS));
     this.myRbEnvVersion = StringUtil.nullIfEmpty(configParameters.get(RubyEnvConfiguratorConstants.UI_RBENV_VERSION_NAME_KEY));
     this.myRbEnvVersionFile = StringUtil.nullIfEmpty(configParameters.get(RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY));
+    this.myRVMRubyVersionPath = StringUtil.nullIfEmpty(configParameters.get(RubyEnvConfiguratorConstants.UI_RVM_RUBY_VERSION_PATH_KEY));
   }
 
   @NotNull
@@ -111,6 +117,11 @@ public class RubyEnvConfiguratorConfiguration {
 
   public boolean isRVMGemsetCreate() {
     return myRVMGemsetCreate;
+  }
+
+  @Nullable
+  public String getRVMRubyVersionPath() {
+    return myRVMRubyVersionPath;
   }
 
   @Nullable

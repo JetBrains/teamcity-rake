@@ -223,6 +223,12 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         shared.setType(SharedParamsType.RVMRC);
         break;
       }
+      case RVM_RUBY_VERSION: {
+        // .rvmrc path
+        shared.setRVMRubyVersionPath(configuration.getRVMRubyVersionPath());
+        shared.setType(SharedParamsType.RVM_RUBY_VERSION);
+        break;
+      }
       case RBENV: {
         shared.setRbEnvVersion(configuration.getRbEnvVersion());
         shared.setType(SharedParamsType.RBENV);

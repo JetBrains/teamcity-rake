@@ -90,6 +90,10 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
         displayParameter(result, "Path to a '.rvmrc' file", configuration.getRVMRCFilePath(), NOT_SPECIFIED_GOOD);
         break;
       }
+      case RVM_RUBY_VERSION: {
+        displayParameter(result, "Path to a forler with '.ruby-version' file", configuration.getRVMRCFilePath(), NOT_SPECIFIED_GOOD);
+        break;
+      }
       case RBENV: {
         displayParameter(result, "rbenv interpreter", configuration.getRbEnvVersion(), NOT_SPECIFIED_ERR);
         break;

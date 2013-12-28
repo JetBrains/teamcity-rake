@@ -99,6 +99,7 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
       case RBENV:
       case RBENV_FILE:
       case RVM:
+      case RVM_RUBY_VERSION:
       case RVMRC: {
         // Lets patch it!
         final File script = createScriptFile(origCommandLine, build.getAgentTempDirectory());
