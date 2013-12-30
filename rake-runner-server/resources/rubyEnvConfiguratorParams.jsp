@@ -153,7 +153,7 @@
 <tr class="rec-container" id="rec-rvm-container-ruby-version">
   <td colspan="1" class="rec-td-text-short">
     <forms:radioButton name="REC_RVM_MODE" onclick="BS.RubyEC.onFormChange()" value="ruby_version" id="rvm_ruby_version"/>
-    <label for="rvm_manual" class="nobr">Path to a directory with '.ruby-version' and '.ruby-gemset'&nbsp;files:</label>
+    <label for="rvm_manual">Path to a directory with '.ruby-version'<br/> and '.ruby-gemset'&nbsp;files:</label>
   </td>
   <td colspan="2" class="rec-td-field-long">
     <nobr>
@@ -326,7 +326,7 @@
           BS.Util.show('rec-rvm-container-manual-2');
           BS.Util.show('rec-rvm-container-manual-3');
           BS.Util.show('rec-rvm-container-rvmrc');
-          BS.Util.show('rec-rvm-container-rec-rvm-container-ruby-version');
+          BS.Util.show('rec-rvm-container-ruby-version');
 
           this.setRVMRequirement();
           switch (rvm) {
