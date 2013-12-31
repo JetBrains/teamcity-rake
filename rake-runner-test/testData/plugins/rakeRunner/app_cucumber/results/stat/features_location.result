@@ -1,3 +1,3 @@
-##teamcity[testSuiteStarted name='Feature: Several error steps' locationHint='file:##BASE_DIR##/##WORKING_DIR##/features/error.feature:1' timestamp='##TIME##'] NORMAL
-##teamcity[testSuiteStarted name='Scenario: first group of error steps' locationHint='file:##BASE_DIR##/##WORKING_DIR##/features/error.feature:6' timestamp='##TIME##'] NORMAL
-##teamcity[testStarted name='Then should be error' captureStandardOutput='true' locationHint='file:##BASE_DIR##/##WORKING_DIR##/features/error.feature:7' timestamp='##TIME##'] NORMAL
+##teamcity[testSuiteStarted name='Feature: Several error steps' locationHint='file:##WORKING_DIR##/features/error.feature:1' timestamp='##TIME##'] NORMAL
+##teamcity[testSuiteStarted name='Scenario: first group of error steps' locationHint='file:##WORKING_DIR##/features/error.feature:6' timestamp='##TIME##'] NORMAL
+##teamcity[testStarted name='Then should be error' captureStandardOutput='true' locationHint='file:##WORKING_DIR##/features/error.feature:7' timestamp='##TIME##'] NORMAL
