@@ -73,4 +73,16 @@ public class FileUtil2 {
     }
   }
 
+  public static File getFirstExistChild(File directory, String... names) {
+    if (!directory.isDirectory() || !directory.exists()) {
+      return null;
+    }
+    for (String name : names) {
+      final File file = new File(directory, name);
+      if (file.exists()) {
+        return file;
+      }
+    }
+    return null;
+  }
 }

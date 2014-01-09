@@ -182,7 +182,7 @@
 <tr class="rec-container rec-rbenv" id="rec-rbenv-container-file">
   <td colspan="1" class="rec-td-text-short">
     <forms:radioButton name="REC_RBENV_MODE" onclick="BS.RubyEC.onFormChange()" value="file" id="rbenv_file"/>
-    <label for="rbenv_file" class="nobr">'.rbenv-version' file:</label>
+    <label for="rbenv_file" class="nobr">Path to a directory with '.ruby-version'<br/> or '.rbenv-version'&nbsp;file:</label>
   </td>
   <td colspan="2" class="rec-td-field-long">
     <nobr>
@@ -192,7 +192,7 @@
       </div>
     </nobr>
     <span class="error" id="error_${UI_RBENV_FILE_PATH_KEY}"></span>
-    <span class="smallNote">Path relative to a checkout directory. Leave empty to use <nobr>".rbenv-version"</nobr></span>
+    <span class="smallNote">Path relative to a checkout directory. Leave empty to use <nobr>".ruby-version"</nobr>(preferred) or <nobr>".rbenv-version"</nobr></span>
   </td>
 </tr>
 

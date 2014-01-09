@@ -99,7 +99,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
         break;
       }
       case RBENV_FILE: {
-        displayParameter(result, "Path to a '.rbenv-version' file", configuration.getRbEnvVersionFile(), NOT_SPECIFIED_GOOD);
+        displayParameter(result, "Path to a directory with '.ruby-version' or '.rbenv-version' file:", configuration.getRbEnvVersionFile(), NOT_SPECIFIED_GOOD);
         break;
       }
     }
@@ -159,7 +159,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
               !StringUtil.hasParameterReferences(rvmrcFilePath) &&
               !PathUtil.getFileName(rvmrcFilePath).equals(".rvmrc")) {
             ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY,
-                                        "file name must be '.rvmrc'. RVM does not support other names"));
+                                        "file name must be '.rvmrc'."));
           }
           break;
         }
@@ -167,16 +167,6 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
           if (StringUtil.isEmptyOrSpaces(configuration.getRbEnvVersion())) {
             ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RBENV_VERSION_NAME_KEY,
                                         "rbenv interpreter name cannot be empty."));
-          }
-          break;
-        }
-        case RBENV_FILE: {
-          final String filePath = StringUtil.emptyIfNull(configuration.getRbEnvVersionFile());
-          if (!StringUtil.isEmptyOrSpaces(filePath) &&
-              !StringUtil.hasParameterReferences(filePath) &&
-              !PathUtil.getFileName(filePath).equals(".rbenv-version")) {
-            ret.add(new InvalidProperty(RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY,
-                                        "file name must be '.rbenv-version'. rbenv does not support other names"));
           }
           break;
         }

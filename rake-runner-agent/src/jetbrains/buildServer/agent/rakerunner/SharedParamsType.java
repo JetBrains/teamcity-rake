@@ -22,6 +22,7 @@ import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.rakerunner.scripting.BashShellScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.scripting.ShellScriptRunner;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
+import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.InternalRubySdkUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.impl.RubySdkImpl;
@@ -217,22 +218,38 @@ public enum SharedParamsType {
         throw new RakeTasksBuildService.MyBuildFailureException("Cannot find rbenv. Please check that it installed on agent", false);
       }
 
-      final String filePath = StringUtil.emptyIfNull(sharedParams.getRbEnvVersionFile());
-      final String checkoutDir = getCanonicalPath2(context.getBuild().getCheckoutDirectory());
-      final File file = new File(checkoutDir, StringUtil.isEmptyOrSpaces(filePath) ? ".rbenv-version" : filePath);
+      final String path = StringUtil.emptyIfNull(sharedParams.getRbEnvVersionFile());
+      final File cd = context.getBuild().getCheckoutDirectory();
+      final File file;
+      if (!StringUtil.isEmptyOrSpaces(path)) {
+        final File f = new File(cd, path);
+        if (f.isDirectory()) {
+          file = FileUtil2.getFirstExistChild(f, ".ruby-version", ".rbenv-version");
+        } else {
+          file = f; // For backward compatibility (enter file name, not directory)
+        }
+      } else {
+        file = FileUtil2.getFirstExistChild(cd, ".ruby-version", ".rbenv-version");
+      }
+
+      if (file == null) {
+        throw new RakeTasksBuildService.MyBuildFailureException(
+          "Rbenv support: local version file file not found. Specified path: \"" + path + "\". Resolved path: \"" +
+          new File(cd, path).getAbsolutePath() + "\"", false);
+      }
 
       final String version;
       try {
         final List<String> strings = FileUtil.readFile(file);
         if (strings.isEmpty()) {
           throw new RakeTasksBuildService.MyBuildFailureException(
-            "Rbenv support: local version file is empty. Specified path: \"" + filePath + "\". Resolved path: \"" +
+            "Rbenv support: local version file is empty. Specified path: \"" + path + "\". Resolved path: \"" +
             file.getAbsolutePath() + "\"", false);
         }
         version = StringUtil.emptyIfNull(StringUtil.trim(strings.iterator().next()));
       } catch (IOException e) {
         throw new RakeTasksBuildService.MyBuildFailureException(
-          "Rbenv support: local version file file not found. Specified path: \"" + filePath + "\". Resolved path: \"" +
+          "Rbenv support: cannot read local version file. Specified path: \"" + path + "\". Resolved path: \"" +
           file.getAbsolutePath() + "\"", e, false);
       }
 
