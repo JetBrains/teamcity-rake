@@ -17,6 +17,7 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
+import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.util.FileUtil;
@@ -29,9 +30,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Vladislav.Rassokhin
@@ -86,8 +85,10 @@ public abstract class AbstractBundlerBasedRakeRunnerTest extends AbstractRakeRun
         interpreter = RakeRunnerTestUtil.getWindowsInterpreterExecutableFile(getRubyVersion());
         final File bin = interpreter.getParentFile();
         try {
-          RunCommandsHelper.runExecutable(LOG, bin.getAbsolutePath() + "/gem.bat", myWorkingDirectory, "install", "bundler");
-          RunCommandsHelper.runExecutable(LOG, bin.getAbsolutePath() + "/bundle.bat", myWorkingDirectory, "install");
+          final Map<String, String> env = new HashMap<String, String>(System.getenv());
+          OSUtil.prependToPATHEnvVariable(bin.getAbsolutePath(), env);
+          RunCommandsHelper.runExecutable(LOG, new File(bin, "gem.bat").getAbsolutePath(), myWorkingDirectory, env, "install", "bundler");
+          RunCommandsHelper.runExecutable(LOG, new File(bin, "bundle.bat").getAbsolutePath(), myWorkingDirectory, env, "install");
         } catch (Throwable e) {
           LOG.error("Failled to prepare environment: " + e.getMessage(), e);
         }

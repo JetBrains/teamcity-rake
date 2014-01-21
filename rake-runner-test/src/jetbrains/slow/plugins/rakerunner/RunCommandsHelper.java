@@ -23,10 +23,12 @@ import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author Vladislav.Rassokhin
@@ -35,10 +37,19 @@ public class RunCommandsHelper {
 
 
   public static long runExecutable(@NotNull final Logger log, @NotNull final String command, @NotNull final File workingDirectory, String... args) {
+    return runExecutable(log, command, workingDirectory, null, args);
+  }
+
+  public static long runExecutable(@NotNull final Logger log,
+                                   @NotNull final String command,
+                                   @NotNull final File workingDirectory,
+                                   @Nullable Map<String, String> env,
+                                   String... args) {
     final GeneralCommandLine cl = new GeneralCommandLine();
     cl.setExePath(command);
     cl.setWorkingDirectory(workingDirectory);
     cl.addParameters(args);
+    cl.setEnvParams(env);
     log.debug("Running " + command + " with " + Arrays.toString(args) + " at " + workingDirectory.getAbsolutePath());
     Long start = System.currentTimeMillis();
     final ExecResult result = SimpleCommandLineProcessRunner.runCommand(cl, null);
