@@ -81,10 +81,19 @@ public abstract class AbstractBundlerBasedRakeRunnerTest extends AbstractRakeRun
       doPrepareGemset(gemsetFullName, LOG, myGemfile);
       gemsetToDelete.add(gemsetFullName);
     } else if (SystemInfo.isWindows) {
-//      final File interpreter = RakeRunnerTestUtil.getWindowsInterpreterExecutableFile(getRubyVersion());
-//      final File bin = interpreter.getParentFile();
-//      RunCommandsHelper.runExecutable(LOG, bin.getAbsolutePath() + "/gem.bat", myWorkingDirectory, "install", "bundler");
-//      RunCommandsHelper.runExecutable(LOG, bin.getAbsolutePath() + "/bundle.bat", myWorkingDirectory, "install");
+      final File interpreter;
+      try {
+        interpreter = RakeRunnerTestUtil.getWindowsInterpreterExecutableFile(getRubyVersion());
+        final File bin = interpreter.getParentFile();
+        try {
+          RunCommandsHelper.runExecutable(LOG, bin.getAbsolutePath() + "/gem.bat", myWorkingDirectory, "install", "bundler");
+          RunCommandsHelper.runExecutable(LOG, bin.getAbsolutePath() + "/bundle.bat", myWorkingDirectory, "install");
+        } catch (Throwable e) {
+          LOG.error("Failled to prepare environment: " + e.getMessage(), e);
+        }
+      } catch (RakeRunnerTestUtil.InterpreterNotFoundException e) {
+        LOG.error("Failled to prepare environment: " + e.getMessage(), e);
+      }
     }
   }
 
