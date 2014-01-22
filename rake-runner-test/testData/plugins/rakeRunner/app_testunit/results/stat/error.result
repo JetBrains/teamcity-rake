@@ -7,7 +7,7 @@
 --1--##teamcity[testFinished name='Failed1Test.test_error11' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
 --1--##teamcity[testStarted name='Failed1Test.test_error12' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testFailed name='Failed1Test.test_error12' message='TypeError: can|'t convert nil into String' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Failed1Test.test_error12' message='TypeError: ' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Failed1Test.test_error12' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testSuiteFinished name='Failed1Test' timestamp='##TIME##'] NORMAL
 

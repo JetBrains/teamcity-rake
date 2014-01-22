@@ -1,11 +1,18 @@
 source "http://rubygems.org"
 gem "rake"
 
-gem "cucumber"
 gem "rspec"
 
 require 'rubygems'
 current = Gem::Version.create(RUBY_VERSION * 1)
+
+# gherkin 2.12.1 does not supports ruby-1.8.7
+if (current < Gem::Version.create('1.9')) then
+  gem "gherkin", '<2.11.1'
+elsif (current > Gem::Version.create('1.9')) then
+  gem "gherkin", '>2.11.0'
+end
+gem "cucumber"
 
 if (current >= Gem::Version.create('1.9')) then
   gem "test-unit"

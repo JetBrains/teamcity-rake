@@ -1,6 +1,6 @@
 --1--##teamcity[blockOpened name='Execute stat:compile_error' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
 
---1--error1_test.rb:7:
+error1_test.rb:7:
 --1--SyntaxError
 
 --1--##teamcity[blockClosed name='Execute stat:compile_error' type='$TARGET_BLOCK$' timestamp='##TIME##'] NORMAL
