@@ -1,4 +1,4 @@
---1--Execute stat:features $TARGET_BLOCK$ FAILURE
+--1--Execute stat:features $TARGET_BLOCK$
 
 --1-- Feature: Several failed steps $TEST_SUITE$ FAILURE
 --1--  Scenario: group with failed steps $TEST_SUITE$ FAILURE
