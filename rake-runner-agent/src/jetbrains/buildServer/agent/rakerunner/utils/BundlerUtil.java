@@ -94,7 +94,7 @@ public class BundlerUtil {
     setBundleBinPath(context.getEnvParameters(), bundlerGemRootPath);
 
     // BUNDLE_GEM_FILE env variable
-    final String gemFilePath = determineGemfilePath(context);
+    final String gemFilePath = FileUtil.toSystemIndependentName(determineGemfilePath(context));
     context.getEnvParameters().put(BUNDLE_GEMFILE_ENV_VAR, gemFilePath);
 
     // Add BUNDLE_PATH/.../bin to PATH
