@@ -25,59 +25,15 @@
   .rec-container {
     display: none;
   }
-
-  .runnerFormTable.featureDetails td {
-    /*padding-right: 2.8em;*/
-  }
-
-  .runnerFormTable.featureDetails tbody tr td {
-    text-align: left;
-    vertical-align: top;
-  }
-
-  .runnerFormTable.featureDetails tbody tr td.rec-td-text-long, .rec-td-text-long {
-    width: 60%;
-    padding-right: 0;
-    margin-right: 0;
-    text-align: left;
-    vertical-align: top;
-    font-weight: bold;
-  }
-
-  .runnerFormTable.featureDetails tbody tr td.rec-td-text-short, .rec-td-text-short {
-    width: 30%;
-    padding-right: 0;
-    margin-right: 0;
-    text-align: left;
-    vertical-align: top;
-    font-weight: bold;
-  }
-
-  .runnerFormTable.featureDetails tbody tr td.rec-td-field-long, .rec-td-field-long {
-    width: 70%;
-    padding-left: 0;
-    margin-left: 0;
-  }
-
-  .runnerFormTable.featureDetails tbody tr td.rec-td-field-short, .rec-td-field-short {
-    width: 40%;
-    padding-left: 0;
-    margin-left: 0;
-  }
-
-  .nobr {
-    text-wrap: avoid;
-    white-space: nowrap;
-  }
 </style>
 
 <tr>
-  <td colspan="2" class="rec-td-text-long nobr">
-    Configure Ruby environment for build steps via <bs:help file="Ruby+Environment+Configurator"/>
-  </td>
-  <td colspan="1" class="rec-td-field-short nobr">
-    <forms:select name="REC_MODE" onchange="BS.RubyEC.onFormChange()" style="width:100%;">
-      <props:option id="rec-mode-none" value="unspecified" selected="${true}">-- Please select method --</props:option>
+  <th colspan="2">
+    Configure Ruby environment via <bs:help file="Ruby+Environment+Configurator"/>
+  </th>
+  <td>
+    <forms:select name="REC_MODE" onchange="BS.RubyEC.onFormChange()" className="longField">
+      <props:option id="rec-mode-none" value="unspecified" selected="${true}">-- Choose method --</props:option>
       <props:option id="rec-mode-path" value="path">Path to Ruby interpreter</props:option>
       <props:option id="rec-mode-rvm" value="rvm">RVM</props:option>
       <props:option id="rec-mode-rbenv" value="rbenv">rbenv</props:option>
@@ -94,74 +50,70 @@
 
 <%-- Path --%>
 <tr class="rec-container" id="rec-path-container">
-  <td colspan="1" class="rec-td-text-short">
+  <th>
     <label for="${UI_RUBY_SDK_PATH_KEY}">Interpreter path:</label>
-  </td>
-  <td colspan="2" class="completionIconWrapper rec-td-field-long">
-    <props:textProperty name="${UI_RUBY_SDK_PATH_KEY}" className="longField" style="width: 100%;"/>
+  </th>
+  <td colspan="2" class="completionIconWrapper">
+    <props:textProperty name="${UI_RUBY_SDK_PATH_KEY}" className="longField"/>
     <span class="smallNote">Leave empty to search interpreter in the <strong>PATH</strong> environment variable.</span>
   </td>
 </tr>
 
 <%-- RVM --%>
 <tr class="rec-container" id="rec-rvm-container-manual-1">
-  <td colspan="2" class="rec-td-text-long">
+  <th colspan="2">
     <forms:radioButton name="REC_RVM_MODE" onclick="BS.RubyEC.onFormChange()" value="manual" id="rvm_manual" checked="true"/>
-    <label for="rvm_manual" class="nobr">Interpreter and gemset</label>
-  </td>
-  <td colspan="1" class="completionIconWrapper rec-td-field-short">
+    <label for="rvm_manual">Interpreter and gemset</label>
+  </th>
+  <td class="completionIconWrapper">
 
   </td>
 </tr>
 <tr class="rec-container" id="rec-rvm-container-manual-2">
-  <td colspan="1" class="rec-td-text-short nobr">
-    <label style="padding-left: 25pt" for="${UI_RVM_SDK_NAME_KEY}">Interpreter name: <l:star/></label>
-  </td>
-  <td colspan="2" class="completionIconWrapper rec-td-field-long">
-    <props:textProperty name="${UI_RVM_SDK_NAME_KEY}" style="width:100%;"/>
+  <th>
+    <label for="${UI_RVM_SDK_NAME_KEY}">Interpreter name: <l:star/></label>
+  </th>
+  <td colspan="2" class="completionIconWrapper">
+    <props:textProperty name="${UI_RVM_SDK_NAME_KEY}" className="longField"/>
     <span class="error" id="error_${UI_RVM_SDK_NAME_KEY}"></span>
     <span class="smallNote">E.g.: <strong>ruby-1.8.7-p249</strong>, <strong>jruby-1.4.0</strong> or <strong>system</strong></span>
   </td>
 </tr>
 <tr class="rec-container" id="rec-rvm-container-manual-3">
-  <td colspan="1" class="rec-td-text-short nobr">
-    <label style="padding-left: 25pt" for="${UI_RVM_GEMSET_NAME_KEY}">Gemset:</label>
-  </td>
-  <td colspan="2" class="completionIconWrapper rec-td-field-long">
-    <props:textProperty name="${UI_RVM_GEMSET_NAME_KEY}" style="width:100%;"/>
+  <th>
+    <label for="${UI_RVM_GEMSET_NAME_KEY}">Gemset:</label>
+  </th>
+  <td colspan="2" class="completionIconWrapper">
+    <props:textProperty name="${UI_RVM_GEMSET_NAME_KEY}" className="longField"/>
     <span class="smallNote">Leave empty to use default gemset.</span>
     <props:checkboxProperty name="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}"/>
     <label for="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}">Create gemset if not exist</label>
   </td>
 </tr>
 <tr class="rec-container" id="rec-rvm-container-rvmrc">
-  <td colspan="1" class="rec-td-text-short">
+  <th>
     <forms:radioButton name="REC_RVM_MODE" onclick="BS.RubyEC.onFormChange()" value="rvmrc" id="rvm_rvmrc"/>
-    <label for="rvm_manual" class="nobr">Path to a&nbsp;'.rvmrc'&nbsp;file:</label>
-  </td>
-  <td colspan="2" class="rec-td-field-long">
-    <nobr>
-      <div class="completionIconWrapper" style="width:100%;">
-        <props:textProperty name="${UI_RVM_RVMRC_PATH_KEY}" className="longField" style="width:100%;"/>
-        <bs:vcsTree fieldId="${UI_RVM_RVMRC_PATH_KEY}"/>
-      </div>
-    </nobr>
+    <label for="rvm_manual">Path to a&nbsp;'.rvmrc'&nbsp;file:</label>
+  </th>
+  <td colspan="2">
+    <div class="completionIconWrapper">
+      <props:textProperty name="${UI_RVM_RVMRC_PATH_KEY}" className="longField"/>
+      <bs:vcsTree fieldId="${UI_RVM_RVMRC_PATH_KEY}"/>
+    </div>
     <span class="error" id="error_${UI_RVM_RVMRC_PATH_KEY}"></span>
     <span class="smallNote">Path relative to a checkout directory. Leave empty to use ".rvmrc"</span>
   </td>
 </tr>
 <tr class="rec-container" id="rec-rvm-container-ruby-version">
-  <td colspan="1" class="rec-td-text-short">
+  <th>
     <forms:radioButton name="REC_RVM_MODE" onclick="BS.RubyEC.onFormChange()" value="ruby_version" id="rvm_ruby_version"/>
     <label for="rvm_manual">Path to a directory with '.ruby-version'<br/> and '.ruby-gemset'&nbsp;files:</label>
-  </td>
-  <td colspan="2" class="rec-td-field-long">
-    <nobr>
-      <div class="completionIconWrapper" style="width:100%;">
-        <props:textProperty name="${UI_RVM_RUBY_VERSION_PATH_KEY}" className="longField" style="width:100%;"/>
-        <bs:vcsTree fieldId="${UI_RVM_RUBY_VERSION_PATH_KEY}"/>
-      </div>
-    </nobr>
+  </th>
+  <td colspan="2">
+    <div class="completionIconWrapper">
+      <props:textProperty name="${UI_RVM_RUBY_VERSION_PATH_KEY}" className="longField"/>
+      <bs:vcsTree fieldId="${UI_RVM_RUBY_VERSION_PATH_KEY}"/>
+    </div>
     <span class="error" id="error_${UI_RVM_RUBY_VERSION_PATH_KEY}"></span>
     <span class="smallNote">Path relative to a checkout directory. Leave empty to use checkout directory</span>
   </td>
@@ -169,28 +121,26 @@
 
 <%-- rbenv --%>
 <tr class="rec-container rec-rbenv" id="rec-rbenv-container-manual">
-  <td colspan="1" class="rec-td-text-short">
+  <th>
     <forms:radioButton name="REC_RBENV_MODE" onclick="BS.RubyEC.onFormChange()" value="manual" id="rbenv_manual" checked="true"/>
-    <label for="rbenv_manual" class="nobr">Interpreter version:</label>
-  </td>
-  <td colspan="2" class="rec-td-field-long">
-    <props:textProperty name="${UI_RBENV_VERSION_NAME_KEY}" style="width:100%;"/>
+    <label for="rbenv_manual">Interpreter version:</label>
+  </th>
+  <td colspan="2">
+    <props:textProperty name="${UI_RBENV_VERSION_NAME_KEY}"/>
     <span class="smallNote">E.g.: <strong>1.9.3-p286</strong> or <strong>jruby-1.7.0</strong></span>
     <span class="error" id="error_${UI_RBENV_VERSION_NAME_KEY}"></span>
   </td>
 </tr>
 <tr class="rec-container rec-rbenv" id="rec-rbenv-container-file">
-  <td colspan="1" class="rec-td-text-short">
+  <th>
     <forms:radioButton name="REC_RBENV_MODE" onclick="BS.RubyEC.onFormChange()" value="file" id="rbenv_file"/>
-    <label for="rbenv_file" class="nobr">Path to a directory with '.ruby-version'<br/> or '.rbenv-version'&nbsp;file:</label>
-  </td>
-  <td colspan="2" class="rec-td-field-long">
-    <nobr>
-      <div class="completionIconWrapper" style="width:100%; ">
-        <props:textProperty name="${UI_RBENV_FILE_PATH_KEY}" className="longFiled" style="width:100%;"/>
-        <bs:vcsTree fieldId="${UI_RBENV_FILE_PATH_KEY}"/>
-      </div>
-    </nobr>
+    <label for="rbenv_file">Path to a directory with '.ruby-version'<br/> or '.rbenv-version'&nbsp;file:</label>
+  </th>
+  <td colspan="2">
+    <div class="completionIconWrapper">
+      <props:textProperty name="${UI_RBENV_FILE_PATH_KEY}" className="longField"/>
+      <bs:vcsTree fieldId="${UI_RBENV_FILE_PATH_KEY}"/>
+    </div>
     <span class="error" id="error_${UI_RBENV_FILE_PATH_KEY}"></span>
     <span class="smallNote">Path relative to a checkout directory. Leave empty to use <nobr>".ruby-version"</nobr>(preferred) or <nobr>".rbenv-version"</nobr></span>
   </td>
@@ -244,7 +194,7 @@
     getSelectValue: function (name) {
       var n = BS.Util.escapeForJQuerySelector(name);
       return $j('select[name=' + n + ']').val();
-    },
+    }
   };
   BS.RubyEC = {
     prepareUI: function () {
@@ -263,7 +213,7 @@
       },
       setMode: function (value) {
         $j('#REC_MODE').val(value);
-      },
+      }
     },
     rvm: {
       manual: "manual",
@@ -407,7 +357,7 @@
     setRbEnvRequirement: function () {
       $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = ""
       $('${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}').value = "%env.RBENV_ROOT%";
-    },
+    }
   };
   BS.RubyEC.prepareUI();
 </script>
