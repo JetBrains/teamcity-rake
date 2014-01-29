@@ -120,7 +120,7 @@
 </tr>
 
 <%-- rbenv --%>
-<tr class="rec-container rec-rbenv" id="rec-rbenv-container-manual">
+<tr class="rec-container" id="rec-rbenv-container-manual">
   <th>
     <forms:radioButton name="REC_RBENV_MODE" onclick="BS.RubyEC.onFormChange()" value="manual" id="rbenv_manual" checked="true"/>
     <label for="rbenv_manual">Interpreter version:</label>
@@ -131,7 +131,7 @@
     <span class="error" id="error_${UI_RBENV_VERSION_NAME_KEY}"></span>
   </td>
 </tr>
-<tr class="rec-container rec-rbenv" id="rec-rbenv-container-file">
+<tr class="rec-container" id="rec-rbenv-container-file">
   <th>
     <forms:radioButton name="REC_RBENV_MODE" onclick="BS.RubyEC.onFormChange()" value="file" id="rbenv_file"/>
     <label for="rbenv_file">Path to a directory with '.ruby-version'<br/> or '.rbenv-version'&nbsp;file:</label>
@@ -158,6 +158,7 @@
   BS.Util.escapeForJQuerySelector = function (obj) {
     return BS.Util.escapeId(obj).substring(1);
   };
+
   BS.RECFormUtil = {
     setInputValue: function (name, value) {
       var n = BS.Util.escapeForJQuerySelector(name);
@@ -196,12 +197,11 @@
       return $j('select[name=' + n + ']').val();
     }
   };
+
   BS.RubyEC = {
     prepareUI: function () {
       this.convertFromStorage();
       BS.jQueryDropdown($('REC_MODE'));
-      //BS.jQueryDropdown($('REC_RVM_MODE'));
-      //BS.jQueryDropdown($('REC_RBENV_MODE'));
     },
     mode: {
       unspecified: "unspecified",
@@ -239,7 +239,6 @@
     convertFromStorage: function () {
       <%-- Take storaged value and convert in into new --%>
       var value = $j(BS.Util.escapeId('${UI_USE_RVM_KEY}')).val();
-      BS.Log.debug("Old value is " + value);
       if ('manual' == value) {
         this.mode.setMode(this.mode.rvm);
         this.rvm.setMode(this.rvm.manual);
@@ -307,14 +306,10 @@
           switch (rbenv) {
             case this.rbenv.manual:
               ow.val('rbenv');
-            <%--$('${UI_RBENV_VERSION_NAME_KEY}').disabled = false;--%>
-            <%--$('${UI_RBENV_FILE_PATH_KEY}').disabled = true;--%>
               $('${UI_RBENV_VERSION_NAME_KEY}').focus();
               break;
             case this.rbenv.file:
               ow.val('rbenv_file');
-            <%--$('${UI_RBENV_VERSION_NAME_KEY}').disabled = true;--%>
-            <%--$('${UI_RBENV_FILE_PATH_KEY}').disabled = false;--%>
               $('${UI_RBENV_FILE_PATH_KEY}').focus();
               break;
             default:
@@ -338,26 +333,24 @@
         default :
           throw "Invalid state exception, cannot process mode: " + mode;
       }
-      if (this.mode.unspecified != mode) {
-        <%--BS.Util.hide('error_${UI_USE_RVM_KEY}');--%>
-      }
       BS.VisibilityHandlers.updateVisibility('mainContent');
     },
     onFormChange: function () {
       // Do nothing will be replaced in convertFromStorage, after converting
     },
     unsetRequirements: function () {
-      $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = ""
+      $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "";
       $('${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}').value = "";
     },
     setRVMRequirement: function () {
-      $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "%env.rvm_path%"
+      $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "%env.rvm_path%";
       $('${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}').value = "";
     },
     setRbEnvRequirement: function () {
-      $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = ""
+      $('${UI_INNER_RVM_EXIST_REQUIRMENT_KEY}').value = "";
       $('${UI_INNER_RBENV_EXIST_REQUIRMENT_KEY}').value = "%env.RBENV_ROOT%";
     }
   };
+
   BS.RubyEC.prepareUI();
 </script>
