@@ -187,15 +187,6 @@ public class RubyEnvConfiguratorService implements BuildRunnerPrecondition {
         }
         break;
       }
-      case RBENV_FILE: {
-        String path = StringUtil.emptyIfNull(configuration.getRVMRCFilePath());
-        if (!StringUtil.isEmptyOrSpaces(path) &&
-            !PathUtil.getFileName(path).equals(".rbenv-version")) {
-          throw new RakeTasksBuildService.InvalidConfigurationException(
-            "local version file name must be '.rbenv-version'. rbenv does not support other names", false);
-        }
-        break;
-      }
     }
   }
 
