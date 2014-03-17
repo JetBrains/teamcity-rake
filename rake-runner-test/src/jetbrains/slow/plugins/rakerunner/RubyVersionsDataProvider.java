@@ -87,8 +87,8 @@ public class RubyVersionsDataProvider {
     }
     return new HashSet<String>() {
       {
-        add("ruby-1.8.7");
-        add("ruby-1.9.2");
+        add("ruby-1.9.3");
+        add("ruby-2.0.0");
         add("jruby");
       }
     };
