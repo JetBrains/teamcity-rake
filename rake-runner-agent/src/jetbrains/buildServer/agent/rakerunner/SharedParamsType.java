@@ -76,6 +76,9 @@ public enum SharedParamsType {
                              @NotNull final SharedParams sharedParams)
       throws RakeTasksBuildService.MyBuildFailureException {
       final String path = StringUtil.emptyIfNull(sharedParams.getInterpreterPath());
+      if (StringUtil.isEmpty(path)) {
+        return DEFAULT.createSdk(context, sharedParams);
+      }
       InternalRubySdkUtil.checkInterpreterPathValid(path);
       return new RubySdkImpl(new File(path), false);
     }

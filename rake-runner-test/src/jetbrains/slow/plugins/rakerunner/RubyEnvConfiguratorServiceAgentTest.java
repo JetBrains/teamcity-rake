@@ -31,6 +31,7 @@ import jetbrains.buildServer.agent.impl.SpringContextFixture;
 import jetbrains.buildServer.agent.rakerunner.SharedParams;
 import jetbrains.buildServer.agent.rakerunner.SharedParamsType;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
+import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
@@ -220,6 +221,79 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     assertFalse(sharedParams.isApplied());
 
     assertSuccessful(build);
+  }
+
+  @Test
+  public void testSdkInPathNotFound() throws Exception {
+    final Ref<BuildRunnerContext> contextRef = new Ref<BuildRunnerContext>();
+    addBuildParamsListener(null, null, null, contextRef);
+
+    final HashMap<String, String> feature = new HashMap<String, String>();
+    feature.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "path");
+    feature.put(RubyEnvConfiguratorConstants.UI_RUBY_SDK_PATH_KEY, "");
+    feature.put(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
+
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, feature);
+
+    bt.addParameter(new SimpleParameter(Constants.ENV_PREFIX + OSUtil.getPATHEnvVariableKey(), ""));
+
+    // launch
+    final SFinishedBuild build = finishBuild(startBuild(bt, false));
+
+    assertFailed(build);
+    assertNotNull(build.getFirstInternalError());
+    assertNotNull(build.getFirstInternalErrorMessage());
+    assertEquals("Unable to find Ruby interpreter in PATH.", build.getFirstInternalErrorMessage());
+
+    // check shared params:
+    final Map<String, String> params = contextRef.get().getRunnerParameters();
+    Assert.assertNotNull(params);
+
+    SharedParams sharedParams = SharedParams.fromRunParameters(params);
+
+    assertTrue(sharedParams.isSetted());
+
+    assertEquals(SharedParamsType.INTERPRETER_PATH, sharedParams.getType());
+    assertTrue(StringUtil.isEmpty(sharedParams.getInterpreterPath()));
+
+    assertFalse(sharedParams.isApplied());
+  }
+
+  @Test
+  @TestFor(issues = "TW-35712")
+  public void testSdkInPathFound() throws Exception {
+    final Ref<BuildRunnerContext> contextRef = new Ref<BuildRunnerContext>();
+    addBuildParamsListener(null, null, null, contextRef);
+
+    final HashMap<String, String> feature = new HashMap<String, String>();
+    feature.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "path");
+    feature.put(RubyEnvConfiguratorConstants.UI_RUBY_SDK_PATH_KEY, "");
+    feature.put(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
+
+    final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, feature);
+
+    final String interpreter = RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/").getAbsolutePath();
+    bt.addParameter(new SimpleParameter(Constants.ENV_PREFIX + OSUtil.getPATHEnvVariableKey(), interpreter));
+
+    // launch
+    final SFinishedBuild build = finishBuild(startBuild(bt, false));
+
+    assertSuccessful(build);
+    assertNull(build.getFirstInternalError());
+    assertNull(build.getFirstInternalErrorMessage());
+
+    // check shared params:
+    final Map<String, String> params = contextRef.get().getRunnerParameters();
+    Assert.assertNotNull(params);
+
+    SharedParams sharedParams = SharedParams.fromRunParameters(params);
+
+    assertTrue(sharedParams.isSetted());
+
+    assertEquals(SharedParamsType.INTERPRETER_PATH, sharedParams.getType());
+    assertTrue(StringUtil.isEmpty(sharedParams.getInterpreterPath()));
+
+    assertTrue(sharedParams.isApplied());
   }
 
   @Test
