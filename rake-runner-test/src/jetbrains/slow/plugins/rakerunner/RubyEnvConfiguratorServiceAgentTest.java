@@ -272,7 +272,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, feature);
 
-    final String interpreter = RakeRunnerTestUtil.getTestDataItemPath(".rvm/rubies/ruby-1.8.7-p352/bin/").getAbsolutePath();
+    final String interpreter = RakeRunnerTestUtil.getTestDataItemPath("fake-ruby/").getAbsolutePath();
     bt.addParameter(new SimpleParameter(Constants.ENV_PREFIX + OSUtil.getPATHEnvVariableKey(), interpreter));
 
     // launch
