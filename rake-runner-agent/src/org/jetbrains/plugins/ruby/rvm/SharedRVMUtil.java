@@ -21,10 +21,13 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.containers.HashMap;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.util.CollectionsUtil;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.util.VersionComparatorUtil;
 import jetbrains.buildServer.util.filters.Filter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -119,16 +122,27 @@ public class SharedRVMUtil {
       return true;
     }
 
-    // if ref is just version:
-    // jruby-1.[3-6]
-    if (sdkRef.startsWith("1.3") || sdkRef.startsWith("1.4") || sdkRef.startsWith("1.5") || sdkRef.startsWith("1.6")) {
-      // try with "jruby-" prefixes
-      return distName.startsWith("jruby-" + sdkRef);
+    // Starts with number
+    if (Character.digit(sdkRef.charAt(0), 10) != -1) {
+      if (VersionComparatorUtil.compare(sdkRef, "1.8") >= 0) {
+        // Looks like ruby
+        if (distName.startsWith("ruby-" + sdkRef)) {
+          return true;
+        }
+      } else {
+        // Looks like jruby
+        if (distName.startsWith("jruby-" + sdkRef)) {
+          return true;
+        }
+      }
     }
-    // ruby-1.[8-9]
-    if (sdkRef.startsWith("1.8") || sdkRef.startsWith("1.9") || sdkRef.startsWith("2.0")) {
-      // try with "ruby-" prefixes
-      return distName.startsWith("ruby-" + sdkRef);
+
+    // Ignore patchversion (match ruby-2.1.0-p0 to ruby-2.1.0)
+    final Matcher matcher = Pattern.compile("(.*)\\-p([0-9]+)").matcher(sdkRef);
+    if (matcher.matches()) {
+      // sdkRef have patchversion
+      final String ref = matcher.group(1);
+      return sdkRefMatchesManual(ref, distName);
     }
 
     return false;

@@ -74,6 +74,12 @@ public class SharedRVMUtilTest {
       {"maglev-head", "maglev-head"},
       {"ironruby", "ironruby-1.1.3"},
       {"ironruby-1.1.3", "ironruby-1.1.3"},
+
+      {"ruby-2.1.0-p0", "ruby-2.1.0-p0"},
+      {"ruby-2.1.0-p0", "ruby-2.1.0"},
+      {"2.1.0-p0", "ruby-2.1.0"},
+      {"2.1.0", "ruby-2.1.0"},
+      {"ruby-2.1.0", "ruby-2.1.0-p0"},
       //{"", ""},
     };
   }
