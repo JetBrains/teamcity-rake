@@ -95,11 +95,10 @@ public class InternalRubySdkUtil {
     throw new RakeTasksBuildService.MyBuildFailureException(msg);
   }
 
-  public static boolean isRuby19Interpreter(@NotNull final RubySdk sdk,
-                                            @Nullable final Map<String, String> env) {
-    final ExecResult rubyVersionResult = sdk.getScriptRunner().run(RUBY_VERSION_SCRIPT, getTempDirectory(), env);
-    final String stdOut = rubyVersionResult.getStdout();
-    return stdOut.contains("1.9.");
+  public static String getRubyInterpreterVersion(@NotNull final RubySdk sdk,
+                                                 @Nullable final Map<String, String> env) {
+    final ExecResult result = sdk.getScriptRunner().run(RUBY_VERSION_SCRIPT, getTempDirectory(), env);
+    return result.getStdout();
   }
 
   public static boolean isJRubyInterpreter(@NotNull final RubySdk sdk,
