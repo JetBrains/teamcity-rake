@@ -44,7 +44,7 @@ public class RubySdkImpl implements RubySdk {
   @NotNull
   private final String myRubyName;
 
-  private boolean myIsRuby19;
+  private String myVersion = null;
   private boolean myIsJRuby;
   private String[] myGemPaths;
   private String[] myLoadPaths;
@@ -110,7 +110,7 @@ public class RubySdkImpl implements RubySdk {
   }
 
   public boolean isRuby19() {
-    return myIsRuby19;
+    return myVersion != null && myVersion.contains("1.9.");
   }
 
   public boolean isJRuby() {
@@ -132,13 +132,18 @@ public class RubySdkImpl implements RubySdk {
     return new ProcessBasedRubyScriptRunner(this);
   }
 
+  @Nullable
+  public String getVersion() {
+    return myVersion;
+  }
+
   @NotNull
   public String[] getLoadPath() {
     return myLoadPaths;
   }
 
-  public void setIsRuby19(final boolean isRuby19) {
-    myIsRuby19 = isRuby19;
+  public void setVersion(final String version) {
+    myVersion = version;
   }
 
   public void setIsJRuby(final boolean isJRuby) {
@@ -190,8 +195,8 @@ public class RubySdkImpl implements RubySdk {
       return;
     }
 
-    // 1.8 / 1.9
-    setIsRuby19(InternalRubySdkUtil.isRuby19Interpreter(this, env));
+    // ruby version
+    setVersion(InternalRubySdkUtil.getRubyInterpreterVersion(this, env));
 
     // ruby / jruby
     setIsJRuby(InternalRubySdkUtil.isJRubyInterpreter(this, env));

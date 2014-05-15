@@ -44,6 +44,9 @@ public interface RubySdk {
   @NotNull
   String getName();
 
+  @Nullable
+  String getVersion();
+
   boolean isSystem();
 
   boolean isRuby19();

@@ -111,10 +111,12 @@ public class TestUnitUtil {
                                                           forcedTestUnitGemVersion);
       } else {
         List<Pair<String, String>> gems = RubySDKUtil.findGemsByName(TEST_UNIT_GEM_NAME, gemPaths);
+        final String version = sdk.getVersion();
+        final String gv = version != null ? version + ".0" : "2.0.0.0";
         gems = CollectionsUtil.filterCollection(gems, new Filter<Pair<String, String>>() {
           public boolean accept(@NotNull final Pair<String, String> data) {
-            // Ruby-2.0.0 with test-unit compatibility layer using minitest
-            return !data.second.equals("2.0.0.0");
+            // Ruby-2.0.0 and newer with test-unit compatibility layer using minitest
+            return !data.second.equals(gv);
           }
         });
         gemInfo = gems.isEmpty() ? null : Collections.max(gems, new RubySDKUtil.GemInfoPairComparator());
