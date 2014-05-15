@@ -15,9 +15,9 @@ Rake tasks runner support for TeamCity 4.x and newer
 3. Sources
 
  |- root
- |--- [rake-runner-agent] - Agent's part of Teamcity Rake Runner, JAVA sources
- |--- [rake-runner-common] - Common code for Agent's and Server's parts or Teamcity Rake Runner, JAVA
- |--- [rake-runner-server] - Server's part of Teamcity Rake Runner, JAVA
+ |--- [rake-runner-agent] - Agent's part of TeamCity Rake Runner, JAVA sources
+ |--- [rake-runner-common] - Common code for Agent's and Server's parts or TeamCity Rake Runner, JAVA
+ |--- [rake-runner-server] - Server's part of TeamCity Rake Runner, JAVA
  |--- [rake-runner-test] - Tests for rake-runner. TeamCity tests API is required for running tests
  |--- [lib/rb] - Unpacked RUBY part of plugin.
  |--- [out] - Compilation output directory
