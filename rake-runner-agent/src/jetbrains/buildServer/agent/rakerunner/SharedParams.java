@@ -61,6 +61,9 @@ public class SharedParams implements SharedRubyEnvSettings {
         params.put(SHARED_RUBY_RVM_RVMRC_PATH, getRVMRCPath());
         break;
       }
+      case RVM_RUBY_VERSION: {
+        params.put(SHARED_RUBY_RVM_RUBY_VERSION_PATH, getRVMRubyVersionPath());
+      }
       case RBENV: {
         params.put(SHARED_RUBY_RBENV_VERSION_NAME, getRbEnvVersion());
         break;
@@ -95,6 +98,9 @@ public class SharedParams implements SharedRubyEnvSettings {
       case RVMRC: {
         context.addRunnerParameter(SHARED_RUBY_RVM_RVMRC_PATH, StringUtil.emptyIfNull(getRVMRCPath()));
         break;
+      }
+      case RVM_RUBY_VERSION: {
+        context.addRunnerParameter(SHARED_RUBY_RVM_RUBY_VERSION_PATH, StringUtil.emptyIfNull(getRVMRubyVersionPath()));
       }
       case RBENV: {
         context.addRunnerParameter(SHARED_RUBY_RBENV_VERSION_NAME, StringUtil.emptyIfNull(getRbEnvVersion()));
@@ -189,6 +195,7 @@ public class SharedParams implements SharedRubyEnvSettings {
     shared.setRVMGemsetName(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RVM_GEMSET_NAME)));
     shared.setRVMRCPath(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RVM_RVMRC_PATH)));
     shared.setRVMGemsetCreate(Boolean.valueOf(runParams.get(SHARED_RUBY_RVM_GEMSET_CREATE)));
+    shared.setRVMRubyVersionPath(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RVM_RUBY_VERSION_PATH)));
     shared.setRbEnvVersion(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RBENV_VERSION_NAME)));
     shared.setRbEnvVersionFile(StringUtil.trimAndNull(runParams.get(SHARED_RUBY_RBENV_FILE_PATH)));
     return shared;
