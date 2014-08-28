@@ -16,6 +16,8 @@
 
 package jetbrains.buildServer.agent.ruby.rbenv.detector;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
@@ -31,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RbEnvDetectorForUNIX extends RbEnvDetector {
   public static final String[] KNOW_GLOBAL_RBENV_HOME_PATHS = new String[]{"/usr/local/rbenv"};
+  public static final String USR_LOCAL_BIN_RBENV = "/usr/local/bin/rbenv";
 
   @Override
   public InstalledRbEnv detect(@NotNull final Map<String, String> env) {
@@ -41,7 +44,7 @@ public class RbEnvDetectorForUNIX extends RbEnvDetector {
     // custom or system wide rbenv path
 
     @Nullable final String special = determinePathUsingEnvVariable(env);
-    @Nullable final String global = determineGlobalInstallation();
+    @Nullable final String global = determineGlobalInstallation(env);
     @Nullable final String local = determineLocalInstallation();
 
     if (special != null) {
@@ -75,7 +78,7 @@ public class RbEnvDetectorForUNIX extends RbEnvDetector {
   }
 
   @Nullable
-  public static String determineGlobalInstallation() {
+  public static String determineGlobalInstallation(@NotNull final Map<String, String> env) {
     // Try to detect global rbenv on dist
     // Known paths: /usr/local/rbenv
     for (String knowHomePath : KNOW_GLOBAL_RBENV_HOME_PATHS) {
@@ -93,9 +96,44 @@ public class RbEnvDetectorForUNIX extends RbEnvDetector {
       }
       // continue search..
     }
+    // HomeBrew ( /usr/local/Cellar/rbenv/x.x.x/ as home and /usr/local/bin/rbenv as binary )
+    try {
+      for (String val : new String[]{OSUtil.findExecutableByNameInPATH("rbenv", env), USR_LOCAL_BIN_RBENV}) {
+        if (val == null) continue;
+        final File home = getResolvedHome(val);
+        if (home == null) continue;
+        if (home.isDirectory() && home.exists()) {
+          final File exec = new File(home, "bin/rbenv");
+          if (exec.exists()) {
+            // rbenv installation detected!
+            // Checking we have permissions
+            if (InstalledRbEnv.executeCommandLine(exec.getAbsolutePath(), "help").contains("sage: rbenv")) {
+              return home.getAbsolutePath();
+            }
+          }
+        }
+      }
+    } catch (Throwable ignored) {
+    }
 
     // No global rbenv was found
     return null;
+  }
+
+  @Nullable
+  private static File getResolvedHome(@NotNull final String rbenv) {
+    final File link = new File(rbenv);
+    // Should resolve symlink to actual version
+    final File resolved;
+    try {
+      resolved = link.getCanonicalFile();
+    } catch (IOException ignored) {
+      return null;
+    }
+    if (!resolved.exists()) return null;
+    final File bin = resolved.getParentFile();
+    if (bin == null) return null;
+    return bin.getParentFile();
   }
 
   @Nullable
