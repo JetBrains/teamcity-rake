@@ -188,7 +188,7 @@ public class InstalledRVM extends RubyVersionManager {
   }
 
   @Nullable
-  public String getDefualtInterpreter() {
+  public String getDefaultInterpreter() {
     return myDefualtInterpreter.getValue();
   }
 
@@ -250,7 +250,7 @@ public class InstalledRVM extends RubyVersionManager {
 
       // Reference for default one ('rvm list default string')
       {
-        final String value = getDefualtInterpreter();
+        final String value = getDefaultInterpreter();
         if (value != null) {
           map.put(Pattern.compile(Pattern.quote("default")), value);
         }

@@ -77,7 +77,7 @@ public class InstalledRVMTest {
   @Test(dataProvider = "defaults")
   public void testGetDefaultInterpreter(String stdout, String expected) throws Exception {
     myCustomContents.put("rvm list default string", stdout);
-    Assert.assertEquals(myMockedRVM.getDefualtInterpreter(), expected);
+    Assert.assertEquals(myMockedRVM.getDefaultInterpreter(), expected);
   }
 
   @Test(dataProvider = "installed")
@@ -124,8 +124,8 @@ public class InstalledRVMTest {
       {"ruby-1.8.7", "ruby-1.8.7-p374"},
       {"1.8.7-p374", "ruby-1.8.7-p374"},
       {"ruby-1.8.7-p374", "ruby-1.8.7-p374"},
-      {"1.9.2", "ruby-1.9.2-p320"},
-      {"ruby-1.9.2", "ruby-1.9.2-p320"},
+      {"1.9.2", "ruby-1.9.2-head"},
+      {"ruby-1.9.2", "ruby-1.9.2-head"},
       {"1.9.3", "ruby-1.9.3-p448"},
       {"ruby-1.9.3", "ruby-1.9.3-p448"},
       {"jruby", "jruby-1.7.4"},

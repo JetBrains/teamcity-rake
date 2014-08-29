@@ -18,7 +18,7 @@ package jetbrains.buildServer.agent.ruby.rvm.util;
 
 import com.intellij.openapi.util.Pair;
 import jetbrains.buildServer.util.CollectionsUtil;
-import jetbrains.buildServer.util.filters.Filter;
+import jetbrains.buildServer.util.Converter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -31,10 +31,13 @@ import java.util.regex.Pattern;
 public class RVMUtil {
   @NotNull
   public static Map<Pattern, String> convertListKnownIntoResolvingMap(@NotNull final String stdout) {
-    final List<String> list = CollectionsUtil.filterCollection(Arrays.asList(stdout.split("\n")), new Filter<String>() {
-      public boolean accept(@NotNull final String data) {
-        final String trim = data.trim();
-        return !trim.isEmpty() && !trim.startsWith("#") && !trim.contains(" ");
+    final List<String> list = CollectionsUtil.convertAndFilterNulls(Arrays.asList(stdout.split("\n")), new Converter<String, String>() {
+      public String createFrom(@NotNull final String source) {
+        String trim = source.trim();
+        final int comment = trim.indexOf('#');
+        if (comment == 0) return null;
+        if (comment > 0) trim = trim.substring(0, comment).trim();
+        return !trim.isEmpty() && !trim.startsWith("#") && !trim.contains(" ") ? trim : null;
       }
     });
 
