@@ -41,7 +41,6 @@ import jetbrains.buildServer.util.EventDispatcher;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.util.TestFor;
-import org.assertj.core.api.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
@@ -380,8 +379,8 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
       final String[] paths = envGemPath.split(File.pathSeparator);
       Assert.assertEquals(2, paths.length);
 
-      Assertions.assertThat(paths[0]).matches(rvmHomePath + "/gems/" + regexRubyAndGemset);
-      Assertions.assertThat(paths[1]).matches(rvmHomePath + "/gems/" + regexRubyAndGlobal);
+      Assert.assertTrue(paths[0].matches(rvmHomePath + "/gems/" + regexRubyAndGemset), paths[0]);
+      Assert.assertTrue(paths[1].matches(rvmHomePath + "/gems/" + regexRubyAndGlobal), paths[1]);
     }
 
     final String envGemHome = envs.get("GEM_HOME");
@@ -395,9 +394,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
       final String[] paths = envPath.split(File.pathSeparator);
       Assert.assertTrue(paths.length >= 4);
 
-      Assertions.assertThat(paths[0]).matches(rvmHomePath + "/gems/" + regexRubyAndGemset + "/bin");
-      Assertions.assertThat(paths[1]).matches(rvmHomePath + "/gems/" + regexRubyAndGlobal + "/bin");
-      Assertions.assertThat(paths[2]).matches(rvmHomePath + "/rubies/" + regexRuby + "/bin");
+      Assert.assertTrue(paths[0].matches(rvmHomePath + "/gems/" + regexRubyAndGemset + "/bin"), paths[0]);
+      Assert.assertTrue(paths[1].matches(rvmHomePath + "/gems/" + regexRubyAndGlobal + "/bin"), paths[1]);
+      Assert.assertTrue(paths[2].matches(rvmHomePath + "/rubies/" + regexRuby + "/bin"), paths[2]);
       Assert.assertEquals(paths[3], rvmHomePath + "/bin");
     }
 
@@ -416,7 +415,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final String envRVMRubyString = envs.get("rvm_ruby_string");
     {
       Assert.assertNotNull(envRVMRubyString);
-      Assertions.assertThat(envRVMRubyString).matches(regexRuby);
+      Assert.assertTrue(envRVMRubyString.matches(regexRuby));
     }
 
 //    Assert.assertEquals(envs.get("GEM_PATH"), rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity:"
