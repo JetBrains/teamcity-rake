@@ -440,26 +440,23 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     final File localCacheDir = new File(workingDirectory, "vendor/cache");
     FileUtil.createDir(localCacheDir);
     FileUtil.copyDir(cacheDir, localCacheDir);
+    final List<String> commands = new ArrayList<String>();
     if (RakeRunnerTestUtil.isUseRVM()) {
-      RunCommandsHelper.runBashScript(LOG, workingDirectory,
-                                      "source " + getTestDataPath("gems/checkRVMCommand.sh").getAbsolutePath(),
-                                      "checkRVMCommand",
-                                      String.format("rvm use \"%s@%s\" --create", version, gemset),
-                                      "gem which bundler || gem install bundler",
-                                      "bundle install --local || (rm -f Gemfile.lock; bundle install)",
-                                      "bundle package --no-prune"
-      );
+      commands.add("source " + getTestDataPath("gems/checkRVMCommand.sh").getAbsolutePath());
+      commands.add("checkRVMCommand");
+      commands.add(String.format("rvm use \"%s@%s\" --create", version, gemset));
     } else if (RakeRunnerTestUtil.isUseRbEnv()) {
-      RunCommandsHelper.runBashScript(LOG, workingDirectory,
-                                      "rbenv local " + version,
-                                      "gem which bundler || gem install bundler",
-                                      "rm -f Gemfile.lock",
-                                      "bundle install --local || (rm -f Gemfile.lock; bundle install)",
-                                      "bundle package --no-prune"
-      );
+      commands.add("rbenv local " + version);
     } else {
       throw new IllegalStateException("Expected to be run on machine with either RVM or RbEnv installed.");
     }
+    Collections.addAll(commands,
+                       "gem which bundler || gem install bundler",
+                       "rm -f Gemfile.lock",
+                       "bundle install --local || (rm -f Gemfile.lock; bundle install)",
+                       "bundle update",
+                       "bundle package --no-prune");
+    RunCommandsHelper.runBashScript(LOG, workingDirectory, commands.toArray(new String[commands.size()]));
     FileUtil.copyDir(localCacheDir, cacheDir);
     try {
       System.out.println("Actual Gemfile.lock:");
