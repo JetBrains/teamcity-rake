@@ -20,11 +20,13 @@ import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.util.Collection;
 
+import java.util.List;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
 import jetbrains.buildServer.agent.ruby.RubyVersionManager;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.util.impl.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +40,17 @@ public class InstalledRbEnv extends RubyVersionManager {
   private final File myHome;
   @NotNull
   private final Type myType;
+  private final Lazy<File> myRoot = new Lazy<File>() {
+    @Nullable
+    @Override
+    protected File createValue() {
+      final String root = executeCommandLine(getExecutablePath(), "root");
+      final List<String> split = StringUtil.split(root, true, '\n', '\r');
+      final File file = new File(split.iterator().next());
+      assert file.exists();
+      return file;
+    }
+  };
 
   @NotNull
   public Type getType() {
@@ -59,7 +72,7 @@ public class InstalledRbEnv extends RubyVersionManager {
   @Nullable
   @Override
   public File getRubiesFolder() {
-    final File versions = new File(myHome, "versions");
+    final File versions = new File(getRoot(), "versions");
     return versions.exists() && versions.isDirectory() ? versions : null;
   }
 
@@ -70,6 +83,10 @@ public class InstalledRbEnv extends RubyVersionManager {
 
   public void patchEnvironment(RbEnvRubySdk sdk, EnvironmentPatchableMap env) {
     env.put(Constants.RBENV_VERSION_ENV_VARIABLE, sdk.getName());
+  }
+
+  public File getRoot() {
+    return myRoot.getValue();
   }
 
   public enum Type {
@@ -90,7 +107,7 @@ public class InstalledRbEnv extends RubyVersionManager {
 
   @NotNull
   public File getInterpreterHome(@NotNull final String version) {
-    return new File(getHome().getAbsolutePath(), "versions" + File.separator + version);
+    return new File(getRubiesFolder(), version);
   }
 
   @NotNull
