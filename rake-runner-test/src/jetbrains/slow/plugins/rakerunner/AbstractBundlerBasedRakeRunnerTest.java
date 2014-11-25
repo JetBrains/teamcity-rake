@@ -76,9 +76,8 @@ public abstract class AbstractBundlerBasedRakeRunnerTest extends AbstractRakeRun
   @BeforeClass(dependsOnMethods = {"doPrepareWorkingDir"})
   protected final void doPrepareEnvironment() throws Throwable {
     if (SystemInfo.isUnix) {
-      final String gemsetFullName = getRubyVersion() + "@" + myRVMGemsetName;
-      doPrepareGemset(gemsetFullName, LOG, myGemfile);
-      gemsetToDelete.add(gemsetFullName);
+      doPrepareGemset(getRubyVersion(), myRVMGemsetName, LOG, myGemfile);
+      if (isUseRVM()) gemsetToDelete.add(getRubyVersion() + "@" + myRVMGemsetName);
     } else if (SystemInfo.isWindows) {
       final File interpreter;
       try {
@@ -102,7 +101,7 @@ public abstract class AbstractBundlerBasedRakeRunnerTest extends AbstractRakeRun
 
   @AfterSuite(alwaysRun = true, enabled = false)
   public void removeGemsets() throws Throwable {
-    if (SystemInfo.isUnix) {
+    if (SystemInfo.isUnix && isUseRVM()) {
       for (String gemset : gemsetToDelete) {
         RunCommandsHelper.runBashScript(LOG, myWorkingDirectory,
             "source " + getTestDataPath("gems/checkRVMCommand.sh").getAbsolutePath(),

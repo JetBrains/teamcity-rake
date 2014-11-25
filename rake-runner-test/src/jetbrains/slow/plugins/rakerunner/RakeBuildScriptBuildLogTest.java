@@ -45,7 +45,7 @@ public class RakeBuildScriptBuildLogTest extends AbstractRakeRunnerTest {
       return;
     }
     final File gemfile = getTestDataPath("gems/" + RakeRunnerTestUtil.DEFAULT_GEMSET_NAME + "/Gemfile");
-    doPrepareGemset(getRubyVersion() + "@" + RakeRunnerTestUtil.DEFAULT_GEMSET_NAME, LOG, gemfile);
+    doPrepareGemset(getRubyVersion(), RakeRunnerTestUtil.DEFAULT_GEMSET_NAME, LOG, gemfile);
     FileUtil.delete(new File(gemfile.getParentFile(), "Gemfile.lock"));
   }
 

@@ -16,14 +16,17 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import com.intellij.util.containers.HashMap;
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Collection;
 import java.util.Set;
-
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
+import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
 import jetbrains.buildServer.serverSide.BuildTypeEx;
+import jetbrains.buildServer.serverSide.SBuildFeatureDescriptor;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -124,8 +127,25 @@ public class RakeRunnerTestUtil {
   }
 
   static public void setRVMConfiguration(@NotNull final BuildTypeEx bt) {
+    setRVMConfiguration(bt, getDeafultRubySdk());
+  }
+
+  static public void setRbEnvConfiguration(@NotNull final BuildTypeEx bt, @NotNull final String rubySdkName) {
+    // Ensure there is build feature
+    getOrCreateRbEnvFeature(bt);
+
+    // Build step should inherit ruby sdk from feature
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_USAGE_MODE,
-                                           RakeRunnerUtils.RubyConfigMode.RVM.getModeValueString()));
+                                           RakeRunnerUtils.RubyConfigMode.DEFAULT.getModeValueString()));
+
+    useRbEnvRubySDK(rubySdkName, bt);
+  }
+
+  static public void setRbEnvConfiguration(@NotNull final BuildTypeEx bt) {
+    setRbEnvConfiguration(bt, getDeafultRubySdk());
+  }
+
+  private static String getDeafultRubySdk() {
     String property = System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY);
     if (StringUtil.isEmptyOrSpaces(property)) {
       final Set<String> set = RubyVersionsDataProvider.getRubyVersionsLinuxSet();
@@ -135,12 +155,30 @@ public class RakeRunnerTestUtil {
         throw new IllegalStateException("Required at least one interpreter");
       }
     }
-    useRVMRubySDK(property, bt);
-    useRVMGemSet(DEFAULT_GEMSET_NAME, bt);
+    return property;
   }
 
   static public void useRVMRubySDK(@NotNull final String sdkname, @NotNull final BuildTypeEx bt) {
     bt.addRunParameter(new SimpleParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME, sdkname));
+  }
+
+  static public void useRbEnvRubySDK(@NotNull final String sdkname, @NotNull final BuildTypeEx bt) {
+    final SBuildFeatureDescriptor feature = getOrCreateRbEnvFeature(bt);
+    final HashMap<String, String> params = new HashMap<String, String>(feature.getParameters());
+    params.put(RubyEnvConfiguratorConstants.UI_RBENV_VERSION_NAME_KEY, sdkname);
+    bt.updateBuildFeature(feature.getId(), feature.getType(), params);
+  }
+
+  private static SBuildFeatureDescriptor getOrCreateRbEnvFeature(final BuildTypeEx bt) {
+    final Collection<SBuildFeatureDescriptor> found = bt.getBuildFeaturesOfType(RubyEnvConfiguratorConstants.RUBY_ENV_CONFIGURATOR_FEATURE_TYPE);
+    if (!found.isEmpty()) {
+      return found.iterator().next();
+    }
+
+    final HashMap<String, String> params = new HashMap<String, String>();
+    params.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "rbenv");
+    params.put(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
+    return bt.addBuildFeature(RubyEnvConfiguratorConstants.RUBY_ENV_CONFIGURATOR_FEATURE_TYPE, params);
   }
 
   static public void useRVMGemSet(@NotNull final String gemset, @NotNull final BuildTypeEx bt) {
