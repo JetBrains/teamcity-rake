@@ -20,8 +20,6 @@ import com.google.common.collect.Sets;
 import com.intellij.openapi.util.SystemInfo;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
-import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
-import jetbrains.buildServer.agent.ruby.rvm.detector.impl.RVMDetectorForUNIX;
 import jetbrains.buildServer.util.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -39,16 +37,19 @@ import java.util.*;
 public class RubyVersionsDataProvider {
   @DataProvider(name = "ruby-versions")
   public static Iterator<Object[]> getRubyVersionsDP() {
+    //noinspection unchecked
     return getCartesianProductIterator(getRubyVersionsSet());
   }
 
   @DataProvider(name = "ruby-versions-linux")
   public static Iterator<Object[]> getRubyVersionsLinuxDP() {
+    //noinspection unchecked
     return getCartesianProductIterator(getRubyVersionsLinuxSet());
   }
 
   @DataProvider(name = "ruby-versions-windows")
   public static Iterator<Object[]> getRubyVersionsWindowsDP() {
+    //noinspection unchecked
     return getCartesianProductIterator(getRubyVersionsWindowsSet());
   }
 
@@ -70,10 +71,21 @@ public class RubyVersionsDataProvider {
       final List<String> rubies = StringUtil.split(property, " ");
       return new HashSet<String>(rubies);
     }
-    if (StringUtil.isTrue(System.getProperty("rake.runnner.tests.use.all.rvm.interpreters"))) {
-      final InstalledRVM rvm = new RVMDetectorForUNIX().detect(System.getenv());
-      if (rvm != null) {
-        final SortedSet<String> rubies = rvm.getInstalledRubies();
+    if (StringUtil.isTrue(System.getProperty("rake.runnner.tests.use.all.rvm.interpreters")) ||
+        StringUtil.isTrue(System.getProperty("rake.runnner.tests.use.all.interpreters"))) {
+      if (RakeRunnerTestUtil.isUseRVM()) {
+        final SortedSet<String> rubies = RakeRunnerTestUtil.getRvm().getInstalledRubies();
+        // Use latest patchversion
+        final Map<String, String> m = new HashMap<String, String>();
+        for (String ruby : rubies) {
+          final String s = ruby.replaceAll("\\-p\\d+", "");
+          if (VersionComparatorUtil.compare(m.get(s), ruby) < 0) {
+            m.put(s, ruby);
+          }
+        }
+        return new TreeSet<String>(m.values());
+      } else if (RakeRunnerTestUtil.isUseRbEnv()) {
+        final SortedSet<String> rubies = new TreeSet<String>(RakeRunnerTestUtil.getRbenv().getInstalledVersions());
         // Use latest patchversion
         final Map<String, String> m = new HashMap<String, String>();
         for (String ruby : rubies) {
@@ -85,11 +97,18 @@ public class RubyVersionsDataProvider {
         return new TreeSet<String>(m.values());
       }
     }
+
     return new HashSet<String>() {
       {
-        add("ruby-1.9.3");
-        add("ruby-2.0.0");
-        add("jruby");
+        if (RakeRunnerTestUtil.isUseRVM()) {
+          add("ruby-1.9.3");
+          add("ruby-2.0.0");
+          add("jruby");
+        } else if (RakeRunnerTestUtil.isUseRbEnv()) {
+          add("1.9.3-p551");
+          add("2.1.5");
+          add("jruby-1.7.16.1");
+        }
       }
     };
   }

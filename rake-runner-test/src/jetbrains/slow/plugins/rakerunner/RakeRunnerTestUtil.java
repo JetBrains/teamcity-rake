@@ -16,12 +16,17 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.containers.HashMap;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Collection;
 import java.util.Set;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
+import jetbrains.buildServer.agent.ruby.rbenv.InstalledRbEnv;
+import jetbrains.buildServer.agent.ruby.rbenv.detector.RbEnvDetectorForUNIX;
+import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.agent.ruby.rvm.detector.impl.RVMDetectorForUNIX;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.rakerunner.RakeRunnerUtils;
@@ -29,7 +34,9 @@ import jetbrains.buildServer.serverSide.BuildTypeEx;
 import jetbrains.buildServer.serverSide.SBuildFeatureDescriptor;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.util.impl.Lazy;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Roman.Chernyatchik
@@ -41,6 +48,39 @@ public class RakeRunnerTestUtil {
   public static final String RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY = "rake-runner.testing.ruby.version";
   public static final String DEFAULT_GEMSET_NAME = "all-trunk";
   public static final String GEMSET_PREFIX = "";
+  private static final Lazy<InstalledRVM> RVM = new Lazy<InstalledRVM>() {
+    @Nullable
+    @Override
+    protected InstalledRVM createValue() {
+      if (!SystemInfo.isUnix) return null;
+      return new RVMDetectorForUNIX().detect(System.getenv());
+    }
+  };
+  private static final Lazy<InstalledRbEnv> RBENV = new Lazy<InstalledRbEnv>() {
+    @Nullable
+    @Override
+    protected InstalledRbEnv createValue() {
+      if (!SystemInfo.isUnix) return null;
+      return new RbEnvDetectorForUNIX().detect(System.getenv());
+    }
+  };
+
+
+  public static InstalledRVM getRvm() {
+    return RVM.getValue();
+  }
+
+  public static InstalledRbEnv getRbenv() {
+    return RBENV.getValue();
+  }
+
+  protected static boolean isUseRVM() {
+    return RVM.getValue() != null;
+  }
+
+  protected static boolean isUseRbEnv() {
+    return RBENV.getValue() != null;
+  }
 
   public static class InterpreterNotFoundException extends Exception {
     InterpreterNotFoundException(final String message) {

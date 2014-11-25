@@ -21,10 +21,6 @@ import jetbrains.buildServer.PartialBuildMessagesChecker;
 import jetbrains.buildServer.RunnerTest2Base;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
-import jetbrains.buildServer.agent.ruby.rbenv.InstalledRbEnv;
-import jetbrains.buildServer.agent.ruby.rbenv.detector.RbEnvDetectorForUNIX;
-import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
-import jetbrains.buildServer.agent.ruby.rvm.detector.impl.RVMDetectorForUNIX;
 import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.BuildMessagesProcessor;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
@@ -36,7 +32,6 @@ import jetbrains.buildServer.serverSide.buildLog.LogMessage;
 import jetbrains.buildServer.serverSide.impl.beans.BuildTypeContextsImpl;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
-import jetbrains.buildServer.util.impl.Lazy;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -145,17 +140,17 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
   }
 
   private void setRubyConfiguration() {
-    if (isUseRVM()) {
+    if (RakeRunnerTestUtil.isUseRVM()) {
       RakeRunnerTestUtil.setRVMConfiguration(getBuildType());
-    } else if (isUseRbEnv()) {
+    } else if (RakeRunnerTestUtil.isUseRbEnv()) {
       RakeRunnerTestUtil.setRbEnvConfiguration(getBuildType());
     }
   }
 
   private void setRubyConfiguration(@NotNull final String rubySdkName) {
-    if (isUseRVM()) {
+    if (RakeRunnerTestUtil.isUseRVM()) {
       RakeRunnerTestUtil.setRVMConfiguration(getBuildType(), rubySdkName);
-    } else if (isUseRbEnv()) {
+    } else if (RakeRunnerTestUtil.isUseRbEnv()) {
       RakeRunnerTestUtil.setRbEnvConfiguration(getBuildType(), rubySdkName);
     }
   }
@@ -435,31 +430,6 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     return msg;
   }
 
-  private static final Lazy<InstalledRVM> RVM = new Lazy<InstalledRVM>() {
-    @Nullable
-    @Override
-    protected InstalledRVM createValue() {
-      if (!SystemInfo.isUnix) return null;
-      return new RVMDetectorForUNIX().detect(System.getenv());
-    }
-  };
-  private static final Lazy<InstalledRbEnv> RBENV = new Lazy<InstalledRbEnv>() {
-    @Nullable
-    @Override
-    protected InstalledRbEnv createValue() {
-      if (!SystemInfo.isUnix) return null;
-      return new RbEnvDetectorForUNIX().detect(System.getenv());
-    }
-  };
-
-  protected static boolean isUseRVM() {
-    return RVM.getValue() != null;
-  }
-
-  protected static boolean isUseRbEnv() {
-    return RBENV.getValue() != null;
-  }
-
   protected void doPrepareGemset(@NotNull final String version, @NotNull final String gemset, @NotNull final Logger LOG, @NotNull final File gemfile) throws IOException {
     if (!SystemInfo.isUnix) {
       return;
@@ -470,7 +440,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     final File localCacheDir = new File(workingDirectory, "vendor/cache");
     FileUtil.createDir(localCacheDir);
     FileUtil.copyDir(cacheDir, localCacheDir);
-    if (isUseRVM()) {
+    if (RakeRunnerTestUtil.isUseRVM()) {
       RunCommandsHelper.runBashScript(LOG, workingDirectory,
                                       "source " + getTestDataPath("gems/checkRVMCommand.sh").getAbsolutePath(),
                                       "checkRVMCommand",
@@ -479,7 +449,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
                                       "bundle install --local || (rm -f Gemfile.lock; bundle install)",
                                       "bundle package --no-prune"
       );
-    } else if (isUseRbEnv()) {
+    } else if (RakeRunnerTestUtil.isUseRbEnv()) {
       RunCommandsHelper.runBashScript(LOG, workingDirectory,
                                       "rbenv local " + version,
                                       "gem which bundler || gem install bundler",
@@ -505,14 +475,14 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
 
     final String sdk = getRunnerParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME);
     final String gs = getRunnerParameter(RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME);
-    if (isUseRVM()) {
+    if (RakeRunnerTestUtil.isUseRVM()) {
       RunCommandsHelper.runBashScript(LOG, getTestDataPath("gems/checkRVMCommand.sh").getParentFile(),
                                       "source " + getTestDataPath("gems/checkRVMCommand.sh").getAbsolutePath(),
                                       "checkRVMCommand",
                                       StringUtil.isEmptyOrSpaces(gs) ? String.format("rvm use \"%s\"", sdk) : String.format("rvm use \"%s\" --create", sdk + "@" + gs),
                                       "gem which bundler || gem install bundler"
       );
-    } else if (isUseRbEnv()) {
+    } else if (RakeRunnerTestUtil.isUseRbEnv()) {
       RunCommandsHelper.runBashScript(LOG, getTempsContainerDir(),
                                       "rbnev shell " + sdk,
                                       "gem which bundler || gem install bundler"
