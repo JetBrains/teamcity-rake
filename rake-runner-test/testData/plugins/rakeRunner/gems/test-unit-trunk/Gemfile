@@ -1,8 +1,14 @@
 source "http://rubygems.org"
-gem "rake"
 
 require 'rubygems'
 current = Gem::Version.create(RUBY_VERSION * 1)
+
+# rake 10.2.0 does not supports less than ruby-1.9
+if (current < Gem::Version.create('1.9')) then
+  gem "rake", '<2.10.1'
+else
+  gem "rake"
+end
 
 if (current >= Gem::Version.create('1.9')) then
   gem "test-unit"
