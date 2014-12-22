@@ -84,7 +84,6 @@
                                cols="58"
                                linkTitle="Enter the Rakefile content"
                                onkeydown="$('custom2').checked = true;" className="longField"/>
-      <span class="error" id="error_${BUILD_FILE_KEY}"></span>
     </td>
   </tr>
   <props:workingDirectory />
