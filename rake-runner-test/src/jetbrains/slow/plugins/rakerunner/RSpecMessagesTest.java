@@ -16,7 +16,8 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
+import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.util.TestFor;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
@@ -35,7 +36,6 @@ public class RSpecMessagesTest extends AbstractRSpecTest {
   protected void beforeMethod2() throws Throwable {
     super.beforeMethod2();
     setMessagesTranslationEnabled(false);
-    activateTestFramework(SupportedTestFramework.RSPEC);
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
   }
 
@@ -43,6 +43,14 @@ public class RSpecMessagesTest extends AbstractRSpecTest {
     setPartialMessagesChecker();
 
     initAndDoTest("output:spec_output", false);
+  }
+
+  @TestFor(issues = "TW-38596")
+  public void testSpecSeedOutput() throws Throwable {
+    setPartialMessagesChecker();
+
+    addRunParameter(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_OPTS_PROPERTY, "--seed 38596");
+    initAndDoTest("output:spec_output", "_spec", false);
   }
 
   public void testSpecPassed() throws Throwable {
