@@ -8,15 +8,18 @@ describe "Pending" do
     medved.should say("preved")
   end
 
-  it "should pending block" do
-    pending("get sing of krevedko") do
+  it "should pending block", :pending do
+    #pending("get sing of krevedko") do
       krevedko.should be("ya!")
-    end
+    #end
   end
 
-  it "should be fixed pending" do
-    pending("some") do
-      true.should == true
-    end
+  #it "should be fixed pending" do
+  #  pending("some") do`
+  #    expect(true).equal?  true
+  #  end
+  #end
+  pending "should be fixed pending" do
+    expect(true).equal?  true
   end
 end

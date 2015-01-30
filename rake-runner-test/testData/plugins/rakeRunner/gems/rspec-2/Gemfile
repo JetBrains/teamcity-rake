@@ -10,4 +10,4 @@ else
   gem "rake"
 end
 
-gem "rspec", "~> 2.0"
+gem "rspec", "~> 2.0", '< 2.99'

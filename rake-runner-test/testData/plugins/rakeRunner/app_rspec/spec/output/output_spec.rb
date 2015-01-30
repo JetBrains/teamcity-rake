@@ -38,7 +38,7 @@ describe "Output" do
     $stderr.flush
     STDERR.flush
 
-    true.should == true
+    expect(true).to eq(true)
   end
 
   it "should fail" do
@@ -53,7 +53,7 @@ describe "Output" do
     $stderr.flush
     STDERR.flush
 
-    true.should == false
+    expect(true).to eq(false)
   end
 
   it "should error" do

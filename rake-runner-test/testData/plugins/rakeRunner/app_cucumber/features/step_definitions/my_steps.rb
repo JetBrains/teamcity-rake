@@ -2,11 +2,11 @@ Given /^background$/ do
 end
 
 Then /^should pass$/ do
-  1.should == 1
+  expect(1).to eq(1)
 end
 
 Then /^should fail$/ do
-  1.should == 2
+  expect(1).to eq(2)
 end
 
 Then /^should be pending$/ do

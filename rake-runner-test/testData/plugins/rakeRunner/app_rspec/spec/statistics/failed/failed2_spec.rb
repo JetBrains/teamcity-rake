@@ -4,7 +4,7 @@ require "rspec"
 describe "Spec failed" do
 
   it "should failed2" do
-    true.should == false
+    expect(true).to eq(false)
   end
 
 end

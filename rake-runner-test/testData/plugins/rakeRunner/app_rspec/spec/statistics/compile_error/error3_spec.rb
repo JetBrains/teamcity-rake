@@ -9,6 +9,6 @@ describe "Compilation" do
   end
 
   it "should fail in after" do
-    true.should == true
+    expect(true).to eq(true)
   end
 end
