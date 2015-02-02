@@ -52,8 +52,11 @@ public class RSpecBuildLogTest extends AbstractRSpecTest {
 
   public void testSpecIgnored() throws Throwable {
     doTestWithoutLogCheck("stat:ignored", false);
-
-    assertTestsCount(0, 1, 2);
+    if (getRVMGemsetName().equals("rspec-2")) {
+      assertTestsCount(0, 1, 2);
+    } else {
+      assertTestsCount(0, 1, 8);
+    }
   }
 
   public void testSpecCompileError() throws Throwable {
