@@ -1,0 +1,21 @@
+--1--##teamcity[progressMessage 'Starting.. (3 examples)'] NORMAL
+--0--##teamcity[testCount count='3' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testSuiteStarted name='Pending' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testStarted name='Pending should pending method' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testIgnored name='Pending should pending method' message='Pending: get sing of medved' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Pending should pending method' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testStarted name='Pending should pending block' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testIgnored name='Pending should pending block' message='Pending: get sing of krevedko' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Pending should pending block' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testStarted name='Pending should be fixed pending' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Pending should be fixed pending' message='RSpec::Core::Pending::PendingExampleFixedError' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Pending should be fixed pending' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testSuiteFinished name='Pending' timestamp='##TIME##'] NORMAL
+
+--1--3 examples, 1 failure, 0 passed, 2 pending NORMAL
+--1--Finished in ##TIME## NORMAL

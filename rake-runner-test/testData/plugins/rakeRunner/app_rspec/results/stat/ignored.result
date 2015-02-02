@@ -1,5 +1,5 @@
---1--##teamcity[progressMessage 'Starting.. (3 examples)'] NORMAL
---0--##teamcity[testCount count='3' timestamp='##TIME##'] NORMAL
+--1--##teamcity[progressMessage 'Starting.. (9 examples)'] NORMAL
+--0--##teamcity[testCount count='9' timestamp='##TIME##'] NORMAL
 
 --1--##teamcity[testSuiteStarted name='Pending' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
 
@@ -7,15 +7,48 @@
 --1--##teamcity[testIgnored name='Pending should pending method' message='Pending: get sing of medved' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Pending should pending method' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
---1--##teamcity[testStarted name='Pending should pending block' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testIgnored name='Pending should pending block' message='Pending: get sing of krevedko' timestamp='##TIME##'] NORMAL
---1--##teamcity[testFinished name='Pending should pending block' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+--0--##teamcity[testStarted name='Pending should pending block' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--0--##teamcity[testIgnored name='Pending should pending block' message='Pending: get sing of krevedko' timestamp='##TIME##'] NORMAL
+--0--##teamcity[testFinished name='Pending should pending block' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
 --1--##teamcity[testStarted name='Pending should be fixed pending' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
---1--##teamcity[testFailed name='Pending should be fixed pending' message='RSpec::Core::Pending::PendingExampleFixedError' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFailed name='Pending should be fixed pending' message='Expected example to fail since it is pending, but it passed.' details='##STACK_TRACE##' error='true' timestamp='##TIME##'] NORMAL
 --1--##teamcity[testFinished name='Pending should be fixed pending' duration='##DURATION##' timestamp='##TIME##'] NORMAL
 
 --1--##teamcity[testSuiteFinished name='Pending' timestamp='##TIME##'] NORMAL
 
---1--3 examples, 1 failure, 0 passed, 2 pending NORMAL
+--1--##teamcity[testSuiteStarted name='Skip' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testStarted name='Skip should skip method' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testIgnored name='Skip should skip method' message='Pending: get sing of medved' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Skip should skip method' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+--0--There is no medved here!
+
+--1--##teamcity[testStarted name='Skip is a skipped example without body' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testIgnored name='Skip is a skipped example without body' message='Pending: Not yet implemented' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Skip is a skipped example without body' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testStarted name='Skip is skipped' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testIgnored name='Skip is skipped' message='Pending: No reason given' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Skip is skipped' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testStarted name='Skip is skipped using xit' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testIgnored name='Skip is skipped using xit' message='Pending: Temporarily skipped with xit' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Skip is skipped using xit' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testStarted name='Skip is skipped using xspecify' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testIgnored name='Skip is skipped using xspecify' message='Pending: Temporarily skipped with xspecify' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Skip is skipped using xspecify' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testStarted name='Skip is skipped using xexample' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testIgnored name='Skip is skipped using xexample' message='Pending: Temporarily skipped with xexample' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Skip is skipped using xexample' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testStarted name='Skip is skipped true' captureStandardOutput='true' locationHint='##LOCATION_URL##' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testIgnored name='Skip is skipped true' message='Pending: No reason given' timestamp='##TIME##'] NORMAL
+--1--##teamcity[testFinished name='Skip is skipped true' duration='##DURATION##' timestamp='##TIME##'] NORMAL
+
+--1--##teamcity[testSuiteFinished name='Skip' timestamp='##TIME##'] NORMAL
+
+--1--9 examples, 1 failure, 0 passed, 8 pending NORMAL
 --1--Finished in ##TIME## NORMAL

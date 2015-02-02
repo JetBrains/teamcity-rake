@@ -72,7 +72,11 @@ public class RSpecMessagesTest extends AbstractRSpecTest {
 
   public void testSpecIgnored() throws Throwable {
     setPartialMessagesChecker();
-    initAndDoTest("stat:ignored", false);
+    if (getRVMGemsetName().equals("rspec-2")) {
+      initAndDoTest("stat:ignored", ".rspec-2", false);
+    } else {
+      initAndDoTest("stat:ignored", false);
+    }
   }
 
   public void testSpecCompileError() throws Throwable {
