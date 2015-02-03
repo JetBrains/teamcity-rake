@@ -20,6 +20,7 @@ import com.intellij.openapi.util.SystemInfo;
 import jetbrains.buildServer.PartialBuildMessagesChecker;
 import jetbrains.buildServer.RunnerTest2Base;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
+import jetbrains.buildServer.agent.FlowLogger;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.BuildMessagesProcessor;
@@ -459,8 +460,10 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     RunCommandsHelper.runBashScript(LOG, workingDirectory, commands.toArray(new String[commands.size()]));
     FileUtil.copyDir(localCacheDir, cacheDir);
     try {
-      System.out.println("Actual Gemfile.lock:");
-      System.out.println(FileUtil.readText(new File(gemfile.getParent(), "Gemfile.lock")));
+      final FlowLogger fl = LogUtil.getFlowLogger(LOG);
+      fl.activityStarted("Actual Gemfile.lock:", "AGL");
+      fl.message(FileUtil.readText(new File(gemfile.getParent(), "Gemfile.lock")));
+      fl.activityFinished("Actual Gemfile.lock:", "AGL");
     } catch (Exception ignored) {
     }
   }

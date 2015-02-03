@@ -17,13 +17,9 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.execution.configurations.GeneralCommandLine;
-import java.util.concurrent.atomic.AtomicReference;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.SimpleCommandLineProcessRunner;
-import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.FlowLogger;
-import jetbrains.buildServer.agent.NullBuildProgressLogger;
-import jetbrains.buildServer.agent.ServerLoggerFacade;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.apache.log4j.Logger;
@@ -50,14 +46,14 @@ public class RunCommandsHelper {
                                    @NotNull final File workingDirectory,
                                    @Nullable Map<String, String> env,
                                    String... args) {
+    final FlowLogger fl = LogUtil.getFlowLogger(log);
     final GeneralCommandLine cl = new GeneralCommandLine();
     cl.setExePath(command);
     cl.setWorkingDirectory(workingDirectory);
     cl.addParameters(args);
     cl.setEnvParams(env);
-    final FlowLogger fl = getFlowLogger();
     fl.activityStarted("Run " + command, "RunExecutable");
-    log.debug("Running " + command + " with " + Arrays.toString(args) + " at " + workingDirectory.getAbsolutePath());
+    fl.message("Running " + command + " with " + Arrays.toString(args) + " at " + workingDirectory.getAbsolutePath());
     Long start = System.currentTimeMillis();
     final ExecResult result = SimpleCommandLineProcessRunner.runCommand(cl, null);
     Long duration = System.currentTimeMillis() - start;
@@ -66,38 +62,15 @@ public class RunCommandsHelper {
       throw new RuntimeException("Failed to run " + command, e);
     }
     if (result.getExitCode() != 0) {
-      log.error(result.toString());
+      fl.error(result.toString());
       throw new RuntimeException("Non zero exit code of " + command + " Actual code is " + result.getExitCode());
     } else if (log.isDebugEnabled()) {
-      log.debug(result.toString());
+      fl.message(result.toString());
     }
-    log.info("Successfully in " + duration + "msec " + command + " with " + Arrays.toString(args) + " at " + workingDirectory.getAbsolutePath());
+    fl.message("Successfully in " + duration + "msec " + command + " with " + Arrays.toString(args) + " at " + workingDirectory.getAbsolutePath());
     fl.activityFinished("Run " + command, "RunExecutable");
     return duration;
   }
-
-  @NotNull
-  private static FlowLogger getFlowLogger() {
-    FlowLogger facade = ourServerLoggerFacade.get();
-    if (facade == null) {
-      synchronized (ourServerLoggerFacade) {
-        facade = ourServerLoggerFacade.get();
-        if (facade != null) {
-          return facade;
-        }
-        final String buildId = AgentRuntimeProperties.getBuildId();
-        if (buildId == null) {
-          facade = new NullBuildProgressLogger();
-        } else {
-          facade = new ServerLoggerFacade(buildId);
-        }
-        ourServerLoggerFacade.set(facade);
-      }
-    }
-    return facade;
-  }
-
-  private static final AtomicReference<FlowLogger> ourServerLoggerFacade = new AtomicReference<FlowLogger>();
 
   public static long runBashScript(@NotNull final Logger log, @NotNull final File workingDirectory, @NotNull final String... lines) throws IOException {
     final String script = StringUtil.join("\n", lines);
