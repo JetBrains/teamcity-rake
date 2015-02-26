@@ -387,7 +387,10 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
   }
 
   protected void assertTestsCount(int succ, int failed, int ignored) {
-    final ShortStatistics shortStatistics = getLastFinishedBuild().getShortStatistics();
+    assertTestsCount(succ, failed, ignored, getLastFinishedBuild().getShortStatistics());
+  }
+
+  protected void assertTestsCount(int succ, int failed, int ignored, ShortStatistics shortStatistics) {
     final int aSucc = shortStatistics.getPassedTestCount();
     final int aFailed = shortStatistics.getFailedTestCount();
     final int aIgnored = shortStatistics.getIgnoredTestCount();

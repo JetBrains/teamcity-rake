@@ -24,3 +24,6 @@ end
 When /^I do something wrong$/ do
   # do nothing
 end
+
+Given /^.*thing$/ do
+end

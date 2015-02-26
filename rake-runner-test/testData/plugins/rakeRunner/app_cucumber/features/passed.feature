@@ -7,4 +7,15 @@ Feature: Several passed steps
     Then should pass
 
   Scenario: second group of passed steps
-    Then should pass        
+    Then should pass
+
+
+  Scenario: passed group with duplicated task names
+    Given nothing
+    When nothing
+    And nothing
+    Then nothing
+    Given something
+    When something
+    And something
+    Then nothing

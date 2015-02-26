@@ -17,6 +17,9 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
+import jetbrains.buildServer.serverSide.BuildStatistics;
+import jetbrains.buildServer.serverSide.BuildStatisticsOptions;
+import jetbrains.buildServer.serverSide.SBuild;
 import org.jetbrains.annotations.NotNull;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
@@ -49,6 +52,15 @@ public class CucumberBuildLogTest extends AbstractCucumberTest {
   public void testCounts() throws Throwable {
     doTestWithoutLogCheck("stat:features", false);
 
-    assertTestsCount(9, 2, 3);
+    final SBuild build = getLastFinishedBuild();
+
+    final BuildStatistics statNotGrouped = build.getBuildStatistics(
+      new BuildStatisticsOptions(BuildStatisticsOptions.PASSED_TESTS | BuildStatisticsOptions.IGNORED_TESTS | BuildStatisticsOptions.NO_GROUPING_BY_NAME, 0));
+
+    final int duplicatedStepsCount = 8;
+
+    assertTestsCount(9 + duplicatedStepsCount, 2, 3, statNotGrouped);
+    assertTestsCount(9 + duplicatedStepsCount - 1, 2, 3, build.getFullStatistics());
+    assertTestsCount(9 + duplicatedStepsCount - 1, 2, 3, build.getShortStatistics());
   }
 }
