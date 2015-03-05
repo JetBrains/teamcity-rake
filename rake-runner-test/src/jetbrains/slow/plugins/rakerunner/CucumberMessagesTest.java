@@ -45,4 +45,12 @@ public class CucumberMessagesTest extends AbstractCucumberTest {
     setMockingOptions();
     initAndDoTest("stat:features", "_location", false);
   }
+
+  @Test
+  public void testAmpresand() throws Throwable {
+    setPartialMessagesChecker();
+
+    setMockingOptions();
+    initAndDoTest("stat:features", "_ampersand", false);
+  }
 }

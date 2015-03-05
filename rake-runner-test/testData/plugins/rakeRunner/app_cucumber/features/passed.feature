@@ -19,3 +19,6 @@ Feature: Several passed steps
     When something
     And something
     Then nothing
+
+  Scenario: with am'persand
+    Then I should see "La place et l'action des médecines" in the ".nq-breadcrumb" element

@@ -27,3 +27,6 @@ end
 
 Given /^.*thing$/ do
 end
+
+Then /^I should see ".*" in the ".*" element$/ do
+end

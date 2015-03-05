@@ -59,8 +59,8 @@ public class CucumberBuildLogTest extends AbstractCucumberTest {
 
     final int duplicatedStepsCount = 8;
 
-    assertTestsCount(9 + duplicatedStepsCount, 2, 3, statNotGrouped);
-    assertTestsCount(9 + duplicatedStepsCount - 1, 2, 3, build.getFullStatistics());
-    assertTestsCount(9 + duplicatedStepsCount - 1, 2, 3, build.getShortStatistics());
+    assertTestsCount(10 + duplicatedStepsCount, 2, 3, statNotGrouped);
+    assertTestsCount(10 + duplicatedStepsCount - 1, 2, 3, build.getFullStatistics());
+    assertTestsCount(10 + duplicatedStepsCount - 1, 2, 3, build.getShortStatistics());
   }
 }

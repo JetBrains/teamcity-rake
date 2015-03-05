@@ -50,5 +50,5 @@
 --1--    Scenario: Line: 12 $TEST_SUITE$ NORMAL
 --6--     Then should pass $TEST_BLOCK$ NORMAL
 
---1-- 11 scenarios (2 failed, 1 undefined, 1 pending, 7 passed) NORMAL
---1-- 22 steps (2 failed, 1 skipped, 1 undefined, 1 pending, 17 passed) NORMAL
+--1-- 12 scenarios (2 failed, 1 undefined, 1 pending, 8 passed) NORMAL
+--1-- 23 steps (2 failed, 1 skipped, 1 undefined, 1 pending, 18 passed) NORMAL
