@@ -421,6 +421,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
   protected String doRunnerSpecificReplacement(final String expected) {
     String msg = expected.replaceAll("[0-9]{4}-[0-9]{2}-[0-9]{2}('T'|T)[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}[+\\-]{1}[0-9]+", "##TIME##");
     msg = msg.replaceAll("duration ?= ?'[0-9]+'", "duration='##DURATION##'");
+    msg = msg.replaceAll("duration ?= ?'[0-9]*\\Q##OWN_PORT##\\E[0-9]*'", "duration='##DURATION##'");
     if (myWorkingDirectory != null) {
       final String rel = FileUtil.getRelativePath(getCurrentDir().getAbsoluteFile(), myWorkingDirectory.getAbsoluteFile());
       if (rel != null) {
