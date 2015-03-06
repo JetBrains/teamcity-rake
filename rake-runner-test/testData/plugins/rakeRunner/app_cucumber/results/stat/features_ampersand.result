@@ -1,4 +1,4 @@
 ##teamcity[testSuiteStarted name='Feature: Several error steps' locationHint='file:##WORKING_DIR##/features/error.feature:1' timestamp='##TIME##'] NORMAL
 ##teamcity[testSuiteStarted name='Scenario: first group of error steps' locationHint='file:##WORKING_DIR##/features/error.feature:6' timestamp='##TIME##'] NORMAL
 ##teamcity[testStarted name='Then should be error' captureStandardOutput='true' locationHint='file:##WORKING_DIR##/features/error.feature:7' timestamp='##TIME##'] NORMAL
-##teamcity[testStarted name='Then I should see "La place et l|'action des médecines" in the ".nq-breadcrumb" element' captureStandardOutput='true' locationHint='file:##WORKING_DIR##/features/passed.feature:24' timestamp='##TIME##'] NORMAL
+##teamcity[testStarted name='Then I should see "La place et l|'action des medecines" in the ".nq-breadcrumb" element' captureStandardOutput='true' locationHint='file:##WORKING_DIR##/features/passed.feature:24' timestamp='##TIME##'] NORMAL

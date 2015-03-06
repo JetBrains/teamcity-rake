@@ -21,4 +21,4 @@ Feature: Several passed steps
     Then nothing
 
   Scenario: with am'persand
-    Then I should see "La place et l'action des médecines" in the ".nq-breadcrumb" element
+    Then I should see "La place et l'action des medecines" in the ".nq-breadcrumb" element
