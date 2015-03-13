@@ -16,13 +16,13 @@
 
 package jetbrains.buildServer.runner.rakerunner;
 
-import com.intellij.openapi.util.io.FileUtil;
 import jetbrains.buildServer.rakerunner.RakeRunnerBundle;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.runner.BuildFileRunnerConstants;
 import jetbrains.buildServer.serverSide.discovery.BreadthFirstRunnerDiscoveryExtension;
 import jetbrains.buildServer.serverSide.discovery.DiscoveredObject;
 import jetbrains.buildServer.util.CollectionsUtil;
+import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.browser.Element;
 import org.jetbrains.annotations.NotNull;
 

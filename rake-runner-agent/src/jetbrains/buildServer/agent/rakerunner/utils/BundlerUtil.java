@@ -17,7 +17,6 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.io.FileUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -29,6 +28,7 @@ import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
+import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
