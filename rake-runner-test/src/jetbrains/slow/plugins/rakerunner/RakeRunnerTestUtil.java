@@ -17,7 +17,7 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Collection;

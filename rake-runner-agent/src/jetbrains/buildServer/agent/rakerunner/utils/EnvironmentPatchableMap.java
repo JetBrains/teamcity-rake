@@ -16,7 +16,7 @@
 
 package jetbrains.buildServer.agent.rakerunner.utils;
 
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

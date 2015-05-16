@@ -16,7 +16,7 @@
 
 package jetbrains.buildServer.agent.rakerunner;
 
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import java.io.File;
 import java.util.*;
 import jetbrains.buildServer.RunBuildException;

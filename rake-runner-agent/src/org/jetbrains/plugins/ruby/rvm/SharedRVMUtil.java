@@ -19,7 +19,7 @@ package org.jetbrains.plugins.ruby.rvm;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.util.containers.HashMap;
+import java.util.HashMap;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
