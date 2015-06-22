@@ -30,7 +30,7 @@
     </c:when>
     <c:otherwise>
       <props:displayValue name="${BUILD_FILE_KEY}" emptyValue="<empty>" showInPopup="true" popupTitle="Rakefile content"
-                          popupLinkText="view Rakefile content"/>
+                          popupLinkText="view Rakefile content" syntax="rake"/>
     </c:otherwise>
   </c:choose>
 </div>
