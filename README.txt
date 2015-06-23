@@ -16,4 +16,4 @@ limitations under the License.
 ==== TeamCity Rake Runner Plugin ====
 =====================================
   
-See full documentation at http://confluence.jetbrains.com/display/TW/Rake+Runner
+See full documentation at https://confluence.jetbrains.com/display/TW/Rake+Runner
