@@ -34,6 +34,7 @@ import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.agent.ruby.RubySdk;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
+import jetbrains.buildServer.asserts.CommonAsserts;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.serverSide.*;
@@ -151,7 +152,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     if (SystemInfo.isUnix) {
       // Really, RVM may be tested only on linux agents
-      assertTrue(sharedParams.isApplied());
+      assertTrue("RVM shared settings are applied", sharedParams.isApplied());
     }
   }
 
@@ -379,13 +380,13 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
       final String[] paths = envGemPath.split(File.pathSeparator);
       Assert.assertEquals(2, paths.length);
 
-      Assert.assertTrue(paths[0].matches(rvmHomePath + "/gems/" + regexRubyAndGemset), paths[0]);
-      Assert.assertTrue(paths[1].matches(rvmHomePath + "/gems/" + regexRubyAndGlobal), paths[1]);
+      CommonAsserts.then(paths[0]).matches(rvmHomePath + "/gems/" + regexRubyAndGemset);
+      CommonAsserts.then(paths[1]).matches(rvmHomePath + "/gems/" + regexRubyAndGlobal);
     }
 
     final String envGemHome = envs.get("GEM_HOME");
     {
-      Assert.assertTrue(envGemHome.matches(rvmHomePath + "/gems/" + regexRubyAndGemset));
+      CommonAsserts.then(envGemHome).matches(rvmHomePath + "/gems/" + regexRubyAndGemset);
     }
 
     final String envPath = envs.get("PATH");
@@ -394,16 +395,15 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
       final String[] paths = envPath.split(File.pathSeparator);
       Assert.assertTrue(paths.length >= 4);
 
-      Assert.assertTrue(paths[0].matches(rvmHomePath + "/gems/" + regexRubyAndGemset + "/bin"), paths[0]);
-      Assert.assertTrue(paths[1].matches(rvmHomePath + "/gems/" + regexRubyAndGlobal + "/bin"), paths[1]);
-      Assert.assertTrue(paths[2].matches(rvmHomePath + "/rubies/" + regexRuby + "/bin"), paths[2]);
-      Assert.assertEquals(paths[3], rvmHomePath + "/bin");
+      CommonAsserts.then(paths[0]).matches(rvmHomePath + "/gems/" + regexRubyAndGemset + "/bin");
+      CommonAsserts.then(paths[1]).matches(rvmHomePath + "/gems/" + regexRubyAndGlobal + "/bin");
+      CommonAsserts.then(paths[2]).matches(rvmHomePath + "/rubies/" + regexRuby + "/bin");
+      CommonAsserts.then(paths[3]).isEqualTo(rvmHomePath + "/bin");
     }
 
     final String envMyRubyHome = envs.get("MY_RUBY_HOME");
     {
-      Assert.assertNotNull(envMyRubyHome);
-      Assert.assertTrue(envMyRubyHome.matches(rvmHomePath + "/rubies/" + regexRuby), envMyRubyHome);
+      CommonAsserts.then(envMyRubyHome).isNotNull().matches(rvmHomePath + "/rubies/" + regexRuby);
     }
 
 //    final String envBundlePath = envs.get("BUNDLE_PATH");
@@ -414,8 +414,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     final String envRVMRubyString = envs.get("rvm_ruby_string");
     {
-      Assert.assertNotNull(envRVMRubyString);
-      Assert.assertTrue(envRVMRubyString.matches(regexRuby));
+      CommonAsserts.then(envRVMRubyString).isNotNull().matches(regexRuby);
     }
 
 //    Assert.assertEquals(envs.get("GEM_PATH"), rvmHomePath + "/gems/ruby-1.8.7-p249@teamcity:"
