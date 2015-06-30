@@ -18,9 +18,12 @@ package jetbrains.slow.plugins.rakerunner;
 
 import com.google.common.collect.Sets;
 import com.intellij.openapi.util.SystemInfo;
+import java.io.IOException;
+import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.util.*;
+import jetbrains.buildServer.util.impl.Lazy;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,6 +38,33 @@ import java.util.*;
  * @author Vladislav.Rassokhin
  */
 public class RubyVersionsDataProvider {
+  private static final String[] RUBY_VERSION_PRIORITY = new String[]{"ruby-2.1", "ruby-2.0", "ruby-1.9", "ruby-1.8", "jruby"};
+  private static final Lazy<String> ourExistentRVMRubyVersion = new Lazy<String>() {
+    @Nullable
+    @Override
+    protected String createValue() {
+      String property = System.getProperty("ruby.testing.versions");
+      if (property != null) {
+        final List<String> rubies = StringUtil.split(property, " ");
+        final String proposed = getInPriority(rubies, RUBY_VERSION_PRIORITY);
+        if (proposed != null) {
+          return proposed;
+        }
+      }
+      final Properties config = getRunningBuildConfigProperties();
+      if (config != null) {
+        property = config.getProperty("rvm.rubies.list");
+        if (property != null) {
+          final String proposed = getInPriority(StringUtil.split(property, ","), RUBY_VERSION_PRIORITY);
+          if (proposed != null) {
+            return proposed;
+          }
+        }
+      }
+      return "ruby-1.8.7";
+    }
+  };
+
   @DataProvider(name = "ruby-versions")
   public static Iterator<Object[]> getRubyVersionsDP() {
     //noinspection unchecked
@@ -71,11 +101,11 @@ public class RubyVersionsDataProvider {
       final List<String> rubies = StringUtil.split(property, " ");
       return new HashSet<String>(rubies);
     }
-    if (StringUtil.isTrue(System.getProperty("rake.runnner.tests.use.all.rvm.interpreters")) ||
-        StringUtil.isTrue(System.getProperty("rake.runnner.tests.use.all.interpreters"))) {
+    if (StringUtil.isTrue(System.getProperty("rake.runner.tests.use.all.rvm.interpreters")) ||
+        StringUtil.isTrue(System.getProperty("rake.runner.tests.use.all.interpreters"))) {
       if (RakeRunnerTestUtil.isUseRVM()) {
         final SortedSet<String> rubies = RakeRunnerTestUtil.getRvm().getInstalledRubies();
-        // Use latest patchversion
+        // Use latest patch version
         final Map<String, String> m = new HashMap<String, String>();
         for (String ruby : rubies) {
           final String s = ruby.replaceAll("\\-p\\d+", "");
@@ -86,7 +116,7 @@ public class RubyVersionsDataProvider {
         return new TreeSet<String>(m.values());
       } else if (RakeRunnerTestUtil.isUseRbEnv()) {
         final SortedSet<String> rubies = new TreeSet<String>(RakeRunnerTestUtil.getRbenv().getInstalledVersions());
-        // Use latest patchversion
+        // Use latest patch version
         final Map<String, String> m = new HashMap<String, String>();
         for (String ruby : rubies) {
           final String s = ruby.replaceAll("\\-p\\d+", "");
@@ -178,4 +208,33 @@ public class RubyVersionsDataProvider {
     return list.iterator();
   }
 
+  @NotNull
+  protected static String getExistentRVMRubyVersion() {
+    return ourExistentRVMRubyVersion.getValue();
+  }
+
+  private static String getInPriority(final Collection<String> input, String... prefixes) {
+    final TreeSet<String> set = new TreeSet<String>(input);
+    for (String prefix : prefixes) {
+      String result = null;
+      for (String ruby : set) {
+        if (ruby.startsWith(prefix)) {
+          result = ruby;
+        }
+      }
+      if (result != null) return result;
+    }
+    return !set.isEmpty() ? set.iterator().next() : null;
+  }
+
+  @Nullable
+  private static Properties getRunningBuildConfigProperties() {
+    final String property = System.getProperty(AgentRuntimeProperties.AGENT_CONFIGURATION_PARAMS_FILE_PROP);
+    if (property == null) return null;
+    try {
+      return PropertiesUtil.loadProperties(new File(property));
+    } catch (IOException e) {
+      return null;
+    }
+  }
 }

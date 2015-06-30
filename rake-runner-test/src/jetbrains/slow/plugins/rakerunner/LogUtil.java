@@ -29,7 +29,7 @@ public class LogUtil {
 
   /**
    * Provides FlowLogger.
-   * When runned under TeamCity - ServerLoggerFacade used, fallback lo 'log' otherwise.
+   * When runs under TeamCity - ServerLoggerFacade used, fallback lo 'log' otherwise.
    * @param log fallback logger
    * @return see above
    */
@@ -46,7 +46,7 @@ public class LogUtil {
       }
       final String buildId = AgentRuntimeProperties.getBuildId();
       if (buildId == null) {
-        return new LoggerToBuildProgressLoggerAdapder(log);
+        return new LoggerToBuildProgressLoggerAdapter(log);
       }
       final ServerLoggerFacade slf = new ServerLoggerFacade(buildId);
       ourServerLoggerFacade.set(slf);
@@ -54,10 +54,10 @@ public class LogUtil {
     }
   }
 
-  private static class LoggerToBuildProgressLoggerAdapder extends NullBuildProgressLogger {
+  private static class LoggerToBuildProgressLoggerAdapter extends NullBuildProgressLogger {
     private final Logger myLog;
 
-    public LoggerToBuildProgressLoggerAdapder(final Logger log) {
+    public LoggerToBuildProgressLoggerAdapter(final Logger log) {
       myLog = log;
     }
 

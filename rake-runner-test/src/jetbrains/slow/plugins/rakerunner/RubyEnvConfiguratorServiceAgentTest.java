@@ -20,9 +20,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import jetbrains.buildServer.AgentServerFunctionalTestCase;
 import jetbrains.buildServer.agent.*;
@@ -38,10 +36,7 @@ import jetbrains.buildServer.asserts.CommonAsserts;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.serverSide.*;
-import jetbrains.buildServer.util.EventDispatcher;
-import jetbrains.buildServer.util.FileUtil;
-import jetbrains.buildServer.util.StringUtil;
-import jetbrains.buildServer.util.TestFor;
+import jetbrains.buildServer.util.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
@@ -117,8 +112,11 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
   }
 
 
-  @Test
+  @Test(groups = {"unix"})
   public void test_setSharedOptionsRvm() throws IOException {
+    if (!SystemInfo.isUnix) {
+      throw new SkipException("Not a UNIX. RVM support is only for Unix.");
+    }
     final Ref<BuildRunnerContext> contextRef = new Ref<BuildRunnerContext>();
 
     // add listener
@@ -128,8 +126,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     // use rvm
     featureParamsMap.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "manual");
-    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY, "ruby-1.8.7");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY, RubyVersionsDataProvider.getExistentRVMRubyVersion());
     featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_NAME_KEY, "teamcity");
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_CREATE_IF_NON_EXISTS, "true");
 
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
 
@@ -145,15 +144,12 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     assertTrue(sharedParams.isSetted());
     assertEquals(SharedParamsType.RVM, sharedParams.getType());
 
-    assertEquals("ruby-1.8.7", sharedParams.getRVMSdkName());
+    assertEquals(RubyVersionsDataProvider.getExistentRVMRubyVersion(), sharedParams.getRVMSdkName());
     assertEquals("teamcity", sharedParams.getRVMGemsetName());
     assertNull(sharedParams.getInterpreterPath());
     assertNull(sharedParams.getRVMRCPath());
 
-    if (SystemInfo.isUnix) {
-      // Really, RVM may be tested only on linux agents
-      assertTrue("RVM shared settings are applied", sharedParams.isApplied());
-    }
+    assertTrue("RVM shared settings are applied", sharedParams.isApplied());
   }
 
   @Test
@@ -344,12 +340,13 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
     // use rvm
     //final String rvmRubyName = myRubyVersion != null ? myRubyVersion : System.getProperty(RAKE_RUNNER_TESTING_RUBY_VERSION_PROPERTY);
-    final String rvmRubyName = "ruby-1.8.7";
+    final String rvmRubyName = RubyVersionsDataProvider.getExistentRVMRubyVersion();
     final String rvmGemsetName = "teamcity";
 
     featureParamsMap.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "manual");
     featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY, rvmRubyName);
     featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_NAME_KEY, rvmGemsetName);
+    featureParamsMap.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_CREATE_IF_NON_EXISTS, "true");
 
     final SBuildType bt = configureFakeBuild(FakeBuildConfiguration.Feature, featureParamsMap);
 
@@ -364,7 +361,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     RVMPathsSettings.getInstanceEx().initialize(envParamsRef.get());
     assertNotNull(RVMPathsSettings.getInstance());
     final InstalledRVM rvm = RVMPathsSettings.getInstance().getRVM();
-    assertNotNull(rvm);
+    assertNotNull("RVM found", rvm);
     final String rvmHomePath = rvm.getPath();
 
     Assert.assertNotNull(rvmHomePath, "Cannot retrieve RVM home path");
