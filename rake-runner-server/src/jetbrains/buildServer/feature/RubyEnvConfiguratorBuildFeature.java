@@ -116,7 +116,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
                                        @Nullable final String value,
                                        @NotNull final String emptyValue) {
     sb.append("<li>").append(name).append(": ");
-    sb.append(StringUtil.isEmptyOrSpaces(value) ? emptyValue : value);
+    sb.append(StringUtil.escapeHTML(StringUtil.isEmptyOrSpaces(value) ? emptyValue : value, true));
     sb.append("</li>");
   }
 
