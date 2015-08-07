@@ -107,14 +107,6 @@ public class InstalledRVM extends RubyVersionManager {
     // TODO: exec rvm for data collecting
   }
 
-  @NotNull
-  public Collection<String> getRubiesNames() {
-    final List<String> rubies = new ArrayList<String>();
-    String stdout = executeCommandLine(getExecutablePath(), "list", "strings");
-    Collections.addAll(rubies, stdout.split("\n"));
-    return rubies;
-  }
-
   private String getExecutablePath() {
     return myPath + "/bin/rvm";
   }

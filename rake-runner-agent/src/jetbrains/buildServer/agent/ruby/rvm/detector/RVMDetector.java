@@ -52,7 +52,7 @@ public abstract class RVMDetector {
     configuration.addEnvironmentVariable(RVM_PATH_ENV_VARIABLE, rvm.getPath());
 
     // TODO: do not provide this parameter, install ruby if necessary
-    String allVersions = StringUtil.join(",", rvm.getRubiesNames());
+    String allVersions = StringUtil.join(",", rvm.getInstalledRubies());
     configuration.addConfigurationParameter(CONF_RVM_RUBIES_LIST, allVersions);
   }
 }
