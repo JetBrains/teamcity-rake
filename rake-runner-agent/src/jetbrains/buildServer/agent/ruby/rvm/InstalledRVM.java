@@ -181,7 +181,7 @@ public class InstalledRVM extends RubyVersionManager {
 
   @Nullable
   public String getDefaultInterpreter() {
-    return myDefualtInterpreter.getValue();
+    return myDefaultInterpreter.getValue();
   }
 
   private final Lazy<SortedSet<String>> myInstalledRubies = new Lazy<SortedSet<String>>() {
@@ -204,7 +204,7 @@ public class InstalledRVM extends RubyVersionManager {
     }
   };
 
-  private final Lazy<String> myDefualtInterpreter = new Lazy<String>() {
+  private final Lazy<String> myDefaultInterpreter = new Lazy<String>() {
     @Nullable
     @Override
     protected String createValue() {
