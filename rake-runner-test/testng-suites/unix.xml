@@ -12,6 +12,7 @@
     <packages>
       <package name="jetbrains.slow.plugins.rakerunner"/>
       <package name="org.jetbrains.plugins.ruby.rvm"/>
+      <package name="org.jetbrains.plugins.ruby.rvm.util"/>
       <package name="jetbrains.buildServer.agent.ruby.rvm"/>
     </packages>
   </test>
