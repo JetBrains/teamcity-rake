@@ -16,11 +16,14 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import jetbrains.buildServer.AgentServerFunctionalTestCase;
 import jetbrains.buildServer.agent.*;
@@ -36,10 +39,14 @@ import jetbrains.buildServer.asserts.CommonAsserts;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.serverSide.*;
-import jetbrains.buildServer.util.*;
+import jetbrains.buildServer.util.EventDispatcher;
+import jetbrains.buildServer.util.FileUtil;
+import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.util.TestFor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMPathsSettings;
+import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.BeforeMethod;
@@ -365,6 +372,12 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     final String rvmHomePath = rvm.getPath();
 
     Assert.assertNotNull(rvmHomePath, "Cannot retrieve RVM home path");
+
+    // Ensure new gemset created
+    final Pair<String, String> detected = RVMSupportUtil.determineSuitableRVMSdkDist(rvmRubyName, rvmGemsetName, true);
+    Assert.assertNotNull(detected);
+    Assert.assertNotNull(detected.first, "RVM should have interpreter " + rvmRubyName);
+    Assert.assertNotNull(detected.second, "RVM should have gemset '" + rvmGemsetName + "' for interpreter " + rvmRubyName);
 
     // Use some regex
     final String regexRuby = "[^/]*" + rvmRubyName + "[^/@]*";
