@@ -374,7 +374,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     Assert.assertNotNull(rvmHomePath, "Cannot retrieve RVM home path");
 
     // Ensure new gemset created
-    final Pair<String, String> detected = RVMSupportUtil.determineSuitableRVMSdkDist(rvmRubyName, rvmGemsetName, true);
+    final Pair<String, String> detected = RVMSupportUtil.determineSuitableRVMSdkDist(rvmRubyName, rvmGemsetName);
     Assert.assertNotNull(detected);
     Assert.assertNotNull(detected.first, "RVM should have interpreter " + rvmRubyName);
     Assert.assertNotNull(detected.second, "RVM should have gemset '" + rvmGemsetName + "' for interpreter " + rvmRubyName);

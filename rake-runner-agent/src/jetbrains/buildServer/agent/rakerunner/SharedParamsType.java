@@ -102,7 +102,7 @@ public enum SharedParamsType {
 
       // build  dist/gemsets table, match ref with dist. name
       final String gemset = sharedParams.getRVMGemsetName();
-      final Pair<String, String> suitable = RVMSupportUtil.determineSuitableRVMSdkDist(sdkName, gemset, sharedParams.isRVMGemsetCreate());
+      final Pair<String, String> suitable = RVMSupportUtil.determineSuitableRVMSdkDist(sdkName, gemset);
 
       if (suitable.first == null) {
         throw new RakeTasksBuildService.MyBuildFailureException(String.format("RVM interpreter '%s' doesn't exist " +

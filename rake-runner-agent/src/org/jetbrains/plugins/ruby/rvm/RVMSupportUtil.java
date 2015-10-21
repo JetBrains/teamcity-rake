@@ -54,8 +54,7 @@ public class RVMSupportUtil {
    */
   @NotNull
   public static Pair<String, String> determineSuitableRVMSdkDist(@NotNull final String interpreter,
-                                                                 @Nullable final String gemset,
-                                                                 final boolean allowGemsetNotExists) {
+                                                                 @Nullable final String gemset) {
     final SharedRVMUtil.RubyDistToGemsetTable table = getInterpreterDistName2GemSetsTable();
 
     return SharedRVMUtil.determineSuitableRVMSdkDist(interpreter, gemset, table);
