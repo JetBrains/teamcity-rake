@@ -23,9 +23,10 @@ import jetbrains.buildServer.agent.NullBuildProgressLogger;
 import jetbrains.buildServer.agent.ServerLoggerFacade;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.testng.internal.collections.Pair;
 
 public class LogUtil {
-  private static final AtomicReference<ServerLoggerFacade> ourServerLoggerFacade = new AtomicReference<ServerLoggerFacade>();
+  private static final AtomicReference<Pair<Logger, FlowLogger>> ourCachedFlowLogger = new AtomicReference<Pair<Logger, FlowLogger>>();
 
   /**
    * Provides FlowLogger.
@@ -35,22 +36,23 @@ public class LogUtil {
    */
   @NotNull
   public static FlowLogger getFlowLogger(final Logger log) {
-    ServerLoggerFacade facade = ourServerLoggerFacade.get();
-    if (facade != null) {
-      return facade;
+    Pair<Logger, FlowLogger> pair = ourCachedFlowLogger.get();
+    if (pair != null && pair.second() != null) {
+      if (pair.first() == null || log == pair.first()) return pair.second();
     }
-    synchronized (ourServerLoggerFacade) {
-      facade = ourServerLoggerFacade.get();
-      if (facade != null) {
-        return facade;
+    synchronized (ourCachedFlowLogger) {
+      pair = ourCachedFlowLogger.get();
+      if (pair != null && pair.second() != null) {
+        if (pair.first() == null || log == pair.first()) return pair.second();
       }
       final String buildId = AgentRuntimeProperties.getBuildId();
       if (buildId == null) {
-        return new LoggerToBuildProgressLoggerAdapter(log);
+        pair = Pair.<Logger, FlowLogger>create(null, new LoggerToBuildProgressLoggerAdapter(log));
+      } else {
+        pair = Pair.<Logger, FlowLogger>create(log, new ServerLoggerFacade(buildId));
       }
-      final ServerLoggerFacade slf = new ServerLoggerFacade(buildId);
-      ourServerLoggerFacade.set(slf);
-      return slf;
+      ourCachedFlowLogger.set(pair);
+      return pair.second();
     }
   }
 

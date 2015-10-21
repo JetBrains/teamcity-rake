@@ -89,10 +89,10 @@ public abstract class AbstractBundlerBasedRakeRunnerTest extends AbstractRakeRun
           RunCommandsHelper.runExecutable(LOG, new File(bin, "gem.bat").getAbsolutePath(), myWorkingDirectory, env, "install", "bundler");
           RunCommandsHelper.runExecutable(LOG, new File(bin, "bundle.bat").getAbsolutePath(), myWorkingDirectory, env, "install");
         } catch (Throwable e) {
-          LOG.error("Failled to prepare environment: " + e.getMessage(), e);
+          LOG.error("Failed to prepare environment: " + e.getMessage(), e);
         }
       } catch (RakeRunnerTestUtil.InterpreterNotFoundException e) {
-        LOG.error("Failled to prepare environment: " + e.getMessage(), e);
+        LOG.error("Failed to prepare environment: " + e.getMessage(), e);
       }
     }
   }

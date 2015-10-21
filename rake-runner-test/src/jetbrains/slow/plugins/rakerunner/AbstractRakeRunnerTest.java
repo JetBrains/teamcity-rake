@@ -62,6 +62,8 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     final Logger logger = Logger.getLogger("jetbrains.slow.plugins.rakerunner");
     logger.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
     logger.setLevel(Level.WARN);
+    // If running under TC, instantiate ASAP to use proper xml-rpc address
+    LogUtil.getFlowLogger(logger);
   }
 
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
