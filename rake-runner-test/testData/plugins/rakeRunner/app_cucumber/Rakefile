@@ -28,6 +28,8 @@ namespace :bundle do
  end
 end
 
+ENV['CUCUMBER_COLORS'] = ''
+
 begin
 #begin
   gem 'cucumber'
