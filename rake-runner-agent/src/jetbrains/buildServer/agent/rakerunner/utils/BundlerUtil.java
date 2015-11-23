@@ -207,7 +207,7 @@ public class BundlerUtil {
       if (!checkIfDirExists(bundlePath)) {
         // else if local path
         if (dir.startsWith("~")) {
-          bundlePath = dir.replaceFirst("~", OSUtil.getUserHomeFolder());
+          bundlePath = OSUtil.getUserHomeFolder() + dir.substring(1);
         }
         if (!checkIfDirExists(bundlePath)) {
           // else if full path
