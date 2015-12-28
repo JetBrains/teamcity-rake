@@ -26,7 +26,5 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.5" />
   </component>
 </project>
-
