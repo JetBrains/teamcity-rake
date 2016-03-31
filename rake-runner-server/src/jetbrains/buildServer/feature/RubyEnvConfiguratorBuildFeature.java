@@ -127,7 +127,6 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
     defaults.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "unspecified");
     defaults.put(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY, ".rvmrc");
     defaults.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_CREATE_IF_NON_EXISTS, Boolean.TRUE.toString());
-    defaults.put(RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY, ".rbenv-version");
     defaults.put(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
     return defaults;
   }
