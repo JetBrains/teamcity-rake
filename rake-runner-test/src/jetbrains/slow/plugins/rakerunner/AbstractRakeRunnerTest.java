@@ -17,6 +17,11 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.*;
+import java.util.regex.Pattern;
 import jetbrains.buildServer.PartialBuildMessagesChecker;
 import jetbrains.buildServer.RunnerTest2Base;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
@@ -30,7 +35,6 @@ import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.ShortStatistics;
 import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.serverSide.buildLog.LogMessage;
-import jetbrains.buildServer.serverSide.impl.beans.BuildTypeContextsImpl;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.apache.log4j.ConsoleAppender;
@@ -43,12 +47,6 @@ import org.testng.Assert;
 import org.testng.ITest;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.*;
-import java.util.regex.Pattern;
 
 import static jetbrains.buildServer.messages.serviceMessages.ServiceMessage.SERVICE_MESSAGE_START;
 import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
@@ -116,22 +114,11 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
   }
 
   protected void setMessagesTranslationEnabled(boolean enabled) {
-    final BuildTypeContextsImpl context = myFixture.getSingletonService(BuildTypeContextsImpl.class);
-    final BuildMessagesProcessor current = context.getBuildMessagesProcessor();
-    if (enabled) {
-      if (current instanceof AsIsBuildMessagesProcessor) {
-        context.setBuildMessagesProcessor(new BuildMessagesProcessor(getServer()));
-      }
-    } else {
-      if (!(current instanceof AsIsBuildMessagesProcessor)) {
-        context.setBuildMessagesProcessor(new AsIsBuildMessagesProcessor(getServer()));
-      }
+    System.getProperties().remove(BuildMessagesProcessor.TEAMCITY_BUILD_MESSAGES_TRANSLATION_ENABLED_PROP);
+    if (!enabled) {
+      System.setProperty(BuildMessagesProcessor.TEAMCITY_BUILD_MESSAGES_TRANSLATION_ENABLED_PROP, "false");
     }
     myShouldTranslateMessages = enabled;
-  }
-
-  protected boolean getMessagesTranslationEnabled() {
-    return myShouldTranslateMessages;
   }
 
   private void setInterpreterPath() throws RakeRunnerTestUtil.InterpreterNotFoundException {
