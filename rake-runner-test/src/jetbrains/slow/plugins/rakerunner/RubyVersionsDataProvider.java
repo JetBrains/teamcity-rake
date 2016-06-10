@@ -22,6 +22,7 @@ import java.io.IOException;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
+import jetbrains.buildServer.agent.ruby.rvm.detector.RVMDetector;
 import jetbrains.buildServer.util.*;
 import jetbrains.buildServer.util.impl.Lazy;
 import org.jetbrains.annotations.Contract;
@@ -53,7 +54,7 @@ public class RubyVersionsDataProvider {
       }
       final Properties config = getRunningBuildConfigProperties();
       if (config != null) {
-        property = config.getProperty("rvm.rubies.list");
+        property = config.getProperty(RVMDetector.CONF_RVM_RUBIES_LIST);
         if (property != null) {
           final String proposed = getInPriority(StringUtil.split(property, ","), RUBY_VERSION_PRIORITY);
           if (proposed != null) {
