@@ -39,8 +39,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
 
-  public static final String CUSTOM_EXECUTABLE = "/bin/sh";
-  public static final String SCRIPT_PERMISSIONS = "u+x";
+  private static final String CUSTOM_EXECUTABLE = "/bin/sh";
+  private static final String SCRIPT_PERMISSIONS = "u+x";
 
   @NotNull
   public ProgramCommandLine process(@NotNull final BuildRunnerContext context, @NotNull final ProgramCommandLine origCommandLine)
@@ -64,9 +64,9 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
 
     // Remove some env variables
     final Map<String, String> environment = new HashMap<String, String>(origCommandLine.getEnvironment());
-    String envsToUnserStr = context.getRunnerParameters().get(RubyEnvConfiguratorService.ENVS_TO_UNSET_PARAM);
-    if (envsToUnserStr != null) {
-      List<String> envs = StringUtil.split(envsToUnserStr, ",");
+    String envsToUnsetStr = context.getRunnerParameters().get(RubyEnvConfiguratorService.ENVS_TO_UNSET_PARAM);
+    if (envsToUnsetStr != null) {
+      List<String> envs = StringUtil.split(envsToUnsetStr, ",");
       for (String key : envs) {
         environment.remove(key);
       }
