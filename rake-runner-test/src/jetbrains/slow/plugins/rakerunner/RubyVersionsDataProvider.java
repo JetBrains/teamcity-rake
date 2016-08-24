@@ -62,7 +62,7 @@ public class RubyVersionsDataProvider {
           }
         }
       }
-      return "ruby-1.8.7";
+      return "ruby-2.2.5";
     }
   };
 
@@ -132,13 +132,19 @@ public class RubyVersionsDataProvider {
     return new HashSet<String>() {
       {
         if (RakeRunnerTestUtil.isUseRVM()) {
-          add("ruby-1.9.3");
-          add("ruby-2.0.0");
+          add("ruby-2.0");
+          add("ruby-2.1");
+          add("ruby-2.2");
+          add("ruby-2.3");
+          add("jruby-1.7");
           add("jruby");
         } else if (RakeRunnerTestUtil.isUseRbEnv()) {
-          add("1.9.3-p551");
-          add("2.1.5");
-          add("jruby-1.7.16.1");
+          add("2.0.0-p648");
+          add("2.1.10");
+          add("2.2.5");
+          add("2.3.1");
+          add("jruby-1.7.25");
+          add("jruby-9.1.2.0");
         }
       }
     };
