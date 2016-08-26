@@ -16,43 +16,28 @@
 
 package jetbrains.slow.plugins.rakerunner;
 
-import java.util.concurrent.atomic.AtomicReference;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.FlowLogger;
 import jetbrains.buildServer.agent.NullBuildProgressLogger;
 import jetbrains.buildServer.agent.ServerLoggerFacade;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.testng.internal.collections.Pair;
 
 public class LogUtil {
-  private static final AtomicReference<Pair<Logger, FlowLogger>> ourCachedFlowLogger = new AtomicReference<Pair<Logger, FlowLogger>>();
-
   /**
    * Provides FlowLogger.
    * When runs under TeamCity - ServerLoggerFacade used, fallback lo 'log' otherwise.
+   *
    * @param log fallback logger
    * @return see above
    */
   @NotNull
   public static FlowLogger getFlowLogger(final Logger log) {
-    Pair<Logger, FlowLogger> pair = ourCachedFlowLogger.get();
-    if (pair != null && pair.second() != null) {
-      if (pair.first() == null || log == pair.first()) return pair.second();
-    }
-    synchronized (ourCachedFlowLogger) {
-      pair = ourCachedFlowLogger.get();
-      if (pair != null && pair.second() != null) {
-        if (pair.first() == null || log == pair.first()) return pair.second();
-      }
-      final String buildId = AgentRuntimeProperties.getBuildId();
-      if (buildId == null) {
-        pair = Pair.<Logger, FlowLogger>create(null, new LoggerToBuildProgressLoggerAdapter(log));
-      } else {
-        pair = Pair.<Logger, FlowLogger>create(log, new ServerLoggerFacade(buildId));
-      }
-      ourCachedFlowLogger.set(pair);
-      return pair.second();
+    final String buildId = AgentRuntimeProperties.getBuildId();
+    if (buildId == null) {
+      return new LoggerToBuildProgressLoggerAdapter(log);
+    } else {
+      return new ServerLoggerFacade(buildId);
     }
   }
 
