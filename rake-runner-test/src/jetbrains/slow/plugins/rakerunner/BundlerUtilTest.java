@@ -88,8 +88,8 @@ public class BundlerUtilTest extends AbstractRakeRunnerTest {
     initAndDoTest("check", "_wd1", true, getTestDataApp(), wd1);
     initAndDoTest("check", "_wd2", true, getTestDataApp(), wd2);
   }
-  @Test
 
+  @Test
   @TestFor(issues = "TW-31718")
   public void testDetermineGemfilePathOldStyle() throws Throwable {
     getBuildType().addBuildParameter(new SimpleParameter(RakeRunnerConstants.GEMFILE_RESOLVE_IN_CHECKOUT_DIRECTORY, "true"));

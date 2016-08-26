@@ -477,7 +477,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
       );
     } else if (RakeRunnerTestUtil.isUseRbEnv()) {
       RunCommandsHelper.runBashScript(LOG, getTempsContainerDir(),
-                                      "rbnev shell " + sdk,
+                                      "rbenv shell " + sdk,
                                       "gem which bundler || gem install bundler"
       );
     } else {
