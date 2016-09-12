@@ -58,7 +58,7 @@
       <label for="custom1">Path to a Rakefile:</label>
     </th>
     <td>
-      <div class="completionIconWrapper">
+      <div class="posRel">
         <props:textProperty name="${BUILD_FILE_PATH_KEY}" className="longField"/>
         <bs:vcsTree fieldId="${BUILD_FILE_PATH_KEY}"/>
       </div>

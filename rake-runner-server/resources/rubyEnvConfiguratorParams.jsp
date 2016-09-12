@@ -28,7 +28,7 @@
 </style>
 
 <tr>
-  <th colspan="2">
+  <th>
     Configure Ruby environment via <bs:help file="Ruby+Environment+Configurator"/>
   </th>
   <td>
@@ -53,7 +53,7 @@
   <th>
     <label for="${UI_RUBY_SDK_PATH_KEY}">Interpreter path:</label>
   </th>
-  <td colspan="2" class="completionIconWrapper">
+  <td>
     <props:textProperty name="${UI_RUBY_SDK_PATH_KEY}" className="longField"/>
     <span class="smallNote">Leave empty to search interpreter in the <strong>PATH</strong> environment variable.</span>
   </td>
@@ -61,19 +61,16 @@
 
 <%-- RVM --%>
 <tr class="rec-container" id="rec-rvm-container-manual-1">
-  <th colspan="2">
+  <th>
     <forms:radioButton name="REC_RVM_MODE" onclick="BS.RubyEC.onFormChange()" value="manual" id="rvm_manual" checked="true"/>
     <label for="rvm_manual">Interpreter and gemset</label>
   </th>
-  <td class="completionIconWrapper">
-
-  </td>
 </tr>
 <tr class="rec-container" id="rec-rvm-container-manual-2">
   <th>
     <label for="${UI_RVM_SDK_NAME_KEY}">Interpreter name: <l:star/></label>
   </th>
-  <td colspan="2" class="completionIconWrapper">
+  <td>
     <props:textProperty name="${UI_RVM_SDK_NAME_KEY}" className="longField"/>
     <span class="error" id="error_${UI_RVM_SDK_NAME_KEY}"></span>
     <span class="smallNote">E.g.: <strong>ruby-1.8.7-p249</strong>, <strong>jruby-1.4.0</strong> or <strong>system</strong></span>
@@ -83,7 +80,7 @@
   <th>
     <label for="${UI_RVM_GEMSET_NAME_KEY}">Gemset:</label>
   </th>
-  <td colspan="2" class="completionIconWrapper">
+  <td>
     <props:textProperty name="${UI_RVM_GEMSET_NAME_KEY}" className="longField"/>
     <span class="smallNote">Leave empty to use default gemset.</span>
     <props:checkboxProperty name="${UI_RVM_GEMSET_CREATE_IF_NON_EXISTS}"/>
@@ -95,8 +92,8 @@
     <forms:radioButton name="REC_RVM_MODE" onclick="BS.RubyEC.onFormChange()" value="rvmrc" id="rvm_rvmrc"/>
     <label for="rvm_manual">Path to a&nbsp;'.rvmrc'&nbsp;file:</label>
   </th>
-  <td colspan="2">
-    <div class="completionIconWrapper">
+  <td>
+    <div class="posRel">
       <props:textProperty name="${UI_RVM_RVMRC_PATH_KEY}" className="longField"/>
       <bs:vcsTree fieldId="${UI_RVM_RVMRC_PATH_KEY}"/>
     </div>
@@ -109,8 +106,8 @@
     <forms:radioButton name="REC_RVM_MODE" onclick="BS.RubyEC.onFormChange()" value="ruby_version" id="rvm_ruby_version"/>
     <label for="rvm_manual">Path to a directory with '.ruby-version'<br/> and '.ruby-gemset'&nbsp;files:</label>
   </th>
-  <td colspan="2">
-    <div class="completionIconWrapper">
+  <td>
+    <div class="posRel">
       <props:textProperty name="${UI_RVM_RUBY_VERSION_PATH_KEY}" className="longField"/>
       <bs:vcsTree fieldId="${UI_RVM_RUBY_VERSION_PATH_KEY}"/>
     </div>
@@ -125,7 +122,7 @@
     <forms:radioButton name="REC_RBENV_MODE" onclick="BS.RubyEC.onFormChange()" value="manual" id="rbenv_manual" checked="true"/>
     <label for="rbenv_manual">Interpreter version:</label>
   </th>
-  <td colspan="2">
+  <td>
     <props:textProperty name="${UI_RBENV_VERSION_NAME_KEY}"/>
     <span class="smallNote">E.g.: <strong>1.9.3-p286</strong> or <strong>jruby-1.7.0</strong></span>
     <span class="error" id="error_${UI_RBENV_VERSION_NAME_KEY}"></span>
@@ -136,8 +133,8 @@
     <forms:radioButton name="REC_RBENV_MODE" onclick="BS.RubyEC.onFormChange()" value="file" id="rbenv_file"/>
     <label for="rbenv_file">Path to a directory with '.ruby-version'<br/> or '.rbenv-version'&nbsp;file:</label>
   </th>
-  <td colspan="2">
-    <div class="completionIconWrapper">
+  <td>
+    <div class="posRel">
       <props:textProperty name="${UI_RBENV_FILE_PATH_KEY}" className="longField"/>
       <bs:vcsTree fieldId="${UI_RBENV_FILE_PATH_KEY}"/>
     </div>
@@ -148,7 +145,7 @@
 
 <%-- For all--%>
 <tr class="rec-container" id="rec-check-container">
-  <td colspan="3">
+  <td colspan="2">
     <props:checkboxProperty name="${UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY}"/>
     <label for="${UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY}">Fail build if Ruby interpreter was not found</label>
   </td>
