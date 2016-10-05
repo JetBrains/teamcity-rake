@@ -20,6 +20,7 @@ import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.FlowLogger;
 import jetbrains.buildServer.agent.NullBuildProgressLogger;
 import jetbrains.buildServer.agent.ServerLoggerFacade;
+import jetbrains.buildServer.agent.impl.ServerLogger;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +38,7 @@ public class LogUtil {
     if (buildId == null) {
       return new LoggerToBuildProgressLoggerAdapter(log);
     } else {
-      return new ServerLoggerFacade(buildId);
+      return new ServerLoggerFacade(ServerLogger.getLoggerInstance(buildId, AbstractRakeRunnerTest.getAgentOwnPort()), buildId);
     }
   }
 

@@ -60,8 +60,6 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     final Logger logger = Logger.getLogger("jetbrains.slow.plugins.rakerunner");
     logger.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
     logger.setLevel(Level.WARN);
-    // If running under TC, instantiate ASAP to use proper xml-rpc address
-    LogUtil.getFlowLogger(logger);
   }
 
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
@@ -84,6 +82,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
   @BeforeMethod
   @Override
   protected void setUp1() throws Throwable {
+    setAgentOwnPort();
     super.setUp1();
     setMockingOptions(FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);
     setMessagesTranslationEnabled(false);
@@ -103,6 +102,30 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
 
     getBuildType().addRunParameter(
       new SimpleParameter(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY, RakeRunnerConstants.CURRENT_CONFIG_VERSION));
+  }
+
+  private static int ourAgentOwnPort = 0;
+  private static void setAgentOwnPort() {
+    if (ourAgentOwnPort != 0) {
+      return;
+    }
+    String property = System.getProperty(AgentRuntimeProperties.OWN_PORT);
+    if (property == null) {
+      ourAgentOwnPort = 9090;
+    }
+    try {
+      ourAgentOwnPort = Integer.parseInt(property);
+    } catch (NumberFormatException e) {
+      ourAgentOwnPort = 9090;
+    }
+  }
+
+  public static int getAgentOwnPort() {
+    if (ourAgentOwnPort == 0) {
+      new Throwable("AbstractRakeRunnerTest.getAgentOwnPort called to early").printStackTrace(System.err);
+      return 9090;
+    }
+    return ourAgentOwnPort;
   }
 
   protected void setRubyVersion(@NotNull final String rubyVersion) {
