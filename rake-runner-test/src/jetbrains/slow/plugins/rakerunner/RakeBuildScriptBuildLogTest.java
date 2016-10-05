@@ -39,7 +39,7 @@ public class RakeBuildScriptBuildLogTest extends AbstractRakeRunnerTest {
     setRubyVersion(ruby);
   }
 
-  @BeforeClass(groups = "unix")
+  @BeforeClass
   public void prepareEnvironment() throws Exception {
     if (!SystemInfo.isUnix) {
       return;
