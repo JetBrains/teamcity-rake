@@ -13,8 +13,7 @@
     <orderEntry type="library" name="Test Libs" level="project" />
     <orderEntry type="library" name="TeamCity-tests-API" level="project" />
     <orderEntry type="library" name="TeamCity server runtime" level="project" />
-    <orderEntry type="library" name="org.testng:testng:6.8.5" level="project" />
+    <orderEntry type="library" name="org.testng:testng:6.8.21" level="project" />
     <orderEntry type="library" name="TeamCity agent runtime" level="project" />
   </component>
 </module>
-
