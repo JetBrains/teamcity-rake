@@ -41,7 +41,6 @@
 
 --1-- Feature: Several passed examples $TEST_SUITE$ NORMAL
 --1--  Scenario Outline: passed tests examples $TEST_SUITE$ NORMAL
---1--   Then should <smth> # features/
 --1--   Examples: $TEST_SUITE$ NORMAL
 --1--    Scenario: Line: 11 $TEST_SUITE$ NORMAL
 --6--     Then should pass $TEST_BLOCK$ NORMAL
