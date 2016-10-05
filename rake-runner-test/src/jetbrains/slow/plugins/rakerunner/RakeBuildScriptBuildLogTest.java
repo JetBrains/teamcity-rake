@@ -17,15 +17,13 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
+import java.io.File;
 import jetbrains.buildServer.util.FileUtil;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Factory;
 import org.testng.annotations.Test;
-
-import java.io.File;
 
 /**
  * @author Roman Chernyatchik
@@ -33,25 +31,30 @@ import java.io.File;
 @Test
 public class RakeBuildScriptBuildLogTest extends AbstractRakeRunnerTest {
   private static final Logger LOG = Logger.getLogger(RakeBuildScriptBuildLogTest.class);
-
   @Factory(dataProviderClass = RubyVersionsDataProvider.class, dataProvider = "ruby-versions")
   public RakeBuildScriptBuildLogTest(@NotNull final String ruby) {
     setRubyVersion(ruby);
   }
 
-  @BeforeClass
-  public void prepareEnvironment() throws Exception {
-    if (!SystemInfo.isUnix) {
-      return;
+  private boolean prepared;
+  public void doPrepareEnvironment() throws Exception {
+    if (prepared) return;
+    try {
+      if (!SystemInfo.isUnix) {
+        return;
+      }
+      final File gemfile = getTestDataPath("gems/" + RakeRunnerTestUtil.DEFAULT_GEMSET_NAME + "/Gemfile");
+      doPrepareGemset(getRubyVersion(), RakeRunnerTestUtil.DEFAULT_GEMSET_NAME, LOG, gemfile);
+      FileUtil.delete(new File(gemfile.getParentFile(), "Gemfile.lock"));
+    } finally {
+      prepared = true;
     }
-    final File gemfile = getTestDataPath("gems/" + RakeRunnerTestUtil.DEFAULT_GEMSET_NAME + "/Gemfile");
-    doPrepareGemset(getRubyVersion(), RakeRunnerTestUtil.DEFAULT_GEMSET_NAME, LOG, gemfile);
-    FileUtil.delete(new File(gemfile.getParentFile(), "Gemfile.lock"));
   }
 
   @BeforeMethod
   @Override
   protected void setUp1() throws Throwable {
+    doPrepareEnvironment();
     super.setUp1();
     setMessagesTranslationEnabled(true);
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
