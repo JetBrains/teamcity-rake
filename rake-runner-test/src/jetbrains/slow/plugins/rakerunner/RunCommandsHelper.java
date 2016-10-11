@@ -53,23 +53,26 @@ public class RunCommandsHelper {
     cl.addParameters(args);
     cl.setEnvParams(env);
     fl.activityStarted("Run " + command, "RunExecutable");
-    fl.message("Running " + command + " with " + Arrays.toString(args) + " at " + workingDirectory.getAbsolutePath());
-    Long start = System.currentTimeMillis();
-    final ExecResult result = SimpleCommandLineProcessRunner.runCommand(cl, null);
-    Long duration = System.currentTimeMillis() - start;
-    final Throwable e = result.getException();
-    if (e != null) {
-      throw new RuntimeException("Failed to run " + command, e);
+    try {
+      fl.message("Running " + command + " with " + Arrays.toString(args) + " at " + workingDirectory.getAbsolutePath());
+      Long start = System.currentTimeMillis();
+      final ExecResult result = SimpleCommandLineProcessRunner.runCommand(cl, null);
+      Long duration = System.currentTimeMillis() - start;
+      final Throwable e = result.getException();
+      if (e != null) {
+        throw new RuntimeException("Failed to run " + command, e);
+      }
+      if (result.getExitCode() != 0) {
+        fl.error(result.toString());
+        throw new RuntimeException("Non zero exit code of " + command + " Actual code is " + result.getExitCode());
+      } else if (log.isDebugEnabled()) {
+        fl.message(result.toString());
+      }
+      fl.message("Successfully in " + duration + "msec " + command + " with " + Arrays.toString(args) + " at " + workingDirectory.getAbsolutePath());
+      return duration;
+    } finally {
+      fl.activityFinished("Run " + command, "RunExecutable");
     }
-    if (result.getExitCode() != 0) {
-      fl.error(result.toString());
-      throw new RuntimeException("Non zero exit code of " + command + " Actual code is " + result.getExitCode());
-    } else if (log.isDebugEnabled()) {
-      fl.message(result.toString());
-    }
-    fl.message("Successfully in " + duration + "msec " + command + " with " + Arrays.toString(args) + " at " + workingDirectory.getAbsolutePath());
-    fl.activityFinished("Run " + command, "RunExecutable");
-    return duration;
   }
 
   public static long runBashScript(@NotNull final Logger log, @NotNull final File workingDirectory, @NotNull final String... lines) throws IOException {
