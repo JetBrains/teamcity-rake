@@ -115,6 +115,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     }
     try {
       ourAgentOwnPort = Integer.parseInt(property);
+      if (ourAgentOwnPort == 12345) ourAgentOwnPort = 9090;
     } catch (NumberFormatException e) {
       ourAgentOwnPort = 9090;
     }
