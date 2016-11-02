@@ -17,6 +17,12 @@
 package jetbrains.buildServer.agent.rakerunner.utils;
 
 import com.intellij.openapi.util.Pair;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.BuildRunnerContext;
@@ -30,13 +36,6 @@ import jetbrains.buildServer.util.VersionComparatorUtil;
 import jetbrains.buildServer.util.filters.Filter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
 
@@ -110,9 +109,15 @@ public class RubySDKUtil {
 
         final String version;
         if (!matcher.find()) {
-          final String msg = "Cannot determine gem version: " + gemNamePrefix + dirtyVersion
-                             + "'(" + gemPath + ") gem. Please submit a feature request.";
+          final String msg = "Cannot determine gem version: " + gemNamePrefix + dirtyVersion + " (" + gemPath + ") gem. Please submit a feature request.";
           throw new RakeTasksBuildService.MyBuildFailureException(msg);
+        }
+        if (matcher.start() != 0) {
+          // Probably another gem with same prefix
+          String middle = dirtyVersion.substring(0, matcher.start());
+          if (middle.length() > 1 && middle.endsWith("-")) {
+            continue;
+          }
         }
         version = matcher.group();
 
