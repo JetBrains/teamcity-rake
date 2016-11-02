@@ -6,6 +6,7 @@
       <class name="jetbrains.buildServer.feature.RubyEnvConfiguratorDiscoveryExtensionTest"/>
       <class name="jetbrains.buildServer.runner.rakerunner.RakeRunnerRunTypeTest"/>
       <class name="jetbrains.buildServer.runner.rakerunner.RakeRunnerDiscoveryExtensionTest"/>
+      <class name="jetbrains.buildServer.agent.rakerunner.utils.RubySDKUtilTest"/>
     </classes>
   </test>
 </suite>
