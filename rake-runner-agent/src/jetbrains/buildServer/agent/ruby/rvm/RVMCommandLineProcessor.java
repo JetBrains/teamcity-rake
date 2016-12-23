@@ -30,9 +30,11 @@ import jetbrains.buildServer.agent.runner.ProgramCommandLine;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConfiguration;
 import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.log.Loggers;
+import jetbrains.buildServer.messages.serviceMessages.MapSerializerUtil;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Vladislav.Rassokhin
@@ -160,17 +162,61 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
   private static String createOriginalCommandLine(@NotNull final ProgramCommandLine commandLine) throws RunBuildException {
     StringBuilder sb = new StringBuilder();
     sb.append(commandLine.getExecutablePath());
-    for (String arg : commandLine.getArguments()) {
-      sb.append(" ");
-      final boolean hasSpaces = arg.indexOf(' ') != -1;
-      if (hasSpaces) {
+    List<String> arguments = commandLine.getArguments();
+    if (!arguments.isEmpty()) {
+      sb.append(' ');
+      doFormatShellArguments(sb, arguments);
+    }
+    return sb.toString();
+  }
+
+  static void doFormatShellArguments(final StringBuilder sb, final List<String> arguments) {
+    for (int i = 0; i < arguments.size(); i++) {
+      String arg = arguments.get(i);
+      if (i != 0) sb.append(' ');
+      final boolean hasSpecialCharacters = arg.isEmpty() || StringUtil.containsAnyChar(arg, " !\"$&'()*,:;<=>?@[\\]^`{|}");
+      if (hasSpecialCharacters) {
         sb.append("\"");
       }
-      sb.append(StringUtil.escapeQuotes(arg));
-      if (hasSpaces) {
+      sb.append(escapeShellArgument(arg));
+      if (hasSpecialCharacters) {
         sb.append("\"");
       }
     }
-    return sb.toString();
+  }
+
+  @NotNull
+  static String escapeShellArgument(final String arg) {
+    return StringUtil.escapeStr(arg, new StringUtil.EscapeInfoProvider2() {
+      @Nullable
+      @Override
+      public String escape(final char c) {
+        switch (c) {
+          case '\"':
+            return "\"";
+          case '$':
+            return "$";
+          case '`':
+            return "`";
+          case '\\':
+            return "\\";
+          case '\n':
+            return "\n";
+          default:
+            return null;
+        }
+      }
+
+      @Nullable
+      @Override
+      public MapSerializerUtil.UnescapeResult unescape(@NotNull final String str, final int startPos) {
+        return null;
+      }
+
+      @Override
+      public char escapeCharacter() {
+        return '\\';
+      }
+    });
   }
 }
