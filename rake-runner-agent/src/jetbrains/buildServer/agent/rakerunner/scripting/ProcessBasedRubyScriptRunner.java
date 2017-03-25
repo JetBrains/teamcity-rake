@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@
 package jetbrains.buildServer.agent.rakerunner.scripting;
 
 import com.intellij.openapi.diagnostic.Logger;
+import java.io.File;
+import java.io.PrintStream;
+import java.util.Map;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvironmentPatchableMap;
 import jetbrains.buildServer.agent.rakerunner.utils.RunnerUtil;
@@ -24,10 +27,6 @@ import jetbrains.buildServer.agent.ruby.RubySdk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.rvm.RVMSupportUtil;
-
-import java.io.File;
-import java.io.PrintStream;
-import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik

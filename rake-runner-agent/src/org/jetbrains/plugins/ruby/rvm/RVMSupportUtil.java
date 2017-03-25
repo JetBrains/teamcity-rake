@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2016 JetBrains s.r.o.
+ * Copyright 2000-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@
 package org.jetbrains.plugins.ruby.rvm;
 
 import com.intellij.openapi.util.Pair;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import jetbrains.buildServer.ExecResult;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.agent.rakerunner.utils.EnvUtil;
@@ -27,10 +30,6 @@ import jetbrains.buildServer.agent.ruby.SdkUtil;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Roman.Chernyatchik
