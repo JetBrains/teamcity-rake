@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="RakeRunner Suite : Windows" configfailurepolicy="continue">
+<suite name="RakeRunner Suite : Windows" configfailurepolicy="continue" group-by-instances="true">
   <suite-files>
     <suite-file path="server-side.xml"/>
   </suite-files>

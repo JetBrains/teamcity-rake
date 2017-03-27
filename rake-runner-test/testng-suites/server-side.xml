@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="RakeRunner Suite : Server Side" configfailurepolicy="continue">
+<suite name="RakeRunner Suite : Server Side" configfailurepolicy="continue" group-by-instances="true">
   <test name="RakeRunner Suite : Server Side">
     <classes>
       <class name="jetbrains.buildServer.feature.RubyEnvConfiguratorBuildFeatureTest"/>
