@@ -3,10 +3,10 @@ Rake tasks runner support for TeamCity 4.x and newer
 =============
 1. Build
  * Checkout ruby sources from https://github.com/JetBrains/intellij-plugins/tree/master/ruby-testing/src/rb/testing into "lib/rb" directory
- * Open project in Intellij IDEA (http://jetbrains.com/idea)
- * In IDEA configure TeamCityDistribution Path Variable. It should point to directory containing TeamCity.
-      You may download and unpack TeamCity-XXXXX.tar.gz (http://jetbrains.com/teamcity) into some folder.
-      You may read more about Path Variables in IDEA help.
+ * Open project in IntelliJ IDEA (https://jetbrains.com/idea)
+ * In IntelliJ IDEA configure TeamCityDistribution Path Variable. It should point to directory containing TeamCity.
+      You may download and unpack TeamCity-XXXXX.tar.gz (https://jetbrains.com/teamcity) into some folder.
+      You may read more about Path Variables in IntelliJ IDEA help.
  * Build -> Build Artifacts... -> plugin_zip
 
 2. Deploying
