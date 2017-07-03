@@ -35,7 +35,7 @@ public class RubySDKUtilTest extends BaseTestCase {
   public void testFindGemsByNameDoesNotReturnLongerNamesWithPrefix() throws Exception {
     File tempDir = createTempDir();
     File gems = createGems(tempDir, "bundler-1.10.0", "bundler-1.12.5", "bundler-unload-1.0.2");
-    String gemsBasePath = FileUtil.toSystemIndependentName(gems.getAbsolutePath()) + "/";
+    String gemsBasePath = gems.getAbsolutePath() + File.separator;
     List<Pair<String, String>> gemsByName = RubySDKUtil.findGemsByName("bundler", new String[]{tempDir.getAbsolutePath()});
     List<Pair<String, String>> converted = CollectionsUtil.convertCollection(gemsByName, new Converter<Pair<String, String>, Pair<String, String>>() {
       @Override
