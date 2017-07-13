@@ -58,10 +58,9 @@
       <label for="custom1">Path to a Rakefile:</label>
     </th>
     <td>
-      <div class="posRel">
-        <props:textProperty name="${BUILD_FILE_PATH_KEY}" className="longField"/>
-        <bs:vcsTree fieldId="${BUILD_FILE_PATH_KEY}"/>
-      </div>
+      <props:textProperty name="${BUILD_FILE_PATH_KEY}" className="longField">
+        <jsp:attribute name="afterTextField"><bs:vcsTree fieldId="${BUILD_FILE_PATH_KEY}"/></jsp:attribute>
+      </props:textProperty>
       <span class="error" id="error_${BUILD_FILE_PATH_KEY}"></span>
       <span class="smallNote">Enter Rakefile path if you don't want to use a default one. Specified path should be relative to the checkout directory.</span>
     </td>
