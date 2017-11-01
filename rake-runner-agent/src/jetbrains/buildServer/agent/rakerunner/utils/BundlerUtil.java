@@ -42,7 +42,7 @@ import static jetbrains.buildServer.rakerunner.RakeRunnerConstants.CUSTOM_GEMFIL
  */
 public class BundlerUtil {
   private static final String BUNDLER_GEM_NAME = "bundler";
-  private static final String BUNDLE_BIN_PATH_ENV_VAR = "BUNDLE_BIN_PATH";
+  static final String BUNDLE_BIN_PATH_ENV_VAR = "BUNDLE_BIN_PATH";
   private static final String BUNDLE_GEMFILE_ENV_VAR = "BUNDLE_GEMFILE";
   private static final Pattern BUNDLE_PATH_PATTERN = Pattern.compile("^\\s*BUNDLE_PATH:\\s*(.*)$", Pattern.MULTILINE);
   private static final String BUNDLE_FOLDER = ".bundle";
@@ -296,15 +296,25 @@ public class BundlerUtil {
     OSUtil.appendToRUBYLIBEnvVariable(getCanonicalPath(libFolder), runnerEnvParams);
   }
 
-  private static void setBundleBinPath(@NotNull final Map<String, String> runnerEnvParams,
-                                       @NotNull final String bundlerGemRootPath)
+  static void setBundleBinPath(@NotNull final Map<String, String> runnerEnvParams,
+                                      @NotNull final String bundlerGemRootPath)
     throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
     if (StringUtil.isEmpty(runnerEnvParams.get(BUNDLE_BIN_PATH_ENV_VAR))) {
       // if user doesn't overload bundle bin path
 
-      final File binFolder = new File(bundlerGemRootPath + File.separator + "bin");
-      checkIfFolderExist(binFolder);
-      runnerEnvParams.put(BUNDLE_BIN_PATH_ENV_VAR, getCanonicalPath(binFolder));
+      // Modern bundler:
+      // Starting from 1.11.0 is
+      // BUNDLE_BIN_PATH=/Users/vlad/.rbenv/versions/2.4.2/lib/ruby/gems/2.4.0/gems/bundler-1.12.6/exe/bundle
+      // In 1.0.0 and newer
+      // BUNDLE_BIN_PATH=/Users/vlad/.rbenv/versions/2.4.2/lib/ruby/gems/2.4.0/gems/bundler-1.7.15/bin/bundle
+      // In 0.9 without 'bundle' ???
+
+      final File bundle = FileUtil2.getFirstExistChild(new File(bundlerGemRootPath), "exe/bundle", "bin/bundle");
+      if (bundle == null) {
+        final String msg = "Unsupported bundler gem version: Cannot find 'bundle' executable under '" + bundlerGemRootPath + "'.";
+        throw new RakeTasksBuildService.MyBuildFailureException(msg);
+      }
+      runnerEnvParams.put(BUNDLE_BIN_PATH_ENV_VAR, getCanonicalPath(bundle));
     }
   }
 
