@@ -18,7 +18,6 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 
 import java.io.File;
 import java.util.HashMap;
-import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.rakerunner.RakeTasksBuildService;
 import jetbrains.buildServer.util.TestFor;
 import jetbrains.slow.plugins.rakerunner.RakeRunnerTestUtil;
@@ -39,12 +38,12 @@ public class BundlerUtilTest {
 
     BundlerUtil.setBundleBinPath(params, getTestDataPath("bundler-1.0.22").getAbsolutePath());
     then(params).containsKey(BundlerUtil.BUNDLE_BIN_PATH_ENV_VAR);
-    then(params.get(BundlerUtil.BUNDLE_BIN_PATH_ENV_VAR)).endsWith("bundler-1.0.22/bin/bundle");
+    then(params.get(BundlerUtil.BUNDLE_BIN_PATH_ENV_VAR)).endsWith("bundler-1.0.22/bin/bundle".replace('/', File.separatorChar));
     params.clear();
 
     BundlerUtil.setBundleBinPath(params, getTestDataPath("bundler-1.11.2").getAbsolutePath());
     then(params).containsKey(BundlerUtil.BUNDLE_BIN_PATH_ENV_VAR);
-    then(params.get(BundlerUtil.BUNDLE_BIN_PATH_ENV_VAR)).endsWith("bundler-1.11.2/exe/bundle");
+    then(params.get(BundlerUtil.BUNDLE_BIN_PATH_ENV_VAR)).endsWith("bundler-1.11.2/exe/bundle".replace('/', File.separatorChar));
     params.clear();
 
     try {
