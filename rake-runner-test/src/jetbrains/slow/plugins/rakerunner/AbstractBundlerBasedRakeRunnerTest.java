@@ -17,6 +17,7 @@
 package jetbrains.slow.plugins.rakerunner;
 
 import com.intellij.openapi.util.SystemInfo;
+import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
 import jetbrains.buildServer.serverSide.SimpleParameter;
@@ -86,7 +87,7 @@ public abstract class AbstractBundlerBasedRakeRunnerTest extends AbstractRakeRun
         try {
           final Map<String, String> env = new HashMap<String, String>(System.getenv());
           OSUtil.prependToPATHEnvVariable(bin.getAbsolutePath(), env);
-          RunCommandsHelper.runExecutable(LOG, new File(bin, "gem.bat").getAbsolutePath(), myWorkingDirectory, env, "install", "bundler");
+          RunCommandsHelper.runExecutable(LOG, FileUtil2.getFirstExistChild(bin, "gem.bat", "gem.cmd").getAbsolutePath(), myWorkingDirectory, env, "install", "bundler");
           RunCommandsHelper.runExecutable(LOG, new File(bin, "bundle.bat").getAbsolutePath(), myWorkingDirectory, env, "install");
         } catch (Throwable e) {
           LOG.error("Failed to prepare environment: " + e.getMessage(), e);
