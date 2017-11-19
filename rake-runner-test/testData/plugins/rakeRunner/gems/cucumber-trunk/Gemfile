@@ -19,4 +19,8 @@ elsif (current > Gem::Version.create('1.9')) then
   gem "gherkin", '>2.11.0'
 end
 
-gem "cucumber"
+if (current < Gem::Version.create('2.2')) then
+  gem "cucumber", '<3'
+else
+  gem "cucumber"
+end

@@ -22,6 +22,8 @@ end
 # activesupport 4.0.0 requires at least 1.9.3
 if (current < Gem::Version.create('1.9.3')) then
   gem 'activesupport', '<4'
+elsif (current < Gem::Version.create('2.2'))
+  gem 'activesupport', '<5.1'
 end
 
 gem "shoulda"
