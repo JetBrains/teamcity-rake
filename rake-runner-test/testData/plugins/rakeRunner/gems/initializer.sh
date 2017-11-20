@@ -33,9 +33,9 @@ for i in `ls -d */ | grep -v vendor | sed 's|/$||'`; do
     echo "##teamcity[blockOpened name='Execute Bundler']"
     if [[ -n "$bundle_repository_local" ]]; then
         echo "##teamcity[message text='Using bundle only with local repository' status='NORMAL']"
-        bundle install --local
+        bundle install --local --no-prune
     else
-        bundle install
+        bundle install --no-prune
     fi
     echo "##teamcity[blockClosed name='Execute Bundler']"
 

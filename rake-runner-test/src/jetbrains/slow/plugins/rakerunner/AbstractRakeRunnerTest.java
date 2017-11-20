@@ -455,9 +455,6 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     final File cacheDir = getTestDataPath("gems/vendor/cache");
     FileUtil.createDir(cacheDir);
     final File workingDirectory = gemfile.getParentFile();
-    final File localCacheDir = new File(workingDirectory, "vendor/cache");
-    FileUtil.createDir(localCacheDir);
-    FileUtil.copyDir(cacheDir, localCacheDir);
     final List<String> commands = new ArrayList<String>();
     if (RakeRunnerTestUtil.isUseRVM()) {
       commands.add("source " + getTestDataPath("gems/checkRVMCommand.sh").getAbsolutePath());
@@ -469,13 +466,15 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
       throw new IllegalStateException("Expected to be run on machine with either RVM or RbEnv installed.");
     }
     Collections.addAll(commands,
+                       "[[ ! -d 'vendor' ]] && mkdir vendor",
+                       "[[ ! -d 'vendor/cache' ]] && ln -s '" + cacheDir.getAbsolutePath() + "' 'vendor/cache'",
                        "gem which bundler || gem install bundler",
                        "rm -f Gemfile.lock",
-                       "bundle install --local || (rm -f Gemfile.lock; bundle install)",
+                       "bundle install --local --no-prune || (rm -f Gemfile.lock; bundle install --no-prune)",
                        "bundle update",
                        "bundle package --no-prune");
     RunCommandsHelper.runBashScript(LOG, workingDirectory, commands.toArray(new String[commands.size()]));
-    FileUtil.copyDir(localCacheDir, cacheDir);
+    //FileUtil.copyDir(localCacheDir, cacheDir);
     try {
       final FlowLogger fl = LogUtil.getFlowLogger(LOG);
       fl.activityStarted("Actual Gemfile.lock:", "AGL");
