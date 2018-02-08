@@ -132,7 +132,7 @@
   </tr>
   <tr id="rr.rvm.mode.interpreter.container" style="display: none">
     <th>
-      <label for="${UI_RUBY_RVM_SDK_NAME}">RVM Interpreter: <l:star/></label>
+      <label for="${UI_RUBY_RVM_SDK_NAME}">RVM Interpreter:<l:star/></label>
     </th>
     <td>
       <props:textProperty name="${UI_RUBY_RVM_SDK_NAME}" className="longField"/>

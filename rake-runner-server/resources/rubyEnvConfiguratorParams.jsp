@@ -29,7 +29,7 @@
 
 <tr>
   <th>
-    Configure Ruby environment via <bs:help file="Ruby+Environment+Configurator"/>
+    Configure Ruby environment via<bs:help file="Ruby+Environment+Configurator"/>
   </th>
   <td>
     <forms:select name="REC_MODE" onchange="BS.RubyEC.onFormChange()" className="longField">
@@ -68,7 +68,7 @@
 </tr>
 <tr class="rec-container" id="rec-rvm-container-manual-2">
   <th>
-    <label for="${UI_RVM_SDK_NAME_KEY}">Interpreter name: <l:star/></label>
+    <label for="${UI_RVM_SDK_NAME_KEY}">Interpreter name:<l:star/></label>
   </th>
   <td>
     <props:textProperty name="${UI_RVM_SDK_NAME_KEY}" className="longField"/>
