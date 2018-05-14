@@ -21,6 +21,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.SystemInfo;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -388,8 +389,9 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
     {
       Assert.assertNotNull(envGemPath, "GEM_PATH not set");
       final String[] paths = envGemPath.split(File.pathSeparator);
-      Assert.assertEquals(2, paths.length);
+      CommonAsserts.then(paths).hasSize(2);
 
+      System.out.println("GEM_PATH: " + Arrays.toString(paths));
       CommonAsserts.then(paths[0]).matches(rvmHomePath + "/gems/" + regexRubyAndGemset);
       CommonAsserts.then(paths[1]).matches(rvmHomePath + "/gems/" + regexRubyAndGlobal);
     }
@@ -404,6 +406,8 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
       Assert.assertNotNull(envPath, "PATH not set");
       final String[] paths = envPath.split(File.pathSeparator);
       Assert.assertTrue(paths.length >= 4);
+
+      System.out.println("PATH[0-4]: " + Arrays.asList(paths).subList(0, 4));
 
       CommonAsserts.then(paths[0]).matches(rvmHomePath + "/gems/" + regexRubyAndGemset + "/bin");
       CommonAsserts.then(paths[1]).matches(rvmHomePath + "/gems/" + regexRubyAndGlobal + "/bin");
