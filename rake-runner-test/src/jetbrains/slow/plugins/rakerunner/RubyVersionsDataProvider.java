@@ -132,10 +132,8 @@ public class RubyVersionsDataProvider {
     return new HashSet<String>() {
       {
         if (RakeRunnerTestUtil.isUseRVM()) {
-          add("ruby-2.1");
-          add("ruby-2.2");
-          add("ruby-2.3");
           add("ruby-2.4");
+          add("ruby-2.5");
           add("jruby");
         } else if (RakeRunnerTestUtil.isUseRbEnv()) {
           add("2.0.0-p648");
