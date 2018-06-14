@@ -28,10 +28,10 @@ import java.util.*;
  */
 public class BundlerBasedTestsDataProvider {
 
-  public static final Set<String> CUCUMBER_GEMFILES_CONFIGURATIONS = ImmutableSet.of("cucumber-trunk", "cucumber-1");
+  public static final Set<String> CUCUMBER_GEMFILES_CONFIGURATIONS = ImmutableSet.of("cucumber-trunk");
   public static final Set<String> TEST_UNIT_GEMFILES_CONFIGURATIONS = ImmutableSet.of("test-unit-trunk");
   public static final Set<String> TEST_SPEC_GEMFILES_CONFIGURATIONS = ImmutableSet.of("test-spec-trunk");
-  public static final Set<String> RSPEC_GEMFILES_CONFIGURATIONS = ImmutableSet.of("rspec-trunk", "rspec-2", "rspec-3");
+  public static final Set<String> RSPEC_GEMFILES_CONFIGURATIONS = ImmutableSet.of("rspec-trunk", "rspec-3");
   public static final Set<String> SHOULDA_GEMFILES_CONFIGURATIONS = ImmutableSet.of("shoulda-trunk");
 
   @NotNull

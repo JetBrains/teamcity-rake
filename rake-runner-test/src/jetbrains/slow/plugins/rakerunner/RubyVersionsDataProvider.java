@@ -18,7 +18,11 @@ package jetbrains.slow.plugins.rakerunner;
 
 import com.google.common.collect.Sets;
 import com.intellij.openapi.util.SystemInfo;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.*;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.rakerunner.utils.FileUtil2;
 import jetbrains.buildServer.agent.rakerunner.utils.OSUtil;
@@ -30,16 +34,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.testng.annotations.DataProvider;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.util.*;
-
 /**
  * @author Vladislav.Rassokhin
  */
 public class RubyVersionsDataProvider {
-  private static final String[] RUBY_VERSION_PRIORITY = new String[]{"ruby-2.4", "ruby-2.3", "ruby-2.2","ruby-2.1", "ruby-2.0", "ruby-1.9", "ruby-1.8", "jruby"};
+  private static final String[] RUBY_VERSION_PRIORITY = new String[]{"ruby-2.5", "ruby-2.4", "ruby-2.3", "jruby"};
   private static final Lazy<String> ourExistentRVMRubyVersion = new Lazy<String>() {
     @Nullable
     @Override
@@ -136,12 +135,11 @@ public class RubyVersionsDataProvider {
           add("ruby-2.5");
           add("jruby");
         } else if (RakeRunnerTestUtil.isUseRbEnv()) {
-          add("2.0.0-p648");
-          add("2.1.10");
-          add("2.2.5");
-          add("2.3.1");
-          add("jruby-1.7.25");
-          add("jruby-9.1.2.0");
+          add("2.3.7");
+          add("2.4.4");
+          add("2.5.1");
+          add("jruby-9.1.17.0");
+          add("jruby-9.2.0.0");
         }
       }
     };
