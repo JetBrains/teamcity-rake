@@ -3,40 +3,19 @@ source "http://rubygems.org"
 require 'rubygems'
 current = Gem::Version.create(RUBY_VERSION * 1)
 
-# rake 10.2.0 does not supports less than ruby-1.9
-if (current < Gem::Version.create('1.9')) then
-  gem "rake", '<2.10.1'
-else
-  gem "rake"
-end
-
+gem "rake"
 gem "rspec"
 
-# gherkin 2.12.1 does not supports ruby-1.8.7
-if (current < Gem::Version.create('1.9')) then
-  gem "gherkin", '<2.11.1'
-else
-  gem "gherkin", '>2.11.0'
-end
+gem "gherkin"
 if (current < Gem::Version.create('2.2')) then
   gem "cucumber", '<3'
 else
   gem "cucumber"
 end
 
-if (current >= Gem::Version.create('1.9')) then
-  gem "test-unit"
-end
+gem "test-unit"
 
-# shoulda-mathcers 2.1.0 does not supports ruby-1.8.7
-if (current < Gem::Version.create('1.9')) then
-  gem 'shoulda-matchers', '<2.1'
-end
-
-# activesupport 4.0.0 requires at least 1.9.3
-if (current < Gem::Version.create('1.9.3')) then
-  gem 'activesupport', '<4'
-elsif (current < Gem::Version.create('2.2'))
+if (current < Gem::Version.create('2.2')) then
   gem 'activesupport', '<5.1'
 end
 
