@@ -69,8 +69,6 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
   public String describeParameters(@NotNull final Map<String, String> params) {
     StringBuilder result = new StringBuilder();
 
-    result.append("<ul style=\"list-style: none; padding-left: 0; margin: 0;\">");
-
     final RubyEnvConfiguratorConfiguration configuration = new RubyEnvConfiguratorConfiguration(params);
     switch (configuration.getType()) {
       case INTERPRETER_PATH: {
@@ -82,7 +80,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
         displayParameter(result, "RVM gemset", configuration.getRVMGemsetName(), NOT_SPECIFIED_GOOD);
 
         if (configuration.isRVMGemsetCreate()) {
-          result.append("<li>Create gemset if does not exist</li>");
+          result.append("Create gemset if does not exist\n");
         }
         break;
       }
@@ -91,7 +89,7 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
         break;
       }
       case RVM_RUBY_VERSION: {
-        displayParameter(result, "Path to a directory with '.ruby-version' file", configuration.getRVMRubyVersionPath(), "<i>checkout directory</i>");
+        displayParameter(result, "Path to a directory with '.ruby-version' file", configuration.getRVMRubyVersionPath(), "<checkout directory>");
         break;
       }
       case RBENV: {
@@ -105,9 +103,8 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
     }
 
     if (configuration.isShouldFailBuildIfNoSdkFound()) {
-      result.append("<li>Fail build if Ruby interpreter wasn't found<li>");
+      result.append("Fail build if Ruby interpreter wasn't found\n");
     }
-    result.append("</ul>");
     return result.toString();
   }
 
@@ -115,9 +112,9 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
                                        @NotNull final String name,
                                        @Nullable final String value,
                                        @NotNull final String emptyValue) {
-    sb.append("<li>").append(name).append(": ");
-    sb.append(StringUtil.escapeHTML(StringUtil.isEmptyOrSpaces(value) ? emptyValue : value, true));
-    sb.append("</li>");
+    sb.append(name).append(": ");
+    sb.append(StringUtil.isEmptyOrSpaces(value) ? emptyValue : value);
+    sb.append("\n");
   }
 
   @Override
