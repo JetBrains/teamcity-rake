@@ -107,6 +107,10 @@ public enum SharedParamsType {
         throw new RakeTasksBuildService.MyBuildFailureException(String.format("RVM interpreter '%s' doesn't exist " +
           "or isn't a file or isn't a valid RVM interpreter name.", sdkName));
       } else {
+        final File home = RVMPathsSettings.getRVMNullSafe().getHomeForVersionName(suitable.first);
+        if (home == null) {
+          throw new RakeTasksBuildService.MyBuildFailureException(String.format("Cannot find home path for RVM SDK with name %s", suitable.first));
+        }
         if (suitable.second == null && !StringUtil.isEmptyOrSpaces(gemset)) {
           if (sharedParams.isRVMGemsetCreate()) {
             // Creating gemset
@@ -118,14 +122,11 @@ public enum SharedParamsType {
             if (output.getExitCode() != 0 || output.getException() != null) {
               throw new RakeTasksBuildService.MyBuildFailureException("Failed to create gemset '" + gemset + "':" + output);
             }
+            return new RVMRubySdkImpl(home, suitable.first, gemset);
           } else {
             throw new RakeTasksBuildService.MyBuildFailureException(String.format("Gemset '%s' isn't defined for RVM interpreter '%s'. " +
               "You may enable 'Create gemset if not exist' option in Ruby Environment Configurator build feature.", gemset, sdkName));
           }
-        }
-        final File home = RVMPathsSettings.getRVMNullSafe().getHomeForVersionName(suitable.first);
-        if (home == null) {
-          throw new RakeTasksBuildService.MyBuildFailureException(String.format("Cannot find home path for RVM SDK with name %s", suitable.first));
         }
         return new RVMRubySdkImpl(home, suitable.first, suitable.second);
       }
