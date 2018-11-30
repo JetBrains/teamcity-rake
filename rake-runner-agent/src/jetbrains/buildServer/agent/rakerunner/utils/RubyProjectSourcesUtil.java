@@ -52,7 +52,7 @@ public class RubyProjectSourcesUtil {
       // Used in tests
       File test = new File("lib/rb");
       if (!test.exists()) {
-        test = new File("bundled-plugins/rake-runner/lib/rb");
+        test = new File("external-repos/rake-runner/lib/rb");
       }
       rubySourcesDir = test;
     }
