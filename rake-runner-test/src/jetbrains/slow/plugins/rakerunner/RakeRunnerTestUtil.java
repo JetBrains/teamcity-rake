@@ -90,9 +90,9 @@ public class RakeRunnerTestUtil {
 
   @NotNull
   public static File getTestDataItemPath(@NotNull final String fileOrFolderRelativePath) {
-    if (new File("svnrepo").getAbsoluteFile().exists()) {
+    if (new File("bundled-plugins").getAbsoluteFile().exists()) {
       // Full BuildServer tests
-      return new File("svnrepo/rake-runner/" + TESTDATA_PATH + fileOrFolderRelativePath);
+      return new File("bundled-plugins/rake-runner/" + TESTDATA_PATH + fileOrFolderRelativePath);
     }
     // In case of standalone tests run
     return new File(TESTDATA_PATH + fileOrFolderRelativePath);
