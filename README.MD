@@ -18,6 +18,6 @@ limitations under the License.
   
 See full documentation at https://confluence.jetbrains.com/display/TW/Rake+Runner
 
-
+---
 This repository was migrated from the svn http://svn.jetbrains.org/teamcity/plugins/rake-runner
 Branches before 2018.1.x are not migrated and can be found in the svn repository.
