@@ -78,10 +78,10 @@
       <props:radioButtonProperty name="${USE_CUSTOM_BUILD_FILE_KEY}" value="true" id="custom2" onclick="${onclick}"/>
       <label for="custom2">Rakefile content:</label>
     </th>
-    <td>
-      <props:multilineProperty expanded="${propertiesBean.properties[USE_CUSTOM_BUILD_FILE_KEY] == true}" name="${BUILD_FILE_KEY}" rows="10"
-                               cols="58"
-                               linkTitle="Enter the Rakefile content"
+    <td class="codeHighlightTD">
+      <props:multilineProperty highlight="rake"
+                               expanded="${propertiesBean.properties[USE_CUSTOM_BUILD_FILE_KEY] == true}"
+                               name="${BUILD_FILE_KEY}" rows="10" cols="58" linkTitle="Enter the Rakefile content"
                                onkeydown="$('custom2').checked = true;" className="longField"/>
     </td>
   </tr>
