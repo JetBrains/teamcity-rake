@@ -33,7 +33,7 @@ public class EnvUtil {
       final int i = line.indexOf('=');
       if (i <= 0) continue;
       String name = line.substring(0, i);
-      String value = line.substring(i + 1, line.length());
+      String value = line.substring(i + 1);
       map.put(name, value);
     }
     return map;
