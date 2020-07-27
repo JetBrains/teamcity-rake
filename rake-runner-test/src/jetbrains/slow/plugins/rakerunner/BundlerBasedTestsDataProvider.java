@@ -29,6 +29,7 @@ import java.util.*;
 public class BundlerBasedTestsDataProvider {
 
   public static final Set<String> CUCUMBER_GEMFILES_CONFIGURATIONS = ImmutableSet.of("cucumber-trunk");
+  public static final Set<String> CUCUMBER4_GEMFILES_CONFIGURATIONS = ImmutableSet.of("cucumber-4-trunk");
   public static final Set<String> TEST_UNIT_GEMFILES_CONFIGURATIONS = ImmutableSet.of("test-unit-trunk");
   public static final Set<String> TEST_SPEC_GEMFILES_CONFIGURATIONS = ImmutableSet.of("test-spec-trunk");
   public static final Set<String> RSPEC_GEMFILES_CONFIGURATIONS = ImmutableSet.of("rspec-trunk", "rspec-3");
@@ -40,6 +41,14 @@ public class BundlerBasedTestsDataProvider {
     return RubyVersionsDataProvider.getCartesianProductIterator(RubyVersionsDataProvider.getRubyVersionsSet(),
         CUCUMBER_GEMFILES_CONFIGURATIONS);
   }
+
+  @NotNull
+  @DataProvider(name = "cucumber4")
+  public static Iterator<Object[]> getCucumber4DP() {
+    return RubyVersionsDataProvider.getCartesianProductIterator(RubyVersionsDataProvider.getRubyVersionsSet(),
+                                                                CUCUMBER4_GEMFILES_CONFIGURATIONS);
+  }
+
 
   @NotNull
   @DataProvider(name = "test-unit")

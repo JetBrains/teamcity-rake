@@ -1,0 +1,12 @@
+--1--Execute stat:features $TARGET_BLOCK$
+
+--1-- Feature: feature to test $TEST_SUITE$ NORMAL
+--1--  Scenario: one $TEST_SUITE$ NORMAL
+--1--   And my test step with "param" $TEST_BLOCK$ NORMAL
+--1--  Scenario Outline: two $TEST_SUITE$ NORMAL
+--1--   Examples $TEST_SUITE$ NORMAL
+--1--    Scenario: Line: 13 $TEST_SUITE$ NORMAL
+--1--     And my test step with "value'1'" $TEST_BLOCK$ NORMAL
+--1--    Scenario: Line: 14 $TEST_SUITE$ NORMAL
+--1--     And my test step with "value|n2" $TEST_BLOCK$ NORMAL
+--6--    ##LOCATION_URL## UNKNOWN

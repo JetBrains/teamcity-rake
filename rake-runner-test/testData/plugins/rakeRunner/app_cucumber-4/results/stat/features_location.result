@@ -1,0 +1,3 @@
+##teamcity[testSuiteStarted name='Scenario: Line: 13' locationHint='file:##WORKING_DIR##/features/test.feature:13' timestamp='##TIME##'] NORMAL
+##teamcity[testSuiteStarted name='Scenario: one' locationHint='file:##WORKING_DIR##/features/test.feature:3' timestamp='##TIME##'] NORMAL
+##teamcity[testStarted name='Given my test step' captureStandardOutput='true' locationHint='file:##WORKING_DIR##/features/test.feature:4' timestamp='##TIME##'] NORMAL

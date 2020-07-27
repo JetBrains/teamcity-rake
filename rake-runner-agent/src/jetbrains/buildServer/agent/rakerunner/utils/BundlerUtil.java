@@ -19,6 +19,7 @@ package jetbrains.buildServer.agent.rakerunner.utils;
 import com.intellij.openapi.util.Pair;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -290,7 +291,12 @@ public class BundlerUtil {
     throws RakeTasksBuildService.MyBuildFailureException, RunBuildException {
     // RUBYLIB: Let's add bundler setup script to loadpath
     // it's better than -I option in RUBYOPT because path may contain whitespaces
-    final File libFolder = new File(bundlerGemRootPath + File.separator + "lib");
+    File libFolder = null;
+    for (String path: Arrays.asList("lib", "libexec", "exe")) {
+      libFolder = new File(bundlerGemRootPath + File.separator + path);
+      if (libFolder.exists()) break;
+    }
+
     checkIfFolderExist(libFolder);
 
     OSUtil.appendToRUBYLIBEnvVariable(getCanonicalPath(libFolder), runnerEnvParams);

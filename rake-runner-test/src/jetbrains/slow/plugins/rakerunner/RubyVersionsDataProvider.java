@@ -38,9 +38,8 @@ import org.testng.annotations.DataProvider;
  * @author Vladislav.Rassokhin
  */
 public class RubyVersionsDataProvider {
-  private static final String[] RUBY_VERSION_PRIORITY = new String[]{"ruby-2.5", "ruby-2.4", "ruby-2.3", "jruby"};
+  private static final String[] RUBY_VERSION_PRIORITY = new String[]{"ruby-2.7", "ruby-2.6", "ruby-2.5", "jruby"};
   private static final Lazy<String> ourExistentRVMRubyVersion = new Lazy<String>() {
-    @Nullable
     @Override
     protected String createValue() {
       String property = System.getProperty("ruby.testing.versions");
@@ -131,8 +130,9 @@ public class RubyVersionsDataProvider {
     return new HashSet<String>() {
       {
         if (RakeRunnerTestUtil.isUseRVM()) {
-          add("ruby-2.4");
           add("ruby-2.5");
+          add("ruby-2.6");
+          add("ruby-2.7");
           add("jruby");
         } else if (RakeRunnerTestUtil.isUseRbEnv()) {
           add("2.3.7");

@@ -24,19 +24,13 @@ import org.jetbrains.annotations.NotNull;
  * @author Vladislav.Rassokhin
  */
 public abstract class AbstractCucumberTest extends AbstractBundlerBasedRakeRunnerTest {
-
-  public static final String APP_CUCUMBER = "app_cucumber";
-
-
   protected AbstractCucumberTest(@NotNull final String ruby, @NotNull final String gemfile) {
     super(ruby, gemfile);
   }
 
   @NotNull
   @Override
-  protected String getTestDataApp() {
-    return APP_CUCUMBER;
-  }
+  abstract protected String getTestDataApp();
 
   @Override
   protected void beforeMethod2() throws Throwable {

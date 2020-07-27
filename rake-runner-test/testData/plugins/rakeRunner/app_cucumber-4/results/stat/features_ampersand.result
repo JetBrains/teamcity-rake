@@ -1,0 +1,4 @@
+##teamcity[testSuiteStarted name='Scenario: Line: 13' locationHint='file:##WORKING_DIR##/features/test.feature:13' timestamp='##TIME##'] NORMAL
+##teamcity[testSuiteStarted name='Scenario Outline: two' locationHint='file:##WORKING_DIR##/features/test.feature:8' timestamp='##TIME##'] NORMAL
+##teamcity[testStarted name='And my test step with "value|'1|'"' captureStandardOutput='true' locationHint='file:##WORKING_DIR##/features/test.feature:13' timestamp='##TIME##'] NORMAL
+##teamcity[testStarted name='And my test step with "value||n2"' captureStandardOutput='true' locationHint='file:##WORKING_DIR##/features/test.feature:14' timestamp='##TIME##'] NORMAL

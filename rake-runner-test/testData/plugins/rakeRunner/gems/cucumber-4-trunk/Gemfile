@@ -1,0 +1,12 @@
+source "http://rubygems.org"
+require 'rubygems'
+current = Gem::Version.create(RUBY_VERSION * 1)
+
+gem "rake"
+
+gem "rspec"
+gem "json"
+
+gem "gherkin"
+
+gem "cucumber", '>4'

@@ -26,6 +26,7 @@ import jetbrains.buildServer.PartialBuildMessagesChecker;
 import jetbrains.buildServer.RunnerTest2Base;
 import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.FlowLogger;
+import jetbrains.buildServer.agent.ServerProvidedProperties;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
 import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.BuildMessagesProcessor;
@@ -102,6 +103,8 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
 
     getBuildType().addRunParameter(
       new SimpleParameter(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY, RakeRunnerConstants.CURRENT_CONFIG_VERSION));
+    getBuildType().addRunParameter(
+      new SimpleParameter(ServerProvidedProperties.TEAMCITY_VERSION_ENV, System.getenv("TEAMCITY_VERSION")));
   }
 
   private static int ourAgentOwnPort = 0;
@@ -290,7 +293,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
                                        final String actual) throws Throwable {
 
         //final String patchedActual =  mockMessageText(mockErrorDetails(mockTimeStamp(actual)));
-        String patchedActual = actual;
+        String patchedActual = actual.trim();
         if (SystemInfo.isWindows) {
           patchedActual = VFS_FILE_PROTOCOL_PATTERN_WIN.matcher(actual).replaceAll("file:");
         }
@@ -339,7 +342,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
   private static String reorderAttributesOfServiceMessages(String patchedActual) {
     final String[] lines = patchedActual.split("\n");
     for (int i = 0; i < lines.length; i++) {
-      String line = lines[i];
+      String line = lines[i].trim();
 
       final int serviceMessageStart = line.indexOf(SERVICE_MESSAGE_START);
       if (serviceMessageStart != -1) {
@@ -356,6 +359,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
           // In case we located at least one attribute ('Multiple attribute message')
           try {
             final Map<String, String> attributes = StringUtil.stringToProperties(text, StringUtil.STD_ESCAPER2, false);
+            removeAttributes(attributes);
             final ArrayList<String> keys = new ArrayList<String>(attributes.keySet());
             reorderAttributes(keys);
             final Map<String, String> orderedAttributes = new LinkedHashMap<String, String>();
@@ -374,6 +378,12 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     }
     patchedActual = StringUtil.join("\n", lines);
     return patchedActual;
+  }
+
+  private static void removeAttributes(Map<String, String> attributes) {
+    for(String trimed: Arrays.asList("nodeId", "parentNodeId")) {
+      attributes.remove(trimed);
+    }
   }
 
   private static void reorderAttributes(final List<String> foundAttrs) {

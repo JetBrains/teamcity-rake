@@ -12,5 +12,5 @@ gem "gherkin"
 if (current < Gem::Version.create('2.2')) then
   gem "cucumber", '<3'
 else
-  gem "cucumber"
+  gem "cucumber", '<4'
 end

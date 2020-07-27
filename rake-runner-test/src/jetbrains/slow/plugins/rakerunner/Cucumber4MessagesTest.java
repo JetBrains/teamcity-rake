@@ -24,17 +24,17 @@ import org.testng.annotations.Test;
 /**
  * @author Roman Chernyatchik
  */
-public class CucumberMessagesTest extends AbstractCucumberTest {
+public class Cucumber4MessagesTest extends AbstractCucumberTest {
 
-  @Factory(dataProvider = "cucumber", dataProviderClass = BundlerBasedTestsDataProvider.class)
-  public CucumberMessagesTest(@NotNull final String ruby, @NotNull final String cucumber) {
+  @Factory(dataProvider = "cucumber4", dataProviderClass = BundlerBasedTestsDataProvider.class)
+  public Cucumber4MessagesTest(@NotNull final String ruby, @NotNull final String cucumber) {
     super(ruby, cucumber);
   }
 
   @NotNull
   @Override
   protected String getTestDataApp() {
-    return "app_cucumber";
+    return "app_cucumber-4";
   }
 
   @Override
@@ -49,7 +49,7 @@ public class CucumberMessagesTest extends AbstractCucumberTest {
     setPartialMessagesChecker();
 
     setMockingOptions();
-    initAndDoTest("stat:features", "_location", false);
+    initAndDoTest("stat:features", "_location", true);
   }
 
   @Test
@@ -57,6 +57,6 @@ public class CucumberMessagesTest extends AbstractCucumberTest {
     setPartialMessagesChecker();
 
     setMockingOptions();
-    initAndDoTest("stat:features", "_ampersand", false);
+    initAndDoTest("stat:features", "_ampersand", true);
   }
 }

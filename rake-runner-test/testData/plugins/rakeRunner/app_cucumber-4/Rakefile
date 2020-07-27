@@ -1,0 +1,58 @@
+# Copyright 2000-2013 JetBrains s.r.o.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Created by IntelliJ IDEA.
+#
+# @author: Roman.Chernyatchik
+# @date: 27.12.2007
+
+require 'rake'
+require 'rubygems'
+
+namespace :bundle do
+  task :install do
+    system("bundle", "install")
+    require "bundler"
+     Bundler.setup()
+ end
+end
+
+ENV['CUCUMBER_COLORS'] = ''
+
+begin
+#begin
+  gem 'cucumber'
+  require 'cucumber'
+  require 'cucumber/rake/task'
+
+  Cucumber::Rake::Task.new(:features) do |t|
+     t.cucumber_opts = %w{--format pretty}
+   end
+  ########################################
+  namespace :stat do
+
+    Cucumber::Rake::Task.new(:features) do |t|
+      t.cucumber_opts = %w{--format pretty}
+    end
+  end
+#rescue LoadError
+#  desc 'Cucumber rake task not available'
+#  task :features do
+#    abort 'Cucumber rake task is not available. Be sure to install cucumber as a gem'
+#  end
+#end
+rescue LoadError
+  desc 'Some gem not available'
+  p "Some gem not available. Run 'bundle:install' task at first"
+end
