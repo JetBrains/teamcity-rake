@@ -292,7 +292,7 @@ public class BundlerUtil {
     // RUBYLIB: Let's add bundler setup script to loadpath
     // it's better than -I option in RUBYOPT because path may contain whitespaces
     File libFolder = null;
-    for (String path: Arrays.asList("lib", "libexec", "exe")) {
+    for (String path: Arrays.asList("lib", "libexec", "exe", "lib")) { // the last "lib" element is needed to save the old logging
       libFolder = new File(bundlerGemRootPath + File.separator + path);
       if (libFolder.exists()) break;
     }
