@@ -104,7 +104,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
     getBuildType().addRunParameter(
       new SimpleParameter(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY, RakeRunnerConstants.CURRENT_CONFIG_VERSION));
     getBuildType().addRunParameter(
-      new SimpleParameter(ServerProvidedProperties.TEAMCITY_VERSION_ENV, System.getenv("TEAMCITY_VERSION")));
+      new SimpleParameter(ServerProvidedProperties.TEAMCITY_VERSION_ENV, "2020.2"));
   }
 
   private static int ourAgentOwnPort = 0;
