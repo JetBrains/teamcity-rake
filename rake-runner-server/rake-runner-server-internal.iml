@@ -13,6 +13,7 @@
         <webroots>
           <root url="file://$MODULE_DIR$/resources" relative="/plugins/rake-runner" />
         </webroots>
+        <sourceRoots />
       </configuration>
     </facet>
   </component>
