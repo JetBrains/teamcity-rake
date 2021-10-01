@@ -17,10 +17,15 @@
 package jetbrains.buildServer.feature;
 
 import com.intellij.util.PathUtil;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import jetbrains.buildServer.requirements.Requirement;
+import jetbrains.buildServer.requirements.RequirementType;
 import jetbrains.buildServer.serverSide.BuildFeature;
 import jetbrains.buildServer.serverSide.InvalidProperty;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
@@ -35,12 +40,19 @@ import org.jetbrains.annotations.Nullable;
 public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
   public static final String NOT_SPECIFIED_GOOD = "<i>not specified</i>";
   public static final String NOT_SPECIFIED_ERR = "<strong>NOT SPECIFIED!</strong>";
+
   private final String myEditUrl;
+  private final Map<String, String> myDefaultParameters;
 
   public RubyEnvConfiguratorBuildFeature(@NotNull final PluginDescriptor descriptor) {
     myEditUrl = descriptor.getPluginResourcesPath("rubyEnvConfiguratorParams.jsp");
-  }
 
+    myDefaultParameters = new HashMap<>(4);
+    myDefaultParameters.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "unspecified");
+    myDefaultParameters.put(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY, ".rvmrc");
+    myDefaultParameters.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_CREATE_IF_NON_EXISTS, Boolean.TRUE.toString());
+    myDefaultParameters.put(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
+  }
 
   @NotNull
   @Override
@@ -119,21 +131,30 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
 
   @Override
   public Map<String, String> getDefaultParameters() {
-    final Map<String, String> defaults = new HashMap<String, String>(5);
+    return myDefaultParameters;
+  }
 
-    defaults.put(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY, "unspecified");
-    defaults.put(RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY, ".rvmrc");
-    defaults.put(RubyEnvConfiguratorConstants.UI_RVM_GEMSET_CREATE_IF_NON_EXISTS, Boolean.TRUE.toString());
-    defaults.put(RubyEnvConfiguratorConstants.UI_FAIL_BUILD_IF_NO_RUBY_FOUND_KEY, Boolean.TRUE.toString());
-    return defaults;
+  @NotNull
+  @Override
+  public Collection<Requirement> getRequirements(Map<String, String> params) {
+    List<Requirement> requirements = new LinkedList<>();
+    requirements.add(new Requirement("env.AAAA", null, RequirementType.EXISTS));
+    return requirements;
   }
 
   @Override
   public PropertiesProcessor getParametersProcessor() {
-    return new ParametersValidator();
+    return new ParametersValidator(myDefaultParameters);
   }
 
   static class ParametersValidator implements PropertiesProcessor {
+
+    private final Map<String, String> myDefaultParameters;
+
+    public ParametersValidator(@NotNull Map<String, String> defaultParameters) {
+      myDefaultParameters = defaultParameters;
+    }
+
     public Collection<InvalidProperty> process(final Map<String, String> properties) {
       final Collection<InvalidProperty> ret = new ArrayList<InvalidProperty>(1);
       if ("unspecified".equalsIgnoreCase(properties.get(RubyEnvConfiguratorConstants.UI_USE_RVM_KEY))) {
@@ -167,7 +188,50 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
           break;
         }
       }
+
+      resetExtraProperties(properties, configuration);
       return ret;
+    }
+
+    private void resetExtraProperties(@NotNull final Map<String, String> properties,
+                                      @NotNull final RubyEnvConfiguratorConfiguration configuration) {
+      if (!configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.INTERPRETER_PATH)) {
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_RUBY_SDK_PATH_KEY);
+      }
+      if (!configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RVM)) {
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_RVM_SDK_NAME_KEY);
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_RVM_GEMSET_NAME_KEY);
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_RVM_GEMSET_CREATE_IF_NON_EXISTS);
+      }
+      if (!configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RVMRC)) {
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_RVM_RVMRC_PATH_KEY);
+      }
+      if (!configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RVM_RUBY_VERSION)) {
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_RVM_RUBY_VERSION_PATH_KEY);
+      }
+      if (!configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RVM) &&
+        !configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RVMRC) &&
+        !configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RVM_RUBY_VERSION)) {
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_INNER_RVM_EXIST_REQUIREMENT_KEY);
+      }
+      if (!configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RBENV)) {
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_RBENV_VERSION_NAME_KEY);
+      }
+      if (!configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RBENV_FILE)) {
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_RBENV_FILE_PATH_KEY);
+      }
+      if (!configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RBENV) &&
+        !configuration.getType().equals(RubyEnvConfiguratorConfiguration.Type.RBENV_FILE)) {
+        resetProperty(properties, RubyEnvConfiguratorConstants.UI_INNER_RBENV_EXIST_REQUIREMENT_KEY);
+      }
+    }
+
+    private void resetProperty(@NotNull final Map<String, String> properties, @NotNull final String key) {
+      if (myDefaultParameters.containsKey(key)) {
+        properties.put(key, myDefaultParameters.get(key));
+      } else {
+        properties.remove(key);
+      }
     }
   }
 }

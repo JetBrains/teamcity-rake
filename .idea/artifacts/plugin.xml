@@ -35,6 +35,9 @@
           </element>
         </element>
       </element>
+      <element id="directory" name="kotlin-dsl">
+        <element id="dir-copy" path="$PROJECT_DIR$/kotlin-dsl" />
+      </element>
       <element id="file-copy" path="$PROJECT_DIR$/rake-runner-server/teamcity-server-plugin.xml" output-file-name="teamcity-plugin.xml" />
     </root>
   </artifact>

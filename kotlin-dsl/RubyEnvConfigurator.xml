@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dsl-extension kind="buildFeature" type="ruby.env.configurator" generateDslJar="true">
+    <class name="RubyEnvConfigurator">
+        <description>
+            A [Ruby Environment Configurator](https://www.jetbrains.com/help/teamcity/?Ruby+Environment+Configurator)
+            build feature passes Ruby interpreter to all build steps.
+        </description>
+    </class>
+    <function name="rubyEnvConfigurator">
+        <description>
+            Adds a [Ruby Environment Configurator](https://www.jetbrains.com/help/teamcity/?Ruby+Environment+Configurator)
+            build feature passes Ruby interpreter to all build steps.
+            @see RubyEnvConfigurator
+        </description>
+    </function>
+    <params>
+        <param name="ui.ruby.configurator.use.rvm" dslName="method" type="compound" mandatory="true">
+            <description>
+                Ruby Environment Configurator method.
+            </description>
+
+            <option name="rubyInterpreter" value="">
+                <param name="ui.ruby.configurator.ruby.interpreter.path" dslName="path">
+                    <description>
+                        The path to Ruby interpreter.
+                        If not specified, the interpreter will be searched in the PATH.
+                        In this field you can use values of environment and system variables.
+                    </description>
+                </param>
+            </option>
+
+            <option name="interpreterAndGemset" value="manual" >
+                <param name="ui.ruby.configurator.rvm.sdk.name" dslName="interpreter" mandatory="true">
+                    <description>
+                        E.g.: 'ruby-1.8.7-p249', 'jruby-1.4.0' or 'system'.
+                    </description>
+                </param>
+                <param name="ui.ruby.configurator.rvm.gemset.name" dslName="gemset">
+                    <description>
+                        Leave empty to use default gemset.
+                    </description>
+                </param>
+                <param name="ui.ruby.configurator.rvm.gemset.create.if.non.exists" dslName="createGemsetIfNotExists"
+                       type="boolean" trueValue="true" falseValue="">
+                    <description>
+                        Create gemset if not exists.
+                    </description>
+                </param>
+                <param name="ui.ruby.configurator.rvm.path" dslName="requireRVM"
+                       type="boolean" trueValue="%env.rvm_path%" falseValue=""/>
+            </option>
+
+            <option name="rvmrc" value="rvmrc">
+                <param name="ui.ruby.configurator.rvm.rvmrc.path" dslName="path">
+                    <description>
+                        Specify here the path to a .rvmrc file relative to the checkout directory.
+                        If the file is specified, TeamCity will fetch environment variables using the rvm-shell
+                        and will pass it to all build steps.
+                    </description>
+                </param>
+                <param name="ui.ruby.configurator.rvm.path" dslName="requireRVM"
+                       type="boolean" trueValue="%env.rvm_path%" falseValue=""/>
+            </option>
+
+            <option name="rvmConfigDirectory" value="rvm_ruby_version">
+                <param name="ui.ruby.configurator.rvm.ruby_version.path" dslName="path">
+                    <description>
+                        Path to a directory with '.ruby-version' and '.ruby-gemset' files
+                        relative to a checkout directory .
+                        Leave empty to use checkout directory.
+                    </description>
+                </param>
+                <param name="ui.ruby.configurator.rvm.path" dslName="requireRVM"
+                       type="boolean" trueValue="%env.rvm_path%" falseValue=""/>
+            </option>
+
+            <option name="rbenv" value="rbenv">
+                <param name="ui.ruby.configurator.rbenv.version.name" dslName="interpreterVersion">
+                    <description>
+                        E.g.: '1.9.3-p286' or 'jruby-1.7.0'
+                    </description>
+                </param>
+                <param name="ui.ruby.configurator.rbenv.root.path" dslName="requireRbenv"
+                       type="boolean" trueValue="%env.RBENV_ROOT%" falseValue=""/>
+            </option>
+
+            <option name="rbenvConfigDirectory" value="rbenv_file">
+                <param name="ui.ruby.configurator.rbenv.file.path" dslName="path">
+                    <description>
+                        Path to a directory with '.ruby-version' or '.rbenv-version' file
+                        relative to a checkout directory.
+                        Leave empty to use ".ruby-version"(preferred) or ".rbenv-version"
+                    </description>
+                </param>
+                <param name="ui.ruby.configurator.rbenv.root.path" dslName="requireRbenv"
+                       type="boolean" trueValue="%env.RBENV_ROOT%" falseValue=""/>
+            </option>
+        </param>
+
+        <param name="ui.ruby.configurator.fail.build.if.interpreter.not.found" dslName="failIfInterpreterNotFound"
+               type="boolean" trueValue="true" falseValue="">
+            <description>
+                Whether fail a build if the Ruby environment configurator cannot pass the Ruby interpreter
+                to the step execution environment because the interpreter wasn't found on the agent.
+            </description>
+        </param>
+    </params>
+</dsl-extension>
