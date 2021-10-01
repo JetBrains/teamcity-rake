@@ -37,14 +37,30 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RakeRunnerRunType extends RunType {
 
+  private final Map<String, String> myDefaultParameters;
+
   public RakeRunnerRunType(final RunTypeRegistry runTypeRegistry) {
     runTypeRegistry.registerRunType(this);
+
+    myDefaultParameters = new HashMap<String, String>();
+    final String trueStr = Boolean.TRUE.toString();
+    // by default let's enable : Test::Unit, RSpec, Cucumber
+    myDefaultParameters.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY, trueStr);
+    myDefaultParameters.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY, trueStr);
+    myDefaultParameters.put(RakeRunnerConstants.SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY, trueStr);
+    // configuration version
+    myDefaultParameters.put(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY,
+            RakeRunnerConstants.CURRENT_CONFIG_VERSION);
+    // select 'default/rec' ruby interpreter mode by default:
+    RakeRunnerUtils.setConfigMode(RakeRunnerUtils.RubyConfigMode.DEFAULT, myDefaultParameters);
+    // select 'bundle exec' by default
+    myDefaultParameters.put(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, trueStr);
   }
 
   @Override
   @Nullable
   public PropertiesProcessor getRunnerPropertiesProcessor() {
-    return new ParametersValidator();
+    return new ParametersValidator(myDefaultParameters);
   }
 
   @Override
@@ -59,25 +75,7 @@ public class RakeRunnerRunType extends RunType {
 
   @Override
   public Map<String, String> getDefaultRunnerProperties() {
-    final Map<String, String> map = new HashMap<String, String>();
-
-    final String trueStr = Boolean.TRUE.toString();
-
-    // by default let's enable : Test::Unit, RSpec, Cucumber
-    map.put(RakeRunnerConstants.SERVER_UI_RAKE_TESTUNIT_ENABLED_PROPERTY, trueStr);
-    map.put(RakeRunnerConstants.SERVER_UI_RAKE_RSPEC_ENABLED_PROPERTY, trueStr);
-    map.put(RakeRunnerConstants.SERVER_UI_RAKE_CUCUMBER_ENABLED_PROPERTY, trueStr);
-
-    // configuration version
-    map.put(RakeRunnerConstants.SERVER_CONFIGURATION_VERSION_PROPERTY,
-            RakeRunnerConstants.CURRENT_CONFIG_VERSION);
-
-    // select 'default/rec' ruby interpreter mode by default:
-    RakeRunnerUtils.setConfigMode(RakeRunnerUtils.RubyConfigMode.DEFAULT, map);
-
-    // select 'bundle exec' by default
-    map.put(RakeRunnerConstants.SERVER_UI_BUNDLE_EXEC_PROPERTY, trueStr);
-    return map;
+    return myDefaultParameters;
   }
 
   @NotNull
@@ -138,6 +136,12 @@ public class RakeRunnerRunType extends RunType {
 
   static class ParametersValidator implements PropertiesProcessor {
 
+    private final Map<String, String> myDefaultParameters;
+
+    public ParametersValidator(@NotNull Map<String, String> defaultParameters) {
+      myDefaultParameters = defaultParameters;
+    }
+
     public Collection<InvalidProperty> process(final Map<String, String> properties) {
       final Collection<InvalidProperty> ret = new ArrayList<InvalidProperty>(1);
       final RakeRunnerUtils.RubyConfigMode mode = RakeRunnerUtils.getRubyInterpreterConfigMode(properties);
@@ -155,7 +159,33 @@ public class RakeRunnerRunType extends RunType {
           break;
         }
       }
+      resetExtraProperties(properties);
       return ret;
+    }
+
+    private void resetExtraProperties(@NotNull final Map<String, String> properties) {
+      final RakeRunnerUtils.RubyConfigMode mode = RakeRunnerUtils.getRubyInterpreterConfigMode(properties);
+      if (!mode.equals(RakeRunnerUtils.RubyConfigMode.INTERPRETER_PATH)) {
+        resetProperty(properties, RakeRunnerConstants.SERVER_UI_RUBY_INTERPRETER_PATH);
+      }
+      if (!mode.equals(RakeRunnerUtils.RubyConfigMode.RVM)) {
+        resetProperty(properties, RakeRunnerConstants.SERVER_UI_RUBY_RVM_SDK_NAME);
+        resetProperty(properties, RakeRunnerConstants.SERVER_UI_RUBY_RVM_GEMSET_NAME);
+      }
+
+      if ("true".equals(properties.get(BuildFileRunnerConstants.USE_CUSTOM_BUILD_FILE_KEY))) {
+        resetProperty(properties, BuildFileRunnerConstants.BUILD_FILE_PATH_KEY);
+      } else {
+        resetProperty(properties, BuildFileRunnerConstants.BUILD_FILE_KEY);
+      }
+    }
+
+    private void resetProperty(@NotNull final Map<String, String> properties, @NotNull final String key) {
+      if (myDefaultParameters.containsKey(key)) {
+        properties.put(key, myDefaultParameters.get(key));
+      } else {
+        properties.remove(key);
+      }
     }
   }
 }

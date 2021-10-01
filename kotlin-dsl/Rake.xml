@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dsl-extension kind="buildStep" type="rake-runner" generateDslJar="true">
+  <class name="RakeStep">
+    <description>
+      A [Rake](https://www.jetbrains.com/help/teamcity/?Rake) build step.
+    </description>
+  </class>
+  <function name="rake">
+    <description>
+      Add s [Rake](https://www.jetbrains.com/help/teamcity/?Rake) build step.
+      @see RakeStep
+    </description>
+  </function>
+  <params>
+
+    <param name="teamcity.build.workingDir" dslName="workingDir">
+      <description>
+        [Build working directory](https://www.jetbrains.com/help/teamcity/?Build+Working+Directory) for ant script,
+        specify it if it is different from the [checkout directory](https://www.jetbrains.com/help/teamcity/?Build+Checkout+Directory).
+      </description>
+    </param>
+
+    <param name="use-custom-build-file" dslName="rakefile" type="compound">
+      <option name="file" value="">
+        <param name="build-file-path" dslName="path">
+          <description>
+            Enter a Rakefile path if you don't want to use the default one.
+            The specified path should be relative to the Build Checkout Directory.
+          </description>
+        </param>
+      </option>
+      <option name="content" value="true">
+        <param name="build-file" dslName="content">
+          <description>
+            Rakefile content. The new Rakefile will be created dynamically from the specified content before running Rake.
+          </description>
+        </param>
+      </option>
+    </param>
+
+    <param name="ui.rakeRunner.rake.tasks.names" dslName="tasks">
+      <description>
+        Space-separated tasks names if you don't want to use the default task.
+        For example, test:functionals or mytask:test mytask:test2.
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.additional.rake.cmd.params" dslName="rakeAdditionalParameters">
+      <description>
+        Specified parameters will be added to rake command line.
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.ruby.use.mode" dslName="rubyInterpreterMode" type="compound">
+      <option name="default" value="default">
+        <description>
+          Use Ruby interpreter settings defined in the Ruby environment configurator build feature settings
+          or the interpreter will be searched in the PATH.
+        </description>
+      </option>
+      <option name="path" value="path">
+        <param name="ui.rakeRunner.ruby.interpreter.path" dslName="path">
+          <description>
+            The path to Ruby interpreter. The path cannot be empty.
+            This field supports values of environment and system variables.
+            For example: "%env.I_AM_DEFINED_IN_BUILDAGENT_CONFIGURATION%"
+          </description>
+        </param>
+      </option>
+      <option name="rvm" value="rvm">
+        <param name="ui.rakeRunner.ruby.rvm.sdk.name" dslName="rvmInterpreter" mandatory="true">
+          <description>
+            E.g.: 'ruby-1.8.7-p249', 'jruby-1.4.0' or 'system'
+          </description>
+        </param>
+        <param name="ui.rakeRunner.ruby.rvm.gemset.name" dslName="gemset">
+          <description>
+            A gemset configured on a build agent.
+            If gemset isn't specified, the default one will be used.
+          </description>
+        </param>
+      </option>
+    </param>
+
+    <param name="ui.rakeRunner.bunlder.exec.enabled" dslName="execBundle"
+           type="boolean" trueValue="true" falseValue="">
+      <description>
+        If your project uses the Bundler requirements manager and your Rakefile doesn't load the bundler setup script,
+        this option will allow you to launch rake tasks using the bundle exec command emulation.
+        If you want to execute bundle install command, you need to do it in the Command Line step before the Rake step.
+        Also, remember to set up the Ruby environment configurator build feature to automatically pass Ruby interpreter to the command line runner.
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.rake.trace.invoke.exec.stages.enabled" dslName="trackInvokeExecuteStages"
+           type="boolean" trueValue="true" falseValue="">
+      <description>
+        Whether to enable showing Invoke stage data in the build log.
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.ruby.interpreter.additional.params" dslName="interpreterAdditionalParameters">
+      <description>
+        Additional parameters for interpreter, useful for JRuby interpreters. E.g. '-J-Xmx512m'
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.frameworks.testunit.enabled" dslName="enableTestUnit"
+           type="boolean" trueValue="true" falseValue="">
+      <description>
+        Whether to attach Test::Unit framework results to Tests tab of the Build Results page.
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.frameworks.testspec.enabled" dslName="enableTestSpec"
+           type="boolean" trueValue="true" falseValue="">
+      <description>
+        Whether to attach Test-Spec framework results to Tests tab of the Build Results page.
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.frameworks.shoulda.enabled" dslName="enableShoulda"
+           type="boolean" trueValue="true" falseValue="">
+      <description>
+        Whether to attach Shoulda framework results to Tests tab of the Build Results page.
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.frameworks.rspec.enabled" dslName="enableRSpec"
+           type="boolean" trueValue="true" falseValue="">
+      <description>
+        Whether to attach RSpec framework results to Tests tab of the Build Results page.
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.rspec.specoptions" dslName="rspecSpecOptions">
+      <description>
+        Rake will be invoked with a "SPEC_OPTS={internal options} {user options}".
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.frameworks.cucumber.enabled" dslName="enableCucumber"
+           type="boolean" trueValue="true" falseValue="">
+      <description>
+        Whether to attach Cucumber framework results to Tests tab of the Build Results page.
+      </description>
+    </param>
+
+    <param name="ui.rakeRunner.cucumber.options" dslName="cucumberOptions">
+      <description>
+        Rake will be invoked with a "CUCUMBER_OPTS={internal options} {user options}".
+      </description>
+    </param>
+
+  </params>
+</dsl-extension>
