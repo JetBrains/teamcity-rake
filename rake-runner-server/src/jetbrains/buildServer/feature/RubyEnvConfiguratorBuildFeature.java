@@ -134,14 +134,6 @@ public class RubyEnvConfiguratorBuildFeature extends BuildFeature {
     return myDefaultParameters;
   }
 
-  @NotNull
-  @Override
-  public Collection<Requirement> getRequirements(Map<String, String> params) {
-    List<Requirement> requirements = new LinkedList<>();
-    requirements.add(new Requirement("env.AAAA", null, RequirementType.EXISTS));
-    return requirements;
-  }
-
   @Override
   public PropertiesProcessor getParametersProcessor() {
     return new ParametersValidator(myDefaultParameters);
