@@ -28,6 +28,7 @@ import jetbrains.buildServer.agent.AgentRuntimeProperties;
 import jetbrains.buildServer.agent.FlowLogger;
 import jetbrains.buildServer.agent.ServerProvidedProperties;
 import jetbrains.buildServer.agent.rakerunner.SupportedTestFramework;
+import jetbrains.buildServer.log.LogInitializer;
 import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.BuildMessagesProcessor;
 import jetbrains.buildServer.rakerunner.RakeRunnerConstants;
@@ -38,10 +39,11 @@ import jetbrains.buildServer.serverSide.SimpleParameter;
 import jetbrains.buildServer.serverSide.buildLog.LogMessage;
 import jetbrains.buildServer.util.FileUtil;
 import jetbrains.buildServer.util.StringUtil;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.testng.Assert;
@@ -58,9 +60,14 @@ import static jetbrains.slow.plugins.rakerunner.MockingOptions.*;
 public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements ITest {
 
   static {
-    final Logger logger = Logger.getLogger("jetbrains.slow.plugins.rakerunner");
-    logger.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
-    logger.setLevel(Level.WARN);
+    LogInitializer.reconfigureLog4j((loggerContext, configuration) -> {
+      PatternLayout patternLayout = PatternLayout.newBuilder().withPattern(PatternLayout.TTCC_CONVERSION_PATTERN).build();
+      ConsoleAppender consoleAppender = ConsoleAppender.newBuilder().setName("console").setLayout(patternLayout).build();
+      String name = "jetbrains.slow.plugins.rakerunner";
+      LoggerConfig loggerConfig = new LoggerConfig(name, Level.WARN, false);
+      loggerConfig.addAppender(consoleAppender, null, null);
+      configuration.addLogger(name, loggerConfig);
+    });
   }
 
   //private MockingOptions[] myCheckerMockOptions = new MockingOptions[0];
