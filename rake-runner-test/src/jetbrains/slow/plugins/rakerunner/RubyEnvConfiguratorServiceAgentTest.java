@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import jetbrains.buildServer.AgentServerFunctionalTestCase;
+import jetbrains.buildServer.NoRetry;
 import jetbrains.buildServer.agent.*;
 import jetbrains.buildServer.agent.feature.RubyEnvConfiguratorService;
 import jetbrains.buildServer.agent.impl.SpringContextFixture;
@@ -57,7 +58,7 @@ import org.testng.annotations.Test;
  * @author Roman.Chernyatchik
  */
 @TestFor(testForClass = {RubyEnvConfiguratorService.class})
-@Test(groups = {"all", "slow"})
+@Test(retryAnalyzer = NoRetry.class, groups = {"all", "slow"})
 @SpringContextFixture(configs = {"classpath*:/META-INF/build-agent-plugin-rakerunner.xml"})
 public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTestCase {
   private final String RUN_TYPE = "mySomeRunner!";
