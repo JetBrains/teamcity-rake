@@ -32,6 +32,7 @@ import jetbrains.buildServer.feature.RubyEnvConfiguratorConstants;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.messages.serviceMessages.MapSerializerUtil;
 import jetbrains.buildServer.util.FileUtil;
+import jetbrains.buildServer.util.PasswordReplacer;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -85,6 +86,11 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
           @NotNull
           public String getWorkingDirectory() throws RunBuildException {
             return origCommandLine.getWorkingDirectory();
+          }
+
+          @Override
+          public String getCommandLineForLogging(PasswordReplacer passwordReplacer) throws RunBuildException {
+            return origCommandLine.getCommandLineForLogging(passwordReplacer);
           }
 
           @NotNull
