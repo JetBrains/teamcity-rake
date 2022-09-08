@@ -88,7 +88,6 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
             return origCommandLine.getWorkingDirectory();
           }
 
-          @Override
           public String getCommandLineForLogging(PasswordReplacer passwordReplacer) throws RunBuildException {
             return origCommandLine.getCommandLineForLogging(passwordReplacer);
           }

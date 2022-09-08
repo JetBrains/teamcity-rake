@@ -17,7 +17,7 @@
 package jetbrains.buildServer.agent.ruby.rvm.detector;
 
 import java.util.Map;
-import jetbrains.buildServer.agent.BuildAgentConfiguration;
+import jetbrains.buildServer.agent.ruby.ConfigurationApplier;
 import jetbrains.buildServer.agent.ruby.rvm.InstalledRVM;
 import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ public abstract class RVMDetector {
   @Nullable
   public abstract InstalledRVM detect(@NotNull final Map<String, String> environmentParams);
 
-  public void patchBuildAgentConfiguration(@NotNull final BuildAgentConfiguration configuration, @Nullable final InstalledRVM rvm) {
+  public void patchBuildAgentConfiguration(@NotNull final ConfigurationApplier configuration, @Nullable final InstalledRVM rvm) {
     if (rvm == null) {
       return;
     }
