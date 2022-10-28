@@ -153,4 +153,58 @@
     </param>
 
   </params>
+
+  <examples>
+    <example>
+      <description>
+        Adds a simple Rake build step with default
+        Ruby [interpreter settings](https://www.jetbrains.com/help/teamcity/?Rake#Ruby+Interpreter),
+        [launching parameters](https://www.jetbrains.com/help/teamcity/?Rake#Launching+Parameters)
+        and [test reporting](https://www.jetbrains.com/help/teamcity/?Rake#Tests+Reporting).
+      </description>
+      <code>
+        rake {
+            name = "My Rake step"
+            rakefile = file {
+                path = "build/Rakefile"
+            }
+            tasks = "mytask:test mytask:test2"
+        }
+      </code>
+    </example>
+    <example>
+      <description>
+        Adds a Rake build step with Rakefile script content and custom 
+        [Rake parameters](https://www.jetbrains.com/help/teamcity/?Rake#Rake+Parameters), 
+        custom Ruby [interpreter settings](https://www.jetbrains.com/help/teamcity/?Rake#Ruby+Interpreter),
+        custom [launching parameters](https://www.jetbrains.com/help/teamcity/?Rake#Launching+Parameters)
+        and [test reporting](https://www.jetbrains.com/help/teamcity/?Rake#Tests+Reporting).
+      </description>
+      <code>
+        rake {
+            name = "My Rake step"
+            workingDir = "project/"
+            rakefile = content {
+                content = """
+                    // Rakefile content
+                    // goes here ...
+                """.trimIndent()
+            }
+            tasks = "mytask:test mytask:test2"
+            rakeAdditionalParameters = "--trace"
+            rubyInterpreterMode = rvm {
+                rvmInterpreter = "jruby-1.4.0"
+            }
+            execBundle = false
+            trackInvokeExecuteStages = true
+            interpreterAdditionalParameters = "-J-Xmx512m"
+            enableTestUnit = false
+            enableTestSpec = true
+            enableShoulda = true
+            rspecSpecOptions = "user options"
+            cucumberOptions = "user options"
+        }
+      </code>
+    </example>
+  </examples>
 </dsl-extension>
