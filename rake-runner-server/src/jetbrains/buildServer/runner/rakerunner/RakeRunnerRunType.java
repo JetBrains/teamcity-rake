@@ -29,6 +29,7 @@ import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
 import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,9 +38,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RakeRunnerRunType extends RunType {
 
+  private final PluginDescriptor myDescriptor;
   private final Map<String, String> myDefaultParameters;
 
-  public RakeRunnerRunType(final RunTypeRegistry runTypeRegistry) {
+  public RakeRunnerRunType(@NotNull final PluginDescriptor descriptor, @NotNull final RunTypeRegistry runTypeRegistry) {
+    myDescriptor = descriptor;
     runTypeRegistry.registerRunType(this);
 
     myDefaultParameters = new HashMap<String, String>();
@@ -94,6 +97,12 @@ public class RakeRunnerRunType extends RunType {
   @Override
   public String getType() {
     return RakeRunnerConstants.RUNNER_TYPE;
+  }
+
+  @Nullable
+  @Override
+  public String getIconUrl() {
+    return myDescriptor.getPluginResourcesPath("rake-runner.svg");
   }
 
   @NotNull
