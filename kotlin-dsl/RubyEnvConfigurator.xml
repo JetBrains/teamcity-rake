@@ -105,4 +105,95 @@
             </description>
         </param>
     </params>
+
+    <examples>
+        <example>
+            <description>
+                Adds a [Ruby Environment Configurator](https://www.jetbrains.com/help/teamcity/?Ruby+Environment+Configurator)
+                build feature with specified Ruby interpreter path with a reference to a
+                [configuration parameter](https://www.jetbrains.com/help/teamcity/?Using+Build+Parameters).
+            </description>
+            <code>
+                rubyEnvConfigurator {
+                    method = rubyInterpreter {
+                        path = "%path.to.inverpreter%"
+                    }
+                }
+            </code>
+        </example>
+        <example>
+            <description>
+                Adds a [Ruby Environment Configurator](https://www.jetbrains.com/help/teamcity/?Ruby+Environment+Configurator)
+                build feature with specified RVM interpreter.
+            </description>
+            <code>
+                rubyEnvConfigurator {
+                    method = interpreterAndGemset {
+                        interpreter = "jruby-1.4.0"
+                        gemset = "gemset"
+                        requireRVM = true
+                    }
+                }
+            </code>
+        </example>
+        <example>
+            <description>
+                Adds a [Ruby Environment Configurator](https://www.jetbrains.com/help/teamcity/?Ruby+Environment+Configurator)
+                build feature with specified RVM with `.rvmrc` file.
+            </description>
+            <code>
+                rubyEnvConfigurator {
+                    method = rvmrc {
+                        path = "rubyProject/.rvmrc"
+                        requireRVM = true
+                    }
+                }
+            </code>
+        </example>
+        <example>
+            <description>
+                Adds a [Ruby Environment Configurator](https://www.jetbrains.com/help/teamcity/?Ruby+Environment+Configurator)
+                build feature with specified RVM with `.rvmrc` file and
+                a path to a directory with `.ruby-version` or `.rbenv-version` file relative to a checkout directory.
+            </description>
+            <code>
+                rubyEnvConfigurator {
+                    method = rvmConfigDirectory {
+                        path = "rubyProject"
+                        requireRVM = true
+                    }
+                }
+            </code>
+        </example>
+        <example>
+            <description>
+                Adds a [Ruby Environment Configurator](https://www.jetbrains.com/help/teamcity/?Ruby+Environment+Configurator)
+                build feature with specified rbenv.
+            </description>
+            <code>
+                rubyEnvConfigurator {
+                    method = rbenv {
+                        interpreterVersion = "jruby-1.7.0"
+                        requireRbenv = true
+                    }
+                    failIfInterpreterNotFound = false
+                }
+            </code>
+        </example>
+        <example>
+            <description>
+                Adds a [Ruby Environment Configurator](https://www.jetbrains.com/help/teamcity/?Ruby+Environment+Configurator)
+                build feature with specified rbenv configuration directory and
+                a path to a directory with `.ruby-version` or `.rbenv-version` file relative to a checkout directory.
+            </description>
+            <code>
+                rubyEnvConfigurator {
+                    method = rbenvConfigDirectory {
+                        path = "rubyProject"
+                        requireRbenv = true
+                    }
+                }
+            </code>
+        </example>
+    </examples>
 </dsl-extension>
