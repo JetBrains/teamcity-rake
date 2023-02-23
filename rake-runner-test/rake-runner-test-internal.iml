@@ -11,6 +11,7 @@
     <orderEntry type="module" module-name="rake-runner-server-internal" scope="TEST" />
     <orderEntry type="module" module-name="integration-test-core" scope="TEST" />
     <orderEntry type="library" name="Guava" level="project" />
+    <orderEntry type="module" module-name="migration" />
   </component>
 </module>
 

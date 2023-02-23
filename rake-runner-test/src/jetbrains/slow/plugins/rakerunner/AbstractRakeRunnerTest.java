@@ -89,7 +89,7 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
 
   @BeforeMethod
   @Override
-  protected void setUp1() throws Throwable {
+  public void setUp1() throws Throwable {
     setAgentOwnPort();
     super.setUp1();
     setMockingOptions(FAKE_STACK_TRACE, FAKE_LOCATION_URL, FAKE_ERROR_MSG);

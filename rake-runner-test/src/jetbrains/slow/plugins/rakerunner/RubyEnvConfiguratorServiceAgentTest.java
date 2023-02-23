@@ -71,7 +71,7 @@ public class RubyEnvConfiguratorServiceAgentTest extends AgentServerFunctionalTe
 
   @BeforeMethod
   @Override
-  protected void setUp1() throws Throwable {
+  public void setUp1() throws Throwable {
     super.setUp1();
 
     createNonBlockingBuildRunner(RUN_TYPE);

@@ -71,7 +71,7 @@ public class BundlerUtilTest extends AbstractRakeRunnerTest {
    */
   @BeforeMethod
   @Override
-  protected final void setUp1() throws Throwable {
+  public final void setUp1() throws Throwable {
     super.setUp1();
     useRVMGemSet("");
     setUseBundle(true);

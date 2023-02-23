@@ -26,5 +26,7 @@
     <orderEntry type="module" module-name="rake-runner-common-internal" exported="" />
     <orderEntry type="module" module-name="server-openapi" exported="" />
     <orderEntry type="module" module-name="web-openapi" exported="" />
+    <orderEntry type="module" module-name="server-common-api" />
+    <orderEntry type="module" module-name="server-model" />
   </component>
 </module>

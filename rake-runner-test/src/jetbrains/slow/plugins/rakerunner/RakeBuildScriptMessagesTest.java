@@ -56,7 +56,7 @@ public class RakeBuildScriptMessagesTest extends AbstractRakeRunnerTest {
 
   @BeforeMethod
   @Override
-  protected void setUp1() throws Throwable {
+  public void setUp1() throws Throwable {
     doPrepareEnvironment();
     super.setUp1();
     setMockingOptions(MockingOptions.FAKE_STACK_TRACE, MockingOptions.FAKE_LOCATION_URL);
