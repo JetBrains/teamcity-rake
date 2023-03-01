@@ -1,3 +1,5 @@
+[![official JetBrains project](https://jb.gg/badges/official-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+
 Copyright 2000-2013 JetBrains s.r.o.
 
 Licensed under the Apache License, Version 2.0 (the "License");
