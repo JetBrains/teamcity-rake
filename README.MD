@@ -1,4 +1,4 @@
-[![official JetBrains project](https://jb.gg/badges/official-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+[![official JetBrains project](https://jb.gg/badges/official-flat-square.svg)](https://github.com/jetbrains#jetbrains-on-github)
 
 Copyright 2000-2013 JetBrains s.r.o.
 
