@@ -35,7 +35,7 @@ public abstract class RbEnvShellRunner implements ShellScriptRunner {
   private static final Logger LOG = Logger.getInstance(RbEnvShellRunner.class.getName());
   private final InstalledRbEnv myRbEnv;
 
-  public RbEnvShellRunner(@NotNull final InstalledRbEnv rbEnv) {
+  protected RbEnvShellRunner(@NotNull final InstalledRbEnv rbEnv) {
     myRbEnv = rbEnv;
   }
 
