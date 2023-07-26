@@ -17,6 +17,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="rake-runner-common-internal" exported="" />
     <orderEntry type="module" module-name="agent" exported="" />
+    <orderEntry type="module" module-name="agent-core" exported="" />
     <orderEntry type="module" module-name="common-impl" />
     <orderEntry type="module" module-name="migration" />
   </component>
