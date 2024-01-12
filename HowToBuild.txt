@@ -22,7 +22,6 @@ Rake tasks runner support for TeamCity 4.x and newer
  |--- [lib/rb] - Unpacked RUBY part of plugin.
  |--- [out] - Compilation output directory
  |--- [out/artifacts] - Build artifacts
- |--- copyright.txt - Copyright for sources
  |--- HowToBuild.txt - this file
 
 4. Internal Properties
