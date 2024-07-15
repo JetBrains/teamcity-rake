@@ -64,7 +64,6 @@ public abstract class AbstractRakeRunnerTest extends RunnerTest2Base implements 
   private File myWorkingDirectory;
 
   protected AbstractRakeRunnerTest() {
-    setName(this.getClass().getSimpleName());
   }
 
   @Override
