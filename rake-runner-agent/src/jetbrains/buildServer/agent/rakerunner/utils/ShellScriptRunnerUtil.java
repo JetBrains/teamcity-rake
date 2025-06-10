@@ -22,7 +22,7 @@ public class ShellScriptRunnerUtil {
     try {
       process.waitFor();
     } catch (InterruptedException e) {
-      LOG.error("Failed to execute chmod " + perms + " " + script.getAbsolutePath() + ", error: " + e.toString());
+      LOG.error("Failed to execute chmod " + perms + " " + script.getAbsolutePath() + ", error: " + e);
     }
   }
 }
