@@ -8,6 +8,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="common" exported="" />
     <orderEntry type="module" module-name="idea-obsolete-openapi" exported="" />
+    <orderEntry type="module" module-name="idea-openapi" exported="" />
     <orderEntry type="library" exported="" name="annotations.jar" level="project" />
   </component>
 </module>
