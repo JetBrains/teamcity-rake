@@ -136,7 +136,7 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
 
       setPermissions(script, SCRIPT_PERMISSIONS); // script needs to be made executable for all (chmod a+x)
     } catch (IOException e) {
-      throw new RunBuildException("Failed to create temp file, error: " + e.toString());
+      throw new RunBuildException("Failed to create temp file, error: " + e);
     }
     return script;
   }
@@ -146,7 +146,7 @@ public class RVMCommandLineProcessor implements BuildCommandLineProcessor {
     try {
       process.waitFor();
     } catch (InterruptedException e) {
-      Loggers.AGENT.warn("Failed to execute chmod " + perms + " " + script.getAbsolutePath() + ", error: " + e.toString());
+      Loggers.AGENT.warn("Failed to execute chmod " + perms + " " + script.getAbsolutePath() + ", error: " + e);
     }
   }
 
